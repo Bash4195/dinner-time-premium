@@ -25,6 +25,10 @@ header, main, footer {
     background-color: transparent;
 }
 
+.side-nav hr {
+    border: solid 1px #eee;
+}
+
 /* Text highlight */
 ::-moz-selection {
     background: #9e9e9e;
