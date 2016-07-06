@@ -5,4 +5,8 @@ router.get('/', function(req, res) {
     res.render('index');
 });
 
+router.get('/rules', function(req, res) {
+    res.render('rules', {active: 'rules'});
+});
+
 module.exports = router;

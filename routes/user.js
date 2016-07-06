@@ -16,7 +16,7 @@ router.get('/auth/steam/return',
 
 router.get('/logout', function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('back');
 });
 
 module.exports = router;

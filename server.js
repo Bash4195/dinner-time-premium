@@ -1,9 +1,9 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var favicon = require('serve-favicon');
 var session = require('express-session');
 var mongoose = require('mongoose');
-var findOrCreate = require('mongoose-findorcreate')
 var passport = require('passport');
 var SteamStrategy = require('passport-steam').Strategy;
 
@@ -17,6 +17,7 @@ var User = require('./models/user');
 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 mongoose.connect('mongodb://localhost/dtp');

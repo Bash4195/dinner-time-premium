@@ -21,7 +21,7 @@
         <li>
             <a href="/">
                 <div class="row valign-wrapper">
-                    <i class="material-icons col s4">settings</i>
+                    <i class="material-icons col s3">settings</i>
                     <span class="col s8">Settings</span>
                 </div>
             </a>
@@ -29,7 +29,7 @@
         <li>
             <a href="/logout">
                 <div class="row valign-wrapper">
-                    <i class="material-icons col s4">power_settings_new</i>
+                    <i class="material-icons col s3">power_settings_new</i>
                     <span class="col s8">Logout</span>
                 </div>
             </a>
@@ -41,6 +41,25 @@
             <hr>
         </li>
 
+        <li>
+            <a href="http://steamcommunity.com/groups/dtpremium#announcements">
+                <div class="row valign-wrapper">
+
+                    <i class="material-icons col s3">announcement</i>
+                    <span class="col s8">News</span>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="http://dtpremium.site.nfoservers.com/donate/">
+                <div class="row valign-wrapper">
+
+                    <i class="material-icons col s3">attach_money</i>
+                    <span class="col s8">Donate</span>
+                </div>
+            </a>
+        </li>
+
         <% if(typeof active !== 'undefined' && active == 'forum') { %>
         <li class="active">
             <a href="/forum" class="red-text">
@@ -49,8 +68,22 @@
             <a href="/forum">
         <% } %>
                 <div class="row valign-wrapper">
-                    <i class="material-icons col s4">forum</i>
+                    <i class="material-icons col s3">forum</i>
                     <span class="col s8">Forum</span>
+                </div>
+            </a>
+        </li>
+        <% if(typeof active !== 'undefined' && active == 'rules') { %>
+        <li class="active">
+            <a href="/rules" class="red-text">
+        <% } else { %>
+        <li>
+            <a href="/rules">
+        <% } %>
+                <div class="row valign-wrapper">
+
+                    <i class="material-icons col s3">assignment</i>
+                    <span class="col s8">Server Rules</span>
                 </div>
             </a>
         </li>
