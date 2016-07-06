@@ -41,8 +41,13 @@
             <hr>
         </li>
 
+        <% if(typeof active !== 'undefined' && active == 'forum') { %>
+        <li class="active">
+            <a href="/forum" class="red-text">
+        <% } else { %>
         <li>
             <a href="/forum">
+        <% } %>
                 <div class="row valign-wrapper">
                     <i class="material-icons col s4">forum</i>
                     <span class="col s8">Forum</span>

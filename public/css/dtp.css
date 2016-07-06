@@ -31,10 +31,9 @@ header, main, footer {
 
 /* Text highlight */
 ::-moz-selection {
-    background: #9e9e9e;
+    background: #B71C1C;
 }
 
 ::selection {
-    background: #9e9e9e;
+    background: #B71C1C;
 }
-
