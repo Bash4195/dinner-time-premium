@@ -79,6 +79,6 @@ app.use(forumRoutes);
 // Normalize port
 var port = process.env.PORT || 8080;
 
-app.listen(8080, function() {
+app.listen(port, function() {
     console.log('Server is listening on port ' + port);
 });
