@@ -20,7 +20,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(bodyParser.urlencoded({extended: true}));
 
-mongoose.connect('mongodb://localhost/dtp');
+mongoose.connect(process.env.MONGODB_URI);
 
 // Passport config
 passport.serializeUser(function(user, done) {
@@ -76,6 +76,9 @@ app.use(indexRoutes);
 app.use(userRoutes);
 app.use(forumRoutes);
 
+// Normalize port
+var port = process.env.PORT || 8080;
+
 app.listen(8080, function() {
-    console.log('Server is listening on port 8080');
+    console.log('Server is listening on port ' + port);
 });
