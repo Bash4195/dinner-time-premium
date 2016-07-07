@@ -9,7 +9,8 @@ var userSchema = mongoose.Schema({
     avatar: String,
     avatarMedium: String,
     avatarFull: String,
-    countryCode: String
+    countryCode: String,
+    isOnline: Boolean
 });
 
 userSchema.plugin(findOrCreate);

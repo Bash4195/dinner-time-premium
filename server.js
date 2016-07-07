@@ -41,7 +41,8 @@ passport.use(new SteamStrategy({
             avatar: user.avatar,
             avatarMedium: user.avatarmedium,
             avatarFull: user.avatarfull,
-            countryCode: user.loccountrycode
+            countryCode: user.loccountrycode,
+            isOnline: true
             
         }, function (err, user) {
             return done(err, user);
@@ -70,7 +71,6 @@ app.use(function(req, res, next) {
 app.use(userRoutes);
 
 app.get('*', function(req, res) {
-    console.log(res);
     res.sendFile(__dirname + '/public/index.html', {user: req.user});
 });
 

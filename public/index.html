@@ -11,51 +11,49 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
     <script src="assets/js/app.js"></script>
 </head>
-<body class="grey lighten-4">
+<body class="grey lighten-4" ng-cloak>
 
 <header>
     <ul id="slide-out" class="side-nav fixed">
         <li><a href="/" class="logo"><img src="assets/img/logo.svg" alt="DTP"></a></li>
         <li><br></li> <!-- Spacing from the logo -->
-        <li>
+        <li ng-hide="user">
             <a href="/auth/steam" style="padding-top: 12px;">
                 <img src="assets/img/steam.png" alt="Sign in through Steam">
             </a>
         </li>
-        <!--<li>-->
-            <!--<a href="/">-->
-                <!--<div class="row valign-wrapper">-->
-                    <!--<img src="<%= user.avatar %>" alt="<%= user.avatar %>"-->
-                         <!--class="col s4 circle responsive-img">-->
-                    <!--<span class="col s8"><%= user.name %></span>-->
-                <!--</div>-->
-            <!--</a>-->
-        <!--</li>-->
-        <!--<li>-->
-            <!--<a href="/">-->
-                <!--<div class="row valign-wrapper">-->
-                    <!--<i class="material-icons col s4">settings</i>-->
-                    <!--<span class="col s8">Settings</span>-->
-                <!--</div>-->
-            <!--</a>-->
-        <!--</li>-->
-        <!--<li>-->
-            <!--<a href="/logout">-->
-                <!--<div class="row valign-wrapper">-->
-                    <!--<i class="material-icons col s4">power_settings_new</i>-->
-                    <!--<span class="col s8">Logout</span>-->
-                <!--</div>-->
-            <!--</a>-->
-        <!--</li>-->
+        <div ng-show="user.isOnline">
+            <li>
+                <a href="/">
+                    <div class="row valign-wrapper">
+                        <img ng-src="{{user.avatar}}" alt="Avatar"
+                             class="col s4 circle responsive-img">
+                        <span class="col s8">{{user.name}}</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/">
+                    <div class="row valign-wrapper">
+                        <i class="material-icons col s4">settings</i>
+                        <span class="col s8">Settings</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="/logout">
+                    <div class="row valign-wrapper">
+                        <i class="material-icons col s4">power_settings_new</i>
+                        <span class="col s8">Logout</span>
+                    </div>
+                </a>
+            </li>
+        </div>
 
         <li>
-
             <hr>
         </li>
 
-        <!--<li class="active">-->
-            <!--<a href="/forum" class="red-text">-->
-                <!--<% } else { %>-->
         <li>
             <a href="/forum">
                 <div class="row valign-wrapper">
@@ -72,7 +70,7 @@
     </nav>
 </header>
 
-<main ng-cloak ng-view></main>
+<main ng-view></main>
 
 <footer class="page-footer red">
     <div class="container">
