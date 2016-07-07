@@ -17,7 +17,7 @@ router.get('/auth/steam/return',
             if(err) {
                 handleError(res, err.message, 'Something went wrong while logging in. Please try again.')
             } else {
-                res.redirect('back');
+                res.redirect('/');
             }
         });
     });

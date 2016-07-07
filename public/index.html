@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="dtp">
 <head>
-    <title>DTP</title>
+    <title ng-bind="title"></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">
@@ -52,6 +52,7 @@
             <hr>
         </li>
 
+        <li>{{activeTab}}</li>
         <li>
             <a href="#/forum">
                 <div class="row valign-wrapper">

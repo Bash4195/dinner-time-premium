@@ -6,9 +6,21 @@ var dtp = angular.module('dtp', ['ngRoute']);
 dtp.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'home.html'
-        });
+            templateUrl: 'home.html',
+            title: 'DTP'
+        })
+        .when('/forum', {
+            templateUrl: 'forum/forum.html',
+            title: 'DTP - Forum',
+            activeTab: 'forum'
+        })
 });
+
+dtp.run(['$rootScope', function($rootScope) {
+    $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+        $rootScope.title = current.$$route.title;
+    });
+}]);
 
 dtp.service('User', function($http) {
     this.getUser =  function() {
