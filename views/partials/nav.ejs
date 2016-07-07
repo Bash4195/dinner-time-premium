@@ -54,7 +54,7 @@
             <a href="http://dtpremium.site.nfoservers.com/donate/">
                 <div class="row valign-wrapper">
 
-                    <i class="material-icons col s3">attach_money</i>
+                    <i class="material-icons col s3">favorite</i>
                     <span class="col s8">Donate</span>
                 </div>
             </a>
@@ -84,6 +84,19 @@
 
                     <i class="material-icons col s3">assignment</i>
                     <span class="col s8">Server Rules</span>
+                </div>
+            </a>
+        </li>
+        <% if(typeof active !== 'undefined' && active == 'about') { %>
+        <li class="active">
+            <a href="/about" class="red-text">
+        <% } else { %>
+        <li>
+            <a href="/about">
+        <% } %>
+                <div class="row valign-wrapper">
+                    <i class="material-icons col s3">people</i>
+                    <span class="col s8">About Us</span>
                 </div>
             </a>
         </li>
