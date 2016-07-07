@@ -27,8 +27,8 @@ passport.deserializeUser(function(user, done) {
 });
 
 passport.use(new SteamStrategy({
-        returnURL: 'http://localhost:8080/auth/steam/return',
-        realm: 'http://localhost:8080/',
+        returnURL: process.env.REALM + 'auth/steam/return',
+        realm: process.env.REALM,
         apiKey: 'B506EB47CC09A8AB77F4D484FB95FC49'
     },
     function(identifier, profile, done) {
@@ -50,7 +50,7 @@ passport.use(new SteamStrategy({
     }
 ));
 
-app.use(session({ //TODO update session when switched to HTTPS
+app.use(session({
     secret: 'Benji lives in Dinner Time Premium',
     name: 'DTP',
     resave: false,
@@ -61,18 +61,8 @@ app.use(session({ //TODO update session when switched to HTTPS
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Middleware to include user on all pages
-app.use(function(req, res, next) {
-    res.locals.user = req.user;
-    next();
-});
-
 // Routes
 app.use(userRoutes);
-
-app.get('*', function(req, res) {
-    res.sendFile(__dirname + '/public/index.html', {user: req.user});
-});
 
 app.listen(8080, function() {
     console.log('Server is listening on port 8080');

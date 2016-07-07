@@ -9,53 +9,51 @@
     <link rel="stylesheet" href="assets/css/dtp.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="app.js"></script>
 </head>
 <body class="grey lighten-4" ng-cloak>
 
-<header>
+<header ng-controller="navCtrl">
     <ul id="slide-out" class="side-nav fixed">
-        <li><a href="/" class="logo"><img src="assets/img/logo.svg" alt="DTP"></a></li>
+        <li><a href="#/" class="logo"><img src="assets/img/logo.svg" alt="DTP"></a></li>
         <li><br></li> <!-- Spacing from the logo -->
-        <li ng-hide="user">
+        <li ng-if="!user">
             <a href="/auth/steam" style="padding-top: 12px;">
                 <img src="assets/img/steam.png" alt="Sign in through Steam">
             </a>
         </li>
-        <div ng-show="user.isOnline">
-            <li>
-                <a href="/">
-                    <div class="row valign-wrapper">
-                        <img ng-src="{{user.avatar}}" alt="Avatar"
-                             class="col s4 circle responsive-img">
-                        <span class="col s8">{{user.name}}</span>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="/">
-                    <div class="row valign-wrapper">
-                        <i class="material-icons col s4">settings</i>
-                        <span class="col s8">Settings</span>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="/logout">
-                    <div class="row valign-wrapper">
-                        <i class="material-icons col s4">power_settings_new</i>
-                        <span class="col s8">Logout</span>
-                    </div>
-                </a>
-            </li>
-        </div>
+        <li ng-if="user">
+            <a href="#/">
+                <div class="row valign-wrapper">
+                    <img ng-src="{{user.avatar}}" alt="Avatar"
+                         class="col s4 circle responsive-img">
+                    <span class="col s8">{{user.name}}</span>
+                </div>
+            </a>
+        </li>
+        <li ng-if="user">
+            <a href="#/">
+                <div class="row valign-wrapper">
+                    <i class="material-icons col s4">settings</i>
+                    <span class="col s8">Settings</span>
+                </div>
+            </a>
+        </li>
+        <li ng-if="user">
+            <a href="/logout">
+                <div class="row valign-wrapper">
+                    <i class="material-icons col s4">power_settings_new</i>
+                    <span class="col s8">Logout</span>
+                </div>
+            </a>
+        </li>
 
         <li>
             <hr>
         </li>
 
         <li>
-            <a href="/forum">
+            <a href="#/forum">
                 <div class="row valign-wrapper">
                     <i class="material-icons col s4">forum</i>
                     <span class="col s8">Forum</span>

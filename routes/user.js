@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var handleError = require('../middleware/handleError');
 var User = require('../models/user');
 
 router.get('/auth/steam',
     passport.authenticate('steam', { failureRedirect: '/' }),
     function(req, res) {
-        res.redirect('/');
+        // Never called - redirects to Steam
     });
 
 router.get('/auth/steam/return',
@@ -14,9 +15,9 @@ router.get('/auth/steam/return',
     function(req, res) {
         User.findByIdAndUpdate(req.user._id, {isOnline: true}, function(err, user) {
             if(err) {
-                console.log(err);
+                handleError(res, err.message, 'Something went wrong while logging in. Please try again.')
             } else {
-                res.redirect('/');
+                res.redirect('back');
             }
         });
     });
@@ -24,10 +25,10 @@ router.get('/auth/steam/return',
 router.get('/logout', function(req, res) {
     User.findByIdAndUpdate(req.user._id, {isOnline: false}, function(err, user) {
         if(err) {
-            console.log(err);
+            handleError(res, err.message, 'Something went wrong while logging out. Please try again.')
         } else {
             req.logout();
-            res.redirect('/');
+            res.redirect('back');
         }
     });
 });
