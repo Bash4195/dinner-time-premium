@@ -6,34 +6,12 @@
                     <!--<i class="material-icons">add</i>-->
                 <!--</a>-->
         </li>
-        <li class="collection-item avatar">
-            <img ng-src={{user.avatar}} alt="" class="circle">
-            <span class="title">Title</span>
-            <p>First Line <br>
-                <span class="right grey-text">Comments</span>
-                Second Line
-            </p>
-        </li>
-        <li class="collection-item avatar">
-            <i class="material-icons circle">folder</i>
-            <span class="title">Title</span>
-            <p>First Line <br>
-                Second Line
-            </p>
-        </li>
-        <li class="collection-item avatar">
-            <i class="material-icons circle green">insert_chart</i>
-            <span class="title">Title</span>
-            <p>First Line <br>
-                Second Line
-            </p>
-        </li>
-        <li class="collection-item avatar">
-            <i class="material-icons circle red">play_arrow</i>
-            <span class="title">Title</span>
-            <p>First Line <br>
-                Second Line
-            </p>
-        </li>
+        <a href="#/forum" ng-repeat="post in posts">
+            <li class="collection-item avatar">
+                <img ng-src={{user.avatar}} alt="" class="circle">
+                <span class="title">{{post.title}}</span>
+                <p>{{post.content}}</p>
+            </li>
+        </a>
     </ul>
 </div>

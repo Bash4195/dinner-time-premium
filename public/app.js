@@ -11,7 +11,12 @@ dtp.config(function ($routeProvider) {
         })
         .when('/forum', {
             templateUrl: 'forum/forum.html',
-            controller: 'forumCtrl',
+            controller: 'forumIndexCtrl',
+            resolve: {
+                posts: function(Forum) {
+                    return Forum.getPosts();
+                }
+            },
             title: 'DTP - Forum'
         })
 });
@@ -34,16 +39,26 @@ dtp.service('User', function($http) {
     }
 });
 
+dtp.service('Forum', function($http) {
+    var self = this;
+    this.getPosts = function() {
+        return $http.get('/forum')
+            .then(function(res) {
+                return res.data;
+            });
+    }
+});
+
 dtp.controller('navCtrl', ['$scope', '$location', 'User', function($scope, $location, User) {
-    function init() {
+    // Initialize data needed for each page
+    function initialize() {
         User.getUser().then(function(user) {
             if(user) { // Get user data if it exists
-                $scope.user = user;
-                User.currentUser = user;
+                $scope.user = User.currentUser;
             }
         });
     }
-    init(); // Have to do this to get the user data properly
+    initialize(); // Have to do this to get the user data properly
 
     // Used to set the active nav button
     $scope.activeNav = function (viewLocation) {
@@ -51,12 +66,7 @@ dtp.controller('navCtrl', ['$scope', '$location', 'User', function($scope, $loca
     };
 }]);
 
-dtp.controller('forumCtrl', ['$scope', 'User', function($scope, User) {
-    if(User.currentUser !== '') {
-        $scope.user = User.currentUser;
-    }
-
-    $(document).ready(function(){
-        $('.collapsible').collapsible();
-    });
+dtp.controller('forumIndexCtrl', ['$scope', 'posts',
+    function($scope, posts) {
+        $scope.posts = posts;
 }]);
