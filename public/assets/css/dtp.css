@@ -20,6 +20,15 @@ header, main, footer {
     }
 }
 
+/* Text highlight */
+::-moz-selection {
+    background: #C62828;
+}
+
+::selection {
+    background: #C62828;
+}
+
 /* Side nav hover logo fix */
 .side-nav.fixed a.logo:hover {
     background-color: transparent;
@@ -29,12 +38,6 @@ header, main, footer {
     border: solid 1px #eee;
 }
 
-/* Text highlight */
-::-moz-selection {
-    background: #9e9e9e;
+.collection a {
+    color: rgba(0,0,0,0.87);
 }
-
-::selection {
-    background: #9e9e9e;
-}
-

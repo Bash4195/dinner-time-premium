@@ -33,6 +33,7 @@ router.get('/logout', function(req, res) {
     });
 });
 
+// Return current user to Angular
 router.get('/getUser', function(req, res) {
     res.status(200).json(req.user);
 });

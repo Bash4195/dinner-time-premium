@@ -52,9 +52,8 @@
             <hr>
         </li>
 
-        <li>{{activeTab}}</li>
-        <li>
-            <a href="#/forum">
+        <li ng-class="{active: activeNav('/forum')}">
+            <a href="#/forum" ng-class="{'red-text': activeNav('/forum')}">
                 <div class="row valign-wrapper">
                     <i class="material-icons col s4">forum</i>
                     <span class="col s8">Forum</span>
