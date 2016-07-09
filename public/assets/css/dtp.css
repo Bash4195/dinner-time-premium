@@ -38,6 +38,15 @@ header, main, footer {
     border: solid 1px #eee;
 }
 
+/* Collections */
 .collection a {
     color: rgba(0,0,0,0.87);
+}
+
+#forum-collection li.collection-header h4 {
+    /*display: inline-block;*/
+}
+
+#forum-collection li.collection-header button {
+    margin: -0.51rem 0 0.912rem 0;
 }
