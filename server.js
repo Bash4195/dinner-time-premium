@@ -8,14 +8,16 @@ var SteamStrategy = require('passport-steam').Strategy;
 
 // Route requires
 var userRoutes = require('./routes/user');
+var forumRoutes = require('./routes/forum');
 
 // Model requires
 var User = require('./models/user');
 
+// App config
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: true}));
 
-mongoose.connect('mongodb://localhost/dtp');
+mongoose.connect(process.env.MONGODB_URI);
 
 // Passport config
 passport.serializeUser(function(user, done) {
@@ -63,6 +65,7 @@ app.use(passport.session());
 
 // Routes
 app.use(userRoutes);
+app.use(forumRoutes);
 
 app.listen(8080, function() {
     console.log('Server is listening on port 8080');
