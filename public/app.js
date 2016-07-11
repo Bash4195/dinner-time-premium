@@ -29,6 +29,35 @@ dtp.run(['$rootScope', function($rootScope) {
     });
 }]);
 
+dtp.service('Error', function() {
+    // Split into different functions to be able to add icons to each message
+    this.default = function(message, duration, callback) {
+        duration = duration || 4000;
+
+        Materialize.toast(message, duration, '', callback);
+    };
+    this.success = function(message, duration, callback) {
+        message = '<i class="material-icons left">check</i>' + message;
+        duration = duration || 4000;
+        Materialize.toast(message, duration, 'toast-success', callback);
+    };
+    this.info = function(message, duration, callback) {
+        message = '<i class="material-icons left">info</i>' + message;
+        duration = duration || 4000;
+        Materialize.toast(message, duration, 'toast-info', callback);
+    };
+    this.warning = function(message, duration, callback) {
+        message = '<i class="material-icons left">warning</i>' + message;
+        duration = duration || 4000;
+        Materialize.toast(message, duration, 'toast-warning', callback);
+    };
+    this.error = function(message, duration, callback) {
+        message = '<i class="material-icons left">error</i><strong>' + message + '</strong>';
+        duration = duration || 4000;
+        Materialize.toast(message, duration, 'toast-error', callback);
+    };
+});
+
 dtp.service('User', function($http) {
     var self = this;
     this.currentUser = ''; // Saves network usage
@@ -74,46 +103,46 @@ dtp.controller('navCtrl', ['$scope', '$location', 'User', function($scope, $loca
     };
 }]);
 
-dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum',
-    function($scope, User, posts, Forum) {
-    if(User.currentUser === '') {
-        User.getUser()
-            .then(function(user) {
-                if(user) {
-                    $scope.user = user;
-                }
-            });
-    } else {
-        $scope.user = User.currentUser;
-    }
-    $scope.posts = posts;
-
-    $scope.postTitle = '';
-    $scope.postContent = '';
-
-    $scope.createPost = function() {
-        if($scope.user === undefined) {
-            console.log('user error');
+dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
+    function($scope, User, posts, Forum, Error) {
+        if(User.currentUser === '') {
+            User.getUser()
+                .then(function(user) {
+                    if(user) {
+                        $scope.user = user;
+                    }
+                });
         } else {
-            if($scope.postTitle || $scope.postContent === '') {
-                console.log('title & content error');
-            } else {
-                var Post = {
-                    title: $scope.postTitle,
-                    content: $scope.postContent,
-                    authour: $scope.user
-                };
-                Forum.newPost(Post)
-                    .then(function(post) {
-                        console.log(post);
-                    });
-            }
+            $scope.user = User.currentUser;
         }
-    };
+        $scope.posts = posts;
 
-    // Initialize Modal
-    $(document).ready(function(){
-        $('.modal-trigger').leanModal();
-        $('.tooltipped').tooltip({delay: 800});
-    });
+        $scope.postTitle = '';
+        $scope.postContent = '';
+
+        $scope.createPost = function() {
+            if($scope.user === undefined) {
+                console.log('user error');
+            } else {
+                if($scope.postTitle || $scope.postContent === '') {
+                    console.log('title & content error');
+                } else {
+                    var Post = {
+                        title: $scope.postTitle,
+                        content: $scope.postContent,
+                        authour: $scope.user
+                    };
+                    Forum.newPost(Post)
+                        .then(function(post) {
+                            console.log(post);
+                        });
+                }
+            }
+        };
+
+        // Initialize Modal
+        $(document).ready(function(){
+            $('.modal-trigger').leanModal();
+            $('.tooltipped').tooltip({delay: 800});
+        });
 }]);

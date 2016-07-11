@@ -29,6 +29,20 @@ header, main, footer {
     background: #C62828;
 }
 
+/* Error handler classes */
+.toast-success {
+    color: #4CAF50;
+}
+.toast-info {
+    color: #2196F3;
+}
+.toast-warning {
+    color: #FF9800;
+}
+.toast-error {
+    color: #F44336;
+}
+
 /* Side nav hover logo fix */
 .side-nav.fixed a.logo:hover {
     background-color: transparent;
