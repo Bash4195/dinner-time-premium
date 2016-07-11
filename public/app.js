@@ -70,20 +70,24 @@ dtp.service('User', function($http) {
     }
 });
 
-dtp.service('Forum', function($http) {
+dtp.service('Forum', ['$http', 'Error', function($http, Error) {
     this.getPosts = function() {
         return $http.get('/forum')
             .then(function(res) {
                 return res.data;
+            }, function(res) {
+                Error.error(res.data.error);
             });
     };
     this.newPost = function(post) {
         return $http.post('/forum', post)
             .then(function(res) {
                 return res.data;
+            }, function(res) {
+                Error.error(res.data.error);
             })
     };
-});
+}]);
 
 dtp.controller('navCtrl', ['$scope', '$location', 'User', function($scope, $location, User) {
     if(User.currentUser === '') {
@@ -127,7 +131,8 @@ dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
             } else {
                 if($scope.postTitle === '') {
                     Error.error('Your post needs a title!');
-                } else if($scope.postContent === '') {
+                } else 
+                if($scope.postContent === '') {
                     Error.error('The content field is required');
                 } else {
                     $('#createPostModal').closeModal();
