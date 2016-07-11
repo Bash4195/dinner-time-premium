@@ -4,7 +4,7 @@
                 <h4>Discussions</h4>
                 <button data-target="createPostModal"
                         class="modal-trigger right btn-floating waves-effect waves-light red tooltipped"
-                        data-position="top" data-delay="800" data-tooltip="New post">
+                        data-position="top" data-delay="800" data-tooltip="New post" ng-show="user">
                     <i class="material-icons">add</i>
                 </button>
         </li>
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a href="" ng-click="createPost()" class="modal-action modal-close waves-effect waves-light btn red">Create<i class="material-icons right">send</i></a>
+            <a href="" ng-click="createPost()" class="modal-action waves-effect waves-light btn red">Create<i class="material-icons right">send</i></a>
             <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
         </div>
     </div>

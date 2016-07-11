@@ -122,16 +122,20 @@ dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
 
         $scope.createPost = function() {
             if($scope.user === undefined) {
-                console.log('user error');
+                Error.error('You must be logged in to create a post');
+                $('#createPostModal').closeModal();
             } else {
-                if($scope.postTitle || $scope.postContent === '') {
-                    console.log('title & content error');
+                if($scope.postTitle === '') {
+                    Error.error('Your post needs a title!');
+                } else if($scope.postContent === '') {
+                    Error.error('The content field is required');
                 } else {
-                    var Post = {
-                        title: $scope.postTitle,
-                        content: $scope.postContent,
-                        authour: $scope.user
-                    };
+                    $('#createPostModal').closeModal();
+                        var Post = {
+                            title: $scope.postTitle,
+                            content: $scope.postContent,
+                            authour: $scope.user
+                        };
                     Forum.newPost(Post)
                         .then(function(post) {
                             console.log(post);
