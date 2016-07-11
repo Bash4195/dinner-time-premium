@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var handleError = require('../middleware/handleError');
+var middleware = require('../middleware/index');
 var Forum = require('../models/forum');
 
 // INDEX
 router.get('/forum', function(req, res) {
     Forum.find({}, function(err, posts) {
         if(err) {
-            handleError(res, err.message, 'Failed to retrieve forum posts.');
+            middleware.handleError(res, err.message, 'Failed to retrieve forum posts.');
         } else {
             res.status(200).json(posts);
         }
@@ -17,24 +17,30 @@ router.get('/forum', function(req, res) {
 // NEW // In Modal instead of separate route
 
 // CREATE
-router.post('/forum', function(req ,res) {
+router.post('/forum', middleware.isLoggedIn, function(req, res) {
     var newPost = req.body;
-    // Check for missing input here or in a middleware
-
-    Forum.create(newPost, function(err, post) {
-        if(err) {
-            handleError(res, err.message, 'Failed to create post.');
-        } else {
-            res.status(201).json(post);
-        }
-    });
+    if(newPost.title === '' || newPost.title === 'undefined') {
+        middleware.handleError(res, 'Title is missing', 'Title is missing', 400);
+    } else if(newPost.content === '' || newPost.content === 'undefined') {
+        middleware.handleError(res, 'Content is missing', 'Content is missing', 400);
+    } else if(newPost.authour === '' || newPost.authour === 'undefined') {
+        middleware.handleError(res, 'Authour is missing', 'Authour is missing', 400);
+    } else {
+        Forum.create(newPost, function(err, post) {
+            if(err) {
+                middleware.handleError(res, err.message, 'Failed to create post.');
+            } else {
+                res.status(201).json(post);
+            }
+        });
+    }
 });
 
 // SHOW
 router.get('/forum/:postId', function(req, res) {
     Forum.findById(req.params.id, function(err, post) {
         if(err) {
-            handleError(res, err.message, 'Failed to find post.');
+            middleware.handleError(res, err.message, 'Failed to find post.');
         } else {
             res.status(200).json(post);
         }
@@ -47,7 +53,7 @@ router.get('/forum/:postId', function(req, res) {
 router.put('/forum/:postId', function(req, res ) {
     Forum.findByIdAndUpdate(req.params.id, res.body, function(err, post) {
         if(err) {
-            handleError(res, err.message, 'Failed to update post.');
+            middleware.handleError(res, err.message, 'Failed to update post.');
         } else {
             res.status(204).end('Updated post');
         }
@@ -58,7 +64,7 @@ router.put('/forum/:postId', function(req, res ) {
 router.delete('/forum/:postId', function(req, res) {
     Forum.findByIdAndRemove(req.params.id, function(err) {
         if(err) {
-            handleError(res, err.message, 'Failed to delete post.');
+            middleware.handleError(res, err.message, 'Failed to delete post.');
         } else {
             res.status(204).end('Deleted post');
         }

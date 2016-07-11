@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var handleError = require('../middleware/handleError');
+var handleError = require('../middleware/index');
 var User = require('../models/user');
 
 router.get('/auth/steam',
