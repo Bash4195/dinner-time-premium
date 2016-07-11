@@ -2,16 +2,40 @@
     <ul class="collection with-header" id="forum-collection">
         <li class="collection-header">
                 <h4>Discussions</h4>
-                <button class="right btn-floating waves-effect waves-light red">
+                <button data-target="createPostModal"
+                        class="modal-trigger right btn-floating waves-effect waves-light red tooltipped"
+                        data-position="top" data-delay="800" data-tooltip="New post">
                     <i class="material-icons">add</i>
                 </button>
         </li>
-        <a href="#/forum" ng-repeat="post in posts">
-            <li class="collection-item avatar">
-                <img ng-src={{user.avatar}} alt="" class="circle">
+        <li class="collection-item avatar" ng-repeat="post in posts">
+            <a ng-href="#/forum/{{post._id}}">
+                <img ng-src={{post.authour.avatar}} alt="" class="circle">
                 <span class="title truncate">{{post.title}}</span>
                 <p class="truncate">{{post.content}}</p>
-            </li>
-        </a>
+                <span class="grey-text">Posted by: {{post.authour.name}}</span>
+                <span class="grey-text right">Comments</span>
+            </a>
+        </li>
     </ul>
+    <div id="createPostModal" class="modal">
+        <div class="modal-content">
+            <div class="row">
+                <form class="col s12">
+                    <div class="input-field col s12">
+                        <input id="title" type="text" ng-model="postTitle">
+                        <label for="title">Title</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <textarea id="content" class="materialize-textarea" ng-model="postContent"></textarea>
+                        <label for="content">Content</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="" ng-click="createPost()" class="modal-action modal-close waves-effect waves-light btn red">Create<i class="material-icons right">send</i></a>
+            <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+        </div>
+    </div>
 </div>

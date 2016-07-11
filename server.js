@@ -15,7 +15,8 @@ var User = require('./models/user');
 
 // App config
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGODB_URI);
 

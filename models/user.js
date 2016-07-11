@@ -11,10 +11,7 @@ var userSchema = mongoose.Schema({
     avatarFull: String,
     countryCode: String,
     isOnline: Boolean
-},
-    {
-        timestamps: true
-    });
+});
 
 userSchema.plugin(findOrCreate);
 

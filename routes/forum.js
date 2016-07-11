@@ -19,7 +19,6 @@ router.get('/forum', function(req, res) {
 // CREATE
 router.post('/forum', function(req ,res) {
     var newPost = req.body;
-
     // Check for missing input here or in a middleware
 
     Forum.create(newPost, function(err, post) {
