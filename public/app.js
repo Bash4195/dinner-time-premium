@@ -6,7 +6,14 @@ dtp.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
             title: 'DTP',
-            templateUrl: 'home.html'
+            templateUrl: 'home.html',
+            controller: 'homeCtrl',
+            resolve: {
+                // Provide posts on page load
+                posts: function(Forum) {
+                    return Forum.getPosts();
+                }
+            }
         })
 
         // Forum Routes
@@ -105,6 +112,10 @@ dtp.controller('navCtrl', ['$scope', '$location', 'User', function($scope, $loca
     $scope.activeNav = function (viewLocation) {
         return viewLocation === $location.path();
     };
+}]);
+
+dtp.controller('homeCtrl', ['$scope', 'posts', function($scope, posts) {
+    $scope.posts = posts;
 }]);
 
 dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
