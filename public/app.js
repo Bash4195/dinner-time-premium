@@ -134,6 +134,13 @@ dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
 
         $scope.postTitle = '';
         $scope.postContent = '';
+        
+        $scope.refresh = function() {
+            Forum.getPosts()
+                .then(function(posts) {
+                    $scope.posts = posts;
+                });
+        };
 
         $scope.createPost = function() {
             if($scope.user === undefined) {
@@ -155,6 +162,7 @@ dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
                     Forum.newPost(Post)
                         .then(function(post) {
                             console.log(post);
+                            $scope.refresh();
                         });
                 }
             }
