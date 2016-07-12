@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var handleError = require('../middleware/index');
+var middleware = require('../middleware/index');
 var User = require('../models/user');
 
 router.get('/auth/steam',
@@ -22,7 +22,7 @@ router.get('/auth/steam/return',
         });
     });
 
-router.get('/logout', function(req, res) {
+router.get('/logout', middleware.isLoggedIn, function(req, res) {
     User.findByIdAndUpdate(req.user._id, {isOnline: false}, function(err, user) {
         if(err) {
             handleError(res, err.message, 'Something went wrong while logging out. Please try again.')

@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
@@ -15,6 +16,7 @@ var User = require('./models/user');
 
 // App config
 app.use(express.static(__dirname + '/public'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
