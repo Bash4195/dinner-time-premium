@@ -8,9 +8,9 @@
                     <i class="material-icons">add</i>
                 </button>
         </li>
-        <li class="collection-item avatar" ng-repeat="post in posts">
+        <li class="collection-item avatar" ng-repeat="post in posts | orderBy : '-updatedAt'">
             <a ng-href="#/forum/{{post._id}}">
-                <img ng-src={{post.authour.avatar}} alt="" class="circle">
+                <img ng-src={{post.authour.avatar}} alt="Avatar" class="circle">
                 <span class="title truncate">{{post.title}}</span>
                 <p class="truncate">{{post.content}}</p>
                 <span class="grey-text">Posted by: {{post.authour.name}}</span>

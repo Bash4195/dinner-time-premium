@@ -38,7 +38,7 @@ router.post('/forum', middleware.isLoggedIn, function(req, res) {
 
 // SHOW
 router.get('/forum/:postId', function(req, res) {
-    Forum.findById(req.params.id, function(err, post) {
+    Forum.findById(req.params.postId, function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to find post.');
         } else {

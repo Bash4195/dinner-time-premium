@@ -5,36 +5,29 @@ var dtp = angular.module('dtp', ['ngRoute']);
 dtp.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
-            title: 'DTP',
             templateUrl: 'home.html',
-            controller: 'homeCtrl',
-            resolve: {
-                // Provide posts on page load
-                posts: function(Forum) {
-                    return Forum.getPosts();
-                }
-            }
+            controller: 'homeCtrl'
         })
 
         // Forum Routes
         .when('/forum', {
-            title: 'DTP - Forum',
-            templateUrl: 'forum/forum.html',
-            controller: 'forumIndexCtrl',
-            resolve: {
-                // Provide posts on page load
-                posts: function(Forum) {
-                    return Forum.getPosts();
-                }
-            }
+            templateUrl: 'forum/forumIndex.html',
+            controller: 'forumIndexCtrl'
+        })
+
+        .when('/forum/:postId', {
+            templateUrl: 'forum/forumShow.html',
+            controller: 'forumShowCtrl'
         })
 });
 
-dtp.run(['$rootScope', function($rootScope) {
-    $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-        $rootScope.title = current.$$route.title;
-    });
-}]);
+dtp.factory('PageTitle', function() {
+    var title = 'DTP';
+    return {
+        title: function() { return title; },
+        setTitle: function(newTitle) { title = newTitle }
+    };
+});
 
 dtp.service('Error', function() {
     // Split into different functions to be able to add icons to each message
@@ -59,7 +52,7 @@ dtp.service('Error', function() {
         Materialize.toast(message, duration, 'toast-warning', callback);
     };
     this.error = function(message, duration, callback) {
-        message = '<i class="material-icons left">error</i><strong>' + message + '</strong>';
+        message = '<i class="material-icons left">error</i>' + message;
         duration = duration || 4000;
         Materialize.toast(message, duration, 'toast-error', callback);
     };
@@ -94,9 +87,18 @@ dtp.service('Forum', ['$http', 'Error', function($http, Error) {
                 Error.error(res.data.error);
             })
     };
+    this.getPost = function(id) {
+        return $http.get('/forum/' + id)
+            .then(function(res) {
+                return res.data;
+            }, function(res) {
+                Error.error(res.data.error);
+            })
+    }
 }]);
 
-dtp.controller('navCtrl', ['$scope', '$location', 'User', function($scope, $location, User) {
+dtp.controller('navCtrl', ['$scope', 'PageTitle', '$location', 'User', function($scope, PageTitle, $location, User) {
+    $scope.PageTitle = PageTitle;
     if(User.currentUser === '') {
         User.getUser()
             .then(function(user) {
@@ -114,12 +116,23 @@ dtp.controller('navCtrl', ['$scope', '$location', 'User', function($scope, $loca
     };
 }]);
 
-dtp.controller('homeCtrl', ['$scope', 'posts', function($scope, posts) {
-    $scope.posts = posts;
+dtp.controller('homeCtrl', ['$scope', 'PageTitle', function($scope, PageTitle) {
+    $scope.PageTitle = PageTitle.setTitle('DTP');
 }]);
 
-dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
-    function($scope, User, posts, Forum, Error) {
+dtp.controller('forumIndexCtrl', ['$scope', 'PageTitle', 'User', 'Forum', 'Error',
+    function($scope, PageTitle, User, Forum, Error) {
+
+        $scope.updatePosts = function() {
+            Forum.getPosts()
+                .then(function(posts) {
+                    $scope.posts = posts;
+                });
+        };
+        $scope.updatePosts();
+
+        PageTitle.setTitle('DTP - Forum');
+
         if(User.currentUser === '') {
             User.getUser()
                 .then(function(user) {
@@ -130,17 +143,9 @@ dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
         } else {
             $scope.user = User.currentUser;
         }
-        $scope.posts = posts;
 
         $scope.postTitle = '';
         $scope.postContent = '';
-        
-        $scope.refresh = function() {
-            Forum.getPosts()
-                .then(function(posts) {
-                    $scope.posts = posts;
-                });
-        };
 
         $scope.createPost = function() {
             if($scope.user === undefined) {
@@ -149,7 +154,7 @@ dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
             } else {
                 if($scope.postTitle === '') {
                     Error.error('Your post needs a title!');
-                } else 
+                } else
                 if($scope.postContent === '') {
                     Error.error('The content field is required');
                 } else {
@@ -162,7 +167,9 @@ dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
                     Forum.newPost(Post)
                         .then(function(post) {
                             console.log(post);
-                            $scope.refresh();
+                            $scope.postTitle = '';
+                            $scope.postContent = '';
+                            $scope.updatePosts();
                         });
                 }
             }
@@ -173,4 +180,18 @@ dtp.controller('forumIndexCtrl', ['$scope', 'User', 'posts', 'Forum', 'Error',
             $('.modal-trigger').leanModal();
             $('.tooltipped').tooltip({delay: 800});
         });
+}]);
+
+dtp.controller('forumShowCtrl', ['$scope', 'PageTitle', '$routeParams', 'Forum', function($scope, PageTitle, $routeParams, Forum) {
+    var id = $routeParams.postId;
+    $scope.PageTitle = PageTitle.setTitle('DTP - Forum');
+
+    $scope.getPost = function() {
+        Forum.getPost(id)
+            .then(function(post) {
+                $scope.post = post;
+                $scope.PageTitle = PageTitle.setTitle(post.title);
+            });
+    };
+    $scope.getPost();
 }]);

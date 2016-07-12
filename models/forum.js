@@ -10,6 +10,7 @@ var forumSchema = mongoose.Schema({
         },
         name: {type: String, required: true},
         avatar: String,
+        avatarMedium: String,
         profileUrl: String,
         isOnline: Boolean
     }

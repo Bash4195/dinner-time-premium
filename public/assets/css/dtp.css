@@ -20,6 +20,26 @@ header, main, footer {
     }
 }
 
+/* Link styles */
+.text-link:hover {
+    text-decoration: underline;
+}
+
+/* Lighten the hr colour */
+hr {
+    border: solid 1px #E0E0E0;
+}
+
+/* Wrap text in pre tag */
+pre {
+    font-family: Roboto, Helvetica, sans-serif;
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+
 /* Text highlight */
 ::-moz-selection {
     background: #C62828;
@@ -46,10 +66,6 @@ header, main, footer {
 /* Side nav hover logo fix */
 .side-nav.fixed a.logo:hover {
     background-color: transparent;
-}
-
-.side-nav hr {
-    border: solid 1px #eee;
 }
 
 /* Input fields */

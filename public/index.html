@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="dtp">
+<html lang="en" ng-app="dtp" ng-controller="navCtrl">
 <head>
-    <title ng-bind="title"></title>
+    <title ng-bind="PageTitle.title()"></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -13,7 +13,7 @@
 </head>
 <body class="grey lighten-4" ng-cloak>
 
-<header ng-controller="navCtrl">
+<header>
     <ul id="slide-out" class="side-nav fixed">
         <li><a href="#/" class="logo"><img src="assets/img/logo.svg" alt="DTP"></a></li>
         <li><br></li> <!-- Spacing from the logo -->
@@ -96,8 +96,8 @@
             <div class="col s4 offset-s2">
                 <h5 class="white-text">Links</h5>
                 <ul>
-                    <li><a class="grey-text text-lighten-3" href="http://steamcommunity.com/groups/dtpremium">Steam</a></li>
-                    <li><a class="grey-text text-lighten-3" href="http://dtpremium.site.nfoservers.com/donate/">Donate</a></li>
+                    <li><a class="text-link grey-text text-lighten-3" href="http://steamcommunity.com/groups/dtpremium">Steam</a></li>
+                    <li><a class="text-link grey-text text-lighten-3" href="http://dtpremium.site.nfoservers.com/donate/">Donate</a></li>
                 </ul>
             </div>
         </div>

@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{post.title}}</span>
+            <a ng-href="{{post.authour.profileUrl}}" class="right" style="color: rgba(0,0,0,0.87)">
+                <span>{{post.authour.name}}</span>
+                <img ng-src="{{post.authour.avatar}}" alt="Avatar" class="circle">
+            </a>
+            <hr>
+            <pre>{{post.content}}</pre>
+        </div>
+    </div>
+</div>
