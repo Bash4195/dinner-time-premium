@@ -15,7 +15,50 @@
 <body class="grey lighten-4" ng-cloak>
 
 <header>
-    <ul id="slide-out" class="side-nav fixed">
+    <nav class="red">
+        <div class="nav-wrapper">
+            <a href="" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+            <a href="/" class="brand-logo"><img src="assets/img/logo.svg" alt="DTP"></a>
+            <ul class="right">
+                <li ng-if="!user">
+                    <a href="/auth/steam" target="_self">
+                        <button class="btn-flat transparent">
+                            <img src="assets/img/steam.png" alt="Sign in through Steam">
+                        </button>
+                    </a>
+                </li>
+                <li ng-if="user">
+                    <a href="/">
+                        <button class="btn-flat transparent" style="padding: 0 10px">
+                            <img ng-src="{{user.avatar}}" alt="Avatar"
+                                 class="circle responsive-img">
+                        </button>
+                    </a>
+                </li>
+            </ul>
+            <ul class="right hide-on-med-and-down">
+                <li>
+                    <a href="http://steamcommunity.com/groups/dtpremium#announcements">
+                        <i class="material-icons left">announcement</i>
+                        <span>News</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://dtpremium.site.nfoservers.com/donate/">
+                        <i class="material-icons left">favorite</i>
+                        <span class="col s8">Donate</span>
+                    </a>
+                </li>
+                <li ng-class="{active: activeNav('/forum')}">
+                    <a href="/forum" ng-class="{'red-text': activeNav('/forum')}">
+                        <i class="material-icons left">forum</i>
+                        <span>Forum</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <ul id="slide-out" class="side-nav">
         <li><a href="/" class="logo"><img src="assets/img/logo.svg" alt="DTP"></a></li>
         <li><br></li> <!-- Spacing from the logo -->
         <li ng-if="!user">
@@ -50,7 +93,7 @@
         </li>
 
         <li>
-            <hr>
+            <div class="divider"></div>
         </li>
 
         <li>
@@ -78,11 +121,6 @@
             </a>
         </li>
     </ul>
-    <nav class="red hide-on-large-only">
-        <div class="container">
-            <a href="" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
-        </div>
-    </nav>
 </header>
 
 <main ng-view></main>

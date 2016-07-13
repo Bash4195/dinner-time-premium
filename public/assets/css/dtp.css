@@ -9,25 +9,9 @@ main {
     flex: 1 0 auto;
 }
 
-/* Offset content for side nav */
-header, main, footer {
-    padding-left: 240px;
-}
-
-@media only screen and (max-width : 992px) {
-    header, main, footer {
-        padding-left: 0;
-    }
-}
-
 /* Link styles */
 .text-link:hover {
     text-decoration: underline;
-}
-
-/* Lighten the hr colour */
-hr {
-    border: solid 1px #E0E0E0;
 }
 
 /* Wrap text in pre tag */
@@ -64,7 +48,7 @@ pre {
 }
 
 /* Side nav hover logo fix */
-.side-nav.fixed a.logo:hover {
+.side-nav a.logo:hover {
     background-color: transparent;
 }
 

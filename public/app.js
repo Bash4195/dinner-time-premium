@@ -7,7 +7,7 @@ dtp.config(function ($routeProvider, $locationProvider) {
             templateUrl: 'home.html',
             controller: 'homeCtrl'
         })
-            
+
         // Forum Routes
         .when('/forum', {
             templateUrl: 'forum/forumIndex.html',
