@@ -6,24 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
-    <link rel="stylesheet" href="assets/css/dtp.css">
+    <link rel="stylesheet" href="/assets/css/dtp.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
-    <script src="app.js"></script>
+    <script src="/app.js"></script>
+    <base href="/">
 </head>
 <body class="grey lighten-4" ng-cloak>
 
 <header>
     <ul id="slide-out" class="side-nav fixed">
-        <li><a href="#/" class="logo"><img src="assets/img/logo.svg" alt="DTP"></a></li>
+        <li><a href="/" class="logo"><img src="assets/img/logo.svg" alt="DTP"></a></li>
         <li><br></li> <!-- Spacing from the logo -->
         <li ng-if="!user">
-            <a href="/auth/steam" style="padding-top: 12px;">
+            <a href="/auth/steam" target="_self" style="padding-top: 12px;">
                 <img src="assets/img/steam.png" alt="Sign in through Steam">
             </a>
         </li>
         <li ng-if="user">
-            <a href="#/">
+            <a href="/">
                 <div class="row valign-wrapper">
                     <img ng-src="{{user.avatar}}" alt="Avatar"
                          class="col s4 circle responsive-img">
@@ -32,7 +33,7 @@
             </a>
         </li>
         <li ng-if="user">
-            <a href="#/">
+            <a href="/">
                 <div class="row valign-wrapper">
                     <i class="material-icons col s4">settings</i>
                     <span class="col s8">Settings</span>
@@ -40,7 +41,7 @@
             </a>
         </li>
         <li ng-if="user">
-            <a href="/logout">
+            <a href="/auth/logout" target="_self">
                 <div class="row valign-wrapper">
                     <i class="material-icons col s4">power_settings_new</i>
                     <span class="col s8">Logout</span>
@@ -69,7 +70,7 @@
             </a>
         </li>
         <li ng-class="{active: activeNav('/forum')}">
-            <a href="#/forum" ng-class="{'red-text': activeNav('/forum')}">
+            <a href="/forum" ng-class="{'red-text': activeNav('/forum')}">
                 <div class="row valign-wrapper">
                     <i class="material-icons col s4">forum</i>
                     <span class="col s8">Forum</span>
@@ -79,7 +80,7 @@
     </ul>
     <nav class="red hide-on-large-only">
         <div class="container">
-            <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+            <a href="" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
         </div>
     </nav>
 </header>

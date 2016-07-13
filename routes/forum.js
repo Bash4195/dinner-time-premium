@@ -4,7 +4,7 @@ var middleware = require('../middleware/index');
 var Forum = require('../models/forum');
 
 // INDEX
-router.get('/forum', function(req, res) {
+router.get('/api/forum', function(req, res) {
     Forum.find({}, function(err, posts) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve forum posts.');
@@ -17,7 +17,7 @@ router.get('/forum', function(req, res) {
 // NEW // In Modal instead of separate route
 
 // CREATE
-router.post('/forum', middleware.isLoggedIn, function(req, res) {
+router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
     var newPost = req.body;
     if(newPost.title === '' || newPost.title === 'undefined') {
         middleware.handleError(res, 'Title is missing', 'Title is missing', 400);
@@ -37,7 +37,7 @@ router.post('/forum', middleware.isLoggedIn, function(req, res) {
 });
 
 // SHOW
-router.get('/forum/:postId', function(req, res) {
+router.get('/api/forum/:postId', function(req, res) {
     Forum.findById(req.params.postId, function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to find post.');
@@ -50,7 +50,7 @@ router.get('/forum/:postId', function(req, res) {
 // EDIT // In modal instead of separate route
 
 // UPDATE
-router.put('/forum/:postId', function(req, res ) {
+router.put('/api/forum/:postId', function(req, res ) {
     Forum.findByIdAndUpdate(req.params.id, res.body, function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to update post.');
@@ -61,7 +61,7 @@ router.put('/forum/:postId', function(req, res ) {
 });
 
 // DESTROY
-router.delete('/forum/:postId', function(req, res) {
+router.delete('/api/forum/:postId', function(req, res) {
     Forum.findByIdAndRemove(req.params.id, function(err) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to delete post.');

@@ -15,17 +15,17 @@ router.get('/auth/steam/return',
     function(req, res) {
         User.findByIdAndUpdate(req.user._id, {isOnline: true}, function(err, user) {
             if(err) {
-                handleError(res, err.message, 'Something went wrong while logging in. Please try again.')
+                middleware.handleError(res, err.message, 'Something went wrong while logging in. Please try again.')
             } else {
                 res.redirect('/');
             }
         });
     });
 
-router.get('/logout', middleware.isLoggedIn, function(req, res) {
+router.get('/auth/logout', middleware.isLoggedIn, function(req, res) {
     User.findByIdAndUpdate(req.user._id, {isOnline: false}, function(err, user) {
         if(err) {
-            handleError(res, err.message, 'Something went wrong while logging out. Please try again.')
+            middleware.handleError(res, err.message, 'Something went wrong while logging out. Please try again.')
         } else {
             req.logout();
             res.redirect('back');
@@ -34,7 +34,7 @@ router.get('/logout', middleware.isLoggedIn, function(req, res) {
 });
 
 // Return current user to Angular
-router.get('/getUser', function(req, res) {
+router.get('/auth/getUser', function(req, res) {
     res.status(200).json(req.user);
 });
 

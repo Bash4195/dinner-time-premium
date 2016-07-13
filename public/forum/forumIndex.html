@@ -9,7 +9,7 @@
                 </button>
         </li>
         <li class="collection-item avatar" ng-repeat="post in posts | orderBy : '-updatedAt'">
-            <a ng-href="#/forum/{{post._id}}">
+            <a ng-href="/forum/{{post._id}}">
                 <img ng-src={{post.authour.avatar}} alt="Avatar" class="circle">
                 <span class="title truncate">{{post.title}}</span>
                 <p class="truncate">{{post.content}}</p>

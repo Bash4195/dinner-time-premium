@@ -1,14 +1,13 @@
 var dtp = angular.module('dtp', ['ngRoute']);
 
-// TODO: Better error handling
-
-dtp.config(function ($routeProvider) {
+dtp.config(function ($routeProvider, $locationProvider) {
+    $locationProvider.html5Mode(true);
     $routeProvider
         .when('/', {
             templateUrl: 'home.html',
             controller: 'homeCtrl'
         })
-
+            
         // Forum Routes
         .when('/forum', {
             templateUrl: 'forum/forumIndex.html',
@@ -62,7 +61,7 @@ dtp.service('User', function($http) {
     var self = this;
     this.currentUser = ''; // Saves network usage
     this.getUser = function() {
-        return $http.get('/getUser')
+        return $http.get('/auth/getUser')
             .then(function(res) {
                 self.currentUser = res.data; // Keep current user variable up to date
                 return res.data;
@@ -72,7 +71,7 @@ dtp.service('User', function($http) {
 
 dtp.service('Forum', ['$http', 'Error', function($http, Error) {
     this.getPosts = function() {
-        return $http.get('/forum')
+        return $http.get('/api/forum')
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -80,7 +79,7 @@ dtp.service('Forum', ['$http', 'Error', function($http, Error) {
             });
     };
     this.newPost = function(post) {
-        return $http.post('/forum', post)
+        return $http.post('/api/forum', post)
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -88,7 +87,7 @@ dtp.service('Forum', ['$http', 'Error', function($http, Error) {
             })
     };
     this.getPost = function(id) {
-        return $http.get('/forum/' + id)
+        return $http.get('/api/forum/' + id)
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -99,6 +98,7 @@ dtp.service('Forum', ['$http', 'Error', function($http, Error) {
 
 dtp.controller('navCtrl', ['$scope', 'PageTitle', '$location', 'User', function($scope, PageTitle, $location, User) {
     $scope.PageTitle = PageTitle;
+
     if(User.currentUser === '') {
         User.getUser()
             .then(function(user) {
@@ -133,14 +133,7 @@ dtp.controller('forumIndexCtrl', ['$scope', 'PageTitle', 'User', 'Forum', 'Error
 
         PageTitle.setTitle('DTP - Forum');
 
-        if(User.currentUser === '') {
-            User.getUser()
-                .then(function(user) {
-                    if(user) {
-                        $scope.user = user;
-                    }
-                });
-        } else {
+        if(User.currentUser !== '') {
             $scope.user = User.currentUser;
         }
 
