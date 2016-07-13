@@ -114,6 +114,19 @@ dtp.controller('navCtrl', ['$scope', 'PageTitle', '$location', 'User', function(
     $scope.activeNav = function (viewLocation) {
         return viewLocation === $location.path();
     };
+
+    // Close side nav if screen size is less than 992px
+    // Not perfect but it'll do. Most people don't resize their browsers...
+    var getWindowSize = function() {    
+        if(window.innerWidth <= 992) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+    $('.button-collapse').sideNav({
+        closeOnClick: getWindowSize() // Closes side-nav on <a> clicks, useful for Angular/Meteor
+    });
 }]);
 
 dtp.controller('homeCtrl', ['$scope', 'PageTitle', function($scope, PageTitle) {

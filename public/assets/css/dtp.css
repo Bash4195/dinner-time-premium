@@ -20,6 +20,11 @@ header, main, footer {
     }
 }
 
+/* Dirty side nav overlay fix */
+#sidenav-overlay{
+    background:none;
+}
+
 /* Link styles */
 .text-link:hover {
     text-decoration: underline;
