@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="dtp" ng-controller="navCtrl">
+<html lang="en" ng-app="dtp" ng-controller="mainCtrl">
 <head>
-    <title ng-bind="PageTitle.title()"></title>
+    <title ng-bind="Title.title()"></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -14,45 +14,10 @@
 </head>
 <body class="grey lighten-4" ng-cloak>
 
-<header>
+<header onload="init()">
     <ul id="slide-out" class="side-nav fixed">
         <li><a href="/" class="logo"><img src="assets/img/logo.svg" alt="DTP"></a></li>
         <li><br></li> <!-- Spacing from the logo -->
-        <li ng-if="!user">
-            <a href="/auth/steam" target="_self" style="padding-top: 12px;">
-                <img src="assets/img/steam.png" alt="Sign in through Steam">
-            </a>
-        </li>
-        <li ng-if="user">
-            <a href="/">
-                <div class="row valign-wrapper">
-                    <img ng-src="{{user.avatar}}" alt="Avatar"
-                         class="col s4 circle responsive-img">
-                    <span class="col s8">{{user.name}}</span>
-                </div>
-            </a>
-        </li>
-        <li ng-if="user">
-            <a href="/">
-                <div class="row valign-wrapper">
-                    <i class="material-icons col s4">settings</i>
-                    <span class="col s8">Settings</span>
-                </div>
-            </a>
-        </li>
-        <li ng-if="user">
-            <a href="/auth/logout" target="_self">
-                <div class="row valign-wrapper">
-                    <i class="material-icons col s4">power_settings_new</i>
-                    <span class="col s8">Logout</span>
-                </div>
-            </a>
-        </li>
-
-        <li>
-            <hr>
-        </li>
-
         <li>
             <a href="http://steamcommunity.com/groups/dtpremium#announcements">
                 <div class="row valign-wrapper">
@@ -80,10 +45,47 @@
     </ul>
     <nav class="red">
         <div class="container">
-            <a href="" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+            <a href="" data-activates="slide-out" class="button-collapse white-text"><i class="material-icons">menu</i></a>
         </div>
+
+        <!-- User options -->
         <ul class="right">
-            <li><button class="btn-flat transparent"><img src="assets/img/steam.png" alt="Sign in through Steam"></button></li>
+            <li ng-hide="user">
+                <a href="/auth/steam" target="_self">
+                    <button class="btn-flat transparent" style="padding: 0">
+                        <img src="assets/img/steam.png" alt="Sign in through Steam">
+                    </button>
+                </a>
+            </li>
+            <li ng-show="user">
+                <a href="" class="dropdown-button" data-activates='user-options' data-beloworigin="true" data-hover="true">
+                    <button class="btn-flat transparent" style="padding: 0 10px">
+                        <img ng-src="{{user.avatar}}" alt="Avatar"
+                             class="circle responsive-img">
+                    </button>
+                </a>
+                <ul id='user-options' class='dropdown-content' style="min-width: 150px">
+                    <li>
+                        <a href="#" class="grey-text text-darken-3">
+                            <i class="tiny material-icons left">face</i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="grey-text text-darken-3">
+                            <i class="material-icons left">settings</i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="/auth/logout" target="_self" class="grey-text text-darken-3">
+                            <i class="material-icons left">power_settings_new</i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </nav>
 </header>
@@ -110,8 +112,5 @@
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
-<script>
-    $(".button-collapse").sideNav();
-</script>
 </body>
 </html>

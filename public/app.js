@@ -20,7 +20,7 @@ dtp.config(function ($routeProvider, $locationProvider) {
         })
 });
 
-dtp.factory('PageTitle', function() {
+dtp.factory('Title', function() {
     var title = 'DTP';
     return {
         title: function() { return title; },
@@ -96,8 +96,8 @@ dtp.service('Forum', ['$http', 'Error', function($http, Error) {
     }
 }]);
 
-dtp.controller('navCtrl', ['$scope', 'PageTitle', '$location', 'User', function($scope, PageTitle, $location, User) {
-    $scope.PageTitle = PageTitle;
+dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', function($scope, Title, $location, User) {
+    $scope.Title = Title;
 
     if(User.currentUser === '') {
         User.getUser()
@@ -117,7 +117,7 @@ dtp.controller('navCtrl', ['$scope', 'PageTitle', '$location', 'User', function(
 
     // Close side nav if screen size is less than 992px
     // Not perfect but it'll do. Most people don't resize their browsers...
-    var getWindowSize = function() {    
+    var getWindowSize = function() {
         if(window.innerWidth <= 992) {
             return true;
         } else {
@@ -125,16 +125,17 @@ dtp.controller('navCtrl', ['$scope', 'PageTitle', '$location', 'User', function(
         }
     };
     $('.button-collapse').sideNav({
-        closeOnClick: getWindowSize() // Closes side-nav on <a> clicks, useful for Angular/Meteor
+        closeOnClick: getWindowSize()
     });
+
 }]);
 
-dtp.controller('homeCtrl', ['$scope', 'PageTitle', function($scope, PageTitle) {
-    $scope.PageTitle = PageTitle.setTitle('DTP');
+dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
+    $scope.Title = Title.setTitle('DTP');
 }]);
 
-dtp.controller('forumIndexCtrl', ['$scope', 'PageTitle', 'User', 'Forum', 'Error',
-    function($scope, PageTitle, User, Forum, Error) {
+dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Error',
+    function($scope, Title, User, Forum, Error) {
 
         $scope.updatePosts = function() {
             Forum.getPosts()
@@ -144,7 +145,7 @@ dtp.controller('forumIndexCtrl', ['$scope', 'PageTitle', 'User', 'Forum', 'Error
         };
         $scope.updatePosts();
 
-        PageTitle.setTitle('DTP - Forum');
+        Title.setTitle('DTP - Forum');
 
         if(User.currentUser !== '') {
             $scope.user = User.currentUser;
@@ -188,15 +189,15 @@ dtp.controller('forumIndexCtrl', ['$scope', 'PageTitle', 'User', 'Forum', 'Error
         });
 }]);
 
-dtp.controller('forumShowCtrl', ['$scope', 'PageTitle', '$routeParams', 'Forum', function($scope, PageTitle, $routeParams, Forum) {
+dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'Forum', function($scope, Title, $routeParams, Forum) {
     var id = $routeParams.postId;
-    $scope.PageTitle = PageTitle.setTitle('DTP - Forum');
+    $scope.Title = Title.setTitle('DTP - Forum');
 
     $scope.getPost = function() {
         Forum.getPost(id)
             .then(function(post) {
                 $scope.post = post;
-                $scope.PageTitle = PageTitle.setTitle(post.title);
+                $scope.Title = Title.setTitle(post.title);
             });
     };
     $scope.getPost();
