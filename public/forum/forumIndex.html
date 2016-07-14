@@ -2,19 +2,15 @@
     <ul class="collection with-header" id="forum-collection">
         <li class="collection-header">
                 <h4>Discussions</h4>
-                <button data-target="createPostModal"
-                        class="modal-trigger right btn-floating waves-effect waves-light red tooltipped"
-                        data-position="top" data-delay="800" data-tooltip="New post" ng-show="user">
-                    <i class="material-icons">add</i>
-                </button>
+                <span class="grey-text"><strong>{{posts.length}}</strong> posts</span>
         </li>
         <li class="collection-item avatar" ng-repeat="post in posts | orderBy : '-updatedAt'">
             <a ng-href="/forum/{{post._id}}">
                 <img ng-src={{post.authour.avatar}} alt="Avatar" class="circle">
                 <span class="title truncate">{{post.title}}</span>
                 <p class="truncate">{{post.content}}</p>
-                <span class="grey-text">Posted by: {{post.authour.name}}</span>
-                <span class="grey-text right">Comments</span>
+                <span class="grey-text">Posted by: <strong>{{post.authour.name}}</strong> at <strong>{{post.createdAt | date: 'MMM d, yyyy h:mm a'}}</strong></span>
+                <span class="grey-text right"><strong>#</strong> Comments</span>
             </a>
         </li>
     </ul>
@@ -22,6 +18,7 @@
         <div class="modal-content">
             <div class="row">
                 <form class="col s12">
+                    <h4 class="col s12">New Post</h4>
                     <div class="input-field col s12">
                         <input id="title" type="text" ng-model="postTitle">
                         <label for="title">Title</label>
@@ -37,5 +34,13 @@
             <a href="" ng-click="createPost()" class="modal-action waves-effect waves-light btn red">Create<i class="material-icons right">send</i></a>
             <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
         </div>
+    </div>
+
+    <!-- Add new post button -->
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+        <a class="modal-trigger btn-floating btn-large waves-effect waves-light tooltipped red" data-target="createPostModal"
+           data-position="top" data-delay="800" data-tooltip="New post" ng-show="user">
+            <i class="material-icons">add</i>
+        </a>
     </div>
 </div>
