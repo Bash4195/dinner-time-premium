@@ -21,8 +21,12 @@ header, main, footer {
 }
 
 /* Dirty side nav overlay fix */
-#sidenav-overlay{
+#sidenav-overlay {
     background:none;
+}
+
+#showPageAuthourName {
+    margin-right: 5px;
 }
 
 /* Link styles */

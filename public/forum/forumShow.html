@@ -2,8 +2,8 @@
     <div class="card">
         <div class="card-content">
             <span class="card-title">{{post.title}}</span>
-            <a ng-href="{{post.authour.profileUrl}}" class="right" style="color: rgba(0,0,0,0.87)">
-                <span>{{post.authour.name}}</span>
+            <a ng-href="{{post.authour.profileUrl}}" class="right valign-wrapper" style="color: rgba(0,0,0,0.87)">
+                <span class="valign" id="showPageAuthourName">{{post.authour.name}}</span>
                 <img ng-src="{{post.authour.avatar}}" alt="Avatar" class="circle">
             </a>
             <hr>
