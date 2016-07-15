@@ -1,17 +1,18 @@
 <div class="container">
     <div class="card">
         <div class="card-content">
+            <!-- Icons with .secondary-content class here for edit and delete? -->
             <span class="card-title">{{post.title}}</span>
-            <a ng-href="{{post.authour.profileUrl}}" class="right valign-wrapper" style="color: rgba(0,0,0,0.87)">
-                <span class="valign" id="showPageAuthourName">{{post.authour.name}}</span>
-                <img ng-src="{{post.authour.avatar}}" alt="Avatar" class="circle">
-            </a>
             <hr>
             <pre>{{post.content}}</pre>
             <hr>
-            <span class="grey-text">Posted on {{post.createdAt | date: 'mediumDate'}} at {{post.createdAt | date: 'shortTime'}}</span>
+            <span class="grey-text right"># Comments</span>
+
+            <span class="grey-text left" style="margin-right: 5px;">Authour:</span>
+
+            <a ng-href="{{post.authour.profileUrl}}" class="left text-link">{{post.authour.name}}</a>
             <br>
-            <span class="grey-text"># Comments</span>
+            <span class="grey-text">Posted on {{post.createdAt | date: 'mediumDate'}} at {{post.createdAt | date: 'shortTime'}}</span>
         </div>
     </div>
     <h4>Comments coming soon!</h4>

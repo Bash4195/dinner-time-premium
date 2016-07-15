@@ -20,32 +20,37 @@ header, main, footer {
     }
 }
 
+/* Lighten the hr colour */
+hr {
+border: solid 1px #E0E0E0;
+}
+
+/* Wrap text in pre tag */
+pre {
+font-family: Roboto, Helvetica, sans-serif;
+white-space: pre-wrap;       /* Since CSS 2.1 */
+white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+white-space: -o-pre-wrap;    /* Opera 7 */
+word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
 /* Dirty side nav overlay fix */
 #sidenav-overlay {
     background:none;
 }
 
-#showPageAuthourName {
-    margin-right: 5px;
+/* Link styles */
+.text-link {
+    color: #424242;
 }
 
-/* Link styles */
 .text-link:hover {
     text-decoration: underline;
 }
 
-/* Lighten the hr colour */
-hr {
-    border: solid 1px #E0E0E0;
-}
-
-/* Wrap text in pre tag */
-pre {
-    font-family: Roboto, Helvetica, sans-serif;
-    white-space: pre-wrap;       /* Since CSS 2.1 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+.bottom-right-btn {
+    bottom: 20px;
+    right: 20px;
 }
 
 /* Text highlight */

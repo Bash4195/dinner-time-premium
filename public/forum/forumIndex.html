@@ -9,7 +9,7 @@
                 <img ng-src={{post.authour.avatar}} alt="Avatar" class="circle">
                 <span class="title truncate">{{post.title}}</span>
                 <p class="truncate">{{post.content}}</p>
-                <span class="grey-text">Posted by: <strong>{{post.authour.name}}</strong> at <strong>{{post.createdAt | date: 'MMM d, yyyy h:mm a'}}</strong></span>
+                <span class="grey-text">Posted by: <strong>{{post.authour.name}}</strong> on <strong>{{post.createdAt | date: 'MMM d, yyyy h:mm a'}}</strong></span>
                 <span class="grey-text right"><strong>#</strong> Comments</span>
             </a>
         </li>
@@ -37,7 +37,7 @@
     </div>
 
     <!-- Add new post button -->
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <div class="fixed-action-btn bottom-right-btn">
         <a class="modal-trigger btn-floating btn-large waves-effect waves-light tooltipped red" data-target="createPostModal"
            data-position="top" data-delay="800" data-tooltip="New post" ng-show="user">
             <i class="material-icons">add</i>
