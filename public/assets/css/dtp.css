@@ -134,6 +134,11 @@ word-wrap: break-word;       /* Internet Explorer 5.5+ */
     box-shadow: 0 1px 0 0 #B71C1C;
 }
 
+/* Small info at bottom of card such as time created */
+.card-info {
+    padding: 0 20px 10px;
+}
+
 /* Collections */
 #forum-collection li.collection-header button {
     margin: -0.519rem 0 0.912rem 0;

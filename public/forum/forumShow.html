@@ -2,17 +2,19 @@
     <div class="card">
         <div class="card-content">
             <!-- Icons with .secondary-content class here for edit and delete? -->
-            <span class="card-title">{{post.title}}</span>
-            <hr>
+            <a href="" class="red-text"><i class="material-icons right">delete</i></a>
+            <a href="" class="red-text"><i class="material-icons right">mode_edit</i></a>
+            <pre class="card-title" style="margin: 0;">{{post.title}}</pre>
+
+            <span class="grey-text left" style="margin-right: 5px;">By</span>
+            <a ng-href="{{post.authour.profileUrl}}" class="grey-text left text-link">{{post.authour.name}}</a>
+            <span class="grey-text" style="margin-left: 10px;">{{post.createdAt | date: 'mediumDate'}}</span>
+
+            <br>
             <pre>{{post.content}}</pre>
             <hr>
-            <span class="grey-text right"># Comments</span>
-
-            <span class="grey-text left" style="margin-right: 5px;">Authour:</span>
-
-            <a ng-href="{{post.authour.profileUrl}}" class="left text-link">{{post.authour.name}}</a>
-            <br>
             <span class="grey-text">Posted on {{post.createdAt | date: 'mediumDate'}} at {{post.createdAt | date: 'shortTime'}}</span>
+            <span class="grey-text right"># Comments</span>
         </div>
     </div>
     <h4>Comments coming soon!</h4>

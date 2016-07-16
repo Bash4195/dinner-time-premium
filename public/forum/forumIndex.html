@@ -1,19 +1,31 @@
-<div class="container">
-    <ul class="collection with-header" id="forum-collection">
-        <li class="collection-header">
-                <h4>Discussions</h4>
-                <span class="grey-text"><strong>{{posts.length}}</strong> posts</span>
-        </li>
-        <li class="collection-item avatar" ng-repeat="post in posts | orderBy : '-updatedAt'">
-            <a ng-href="/forum/{{post._id}}">
-                <img ng-src={{post.authour.avatar}} alt="Avatar" class="circle">
-                <span class="title truncate">{{post.title}}</span>
-                <p class="truncate">{{post.content}}</p>
-                <span class="grey-text">Posted by: <strong>{{post.authour.name}}</strong> on <strong>{{post.createdAt | date: 'MMM d, yyyy h:mm a'}}</strong></span>
-                <span class="grey-text right"><strong>#</strong> Comments</span>
-            </a>
-        </li>
-    </ul>
+<div class="container section">
+    <span class="grey-text" style="padding-left: 20px;">{{posts.length}} posts</span>
+    <div class="row" ng-repeat="post in posts | orderBy : '-updatedAt'">
+        <div class="col s12">
+            <div class="card hoverable">
+                    <div class="card-content">
+                        <a ng-href="{{post.authour.profileUrl}}" class="valign-wrapper right">
+                            <span class="valign grey-text text-darken-3" style="margin-right: 5px;">{{post.authour.name}}</span>
+                            <img ng-src="{{post.authour.avatar}}" alt="Avatar" class="circle responsive-img grey-text text-darken-3">
+                        </a>
+                        <a ng-href="/forum/{{post._id}}" style="width: 100%; height: 100%;">
+                            <span class="card-title grey-text text-darken-3 truncate" style="width: 85%;">{{post.title}}</span>
+                            <p class="grey-text text-darken-3 truncate" style="width: 90    %;">{{post.content}}</p>
+                        </a>
+                    </div>
+                <div class="card-info">
+                    <span class="grey-text">{{post.updatedAt | date: 'MMM d, yyyy h:mm a'}}</span>
+                    <span class="grey-text right"># comments</span>
+                </div>
+                <div class="card-action">
+                    <a ng-href="/forum/{{post._id}}" class="red-text">View Post</a>
+                    <a href="#" class="red-text right"><i class="material-icons">delete</i></a>
+                    <a href="#" class="red-text right"><i class="material-icons">mode_edit</i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="createPostModal" class="modal">
         <div class="modal-content">
             <div class="row">
