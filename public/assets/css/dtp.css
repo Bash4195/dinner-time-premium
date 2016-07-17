@@ -139,6 +139,10 @@ word-wrap: break-word;       /* Internet Explorer 5.5+ */
     padding: 0 20px 10px;
 }
 
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
+    color: #e57373 !important;
+}
+
 /* Collections */
 #forum-collection li.collection-header button {
     margin: -0.519rem 0 0.912rem 0;

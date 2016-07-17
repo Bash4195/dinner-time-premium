@@ -182,7 +182,6 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Error',
             }
         };
 
-        // Initialize Modal
         $(document).ready(function(){
             $('.modal-trigger').leanModal();
             $('.tooltipped').tooltip({delay: 800});
@@ -201,4 +200,9 @@ dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'Forum', fun
             });
     };
     $scope.getPost();
+
+    $(document).ready(function(){
+        $('.modal-trigger').leanModal();
+        $('.tooltipped').tooltip();
+    });
 }]);

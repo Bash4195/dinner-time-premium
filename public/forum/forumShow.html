@@ -1,20 +1,27 @@
 <div class="container">
     <div class="card">
         <div class="card-content">
-            <!-- Icons with .secondary-content class here for edit and delete? -->
-            <a href="" class="red-text"><i class="material-icons right">delete</i></a>
-            <a href="" class="red-text"><i class="material-icons right">mode_edit</i></a>
+            <a ng-href="{{post.authour.profileUrl}}" class="text-link valign-wrapper right">
+                <span class="valign grey-text text-darken-3" style="margin-right: 5px;">{{post.authour.name}}</span>
+                <img ng-src="{{post.authour.avatar}}" alt="Avatar" class="circle responsive-img grey-text text-darken-3">
+            </a>
             <pre class="card-title" style="margin: 0;">{{post.title}}</pre>
 
-            <span class="grey-text left" style="margin-right: 5px;">By</span>
-            <a ng-href="{{post.authour.profileUrl}}" class="grey-text left text-link">{{post.authour.name}}</a>
-            <span class="grey-text" style="margin-left: 10px;">{{post.createdAt | date: 'mediumDate'}}</span>
+            <span class="grey-text">{{post.createdAt | date: 'MMM d, yyyy h:mm a'}}</span>
 
             <br>
             <pre>{{post.content}}</pre>
-            <hr>
-            <span class="grey-text">Posted on {{post.createdAt | date: 'mediumDate'}} at {{post.createdAt | date: 'shortTime'}}</span>
-            <span class="grey-text right"># Comments</span>
+            <span ng-if="post.updatedAt !== post.createdAt" class="grey-text">Updated {{post.updatedAt | date: 'MMM d, yyyy h:mm a'}}</span>
+            <p class="grey-text right"># Comments</p>
+            <br>
+            <div class="card-action">
+                <a href="" class="red-text">
+                    <i class="tooltipped material-icons right" data-position="bottom" data-delay="500" data-tooltip="Delete post">delete</i>
+                </a>
+                <a href="" class="red-text">
+                    <i class="tooltipped material-icons right" data-position="bottom" data-delay="500" data-tooltip="Edit post">mode_edit</i>
+                </a>
+            </div>
         </div>
     </div>
     <h4>Comments coming soon!</h4>
