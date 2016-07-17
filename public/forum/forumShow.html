@@ -1,4 +1,32 @@
 <div class="container">
+
+    <!-- Edit post modal -->
+    <div id="editPostModal" class="modal">
+        <div class="modal-content">
+            <div class="row">
+                <form class="col s12">
+                    <h4 class="col s12 truncate">Edit {{post.title}}</h4>
+                    <div class="input-field col s12">
+                        <input id="title" type="text" ng-model="postTitle">
+                        <label for="title" class="active">Title</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <textarea id="content" class="materialize-textarea" ng-model="postContent"></textarea>
+                        <label for="content" class="active">Content</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="" ng-click="editPost()" class="modal-action waves-effect waves-light btn red">
+                Update
+                <i class="material-icons right">send</i>
+            </a>
+            <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+        </div>
+    </div>
+
+    <!-- Post -->
     <div class="card">
         <div class="card-content">
             <a ng-href="{{post.authour.profileUrl}}" class="text-link valign-wrapper right">
@@ -11,18 +39,30 @@
 
             <br>
             <pre>{{post.content}}</pre>
-            <span ng-if="post.updatedAt !== post.createdAt" class="grey-text">Updated {{post.updatedAt | date: 'MMM d, yyyy h:mm a'}}</span>
+            <span ng-if="post.updatedAt !== post.createdAt" class="grey-text">
+                Updated {{post.updatedAt | date: 'MMM d, yyyy h:mm a'}}
+            </span>
             <p class="grey-text right"># Comments</p>
             <br>
             <div class="card-action">
                 <a href="" class="red-text">
-                    <i class="tooltipped material-icons right" data-position="bottom" data-delay="500" data-tooltip="Delete post">delete</i>
+                    <i class="tooltipped material-icons right"
+                       data-position="bottom" data-delay="500"
+                       data-tooltip="Delete post">
+                        delete
+                    </i>
                 </a>
                 <a href="" class="red-text">
-                    <i class="tooltipped material-icons right" data-position="bottom" data-delay="500" data-tooltip="Edit post">mode_edit</i>
+                    <i class="tooltipped modal-trigger material-icons right"
+                       data-target="editPostModal" data-position="bottom"
+                       data-delay="500" data-tooltip="Edit post" ng-click="openModal()">
+                        mode_edit
+                    </i>
                 </a>
             </div>
         </div>
     </div>
+
+    <!-- Comments -->
     <h4>Comments coming soon!</h4>
 </div>

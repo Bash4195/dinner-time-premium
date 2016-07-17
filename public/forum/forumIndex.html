@@ -1,5 +1,6 @@
 <div class="container section">
     <span class="grey-text" style="padding-left: 20px;">{{posts.length}} posts</span>
+    <!-- Posts -->
     <div class="row" ng-repeat="post in posts | orderBy : '-updatedAt'">
         <div class="col s12">
             <div class="card hoverable">
@@ -25,13 +26,14 @@
         </div>
     </div>
 
+    <!-- Create post modal -->
     <div id="createPostModal" class="modal">
         <div class="modal-content">
             <div class="row">
                 <form class="col s12">
                     <h4 class="col s12">New Post</h4>
                     <div class="input-field col s12">
-                        <input id="title" type="text" ng-model="postTitle">
+                        <input id="title" type="text" ng-model="postTitle" autofocus>
                         <label for="title">Title</label>
                     </div>
                     <div class="input-field col s12">

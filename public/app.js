@@ -196,10 +196,20 @@ dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'Forum', fun
         Forum.getPost(id)
             .then(function(post) {
                 $scope.post = post;
+                $scope.postTitle = post.title;
+                $scope.postContent = post.content;
                 $scope.Title = Title.setTitle(post.title);
             });
     };
     $scope.getPost();
+    
+    $scope.openModal = function() {
+        $('#content').trigger('autoresize');
+    };
+
+    $scope.editPost = function() {
+
+    };
 
     $(document).ready(function(){
         $('.modal-trigger').leanModal();
