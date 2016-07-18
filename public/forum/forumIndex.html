@@ -15,11 +15,13 @@
                         </a>
                     </div>
                 <div class="card-info">
-                    <span class="grey-text">{{post.updatedAt | date: 'MMM d, yyyy h:mm a'}}</span>
+                    <span class="grey-text" ng-hide="post.updatedAt === post.createdAt">Updated</span>
+                    <span class="grey-text" ng-show="post.updatedAt === post.createdAt">Created</span>
+                    <span class="grey-text" am-time-ago="post.updatedAt"></span>
                     <span class="grey-text right"># comments</span>
                 </div>
                 <div class="card-action">
-                    <a ng-href="/forum/{{post._id}}" class="red-text">View Post</a>
+                    <a ng-href="/forum/{{post._id}}" class="waves-effect waves-light btn red">View Post</a>
                     <a href="#" class="red-text right"><i class="material-icons">delete</i></a>
                 </div>
             </div>
