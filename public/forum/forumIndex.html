@@ -1,4 +1,26 @@
 <div class="container section">
+    <!-- Welcome banner -->
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <img src="../assets/img/icon.png" alt="DTP" class="col s4 responsive-img left">
+                <div class="col s8">
+                    <span class="card-title">Welcome to the Dinner Time Premium Forum!</span>
+                    <br><br>
+                    <blockquote>
+
+
+                    <p style="font-size: 16px">If you have any questions or comments, feel free to post them here!</p>
+                    <br>
+                    <p>
+                        We only ask that you keep your posts appropriate \n for all ages as kids do come on here as well.
+                    </p>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
     <span class="grey-text" style="padding-left: 20px;">{{posts.length}} posts</span>
     <!-- Posts -->
     <div class="row" ng-repeat="post in posts | orderBy : '-updatedAt'">
