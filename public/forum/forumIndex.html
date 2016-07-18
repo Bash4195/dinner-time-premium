@@ -20,8 +20,10 @@
             </div>
         </div>
     </div>
+
     <br>
     <span class="grey-text" style="padding-left: 20px;">{{posts.length}} posts</span>
+
     <!-- Posts -->
     <div class="row" ng-repeat="post in posts | orderBy : '-updatedAt'">
         <div class="col s12">
@@ -44,7 +46,6 @@
                 </div>
                 <div class="card-action">
                     <a ng-href="/forum/{{post._id}}" class="waves-effect waves-light btn red">View Post</a>
-                    <a href="#" class="red-text right"><i class="material-icons">delete</i></a>
                 </div>
             </div>
         </div>

@@ -28,7 +28,7 @@ dtp.factory('Title', function() {
     };
 });
 
-dtp.service('Error', function() {
+dtp.service('Notify', function() {
     // Split into different functions to be able to add icons to each message
     this.default = function(message, duration, callback) {
         duration = duration || 4000;
@@ -69,13 +69,13 @@ dtp.service('User', function($http) {
     }
 });
 
-dtp.service('Forum', ['$http', 'Error', function($http, Error) {
+dtp.service('Forum', ['$http', 'Notify', function($http, Notify) {
     this.getPosts = function() {
         return $http.get('/api/forum')
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Error.error(res.data.error);
+                Notify.error(res.data.error);
             });
     };
     this.newPost = function(post) {
@@ -83,7 +83,7 @@ dtp.service('Forum', ['$http', 'Error', function($http, Error) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Error.error(res.data.error);
+                Notify.error(res.data.error);
             })
     };
     this.getPost = function(id) {
@@ -91,7 +91,7 @@ dtp.service('Forum', ['$http', 'Error', function($http, Error) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Error.error(res.data.error);
+                Notify.error(res.data.error);
             })
     };
     this.updatePost = function(id, newContent) {
@@ -99,9 +99,17 @@ dtp.service('Forum', ['$http', 'Error', function($http, Error) {
             .then(function(res) {
                 return res;
             }, function(res) {
-                Error.error(res.data.error);
+                Notify.error(res.data.error);
             })
     };
+    this.deletePost = function(id) {
+        return $http.delete('/api/forum/' + id)
+            .then(function(res) {
+                return res;
+            }, function(res) {
+                Notify.error(res.data.error);
+            })
+    }
 }]);
 
 dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', function($scope, Title, $location, User) {
@@ -142,8 +150,8 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
     $scope.Title = Title.setTitle('DTP');
 }]);
 
-dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Error',
-    function($scope, Title, User, Forum, Error) {
+dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify',
+    function($scope, Title, User, Forum, Notify) {
 
         $scope.updatePosts = function() {
             Forum.getPosts()
@@ -164,14 +172,14 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Error',
 
         $scope.createPost = function() {
             if($scope.user === undefined) {
-                Error.error('You must be logged in to create a post');
+                Notify.error('You must be logged in to create a post');
                 $('#createPostModal').closeModal();
             } else {
                 if($scope.postTitle === '') {
-                    Error.error('Your post needs a title!');
+                    Notify.error('Your post needs a title!');
                 } else
                 if($scope.postContent === '') {
-                    Error.error('The content field is required');
+                    Notify.error('The content field is required');
                 } else {
                     $('#createPostModal').closeModal();
                         var Post = {
@@ -195,8 +203,8 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Error',
         });
 }]);
 
-dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'User', 'Forum',
-    function($scope, Title, $routeParams, User, Forum) {
+dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'User', 'Forum', '$location',
+    function($scope, Title, $routeParams, User, Forum, $location) {
 
         var id = $routeParams.postId;
         $scope.Title = Title.setTitle('DTP - Forum');
@@ -229,6 +237,13 @@ dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'User', 'For
             Forum.updatePost(id, updatedPost)
                 .then(function() {
                     $scope.getPost();
+                })
+        };
+
+        $scope.deletePost = function() {
+            Forum.deletePost(id)
+                .then(function() {
+                    $location.path('/forum');
                 })
         };
 

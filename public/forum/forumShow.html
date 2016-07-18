@@ -1,5 +1,44 @@
 <div class="container">
 
+    <!-- Post -->
+    <div class="card card-links">
+        <div class="card-content">
+            <a ng-href="{{post.authour.profileUrl}}" class="text-link valign-wrapper right">
+                <span class="valign grey-text text-darken-3" style="margin-right: 5px;">{{post.authour.name}}</span>
+                <img ng-src="{{post.authour.avatar}}" alt="Avatar" class="circle responsive-img grey-text text-darken-3">
+            </a>
+            <pre class="card-title" style="margin: 0;">{{post.title}}</pre>
+
+            <span class="grey-text">Created {{post.createdAt | date: 'MMM d, yyyy h:mm a'}}</span>
+
+            <br>
+            <pre ng-bind-html="post.content | linky">{{post.content}}</pre>
+            <span ng-show="post.updatedAt !== post.createdAt" class="grey-text">Updated</span>
+            <span ng-show="post.updatedAt !== post.createdAt" class="grey-text" am-time-ago="post.updatedAt"></span>
+            <p class="grey-text right"># Comments</p>
+            <br>
+            <div class="card-action">
+                <a href="" class="red-text">
+                    <i class="tooltipped modal-trigger material-icons right"
+                       data-target="deletePostModal" data-position="bottom" data-delay="500"
+                       data-tooltip="Delete post">
+                        delete
+                    </i>
+                </a>
+                <a href="" class="red-text">
+                    <i class="tooltipped modal-trigger material-icons right"
+                       data-target="editPostModal" data-position="bottom"
+                       data-delay="500" data-tooltip="Edit post" ng-click="openModal()">
+                        mode_edit
+                    </i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments -->
+    <h4>Comments coming soon!</h4>
+
     <!-- Edit post modal -->
     <div id="editPostModal" class="modal">
         <div class="modal-content">
@@ -20,48 +59,22 @@
         <div class="modal-footer">
             <a href="" ng-click="updatePost()" class="modal-action modal-close waves-effect waves-light btn red">
                 Update
-                <i class="material-icons right">send</i>
             </a>
             <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
         </div>
     </div>
 
-    <!-- Post -->
-    <div class="card card-links">
-        <div class="card-content">
-            <a ng-href="{{post.authour.profileUrl}}" class="text-link valign-wrapper right">
-                <span class="valign grey-text text-darken-3" style="margin-right: 5px;">{{post.authour.name}}</span>
-                <img ng-src="{{post.authour.avatar}}" alt="Avatar" class="circle responsive-img grey-text text-darken-3">
+    <!-- Delete post modal -->
+    <div id="deletePostModal" class="modal" style="width: 20%;">
+        <div class="modal-content">
+            <h4>Delete Post?</h4>
+            <p>Delete this post forever. You won't be able to undo this!</p>
+        </div>
+        <div class="modal-footer">
+            <a href="" ng-click="deletePost()" class="modal-action modal-close waves-effect waves-light btn red">
+                Delete
             </a>
-            <pre class="card-title" style="margin: 0;">{{post.title}}</pre>
-
-            <span class="grey-text">Created {{post.createdAt | date: 'MMM d, yyyy h:mm a'}}</span>
-
-            <br>
-            <pre ng-bind-html="post.content | linky">{{post.content}}</pre>
-            <span ng-show="post.updatedAt !== post.createdAt" class="grey-text">Updated</span>
-            <span ng-show="post.updatedAt !== post.createdAt" class="grey-text" am-time-ago="post.updatedAt"></span>
-            <p class="grey-text right"># Comments</p>
-            <br>
-            <div class="card-action">
-                <a href="" class="red-text">
-                    <i class="tooltipped material-icons right"
-                       data-position="bottom" data-delay="500"
-                       data-tooltip="Delete post">
-                        delete
-                    </i>
-                </a>
-                <a href="" class="red-text">
-                    <i class="tooltipped modal-trigger material-icons right"
-                       data-target="editPostModal" data-position="bottom"
-                       data-delay="500" data-tooltip="Edit post" ng-click="openModal()">
-                        mode_edit
-                    </i>
-                </a>
-            </div>
+            <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
         </div>
     </div>
-
-    <!-- Comments -->
-    <h4>Comments coming soon!</h4>
 </div>
