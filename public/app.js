@@ -1,4 +1,4 @@
-var dtp = angular.module('dtp', ['ngRoute', 'angularMoment']);
+var dtp = angular.module('dtp', ['ngRoute', 'ngSanitize', 'angularMoment']);
 
 dtp.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);

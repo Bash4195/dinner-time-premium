@@ -27,7 +27,7 @@
     </div>
 
     <!-- Post -->
-    <div class="card">
+    <div class="card card-links">
         <div class="card-content">
             <a ng-href="{{post.authour.profileUrl}}" class="text-link valign-wrapper right">
                 <span class="valign grey-text text-darken-3" style="margin-right: 5px;">{{post.authour.name}}</span>
@@ -38,7 +38,7 @@
             <span class="grey-text">Created {{post.createdAt | date: 'MMM d, yyyy h:mm a'}}</span>
 
             <br>
-            <pre>{{post.content}}</pre>
+            <pre ng-bind-html="post.content | linky">{{post.content}}</pre>
             <span ng-show="post.updatedAt !== post.createdAt" class="grey-text">Updated</span>
             <span ng-show="post.updatedAt !== post.createdAt" class="grey-text" am-time-ago="post.updatedAt"></span>
             <p class="grey-text right"># Comments</p>

@@ -67,6 +67,10 @@ blockquote {
     text-decoration: underline;
 }
 
+a {
+    color: #F44336;
+}
+
 .bottom-right-btn {
     bottom: 20px;
     right: 20px;
