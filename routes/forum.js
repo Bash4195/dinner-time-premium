@@ -51,7 +51,7 @@ router.get('/api/forum/:postId', function(req, res) {
 
 // UPDATE
 router.put('/api/forum/:postId', function(req, res ) {
-    Forum.findByIdAndUpdate(req.params.id, res.body, function(err, post) {
+    Forum.findByIdAndUpdate(req.params.postId, req.body, function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to update post.');
         } else {
@@ -62,7 +62,7 @@ router.put('/api/forum/:postId', function(req, res ) {
 
 // DESTROY
 router.delete('/api/forum/:postId', function(req, res) {
-    Forum.findByIdAndRemove(req.params.id, function(err) {
+    Forum.findByIdAndRemove(req.params.postId, function(err) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to delete post.');
         } else {

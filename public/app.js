@@ -93,7 +93,15 @@ dtp.service('Forum', ['$http', 'Error', function($http, Error) {
             }, function(res) {
                 Error.error(res.data.error);
             })
-    }
+    };
+    this.updatePost = function(id, newContent) {
+        return $http.put('/api/forum/' + id, newContent)
+            .then(function(res) {
+                return res;
+            }, function(res) {
+                Error.error(res.data.error);
+            })
+    };
 }]);
 
 dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', function($scope, Title, $location, User) {
@@ -173,7 +181,6 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Error',
                         };
                     Forum.newPost(Post)
                         .then(function(post) {
-                            console.log(post);
                             $scope.postTitle = '';
                             $scope.postContent = '';
                             $scope.updatePosts();
@@ -188,31 +195,45 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Error',
         });
 }]);
 
-dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'Forum', function($scope, Title, $routeParams, Forum) {
-    var id = $routeParams.postId;
-    $scope.Title = Title.setTitle('DTP - Forum');
+dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'User', 'Forum',
+    function($scope, Title, $routeParams, User, Forum) {
 
-    $scope.getPost = function() {
-        Forum.getPost(id)
-            .then(function(post) {
-                $scope.post = post;
-                $scope.postTitle = post.title;
-                $scope.postContent = post.content;
-                $scope.Title = Title.setTitle(post.title);
-            });
-    };
-    $scope.getPost();
-    
-    $scope.openModal = function() {
-        $('#content').trigger('autoresize');
-    };
+        var id = $routeParams.postId;
+        $scope.Title = Title.setTitle('DTP - Forum');
 
-    $scope.editPost = function() {
+        if(User.currentUser !== '') {
+            $scope.user = User.currentUser;
+        }
 
-    };
+        $scope.getPost = function() {
+            Forum.getPost(id)
+                .then(function(post) {
+                    $scope.post = post;
+                    $scope.postTitle = post.title;
+                    $scope.postContent = post.content;
+                    $scope.Title = Title.setTitle(post.title);
+                });
+        };
+        $scope.getPost();
 
-    $(document).ready(function(){
-        $('.modal-trigger').leanModal();
-        $('.tooltipped').tooltip();
-    });
+        $scope.openModal = function() {
+            $('#content').trigger('autoresize');
+        };
+
+        $scope.updatePost = function() {
+            var updatedPost = {
+                title: $scope.postTitle,
+                content: $scope.postContent,
+                editedBy: $scope.user
+            };
+            Forum.updatePost(id, updatedPost)
+                .then(function() {
+                    $scope.getPost();
+                })
+        };
+
+        $(document).ready(function(){
+            $('.modal-trigger').leanModal();
+            $('.tooltipped').tooltip();
+        });
 }]);
