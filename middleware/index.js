@@ -13,4 +13,9 @@ middleware.isLoggedIn = function(req, res, next) {
     }
 };
 
+middleware.saveSessionPath = function(req, res, next) {
+    req.session.returnTo = req.header('Referer');
+    next();
+};
+
 module.exports = middleware;

@@ -4,8 +4,7 @@ var passport = require('passport');
 var middleware = require('../middleware/index');
 var User = require('../models/user');
 
-router.get('/auth/steam',
-    passport.authenticate('steam', { failureRedirect: '/' }),
+router.get('/auth/steam', middleware.saveSessionPath, passport.authenticate('steam', { failureRedirect: '/' }),
     function(req, res) {
         // Never called - redirects to Steam
     });
@@ -17,7 +16,8 @@ router.get('/auth/steam/return',
             if(err) {
                 middleware.handleError(res, err.message, 'Something went wrong while logging in. Please try again.')
             } else {
-                res.redirect('/');
+                res.redirect(req.session.returnTo || '/');
+                delete req.session.returnTo;
             }
         });
     });
