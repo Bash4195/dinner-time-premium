@@ -50,18 +50,24 @@ router.get('/api/forum/:postId', function(req, res) {
 // EDIT // In modal instead of separate route
 
 // UPDATE
-router.put('/api/forum/:postId', function(req, res ) {
-    Forum.findByIdAndUpdate(req.params.postId, req.body, function(err, post) {
-        if(err) {
-            middleware.handleError(res, err.message, 'Failed to update post.');
-        } else {
-            res.status(204).end('Updated post');
-        }
-    })
+router.put('/api/forum/:postId', middleware.isLoggedIn, function(req, res ) {
+    if(req.body.title === '' || req.body.title === 'undefined') {
+        middleware.handleError(res, 'Title is missing', 'Title is missing', 400);
+    } else if(req.body.content === '' || req.body.content === 'undefined') {
+        middleware.handleError(res, 'Content is missing', 'Content is missing', 400);
+    } else {
+        Forum.findByIdAndUpdate(req.params.postId, req.body, function(err, post) {
+            if(err) {
+                middleware.handleError(res, err.message, 'Failed to update post.');
+            } else {
+                res.status(204).end('Updated post');
+            }
+        })
+    }
 });
 
 // DESTROY
-router.delete('/api/forum/:postId', function(req, res) {
+router.delete('/api/forum/:postId', middleware.isLoggedIn, function(req, res) {
     Forum.findByIdAndRemove(req.params.postId, function(err) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to delete post.');

@@ -12,6 +12,10 @@
     outline: 1px solid slategrey;
 }
 
+body, a:hover {
+    cursor: url(http://cur.cursors-4u.net/food/foo-5/foo429.cur), auto !important;
+}
+
 /* Sticky footer */
 body {
     display: flex;
