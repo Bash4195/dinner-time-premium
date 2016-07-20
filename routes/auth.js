@@ -34,7 +34,7 @@ router.get('/auth/logout', middleware.isLoggedIn, function(req, res) {
 });
 
 // Return current user to Angular
-router.get('/auth/getUser', function(req, res) {
+router.get('/auth/getLoggedInUser', function(req, res) {
     res.status(200).json(req.user);
 });
 

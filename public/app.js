@@ -8,6 +8,12 @@ dtp.config(function ($routeProvider, $locationProvider) {
             controller: 'homeCtrl'
         })
             
+        //User Routes
+        .when('/user/:userId', {
+            templateUrl: 'user/userIndex.html',
+            controller: 'userIndexCtrl'
+        })
+            
         // Forum Routes
         .when('/forum', {
             templateUrl: 'forum/forumIndex.html',
@@ -57,16 +63,24 @@ dtp.service('Notify', function() {
     };
 });
 
-dtp.service('User', function($http) {
+dtp.service('User', function($http, Notify) {
     var self = this;
     this.currentUser = ''; // Saves network usage
-    this.getUser = function() {
-        return $http.get('/auth/getUser')
+    this.getLoggedInUser = function() {
+        return $http.get('/auth/getLoggedInUser')
             .then(function(res) {
                 self.currentUser = res.data; // Keep current user variable up to date
                 return res.data;
             })
-    }
+    };
+    this.getUser = function(id) {
+        return $http.get('/api/user/' + id)
+            .then(function(res) {
+                return res.data;
+            }, function(res) {
+                Notify.error(res.data.error);
+            })
+    };
 });
 
 dtp.service('Forum', ['$http', 'Notify', function($http, Notify) {
@@ -112,11 +126,13 @@ dtp.service('Forum', ['$http', 'Notify', function($http, Notify) {
     }
 }]);
 
+// Runs anytime any page loads up for the first time.
+// Ex. refresh or from external link. Not Angular routing
 dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', function($scope, Title, $location, User) {
     $scope.Title = Title;
 
     if(User.currentUser === '') {
-        User.getUser()
+        User.getLoggedInUser()
             .then(function(user) {
                 if(user) {
                     $scope.user = user;
@@ -147,7 +163,24 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', function($sc
 }]);
 
 dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
-    $scope.Title = Title.setTitle('DTP');
+    Title.setTitle('DTP');
+}]);
+
+dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', function($scope, Title, User, $routeParams) {
+    Title.setTitle('User Profile');
+
+    if(User.currentUser !== '') {
+        $scope.user = User.currentUser;
+    }
+
+    $scope.getUserProfile = function() {
+        User.getUser($routeParams.userId)
+            .then(function(user) {
+                $scope.userProfile = user;
+            })
+    };
+
+    $scope.getUserProfile();
 }]);
 
 dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify',
@@ -157,7 +190,7 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify',
             Forum.getPosts()
                 .then(function(posts) {
                     $scope.posts = posts;
-                });
+                })
         };
         $scope.updatePosts();
 
