@@ -8,8 +8,9 @@ var passport = require('passport');
 var SteamStrategy = require('passport-steam').Strategy;
 
 // Route requires
-var userRoutes = require('./routes/user');
+var authRoutes = require('./routes/auth');
 var forumRoutes = require('./routes/forum');
+var userRoutes = require('./routes/user');
 
 // Model requires
 var User = require('./models/user');
@@ -67,8 +68,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use(userRoutes);
+app.use(authRoutes);
 app.use(forumRoutes);
+app.use(userRoutes);
 
 app.get('*', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');

@@ -7,7 +7,7 @@ var Forum = require('../models/forum');
 router.get('/api/forum', function(req, res) {
     Forum.find({}, function(err, posts) {
         if(err) {
-            middleware.handleError(res, err.message, 'Failed to retrieve forum posts.');
+            middleware.handleError(res, err.message, 'Failed to retrieve forum posts');
         } else {
             res.status(200).json(posts);
         }
@@ -28,7 +28,7 @@ router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
     } else {
         Forum.create(newPost, function(err, post) {
             if(err) {
-                middleware.handleError(res, err.message, 'Failed to create post.');
+                middleware.handleError(res, err.message, 'Failed to create post');
             } else {
                 res.status(201).json(post);
             }
@@ -40,7 +40,7 @@ router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
 router.get('/api/forum/:postId', function(req, res) {
     Forum.findById(req.params.postId, function(err, post) {
         if(err) {
-            middleware.handleError(res, err.message, 'Failed to find post.');
+            middleware.handleError(res, err.message, 'Failed to find post');
         } else {
             res.status(200).json(post);
         }
@@ -58,7 +58,7 @@ router.put('/api/forum/:postId', middleware.isLoggedIn, function(req, res ) {
     } else {
         Forum.findByIdAndUpdate(req.params.postId, req.body, function(err, post) {
             if(err) {
-                middleware.handleError(res, err.message, 'Failed to update post.');
+                middleware.handleError(res, err.message, 'Failed to update post');
             } else {
                 res.status(204).end('Updated post');
             }
@@ -70,7 +70,7 @@ router.put('/api/forum/:postId', middleware.isLoggedIn, function(req, res ) {
 router.delete('/api/forum/:postId', middleware.isLoggedIn, function(req, res) {
     Forum.findByIdAndRemove(req.params.postId, function(err) {
         if(err) {
-            middleware.handleError(res, err.message, 'Failed to delete post.');
+            middleware.handleError(res, err.message, 'Failed to delete post');
         } else {
             res.status(204).end('Deleted post');
         }

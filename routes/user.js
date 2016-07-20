@@ -1,41 +1,20 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
 var middleware = require('../middleware/index');
 var User = require('../models/user');
 
-router.get('/auth/steam', middleware.saveSessionPath, passport.authenticate('steam', { failureRedirect: '/' }),
-    function(req, res) {
-        // Never called - redirects to Steam
-    });
-
-router.get('/auth/steam/return',
-    passport.authenticate('steam', {failureRedirect: '/'}),
-    function(req, res) {
-        User.findByIdAndUpdate(req.user._id, {isOnline: true}, function(err, user) {
-            if(err) {
-                middleware.handleError(res, err.message, 'Something went wrong while logging in. Please try again.')
-            } else {
-                res.redirect(req.session.returnTo || '/');
-                delete req.session.returnTo;
-            }
-        });
-    });
-
-router.get('/auth/logout', middleware.isLoggedIn, function(req, res) {
-    User.findByIdAndUpdate(req.user._id, {isOnline: false}, function(err, user) {
-        if(err) {
-            middleware.handleError(res, err.message, 'Something went wrong while logging out. Please try again.')
-        } else {
-            req.logout();
-            res.redirect('back');
-        }
-    });
+router.get('/api/users', function(req, res) {
+    // TODO: Return users
 });
 
-// Return current user to Angular
-router.get('/auth/getUser', function(req, res) {
-    res.status(200).json(req.user);
+router.get('/api/user/:userId', function(req, res) {
+    User.findById(req.params.userId, function(err, user) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to find user');
+        } else {
+            res.status(200).json(user);
+        }
+    })
 });
 
 module.exports = router;
