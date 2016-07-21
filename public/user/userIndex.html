@@ -5,10 +5,14 @@
                 <i class="material-icons tooltipped" data-position="bottom" data-tooltip="Edit profile">mode_edit</i>
             </a>
             <div class="row">
-                <img ng-src="{{userProfile.avatarFull}}" alt="" class="col s3 l2 circle responsive-img">
+                <img ng-src="{{userProfile.avatarFull}}" alt="" class="col s3 l2 circle responsive-img"
+                     ng-class="{'offline-pic': !userProfile.isOnline, 'online-pic': userProfile.isOnline}">
+
                 <h4 class="col s8 l9" style="word-wrap: break-word;">{{userProfile.name}}</h4>
                 <p class="col s9">User</p>
-                <p class="col s9 grey-text">Offline</p>
+                <p class="col s9" ng-class="{'offline-text': !userProfile.isOnline, 'online-text': userProfile.isOnline}">
+                    {{onlineStatus}}
+                </p>
             </div>
             <pre class="col">Status: I am feeling super duper pooper scooper happy today because it is sunny outside.</pre>
             <div class="divider"></div>

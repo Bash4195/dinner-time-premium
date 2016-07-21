@@ -8,6 +8,7 @@ var forumSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         },
+        _id: {type: String, required: true},
         name: {type: String, required: true},
         avatar: String,
         avatarMedium: String,

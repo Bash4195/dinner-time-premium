@@ -58,6 +58,25 @@ blockquote {
     background:none;
 }
 
+/* Online/Offline */
+.offline-pic {
+    border: solid 3px #9e9e9e !important;
+    padding: 0 !important;
+}
+
+.offline-text {
+    color: #9e9e9e !important;
+}
+
+.online-pic {
+    border: solid 3px #4caf50 !important;
+    padding: 0 !important;
+}
+
+.online-text {
+    color: #4caf50 !important;
+}
+
 /* Link styles */
 .text-link {
     color: #424242;

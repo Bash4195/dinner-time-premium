@@ -178,6 +178,11 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', func
             .then(function(user) {
                 $scope.userProfile = user;
                 Title.setTitle(user.name + '\'s Profile');
+                if(user.isOnline) {
+                    $scope.onlineStatus = 'Online';
+                } else {
+                    $scope.onlineStatus = 'Offline';
+                }
             })
     };
 
@@ -201,6 +206,7 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify',
             Forum.getPosts()
                 .then(function(posts) {
                     $scope.posts = posts;
+                    console.log(posts);
                 })
         };
         $scope.updatePosts();
