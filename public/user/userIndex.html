@@ -1,1 +1,57 @@
-<h1>{{userProfile.name}}</h1>
+<div class="container section">
+    <div class="card">
+        <div class="card-content" style="max-height: 100%; border-radius: 0">
+            <a href="" class="right" ng-click="editProfile()"> <!--ng-show="user._id === userProfile._id"-->
+                <i class="material-icons tooltipped" data-position="bottom" data-tooltip="Edit profile">mode_edit</i>
+            </a>
+            <div class="row">
+                <img ng-src="{{userProfile.avatarFull}}" alt="" class="col s3 l2 circle responsive-img">
+                <h4 class="col s8 l9" style="word-wrap: break-word;">{{userProfile.name}}</h4>
+                <p class="col s9">User</p>
+                <p class="col s9 grey-text">Offline</p>
+            </div>
+            <pre class="col">Status: I am feeling super duper pooper scooper happy today because it is sunny outside.</pre>
+            <div class="divider"></div>
+            <br>
+            <div class="row" ng-hide="editing">
+                <div class="col m12 l6">
+                    <p>Name:</p>
+                    <br>
+                    <p>Age:</p>
+                    <br>
+                    <p>Birthday:</p>
+                    <br>
+                    <p>Location:</p>
+                    <br>
+                    <p>Occupation:</p>
+                    <br>
+                </div>
+                <div class="col m12 l6">
+                    <pre style="margin: 0">About me:</pre>
+                </div>
+            </div>
+
+            <div class="row" ng-show="editing">
+                <div class="col m12 l6">
+                    <p>Name: working!</p>
+                    <br>
+                    <p>Age:</p>
+                    <br>
+                    <p>Birthday:</p>
+                    <br>
+                    <p>Location:</p>
+                    <br>
+                    <p>Occupation:</p>
+                    <br>
+                </div>
+                <div class="col m12 l6">
+                    <pre style="margin: 0">About me: working!</pre>
+                </div>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="row">
+            </div>
+        </div>
+    </div>
+</div>

@@ -177,10 +177,21 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', func
         User.getUser($routeParams.userId)
             .then(function(user) {
                 $scope.userProfile = user;
+                Title.setTitle(user.name + '\'s Profile');
             })
     };
 
     $scope.getUserProfile();
+    
+    $scope.editing = false;
+    
+    $scope.editProfile = function() {
+        $scope.editing = true;
+    };
+
+    $(document).ready(function(){
+        $('.tooltipped').tooltip({delay: 800});
+    });
 }]);
 
 dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify',
