@@ -214,6 +214,7 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', '$fi
     };
 
     $scope.saveProfile = function() {
+        console.log($('#birthday').val());
         var userData = {
             realName: $scope.userProfile.realName,
             age: $scope.userProfile.age,
