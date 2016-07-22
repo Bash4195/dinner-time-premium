@@ -36,21 +36,21 @@ header, main, footer {
 
 /* Lighten the hr colour */
 hr {
-border: solid 1px #E0E0E0;
+    border: solid 1px #E0E0E0;
 }
 
 /* Wrap text in pre tag */
 pre {
-font-family: Roboto, Helvetica, sans-serif;
-white-space: pre-wrap;       /* Since CSS 2.1 */
-white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-white-space: -o-pre-wrap;    /* Opera 7 */
-word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    font-family: Roboto, Helvetica, sans-serif;
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 /* Blockquote colour to DTP colours */
 blockquote {
-border-left: 5px solid #F44336; /* Just change the color value and that's it*/
+    border-left: 5px solid #F44336; /* Just change the color value and that's it*/
 }
 
 a {
@@ -63,54 +63,57 @@ select:focus {
 
 /* Dirty side nav overlay fix */
 #sidenav-overlay {
-background:none;
+    background:none;
 }
 
 /* Profile Form */
 #profile-form .input-field {
-margin-top: 0;
+    margin-top: 0;
 }
 
 #profile-form .input-field.col {
-padding: 0;
+    padding: 0;
 }
 
 #profile-form .input-field label {
-left: 0;
+    left: 0;
 }
 
 /* Online/Offline */
 .offline-pic {
-border: solid 3px #9e9e9e !important;
-padding: 0 !important;
+    border: solid 3px #9e9e9e !important;
+    padding: 0 !important;
 }
 
 .offline-text {
-color: #9e9e9e !important;
+    color: #9e9e9e !important;
 }
 
 .online-pic {
-border: solid 3px #4caf50 !important;
-padding: 0 !important;
+    border: solid 3px #4caf50 !important;
+    padding: 0 !important;
 }
 
 .online-text {
-color: #4caf50 !important;
+    color: #4caf50 !important;
 }
 
 /* Link styles */
 .text-link {
-color: #424242;
+    color: #424242;
 }
 
 .text-link:hover {
-text-decoration: underline;
+    text-decoration: underline;
 }
-
 
 .bottom-right-btn {
     bottom: 20px;
     right: 20px;
+}
+
+.floating-button {
+    margin: -0.519rem 0 0.912rem 0;
 }
 
 /* Text highlight */
