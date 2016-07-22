@@ -1,23 +1,21 @@
 <div class="container section">
     <div class="card">
         <div class="card-content" style="max-height: 100%; border-radius: 0">
-            <a href="" class="right waves-effect" ng-click="editProfile()" ng-show="user._id === userProfile._id" ng-hide="editing">
-                <i class="material-icons tooltipped" data-position="bottom" data-tooltip="Edit profile">mode_edit</i>
-            </a>
             <div class="row">
                 <img ng-src="{{userProfile.avatarFull}}" alt="" class="col s3 l2 circle responsive-img"
                      ng-class="{'offline-pic': !userProfile.isOnline, 'online-pic': userProfile.isOnline}">
 
-                <h4 class="col s8 l9" style="word-wrap: break-word;">{{userProfile.name}}</h4>
-                <p class="col s9">User</p>
-                <p class="col s9" ng-class="{'offline-text': !userProfile.isOnline, 'online-text': userProfile.isOnline}">
-                    {{onlineStatus}}
-                </p>
+                <h4 class="col s7 l8" style="word-wrap: break-word;">{{userProfile.name}}</h4>
+
+                <p class="col s2 center chip red-text">GOD</p>
+
+                <div class="col s9">
+                    <p ng-class="{'offline-text': !userProfile.isOnline, 'online-text': userProfile.isOnline}">
+                        {{onlineStatus}}
+                    </p>
+                </div>
             </div>
-            <div class="row" style="margin-bottom: 0;">
-                <pre class="col s10">Status:</pre>
-                <a ng-href="{{userProfile.profileUrl}}" class="col s2 btn red right">Steam</a>
-            </div>
+            <pre>Status: MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</pre>
             <div class="divider"></div>
             <br>
             <div class="row" ng-hide="editing">
@@ -76,9 +74,11 @@
                 </form>
             </div>
         </div>
-        <div class="card-content">
-            <div class="row">
-            </div>
+        <div class="card-action">
+            <a ng-href="{{userProfile.profileUrl}}" class="btn red">Steam Profile</a>
+            <a href="" class="red-text right" ng-click="editProfile()" ng-show="user._id === userProfile._id" ng-hide="editing" style="margin: 0;">
+                <i class="material-icons tooltipped waves-effect right" data-position="bottom" data-tooltip="Edit profile">mode_edit</i>
+            </a>
         </div>
     </div>
 </div>

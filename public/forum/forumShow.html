@@ -19,22 +19,22 @@
             <span ng-show="post.updatedAt !== post.createdAt" class="grey-text" am-time-ago="post.updatedAt"></span>
             <p class="grey-text right"># Comments</p>
             <br>
-            <div class="card-action" ng-show="user">
-                <a href="" class="red-text">
-                    <i class="tooltipped modal-trigger material-icons right"
-                       data-target="deletePostModal" data-position="bottom" data-delay="500"
-                       data-tooltip="Delete post">
-                        delete
-                    </i>
-                </a>
-                <a href="" class="red-text">
-                    <i class="tooltipped modal-trigger material-icons right"
-                       data-target="editPostModal" data-position="bottom"
-                       data-delay="500" data-tooltip="Edit post" ng-click="openModal()">
-                        mode_edit
-                    </i>
-                </a>
-            </div>
+        </div>
+        <div class="card-action" ng-show="user">
+            <a href="" class="red-text">
+                <i class="tooltipped modal-trigger material-icons right"
+                   data-target="deletePostModal" data-position="bottom" data-delay="500"
+                   data-tooltip="Delete post">
+                    delete
+                </i>
+            </a>
+            <a href="" class="red-text">
+                <i class="tooltipped modal-trigger material-icons right"
+                   data-target="editPostModal" data-position="bottom"
+                   data-delay="500" data-tooltip="Edit post" ng-click="openModal()">
+                    mode_edit
+                </i>
+            </a>
         </div>
     </div>
 
