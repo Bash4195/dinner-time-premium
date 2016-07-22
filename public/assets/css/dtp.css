@@ -50,58 +50,63 @@ word-wrap: break-word;       /* Internet Explorer 5.5+ */
 
 /* Blockquote colour to DTP colours */
 blockquote {
-    border-left: 5px solid #F44336; /* Just change the color value and that's it*/
-}
-
-/* Dirty side nav overlay fix */
-#sidenav-overlay {
-    background:none;
-}
-
-/* Profile Form */
-#profile-form .input-field {
-    margin-top: 0;
-}
-
-#profile-form .input-field.col {
-    padding: 0;
-}
-
-#profile-form .input-field label {
-    left: 0;
-}
-
-/* Online/Offline */
-.offline-pic {
-    border: solid 3px #9e9e9e !important;
-    padding: 0 !important;
-}
-
-.offline-text {
-    color: #9e9e9e !important;
-}
-
-.online-pic {
-    border: solid 3px #4caf50 !important;
-    padding: 0 !important;
-}
-
-.online-text {
-    color: #4caf50 !important;
-}
-
-/* Link styles */
-.text-link {
-    color: #424242;
-}
-
-.text-link:hover {
-    text-decoration: underline;
+border-left: 5px solid #F44336; /* Just change the color value and that's it*/
 }
 
 a {
     color: #F44336;
 }
+
+select:focus {
+    outline: 1px solid #e57373;
+}
+
+/* Dirty side nav overlay fix */
+#sidenav-overlay {
+background:none;
+}
+
+/* Profile Form */
+#profile-form .input-field {
+margin-top: 0;
+}
+
+#profile-form .input-field.col {
+padding: 0;
+}
+
+#profile-form .input-field label {
+left: 0;
+}
+
+/* Online/Offline */
+.offline-pic {
+border: solid 3px #9e9e9e !important;
+padding: 0 !important;
+}
+
+.offline-text {
+color: #9e9e9e !important;
+}
+
+.online-pic {
+border: solid 3px #4caf50 !important;
+padding: 0 !important;
+}
+
+.online-text {
+color: #4caf50 !important;
+}
+
+/* Link styles */
+.text-link {
+color: #424242;
+}
+
+.text-link:hover {
+text-decoration: underline;
+}
+
 
 .bottom-right-btn {
     bottom: 20px;
@@ -219,4 +224,32 @@ a {
 .collection.with-header .collection-item.avatar a:hover {
     background-color: #E0E0E0;
     transition: .25ms;
+}
+
+/* Date picker */
+.picker__date-display {
+    background-color: #F44336;
+}
+.picker__weekday-display {
+    background-color: #C62828;
+    font-weight: 300;
+}
+.picker__day--selected, .picker__day--selected:hover, .picker--focused .picker__day--selected {
+    background-color: #F44336;
+}
+
+.picker__day.picker__day--today {
+    color: #F44336;
+}
+
+.picker__nav--prev:hover, .picker__nav--next:hover {
+    background-color: #ef5350;
+}
+
+.picker__close, .picker__today {
+    color: #F44336;
+}
+
+button.picker__today:focus, button.picker__clear:focus, button.picker__close:focus {
+    background-color: #ef5350;
 }

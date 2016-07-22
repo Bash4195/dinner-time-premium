@@ -10,29 +10,29 @@
                 <p class="col s2 center chip red-text">GOD</p>
 
                 <div class="col s9">
-                    <p ng-class="{'offline-text': !userProfile.isOnline, 'online-text': userProfile.isOnline}">
+                    <p ng-class="{'offline-text': !userProfile.isOnline, 'online-text': userProfile.isOnline}" style="padding-left: 1px">
                         {{onlineStatus}}
                     </p>
                 </div>
             </div>
-            <pre>Status: MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM</pre>
+            <pre>Status: </pre>
             <div class="divider"></div>
             <br>
             <div class="row" ng-hide="editing">
                 <div class="col s12 m12 l6">
-                    <p>Name:</p>
+                    <p>Name: {{userProfile.realName}}</p>
                     <br>
-                    <p>Age:</p>
+                    <p>Age: {{userProfile.age}}</p>
                     <br>
-                    <p>Birthday:</p>
+                    <p>Birthday: {{userProfile.birthday | date: 'longDate'}}</p>
                     <br>
-                    <p>Location:</p>
+                    <p>Location: {{userProfile.location}}</p>
                     <br>
-                    <p>Occupation:</p>
+                    <p>Occupation: {{userProfile.occupation}}</p>
                     <br>
                 </div>
                 <div class="col s12 m12 l6">
-                    <pre style="margin: 0">About me:</pre>
+                    <pre style="margin: 0">About me: {{userProfile.bio}}</pre>
                 </div>
             </div>
 
@@ -40,34 +40,34 @@
                 <form id="profile-form">
                     <div class="col s12 m12 l6">
                         <div class="input-field col s12">
-                            <input id="name" type="text">
+                            <input id="name" type="text" ng-model="userProfile.realName">
                             <label for="name">Name</label>
                         </div>
                         <br>
                         <div class="input-field col s12">
-                            <input id="age" type="text">
+                            <input id="age" type="text" ng-model="userProfile.age" ng-disabled="userProfile.birthday">
                             <label for="age">Age</label>
                         </div>
                         <br>
                         <div class="input-field col s12">
-                            <input id="birthday" type="text">
+                            <input id="birthday" type="text" class="datepicker" ng-model="userProfile.birthday">
                             <label for="birthday">Birthday</label>
                         </div>
                         <br>
                         <div class="input-field col s12">
-                            <input id="location" type="text">
+                            <input id="location" type="text" ng-model="userProfile.location">
                             <label for="location">Location</label>
                         </div>
                         <br>
                         <div class="input-field col s12">
-                            <input id="occupation" type="text">
+                            <input id="occupation" type="text" ng-model="userProfile.occupation">
                             <label for="occupation">Occupation</label>
                         </div>
                         <br>
                     </div>
                     <div class="col s12 m12 l6">
                         <div class="input-field col s12">
-                            <textarea id="bio" class="materialize-textarea"></textarea>
+                            <textarea id="bio" class="materialize-textarea" ng-model="userProfile.bio"></textarea>
                             <label for="bio">About me</label>
                         </div>
                     </div>
@@ -79,6 +79,8 @@
             <a href="" class="red-text right" ng-click="editProfile()" ng-show="user._id === userProfile._id" ng-hide="editing" style="margin: 0;">
                 <i class="material-icons tooltipped waves-effect right" data-position="bottom" data-tooltip="Edit profile">mode_edit</i>
             </a>
+            <a href="" class="btn red right" ng-click="saveProfile()" ng-show="editing">Save</a>
+            <a href="" class="btn-flat red-text right" ng-click="editing = false" ng-show="editing">Cancel</a>
         </div>
     </div>
 </div>

@@ -81,6 +81,15 @@ dtp.service('User', function($http, Notify) {
                 Notify.error(res.data.error);
             })
     };
+
+    this.updateUser = function(id, userData) {
+        return $http.put('/api/user/' + id, userData)
+            .then(function(res) {
+                return res;
+            }, function(res) {
+                Notify.error(res.data.error);
+            })
+    }
 });
 
 dtp.service('Forum', ['$http', 'Notify', function($http, Notify) {
@@ -166,7 +175,9 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
     Title.setTitle('DTP');
 }]);
 
-dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', function($scope, Title, User, $routeParams) {
+dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', '$filter', function($scope, Title, User, $routeParams, $filter) {
+    var id = $routeParams.userId;
+    
     Title.setTitle('User Profile');
 
     if(User.currentUser !== '') {
@@ -174,15 +185,22 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', func
     }
 
     $scope.getUserProfile = function() {
-        User.getUser($routeParams.userId)
+        User.getUser(id)
             .then(function(user) {
                 $scope.userProfile = user;
                 Title.setTitle(user.name + '\'s Profile');
+                // Have to do this to display online/offline text
                 if(user.isOnline) {
                     $scope.onlineStatus = 'Online';
                 } else {
                     $scope.onlineStatus = 'Offline';
                 }
+                // Age will display properly based on birthday if one is provided
+                // Age may not be saved properly to the database, but will display properly regardless
+                if($scope.userProfile.birthday) {
+                    $scope.userProfile.age = getAge($scope.userProfile.birthday);
+                }
+                $scope.userProfile.birthday = $filter('date')($scope.userProfile.birthday, 'longDate');
             })
     };
 
@@ -192,10 +210,44 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', func
     
     $scope.editProfile = function() {
         $scope.editing = true;
+        Materialize.updateTextFields();
     };
+
+    $scope.saveProfile = function() {
+        var userData = {
+            realName: $scope.userProfile.realName,
+            age: $scope.userProfile.age,
+            birthday: $('#birthday').val(),
+            location: $scope.userProfile.location,
+            occupation: $scope.userProfile.occupation,
+            bio: $scope.userProfile.bio
+        };
+        
+        User.updateUser(id, userData)
+            .then(function() {
+                $scope.editing = false;
+                $scope.getUserProfile();
+            })
+    };
+
+    function getAge(dateString) {
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
 
     $(document).ready(function(){
         $('.tooltipped').tooltip({delay: 800});
+        $('.datepicker').pickadate({
+            selectMonths: true, // Creates a dropdown to control month
+            selectYears: 99, // Creates a dropdown of 40 years to control year
+            max: moment().year(moment().year()).toDate()
+        });
     });
 }]);
 
