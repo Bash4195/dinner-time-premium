@@ -200,7 +200,7 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', '$fi
                 if($scope.userProfile.birthday) {
                     $scope.userProfile.age = getAge($scope.userProfile.birthday);
                 }
-                $scope.userProfile.birthday = $filter('date')($scope.userProfile.birthday, 'longDate');
+                $scope.userProfile.birthday = $filter('date')($scope.userProfile.birthday, 'dd MMMM, yyyy');
             })
     };
 
@@ -214,7 +214,6 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', '$fi
     };
 
     $scope.saveProfile = function() {
-        console.log($('#birthday').val());
         var userData = {
             realName: $scope.userProfile.realName,
             age: $scope.userProfile.age,
