@@ -67,6 +67,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// TODO: Reset all users to offline mode
+// Useful for when the site is updated, restarted, crashed, etc.
+
 // Routes
 app.use(authRoutes);
 app.use(forumRoutes);
