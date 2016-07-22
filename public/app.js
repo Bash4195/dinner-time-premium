@@ -206,7 +206,6 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify',
             Forum.getPosts()
                 .then(function(posts) {
                     $scope.posts = posts;
-                    console.log(posts);
                 })
         };
         $scope.updatePosts();

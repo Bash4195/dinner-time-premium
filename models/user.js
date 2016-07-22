@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var findOrCreate = require('mongoose-findorcreate');
 
 var userSchema = mongoose.Schema({
+    // stuff from steam
     openIdIdentifier: String,
     steamId: String,
     name: String,
@@ -10,7 +11,19 @@ var userSchema = mongoose.Schema({
     avatarMedium: String,
     avatarFull: String,
     countryCode: String,
-    isOnline: Boolean
+
+    // Profile info
+    isOnline: Boolean,
+    realName: String,
+    age: Number,
+    birthday: Date,
+    location: String,
+    occupation: String,
+    status: String,
+    bio: String,
+
+    // Permissions
+    rank: String
 });
 
 userSchema.plugin(findOrCreate);

@@ -58,6 +58,19 @@ blockquote {
     background:none;
 }
 
+/* Profile Form */
+#profile-form .input-field {
+    margin-top: 0;
+}
+
+#profile-form .input-field.col {
+    padding: 0;
+}
+
+#profile-form .input-field label {
+    left: 0;
+}
+
 /* Online/Offline */
 .offline-pic {
     border: solid 3px #9e9e9e !important;

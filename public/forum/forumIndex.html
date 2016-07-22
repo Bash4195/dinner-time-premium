@@ -16,11 +16,16 @@
                     </blockquote>
                 </div>
             </div>
+            <!-- Add new post button -->
+            <a class="modal-trigger btn-floating btn-large waves-effect waves-light tooltipped red right" data-target="createPostModal"
+               data-position="top" data-delay="500" data-tooltip="New post" style="margin: -0.519rem 0 0.912rem 0;" ng-show="user">
+                <i class="material-icons">add</i>
+            </a>
         </div>
     </div>
 
     <br>
-    <span class="grey-text" style="padding-left: 20px;">{{posts.length}} posts</span>
+    <span class="grey-text" style="padding-left: 20px;">{{posts.length || 0}} posts</span>
 
     <!-- Posts -->
     <div class="row" ng-repeat="post in posts | orderBy : '-updatedAt'">
@@ -71,13 +76,5 @@
             <a href="" ng-click="createPost()" class="modal-action waves-effect waves-light btn red">Create<i class="material-icons right">send</i></a>
             <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
         </div>
-    </div>
-
-    <!-- Add new post button -->
-    <div class="fixed-action-btn bottom-right-btn">
-        <a class="modal-trigger btn-floating btn-large waves-effect waves-light tooltipped red" data-target="createPostModal"
-           data-position="top" data-delay="500" data-tooltip="New post" ng-show="user">
-            <i class="material-icons">add</i>
-        </a>
     </div>
 </div>

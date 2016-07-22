@@ -1,7 +1,7 @@
 <div class="container section">
     <div class="card">
         <div class="card-content" style="max-height: 100%; border-radius: 0">
-            <a href="" class="right" ng-click="editProfile()"> <!--ng-show="user._id === userProfile._id"-->
+            <a href="" class="right waves-effect" ng-click="editProfile()" ng-show="user._id === userProfile._id" ng-hide="editing">
                 <i class="material-icons tooltipped" data-position="bottom" data-tooltip="Edit profile">mode_edit</i>
             </a>
             <div class="row">
@@ -14,11 +14,14 @@
                     {{onlineStatus}}
                 </p>
             </div>
-            <pre class="col">Status: I am feeling super duper pooper scooper happy today because it is sunny outside.</pre>
+            <div class="row" style="margin-bottom: 0;">
+                <pre class="col s10">Status:</pre>
+                <a ng-href="{{userProfile.profileUrl}}" class="col s2 btn red right">Steam</a>
+            </div>
             <div class="divider"></div>
             <br>
             <div class="row" ng-hide="editing">
-                <div class="col m12 l6">
+                <div class="col s12 m12 l6">
                     <p>Name:</p>
                     <br>
                     <p>Age:</p>
@@ -30,27 +33,47 @@
                     <p>Occupation:</p>
                     <br>
                 </div>
-                <div class="col m12 l6">
+                <div class="col s12 m12 l6">
                     <pre style="margin: 0">About me:</pre>
                 </div>
             </div>
 
             <div class="row" ng-show="editing">
-                <div class="col m12 l6">
-                    <p>Name: working!</p>
-                    <br>
-                    <p>Age:</p>
-                    <br>
-                    <p>Birthday:</p>
-                    <br>
-                    <p>Location:</p>
-                    <br>
-                    <p>Occupation:</p>
-                    <br>
-                </div>
-                <div class="col m12 l6">
-                    <pre style="margin: 0">About me: working!</pre>
-                </div>
+                <form id="profile-form">
+                    <div class="col s12 m12 l6">
+                        <div class="input-field col s12">
+                            <input id="name" type="text">
+                            <label for="name">Name</label>
+                        </div>
+                        <br>
+                        <div class="input-field col s12">
+                            <input id="age" type="text">
+                            <label for="age">Age</label>
+                        </div>
+                        <br>
+                        <div class="input-field col s12">
+                            <input id="birthday" type="text">
+                            <label for="birthday">Birthday</label>
+                        </div>
+                        <br>
+                        <div class="input-field col s12">
+                            <input id="location" type="text">
+                            <label for="location">Location</label>
+                        </div>
+                        <br>
+                        <div class="input-field col s12">
+                            <input id="occupation" type="text">
+                            <label for="occupation">Occupation</label>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="col s12 m12 l6">
+                        <div class="input-field col s12">
+                            <textarea id="bio" class="materialize-textarea"></textarea>
+                            <label for="bio">About me</label>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="card-content">

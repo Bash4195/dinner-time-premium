@@ -5,7 +5,7 @@ var Forum = require('../models/forum');
 
 // INDEX
 router.get('/api/forum', function(req, res) {
-    Forum.find({}, function(err, posts) {
+    Forum.find({}).populate('authour').exec(function(err, posts) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve forum posts');
         } else {
@@ -38,7 +38,7 @@ router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
 
 // SHOW
 router.get('/api/forum/:postId', function(req, res) {
-    Forum.findById(req.params.postId, function(err, post) {
+    Forum.findById(req.params.postId).populate('authour').exec(function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to find post');
         } else {

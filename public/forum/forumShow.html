@@ -5,7 +5,7 @@
         <div class="card-content">
             <a ng-href="/user/{{post.authour._id}}" class="text-link valign-wrapper right">
                 <span class="valign grey-text text-darken-3" style="margin-right: 5px;">{{post.authour.name}}</span>
-                <img ng-src="{{post.authour.avatar}}" alt="Avatar" class="circle responsive-img grey-text text-darken-3"
+                <img ng-src="{{post.authour.avatar}}" alt="" class="circle responsive-img grey-text text-darken-3"
                      ng-class="{'offline-pic': !post.authour.isOnline, 'online-pic': post.authour.isOnline}">
             </a>
             <pre class="card-title" style="margin: 0;">{{post.title}}</pre>
