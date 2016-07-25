@@ -1,258 +1,37 @@
-/* Scrollbar */
-::-webkit-scrollbar {
-    width: 0.6em;
+/* Side nav */
+md-sidenav,
+md-sidenav.md-locked-open,
+md-sidenav.md-closed.md-locked-open-add-active {
+    min-width: 254px !important;
+    width: 254px !important;
+    max-width: 304px !important;
 }
 
-::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #F44336;
-    outline: 1px solid slategrey;
-}
-
-/* Sticky footer */
-body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-}
-
-main {
-    flex: 1 0 auto;
-}
-
-/* Offset content for side nav */
-header, main, footer {
-    padding-left: 240px;
-}
-
-@media only screen and (max-width : 992px) {
-    header, main, footer {
-        padding-left: 0;
-    }
-}
-
-/* Lighten the hr colour */
-hr {
-    border: solid 1px #E0E0E0;
-}
-
-/* Wrap text in pre tag */
-pre {
-    font-family: Roboto, Helvetica, sans-serif;
-    white-space: pre-wrap;       /* Since CSS 2.1 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
-}
-
-/* Blockquote colour to DTP colours */
-blockquote {
-    border-left: 5px solid #F44336; /* Just change the color value and that's it*/
-}
-
-a {
-    color: #F44336;
-}
-
-select:focus {
-    outline: 1px solid #e57373;
-}
-
-/* Dirty side nav overlay fix */
-#sidenav-overlay {
-    background:none;
-}
-
-/* Profile Form */
-#profile-form .input-field {
-    margin-top: 0;
-}
-
-#profile-form .input-field.col {
+/* Side nav lists */
+md-sidenav md-list {
     padding: 0;
 }
 
-#profile-form .input-field label {
-    left: 0;
-}
-
-/* Online/Offline */
-.offline-pic {
-    border: solid 3px #9e9e9e !important;
-    padding: 0 !important;
-}
-
-.offline-text {
-    color: #9e9e9e !important;
-}
-
-.online-pic {
-    border: solid 3px #4caf50 !important;
-    padding: 0 !important;
-}
-
-.online-text {
-    color: #4caf50 !important;
-}
-
-/* Link styles */
-.text-link {
-    color: #424242;
-}
-
-.text-link:hover {
-    text-decoration: underline;
-}
-
-.bottom-right-btn {
-    bottom: 20px;
-    right: 20px;
-}
-
-.floating-button {
-    margin: -0.519rem 0 0.912rem 0;
-}
-
-/* Text highlight */
-::-moz-selection {
-    background: #C62828;
-}
-
-::selection {
-    background: #C62828;
-}
-
-/* Error handler classes */
-.toast-success {
-    color: #4CAF50;
-}
-.toast-info {
-    color: #2196F3;
-}
-.toast-warning {
-    color: #FF9800;
-}
-.toast-error {
-    color: #F44336;
-}
-
-/* Side nav hover logo fix */
-.side-nav.fixed a.logo:hover {
-    background-color: transparent;
-}
-
-/* Input fields */
-
-/* label color */
-.input-field label {
-    color: #9E9E9E;
-}
-/* label focus color */
-.input-field input[type=text]:focus + label {
-    color: #F44336;
-}
-/* label underline focus color */
-.input-field input[type=text]:focus {
-    border-bottom: 1px solid #F44336;
-    box-shadow: 0 1px 0 0 #F44336;
-}
-/* valid color */
-.input-field input[type=text].valid {
-    border-bottom: 1px solid #4CAF50;
-    box-shadow: 0 1px 0 0 #4CAF50;
-}
-/* invalid color */
-.input-field input[type=text].invalid {
-    border-bottom: 1px solid #B71C1C;
-    box-shadow: 0 1px 0 0 #B71C1C;
-}
-/* icon prefix focus color */
-.input-field .prefix.active {
-    color: #F44336;
-}
-
-/* Textarea fields */
-/* Some of these are covered by input fields ^ */
-
-/* label focus color */
-.input-field textarea.materialize-textarea:focus + label {
-    color: #F44336;
-}
-/* label underline focus color */
-.input-field textarea.materialize-textarea:focus {
-    border-bottom: 1px solid #F44336;
-    box-shadow: 0 1px 0 0 #F44336;
-}
-/* valid color */
-.input-field textarea.materialize-textarea.valid {
-    border-bottom: 1px solid #4CAF50;
-    box-shadow: 0 1px 0 0 #4CAF50;
-}
-/* invalid color */
-.input-field input[type=text].invalid {
-    border-bottom: 1px solid #B71C1C;
-    box-shadow: 0 1px 0 0 #B71C1C;
-}
-
-/* Small info at bottom of card such as time created */
-.card-info {
-    padding: 0 20px 10px;
-}
-
-.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
-    color: #e57373 !important;
-}
-
-/* Collections */
-#forum-collection li.collection-header button {
-    margin: -0.519rem 0 0.912rem 0;
-}
-
-.collection.with-header .collection-item.avatar {
-    padding: 0;
-}
-
-.collection.with-header .collection-item.avatar a {
-    color: rgba(0,0,0,0.87);
-    margin: 0;
-    padding: 10px 20px 10px 72px;
-    display: block;
+md-list-item > button {
     width: 100%;
-    height: 100%;
+    text-align: left !important;
 }
 
-.collection.with-header .collection-item.avatar a:hover {
-    background-color: #E0E0E0;
-    transition: .25ms;
+md-sidenav md-list-item > button {
+    margin: 0 !important;
+    border-radius: 0 !important;
 }
 
-/* Date picker */
-.picker__date-display {
-    background-color: #F44336;
+/* Icon font sizes */
+.material-icons.md-18 {
+    font-size: 18px;
 }
-.picker__weekday-display {
-    background-color: #C62828;
-    font-weight: 300;
+.material-icons.md-24 {
+    font-size: 24px;
 }
-.picker__day--selected, .picker__day--selected:hover, .picker--focused .picker__day--selected {
-    background-color: #F44336;
+.material-icons.md-36 {
+    font-size: 36px;
 }
-
-.picker__day.picker__day--today {
-    color: #F44336;
-}
-
-.picker__nav--prev:hover, .picker__nav--next:hover {
-    background-color: #ef5350;
-}
-
-.picker__close, .picker__today {
-    color: #F44336;
-}
-
-button.picker__today:focus, button.picker__clear:focus, button.picker__close:focus {
-    background-color: #ef5350;
+.material-icons.md-48 {
+    font-size: 48px;
 }

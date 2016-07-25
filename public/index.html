@@ -4,116 +4,91 @@
     <title ng-bind="Title.title()"></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Angular Material -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc3/angular-material.min.css">
     <link rel="stylesheet" href="/assets/css/dtp.css">
+    <!-- Angular -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-sanitize.min.js"></script>
-    <script src="/app.js"></script>
+    <script src="/dtp.js"></script>
+    <!-- For pretty routes -->
     <base href="/">
 </head>
-<body class="grey lighten-4" ng-cloak>
-
-<header onload="init()">
-
-    <!-- Side nav -->
-    <ul id="slide-out" class="side-nav fixed">
-        <li><a href="/" class="logo"><img src="assets/img/logo.png" alt="DTP" class="responsive-img"></a></li>
-        <li><br></li> <!-- Spacing from the logo -->
-        <li>
-            <a href="http://steamcommunity.com/groups/dtpremium#announcements">
-                <div class="row valign-wrapper">
-                    <i class="material-icons col s4">announcement</i>
-                    <span class="col s8">News</span>
+<body layout="row" ng-cloak>
+<md-sidenav md-is-locked-open="$mdMedia('gt-md') && lockLeft"
+            md-component-id="left"
+            class="md-sidenav-left" md-whiteframe="4dp">
+    <md-toolbar layout="row" layout-align="center center" style="background-color: #FFF">
+        <a href="/" layout="row" layout-align="center center">
+            <img src="assets/img/logo.png" alt="DTP">
+        </a>
+    </md-toolbar>
+    <md-list>
+        <md-list-item>
+            <md-button layout="row">
+                <div layout="row" flex="30">
+                    <md-icon>announcement</md-icon>
                 </div>
-            </a>
-        </li>
-        <li>
-            <a href="http://dtpremium.site.nfoservers.com/donate/">
-                <div class="row valign-wrapper">
-                    <i class="material-icons col s4">favorite</i>
-                    <span class="col s8">Donate</span>
+                <p flex="70">News</p>
+            </md-button>
+        </md-list-item>
+        <md-list-item>
+            <md-button layout="row">
+                <div layout="row" flex="30">
+                    <md-icon>attach_money</md-icon>
                 </div>
-            </a>
-        </li>
-        <li ng-class="{active: activeNav('/forum')}">
-            <a href="/forum" ng-class="{'red-text': activeNav('/forum')}">
-                <div class="row valign-wrapper">
-                    <i class="material-icons col s4">forum</i>
-                    <span class="col s5">Forum</span><!-- TODO: put this back to col s8 after removing beta tag! -->
-                    <div class="chip red white-text">
-                        Beta
-                    </div>
+                <p flex="70">Donate</p>
+            </md-button>
+        </md-list-item>
+        <md-list-item>
+            <md-button layout="row">
+                <div layout="row" flex="30">
+                    <md-icon>forum</md-icon>
                 </div>
-            </a>
-        </li>
-    </ul>
+                <p flex="70">Forum</p>
+            </md-button>
+        </md-list-item>
+    </md-list>
+</md-sidenav>
 
-    <!-- Top nav -->
-    <nav class="red">
-        <div class="container">
-            <a href="" data-activates="slide-out" class="button-collapse white-text"><i class="material-icons">menu</i></a>
+<div class="container" layout="column" flex>
+    <md-toolbar class="md-toolbar-tools" style="padding-right: 0;">
+        <div layout="row" layout-align="center center" flex="2">
+            <md-button class="md-icon-button" ng-click="lockLeft = !lockLeft" hide show-gt-md>
+                <md-icon>menu</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="toggleLeft()" hide-gt-md>
+                <md-icon>menu</md-icon>
+            </md-button>
         </div>
-
+        <span flex></span>
+        <span class="md-headline">Dinner Time Premium</span>
+        <span flex></span>
+        
         <!-- User options -->
-        <ul class="right">
-            <li ng-hide="user">
-                <a href="/auth/steam" target="_self">
-                    <button class="btn-flat transparent" style="padding: 0">
-                        <img src="assets/img/steam.png" alt="Sign in through Steam">
-                    </button>
-                </a>
-            </li>
-            <li ng-show="user">
-                <a href="" class="dropdown-button" data-activates='user-options' data-beloworigin="true" data-hover="true">
-                    <button class="btn-flat transparent" style="padding: 0 10px">
-                        <img ng-src="{{user.avatar}}" alt="Avatar"
-                             class="circle responsive-img">
-                    </button>
-                </a>
-                <ul id='user-options' class='dropdown-content' style="min-width: 150px">
-                    <li>
-                        <a ng-href="/user/{{user._id}}" class="grey-text text-darken-3">
-                            <i class="tiny material-icons left">face</i>
-                            <span>Profile</span>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="/auth/logout" target="_self" class="grey-text text-darken-3">
-                            <i class="material-icons left">power_settings_new</i>
-                            <span>Logout</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
-</header>
+        <a href="/auth/steam" target="_self" ng-hide="user">
+            <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
+        </a>
 
-<main ng-view></main>
+        <a href="">
+            <md-button>
+                <img src="user.avatar" alt="">
+            </md-button>
+        </a>
+    </md-toolbar>
 
-<footer class="page-footer red">
-    <div class="container">
-        <div class="row">
-            <div class="col s12 m6">
-                <h5 class="white-text">Dinner Time Premium</h5>
-                <p class="grey-text text-lighten-4">We hope you enjoy your time on DTP! Feel free to message a staff member if you need anything.</p>
-            </div>
-            <div class="col s12 m4 offset-m2">
-                <h5 class="white-text">Links</h5>
-                <ul>
-                    <li><a class="text-link grey-text text-lighten-3" href="http://steamcommunity.com/groups/dtpremium">Steam</a></li>
-                    <li><a class="text-link grey-text text-lighten-3" href="http://dtpremium.site.nfoservers.com/donate/">Donate</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</footer>
+    <md-content layout-padding flex ng-view></md-content>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+    <!-- TODO: Footer -->
+    <footer layout="row"></footer>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-messages.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.min.js"></script>
 </body>
