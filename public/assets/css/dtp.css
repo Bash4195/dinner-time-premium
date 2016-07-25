@@ -7,6 +7,9 @@ md-sidenav.md-closed.md-locked-open-add-active {
     max-width: 304px !important;
 }
 
+/* Arrow button to show online users when closed */
+
+
 /* Side nav lists */
 md-sidenav md-list {
     padding: 0;

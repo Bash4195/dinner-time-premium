@@ -28,10 +28,9 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
     // Themes
     $mdThemingProvider.theme('DTP')
         .primaryPalette('red')
-        .accentPalette('grey', {
-            'default': '500'
-        })
+        .accentPalette('grey')
         .warnPalette('red');
+
     $mdThemingProvider.setDefaultTheme('DTP')
 });
 
@@ -167,13 +166,15 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
         }
 
         $scope.lockLeft = true;
+        $scope.lockOnlineUsers = true;
 
         $scope.toggleLeft = function() {
             $mdSidenav('left').toggle();
         };
         
-        // Variable for all tooltip delays
-        $scope.tooltipDelay = 1000;
+        $scope.toggleOnlineUsers = function() {
+            $mdSidenav('onlineUsers').toggle();
+        };
 
     // Used to set the active nav button
     // $scope.activeNav = function (viewLocation) {
