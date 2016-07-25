@@ -22,6 +22,15 @@ md-sidenav md-list-item > button {
     border-radius: 0 !important;
 }
 
+/* Font alignment */
+.left-align-text {
+    text-align: left;
+}
+
+.right-align-text {
+    text-align: right;
+}
+
 /* Icon font sizes */
 .material-icons.md-18 {
     font-size: 18px;
@@ -34,4 +43,24 @@ md-sidenav md-list-item > button {
 }
 .material-icons.md-48 {
     font-size: 48px;
+}
+
+/* Avatar image */
+.avatar-simple {
+    border-radius: 50%;
+}
+
+.avatar {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0;
+    vertical-align: middle;
+    zoom: 0.70;
+    transform: translateZ(0);
+    -webkit-transform: scale(0.70);
+    -moz-transform: scale(0.70);
 }

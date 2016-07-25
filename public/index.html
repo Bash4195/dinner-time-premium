@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="/assets/css/dtp.css">
     <!-- Angular -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
-    <script src="/dtp.js"></script>
     <!-- For pretty routes -->
     <base href="/">
 </head>
@@ -27,34 +25,28 @@
     </md-toolbar>
     <md-list>
         <md-list-item>
-            <md-button layout="row">
-                <div layout="row" flex="30">
-                    <md-icon>announcement</md-icon>
-                </div>
-                <p flex="70">News</p>
+            <md-button ng-href="http://steamcommunity.com/groups/dtpremium#announcements" target="_target" layout="row" layout-fill>
+                <md-icon flex="40">announcement</md-icon>
+                <p class="left-align-text" flex="60">News</p>
             </md-button>
         </md-list-item>
         <md-list-item>
-            <md-button layout="row">
-                <div layout="row" flex="30">
-                    <md-icon>attach_money</md-icon>
-                </div>
-                <p flex="70">Donate</p>
+            <md-button ng-href="http://dtpremium.site.nfoservers.com/donate/" target="_target" layout="row" layout-fill>
+                <md-icon flex="40">attach_money</md-icon>
+                <p class="left-align-text" flex="60">Donate</p>
             </md-button>
         </md-list-item>
         <md-list-item>
-            <md-button layout="row">
-                <div layout="row" flex="30">
-                    <md-icon>forum</md-icon>
-                </div>
-                <p flex="70">Forum</p>
+            <md-button ng-href="/forum" layout="row" layout-fill>
+                <md-icon flex="40">forum</md-icon>
+                <p class="left-align-text" flex="60">Forum</p>
             </md-button>
         </md-list-item>
     </md-list>
 </md-sidenav>
 
 <div class="container" layout="column" flex>
-    <md-toolbar class="md-toolbar-tools" style="padding-right: 0;">
+    <md-toolbar class="md-toolbar-tools" layout="row" style="padding-right: 0;">
         <div layout="row" layout-align="center center" flex="2">
             <md-button class="md-icon-button" ng-click="lockLeft = !lockLeft" hide show-gt-md>
                 <md-icon>menu</md-icon>
@@ -64,7 +56,7 @@
             </md-button>
         </div>
         <span flex></span>
-        <span class="md-headline">Dinner Time Premium</span>
+        <span class="md-headline">{{Title.pageTitle()}}</span>
         <span flex></span>
         
         <!-- User options -->
@@ -72,11 +64,25 @@
             <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
         </a>
 
-        <a href="">
-            <md-button>
-                <img src="user.avatar" alt="">
-            </md-button>
-        </a>
+        <md-menu ng-show="user" md-position-mode="target-right target">
+            <a href="" ng-click="$mdOpenMenu($event)" layout-margin>
+                <img ng-src="{{user.avatar}}" alt="" class="avatar-simple">
+            </a>
+            <md-menu-content>
+                <md-menu-item>
+                    <md-button ng-href="/user/{{user._id}}" class="md-primary">
+                        <md-icon>face</md-icon>
+                        Profile
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-href="/auth/logout" target="_self">
+                        <md-icon>power_settings_new</md-icon>
+                        Logout
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
     </md-toolbar>
 
     <md-content layout-padding flex ng-view></md-content>
@@ -85,6 +91,8 @@
     <footer layout="row"></footer>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
+<script src="/dtp.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-aria.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-messages.min.js"></script>

@@ -28,9 +28,12 @@ dtp.config(function ($routeProvider, $locationProvider) {
 
 dtp.factory('Title', function() {
     var title = 'DTP';
+    var pageTitle = 'Dinner Time Premium';
     return {
         title: function() { return title; },
-        setTitle: function(newTitle) { title = newTitle }
+        pageTitle: function() { return pageTitle },
+        setTitle: function(newTitle) { title = newTitle },
+        setPageTitle: function(newTitle) { pageTitle = newTitle }
     };
 });
 //
@@ -159,6 +162,9 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
         $scope.toggleLeft = function() {
             $mdSidenav('left').toggle();
         };
+        
+        // Variable for all tooltip delays
+        $scope.tooltipDelay = 1000;
 
     // Used to set the active nav button
     // $scope.activeNav = function (viewLocation) {
@@ -168,6 +174,7 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
 
 dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
     Title.setTitle('DTP');
+    Title.setPageTitle('Dinner Time Premium');
 }]);
 
 // dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', '$filter', function($scope, Title, User, $routeParams, $filter) {
