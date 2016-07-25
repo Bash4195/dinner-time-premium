@@ -1,6 +1,6 @@
 var dtp = angular.module('dtp', ['ngRoute', 'ngMaterial', 'angularMoment']);
 
-dtp.config(function ($routeProvider, $locationProvider) {
+dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
     $locationProvider.html5Mode(true);
     $routeProvider
         .when('/', {
@@ -23,7 +23,16 @@ dtp.config(function ($routeProvider, $locationProvider) {
         .when('/forum/:postId', {
             templateUrl: 'forum/forumShow.html',
             controller: 'forumShowCtrl'
+        });
+
+    // Themes
+    $mdThemingProvider.theme('DTP')
+        .primaryPalette('red')
+        .accentPalette('grey', {
+            'default': '500'
         })
+        .warnPalette('red');
+    $mdThemingProvider.setDefaultTheme('DTP')
 });
 
 dtp.factory('Title', function() {
