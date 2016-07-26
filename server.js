@@ -67,8 +67,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// TODO: Reset all users to offline mode
+// Reset all users to offline mode
 // Useful for when the site is updated, restarted, crashed, etc.
+User.update({onlineStatus: {$ne: 'Offline'}}, {onlineStatus: 'Offline'}, {multi: true}, function(err, users) {
+    if(err) {
+        console.log('ERROR: ' + err.message)
+    } else {
+        console.log(users)
+    }
+});
 
 // Routes
 app.use(authRoutes);
