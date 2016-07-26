@@ -12,15 +12,8 @@ router.get('/auth/steam', middleware.saveSessionPath, passport.authenticate('ste
 router.get('/auth/steam/return',
     passport.authenticate('steam', {failureRedirect: '/'}),
     function(req, res) {
-        // TODO: Update user info when they log in
-        User.findByIdAndUpdate(req.user._id, {onlineStatus: 'Online'}, function(err, user) {
-            if(err) {
-                middleware.handleError(res, err.message, 'Something went wrong while logging in. Please try again.')
-            } else {
-                res.redirect(req.session.returnTo || '/');
-                delete req.session.returnTo;
-            }
-        });
+        res.redirect(req.session.returnTo || '/');
+        delete req.session.returnTo;
     });
 
 router.get('/auth/logout', middleware.isLoggedIn, function(req, res) {
@@ -35,7 +28,7 @@ router.get('/auth/logout', middleware.isLoggedIn, function(req, res) {
 });
 
 // Return current user to Angular
-router.get('/auth/getLoggedInUser', function(req, res) {
+router.get('/auth/getCurrentUser', function(req, res) {
     res.status(200).json(req.user);
 });
 

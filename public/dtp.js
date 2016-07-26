@@ -78,8 +78,8 @@ dtp.factory('Title', function() {
 dtp.service('User', ['$http', function($http) {
     var self = this;
     this.currentUser = ''; // Saves network usage
-    this.getLoggedInUser = function() {
-        return $http.get('/auth/getLoggedInUser')
+    this.getCurrentUser = function() {
+        return $http.get('/auth/getCurrentUser')
             .then(function(res) {
                 self.currentUser = res.data; // Keep current user variable up to date
                 return res.data;
@@ -165,7 +165,7 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
         $scope.$mdMedia = $mdMedia;
 
         if(User.currentUser === '') {
-            User.getLoggedInUser()
+            User.getCurrentUser()
                 .then(function(user) {
                     if(user) {
                         $scope.user = user;
@@ -206,7 +206,6 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
             User.getOnlineUsers()
                 .then(function(users) {
                     $scope.onlineUsers = users;
-                    console.log(users);
                 })
         }
 

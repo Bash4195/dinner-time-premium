@@ -39,8 +39,9 @@ passport.use(new SteamStrategy({
     },
     function(identifier, profile, done) {
         var user = profile._json;
-        User.findOrCreate({ openIdIdentifier: identifier }, {
-            // Add these properties to object if it needs to be created
+        User.findOneAndUpdate({openIdIdentifier: identifier}, {
+            // Updates these properties on creating or finding
+            openIdIdentifier: identifier,
             steamId: user.steamid,
             name: user.personaname,
             profileUrl: user.profileurl,
@@ -49,10 +50,9 @@ passport.use(new SteamStrategy({
             avatarFull: user.avatarfull,
             countryCode: user.loccountrycode,
             onlineStatus: 'Online'
-            
-        }, function (err, user) {
+        }, {upsert: true}, function(err, user) { // Upsert allows the object to be updated if it's found
             return done(err, user);
-        });
+        })
     }
 ));
 
@@ -72,8 +72,6 @@ app.use(passport.session());
 User.update({onlineStatus: {$ne: 'Offline'}}, {onlineStatus: 'Offline'}, {multi: true}, function(err, users) {
     if(err) {
         console.log('ERROR: ' + err.message)
-    } else {
-        console.log(users)
     }
 });
 

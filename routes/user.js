@@ -3,7 +3,6 @@ var router = express.Router();
 var middleware = require('../middleware/index');
 var User = require('../models/user');
 
-// TODO: Protect these routes!
 router.get('/api/users', function(req, res) {
     User.find({}, function(err, users) {
         if(err) {
@@ -34,6 +33,7 @@ router.get('/api/user/:userId', function(req, res) {
     })
 });
 
+// TODO: Protect this route!
 router.put('/api/user/:userId', function(req, res) {
     User.findByIdAndUpdate(req.params.userId, req.body, function(err, user) {
         if(err) {
