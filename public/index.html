@@ -60,7 +60,16 @@
 
         <!-- User options -->
         <md-button layout="row" class="md-icon-button fadein fadeout" ng-hide="lockOnlineUsers"
-                   ng-click="toggleLockOnlineUsers()">
+                   ng-click="toggleLockOnlineUsers()" hide show-gt-md>
+            <div class="online-dot"></div>
+            <div flex></div>
+            <md-icon>account_circle</md-icon>
+            <md-tooltip>
+                Show online users
+            </md-tooltip>
+        </md-button>
+
+        <md-button layout="row" class="md-icon-button fadein fadeout" ng-click="toggleOnlineUsers()" hide-gt-md>
             <div class="online-dot"></div>
             <div flex></div>
             <md-icon>account_circle</md-icon>
@@ -102,7 +111,7 @@
 
         <md-sidenav class="md-sidenav-right" md-component-id="onlineUsers" md-is-locked-open="$mdMedia('gt-md') && lockOnlineUsers">
             <md-toolbar layout="row" layout-align="center center">
-                <md-button class="md-icon-button" ng-click="toggleLockOnlineUsers()">
+                <md-button class="md-icon-button" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
                     <md-icon>keyboard_arrow_right</md-icon>
                 </md-button>
                 <span flex="80">Online Users</span>
