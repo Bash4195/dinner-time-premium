@@ -19,7 +19,7 @@ router.get('/auth/steam/return',
 router.get('/auth/logout', middleware.isLoggedIn, function(req, res) {
     User.findByIdAndUpdate(req.user._id, {onlineStatus: 'Offline'}, function(err, user) {
         if(err) {
-            middleware.handleError(res, err.message, 'Something went wrong while logging out. Please try again.')
+            middleware.handleError(res, err.message, 'Failed to logout')
         } else {
             req.logout();
             res.redirect('back');
@@ -28,7 +28,7 @@ router.get('/auth/logout', middleware.isLoggedIn, function(req, res) {
 });
 
 // Return current user to Angular
-router.get('/auth/getCurrentUser', function(req, res) {
+router.get('/auth/getCurrentUser', middleware.isLoggedIn, function(req, res) {
     res.status(200).json(req.user);
 });
 

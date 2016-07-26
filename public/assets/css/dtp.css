@@ -25,6 +25,15 @@ md-sidenav md-list-item > button {
     border-radius: 0 !important;
 }
 
+/* Toast Themes */
+md-toast.md-success-toast-theme .md-toast-content {
+    background-color: #4CAF50;
+}
+
+md-toast.md-error-toast-theme .md-toast-content {
+    background-color: #B71C1C;
+}
+
 /* Font alignment */
 .left-align-text {
     text-align: left;

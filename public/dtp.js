@@ -31,7 +31,12 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
         .accentPalette('grey')
         .warnPalette('red');
 
-    $mdThemingProvider.setDefaultTheme('DTP')
+    $mdThemingProvider.setDefaultTheme('DTP');
+
+        // Toast themes
+    $mdThemingProvider.theme('success-toast');
+
+    $mdThemingProvider.theme('error-toast');
 });
 
 dtp.factory('Title', function() {
@@ -44,38 +49,24 @@ dtp.factory('Title', function() {
         setPageTitle: function(newTitle) { pageTitle = newTitle }
     };
 });
-//
-// dtp.service('Notify', function() {
-//     // Split into different functions to be able to add icons to each message
-//     this.default = function(message, duration, callback) {
-//         duration = duration || 4000;
-//
-//         Materialize.toast(message, duration, '', callback);
-//     };
-//     this.success = function(message, duration, callback) {
-//         message = '<i class="material-icons left">check</i>' + message;
-//         duration = duration || 4000;
-//         Materialize.toast(message, duration, 'toast-success', callback);
-//     };
-//     this.info = function(message, duration, callback) {
-//         message = '<i class="material-icons left">info</i>' + message;
-//         duration = duration || 4000;
-//         Materialize.toast(message, duration, 'toast-info', callback);
-//     };
-//     this.warning = function(message, duration, callback) {
-//         message = '<i class="material-icons left">warning</i>' + message;
-//         duration = duration || 4000;
-//         Materialize.toast(message, duration, 'toast-warning', callback);
-//     };
-//     this.error = function(message, duration, callback) {
-//         message = '<i class="material-icons left">error</i>' + message;
-//         duration = duration || 4000;
-//         Materialize.toast(message, duration, 'toast-error', callback);
-//     };
-// });
 
-// Inject notify
-dtp.service('User', ['$http', function($http) {
+dtp.service('Notify', ['$mdToast', function($mdToast) {
+    this.success = function(message) {
+        var success = $mdToast.simple(message)
+            .position('top right')
+            .theme('error-toast');
+        $mdToast.show(success);
+    };
+
+    this.error = function(message) {
+        var error = $mdToast.simple(message)
+            .position('top right')
+            .theme('error-toast');
+        $mdToast.show(error);
+    };
+}]);
+
+dtp.service('User', ['$http', 'Notify', function($http, Notify) {
     var self = this;
     this.currentUser = ''; // Saves network usage
     this.getCurrentUser = function() {
@@ -83,6 +74,8 @@ dtp.service('User', ['$http', function($http) {
             .then(function(res) {
                 self.currentUser = res.data; // Keep current user variable up to date
                 return res.data;
+            }, function(res) {
+                Notify.error(res.data.error || 'Failed to retrieve your user information');
             })
     };
     this.getOnlineUsers = function() {
@@ -90,7 +83,7 @@ dtp.service('User', ['$http', function($http) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                // Notify.error(res.data.error);
+                Notify.error(res.data.error);
             })
     };
     this.getUser = function(id) {
@@ -98,7 +91,7 @@ dtp.service('User', ['$http', function($http) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                // Notify.error(res.data.error);
+                Notify.error(res.data.error);
             })
     };
 
@@ -107,7 +100,7 @@ dtp.service('User', ['$http', function($http) {
             .then(function(res) {
                 return res;
             }, function(res) {
-                // Notify.error(res.data.error);
+                Notify.error(res.data.error);
             })
     }
 }]);
@@ -118,7 +111,7 @@ dtp.service('Forum', ['$http', function($http) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                // Notify.error(res.data.error);
+                Notify.error(res.data.error);
             });
     };
     this.newPost = function(post) {
@@ -126,7 +119,7 @@ dtp.service('Forum', ['$http', function($http) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                // Notify.error(res.data.error);
+                Notify.error(res.data.error);
             })
     };
     this.getPost = function(id) {
@@ -134,7 +127,7 @@ dtp.service('Forum', ['$http', function($http) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                // Notify.error(res.data.error);
+                Notify.error(res.data.error);
             })
     };
     this.updatePost = function(id, newContent) {
@@ -142,7 +135,7 @@ dtp.service('Forum', ['$http', function($http) {
             .then(function(res) {
                 return res;
             }, function(res) {
-                // Notify.error(res.data.error);
+                Notify.error(res.data.error);
             })
     };
     this.deletePost = function(id) {
@@ -150,7 +143,7 @@ dtp.service('Forum', ['$http', function($http) {
             .then(function(res) {
                 return res;
             }, function(res) {
-                // Notify.error(res.data.error);
+                Notify.error(res.data.error);
             })
     }
 }]);
