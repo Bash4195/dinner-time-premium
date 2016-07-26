@@ -28,7 +28,9 @@ router.get('/auth/logout', middleware.isLoggedIn, function(req, res) {
 });
 
 // Return current user to Angular
-router.get('/auth/getCurrentUser', middleware.isLoggedIn, function(req, res) {
+// Route not protected by loggedIn middleware because
+// when a user first joins, they would see an error
+router.get('/auth/getCurrentUser', function(req, res) {
     res.status(200).json(req.user);
 });
 
