@@ -7,7 +7,7 @@
     <!-- Angular Material -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc3/angular-material.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc3/angular-material.min.css">
     <link rel="stylesheet" href="/assets/css/dtp.css">
     <!-- Angular -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
@@ -107,7 +107,38 @@
     </md-toolbar>
 
     <div layout="row" flex>
-        <md-content layout-padding flex ng-view></md-content>
+        <md-content flex>
+            <div layout-padding flex ng-view></div>
+
+            <!-- TODO: Footer -->
+            <footer>
+                <md-toolbar layout="row">
+                    <div flex></div>
+                    <div layout="column" layout-align="space-around start" layout-padding flex="30">
+                        <span>Dinner Time Premium</span>
+                <span class="md-body-1">
+                    We hope you enjoy your stay on our server!
+                    If you need help with anything, please feel free to contact a staff member, we're here to help.
+                </span>
+                        <span flex></span>
+                    </div>
+                    <div flex></div>
+                    <div layout="column" layout-align="space-around start" layout-padding flex="30">
+                        <span>Links</span>
+                <span>
+                    <a href="" class="md-body-2 md-accent">About</a>
+                    <br>
+                    <a href="" class="md-body-2 md-accent">Feedback</a>
+                    <br>
+                    <a href="" class="md-body-2 md-accent">Support</a>
+                    <br>
+                    <a href="" class="md-body-2 md-accent">Report</a>
+                </span>
+                    </div>
+                    <div flex></div>
+                </md-toolbar>
+            </footer>
+        </md-content>
 
         <md-sidenav class="md-sidenav-right" md-component-id="onlineUsers" md-is-locked-open="$mdMedia('gt-md') && lockOnlineUsers">
             <md-toolbar layout="row" layout-align="center center">
@@ -136,43 +167,14 @@
             </md-list>
         </md-sidenav>
     </div>
-
-    <!-- TODO: Footer -->
-    <footer>
-        <md-toolbar layout="row">
-            <div flex></div>
-            <div layout="column" layout-align="space-around start" layout-padding flex="30">
-                <span>Dinner Time Premium</span>
-                <span class="md-body-1">
-                    We hope you enjoy your stay on our server!
-                    If you need help with anything, please feel free to contact a staff member, we're here to help.
-                </span>
-                <span flex></span>
-            </div>
-            <div flex></div>
-            <div layout="column" layout-align="space-around start" layout-padding flex="30">
-                <span>Links</span>
-                <span>
-                    <a href="" class="md-body-2 md-accent">About</a>
-                    <br>
-                    <a href="" class="md-body-2 md-accent">Feedback</a>
-                    <br>
-                    <a href="" class="md-body-2 md-accent">Support</a>
-                    <br>
-                    <a href="" class="md-body-2 md-accent">Report</a>
-                </span>
-            </div>
-            <div flex></div>
-        </md-toolbar>
-    </footer>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
 <script src="/dtp.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-aria.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-messages.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-messages.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.min.js"></script>
 </body>
