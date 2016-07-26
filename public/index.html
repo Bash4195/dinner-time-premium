@@ -159,7 +159,9 @@
                     <md-button layout="row" layout-fill ng-href="/user/{{onlineUser._id}}">
                         <div ng-class="{'online-dot': onlineUser.onlineStatus === 'Online',
                         'away-dot': onlineUser.onlineStatus === 'Away',
-                        'busy-dot': onlineUser.onlineStatus === 'Busy'}" flex="2"></div>
+                        'busy-dot': onlineUser.onlineStatus === 'Busy'}" flex="2">
+                            <md-tooltip>{{onlineUser.onlineStatus}}</md-tooltip>
+                        </div>
                         <div flex></div>
                         <span flex="60">{{onlineUser.name}}</span>
                         <div flex></div>
