@@ -107,8 +107,10 @@
     </md-toolbar>
 
     <div layout="row" flex>
-        <md-content flex>
-            <div layout-padding flex ng-view></div>
+        <md-content layout="column" flex>
+            <div layout-padding ng-view></div>
+
+            <div flex></div>
 
             <!-- TODO: Footer -->
             <footer>
