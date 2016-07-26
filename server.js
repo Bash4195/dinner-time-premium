@@ -48,7 +48,7 @@ passport.use(new SteamStrategy({
             avatarMedium: user.avatarmedium,
             avatarFull: user.avatarfull,
             countryCode: user.loccountrycode,
-            isOnline: true
+            onlineStatus: 'Online'
             
         }, function (err, user) {
             return done(err, user);

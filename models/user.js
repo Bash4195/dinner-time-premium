@@ -13,7 +13,7 @@ var userSchema = mongoose.Schema({
     countryCode: String,
 
     // Profile info
-    isOnline: Boolean,
+    onlineStatus: String,
     realName: String,
     age: Number,
     birthday: Date,

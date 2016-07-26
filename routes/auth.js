@@ -13,7 +13,7 @@ router.get('/auth/steam/return',
     passport.authenticate('steam', {failureRedirect: '/'}),
     function(req, res) {
         // TODO: Update user info when they log in
-        User.findByIdAndUpdate(req.user._id, {isOnline: true}, function(err, user) {
+        User.findByIdAndUpdate(req.user._id, {onlineStatus: 'Online'}, function(err, user) {
             if(err) {
                 middleware.handleError(res, err.message, 'Something went wrong while logging in. Please try again.')
             } else {
@@ -24,7 +24,7 @@ router.get('/auth/steam/return',
     });
 
 router.get('/auth/logout', middleware.isLoggedIn, function(req, res) {
-    User.findByIdAndUpdate(req.user._id, {isOnline: false}, function(err, user) {
+    User.findByIdAndUpdate(req.user._id, {onlineStatus: 'Offline'}, function(err, user) {
         if(err) {
             middleware.handleError(res, err.message, 'Something went wrong while logging out. Please try again.')
         } else {
