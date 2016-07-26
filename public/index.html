@@ -15,6 +15,9 @@
     <base href="/">
 </head>
 <body layout="row" ng-cloak>
+
+<!-- Sidenav -->
+
 <md-sidenav md-is-locked-open="$mdMedia('gt-md') && lockLeft" md-component-id="left"
             class="md-sidenav-left" md-whiteframe="4dp">
     <md-toolbar layout="row" layout-align="center center" style="background-color: #FFF"> <!-- TODO: Fix this to integrate with themes -->
@@ -22,6 +25,17 @@
             <img src="assets/img/logo.png" alt="DTP">
         </a>
     </md-toolbar>
+    <div hide-gt-sm>
+        <md-list>
+            <md-list-item ng-hide="user">
+                <md-button ng-href="/auth/steam" target="_self" layout="row" layout-fill>
+                    <div flex></div>
+                    <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
+                    <div flex></div>
+                </md-button>
+            </md-list-item>
+        </md-list>
+    </div>
     <md-list>
         <md-list-item>
             <md-button ng-href="http://steamcommunity.com/groups/dtpremium#announcements" target="_blank" layout="row" layout-fill>
@@ -41,12 +55,28 @@
                 <p class="left-align-text" flex="60">Forum</p>
             </md-button>
         </md-list-item>
+
+        <div hide-gt-md>
+            <md-divider></md-divider>
+            <md-list-item>
+                <md-button layout="row" layout-fill ng-click="toggleLeftAndOnlineUsers()">
+                    <div layout="row" layout-align="center center" flex="40">
+                        <div class="online-dot"></div>
+                        <md-icon style="margin: 0">account_circle</md-icon>
+                    </div>
+                    <p class="left-align-text" flex="60">Online Users</p>
+                </md-button>
+            </md-list-item>
+        </div>
     </md-list>
 </md-sidenav>
 
 <div layout="column" flex>
+
+    <!-- Top Navbar -->
+
     <md-toolbar class="md-toolbar-tools" layout="row" style="padding-right: 0;">
-        <div layout="row" layout-align="center center" flex="2">
+        <div layout="row" layout-align="center center">
             <md-button class="md-icon-button" ng-click="lockLeft = !lockLeft" hide show-gt-md>
                 <md-icon>menu</md-icon>
             </md-button>
@@ -59,6 +89,7 @@
         <span flex></span>
 
         <!-- User options -->
+
         <md-button layout="row" class="md-icon-button fadein fadeout" ng-hide="lockOnlineUsers"
                    ng-click="toggleLockOnlineUsers()" hide show-gt-md>
             <div class="online-dot"></div>
@@ -69,16 +100,7 @@
             </md-tooltip>
         </md-button>
 
-        <md-button layout="row" class="md-icon-button fadein fadeout" ng-click="toggleOnlineUsers()" hide-gt-md>
-            <div class="online-dot"></div>
-            <div flex></div>
-            <md-icon>account_circle</md-icon>
-            <md-tooltip>
-                Show online users
-            </md-tooltip>
-        </md-button>
-
-        <a href="/auth/steam" target="_self" ng-hide="user">
+        <a href="/auth/steam" target="_self" ng-hide="user || !$mdMedia('gt-sm')">
             <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
         </a>
 
@@ -108,9 +130,14 @@
 
     <div layout="row" flex>
         <md-content layout="column" flex>
+
+            <!-- Page Content -->
+
             <div layout-padding ng-view></div>
 
             <div flex></div>
+
+            <!-- Footer -->
 
             <!-- TODO: Footer -->
             <footer>
@@ -141,6 +168,8 @@
                 </md-toolbar>
             </footer>
         </md-content>
+
+        <!-- Online Users Sidenav -->
 
         <md-sidenav class="md-sidenav-right" md-component-id="onlineUsers" md-is-locked-open="$mdMedia('gt-md') && lockOnlineUsers">
             <md-toolbar layout="row" layout-align="center center">

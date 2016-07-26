@@ -158,9 +158,11 @@ dtp.service('Forum', ['$http', function($http) {
 // Runs anytime any page loads up for the first time.
 // Ex. refresh or from external link. Not Angular routing
 // Used for the nav and anything on all pages
-dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav',
-    function($scope, Title, $location, User, $mdSidenav) {
+dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav', '$mdMedia',
+    function($scope, Title, $location, User, $mdSidenav, $mdMedia) {
         $scope.Title = Title;
+
+        $scope.$mdMedia = $mdMedia;
 
         if(User.currentUser === '') {
             User.getLoggedInUser()
@@ -183,6 +185,9 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
         
         $scope.toggleOnlineUsers = function() {
             $mdSidenav('onlineUsers').toggle();
+            if($mdSidenav('onlineUsers').isOpen()) {
+                getUsers();
+            }
         };
         
         $scope.toggleLockOnlineUsers = function() {
@@ -190,6 +195,11 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
             if($scope.lockOnlineUsers) {
                 getUsers();
             }
+        };
+
+        $scope.toggleLeftAndOnlineUsers = function() {
+            $scope.toggleLeft();
+            $scope.toggleOnlineUsers();
         };
 
         function getUsers() {
