@@ -67,3 +67,38 @@ md-sidenav md-list-item > button {
     -webkit-transform: scale(0.70);
     -moz-transform: scale(0.70);
 }
+
+/* Status dots */
+.online-dot {
+    border: 5px solid #4CAF50;
+    border-radius: 50%;
+}
+
+/* Transitions */
+.fadeout.ng-hide-add {
+    animation: 0.5s fadeOut ease;
+}
+
+.fadein.ng-hide-remove {
+    animation: 0.5s fadeIn ease;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

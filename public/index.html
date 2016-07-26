@@ -15,8 +15,7 @@
     <base href="/">
 </head>
 <body layout="row" ng-cloak>
-<md-sidenav md-is-locked-open="$mdMedia('gt-md') && lockLeft"
-            md-component-id="left"
+<md-sidenav md-is-locked-open="$mdMedia('gt-md') && lockLeft" md-component-id="left"
             class="md-sidenav-left" md-whiteframe="4dp">
     <md-toolbar layout="row" layout-align="center center" style="background-color: #FFF"> <!-- TODO: Fix this to integrate with themes -->
         <a href="/" layout="row" layout-align="center center">
@@ -25,13 +24,13 @@
     </md-toolbar>
     <md-list>
         <md-list-item>
-            <md-button ng-href="http://steamcommunity.com/groups/dtpremium#announcements" target="_target" layout="row" layout-fill>
+            <md-button ng-href="http://steamcommunity.com/groups/dtpremium#announcements" target="_blank" layout="row" layout-fill>
                 <md-icon flex="40">announcement</md-icon>
                 <p class="left-align-text" flex="60">News</p>
             </md-button>
         </md-list-item>
         <md-list-item>
-            <md-button ng-href="http://dtpremium.site.nfoservers.com/donate/" target="_target" layout="row" layout-fill>
+            <md-button ng-href="http://dtpremium.site.nfoservers.com/donate/" target="_blank" layout="row" layout-fill>
                 <md-icon flex="40">attach_money</md-icon>
                 <p class="left-align-text" flex="60">Donate</p>
             </md-button>
@@ -45,7 +44,7 @@
     </md-list>
 </md-sidenav>
 
-<div class="container" layout="column" flex>
+<div layout="column" flex>
     <md-toolbar class="md-toolbar-tools" layout="row" style="padding-right: 0;">
         <div layout="row" layout-align="center center" flex="2">
             <md-button class="md-icon-button" ng-click="lockLeft = !lockLeft" hide show-gt-md>
@@ -60,6 +59,16 @@
         <span flex></span>
 
         <!-- User options -->
+        <md-button layout="row" class="md-icon-button fadein fadeout" ng-hide="lockOnlineUsers"
+                   ng-click="lockOnlineUsers = !lockOnlineUsers">
+            <div class="online-dot"></div>
+            <div flex></div>
+            <md-icon>account_circle</md-icon>
+            <md-tooltip>
+                Show online users
+            </md-tooltip>
+        </md-button>
+
         <a href="/auth/steam" target="_self" ng-hide="user">
             <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
         </a>
@@ -105,14 +114,6 @@
                 </md-list-item>
             </md-list>
         </md-sidenav>
-
-        <div layout="row" layout-align="end start" ng-hide="lockOnlineUsers">
-            <md-toolbar layout="row" layout-align="center center">
-                <md-button class="md-icon-button" ng-click="lockOnlineUsers = !lockOnlineUsers">
-                    <md-icon>keyboard_arrow_left</md-icon>
-                </md-button>
-            </md-toolbar>
-        </div>
     </div>
 
     <!-- TODO: Footer -->
