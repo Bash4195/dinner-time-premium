@@ -49,28 +49,28 @@ md-sidenav md-list-item > button {
 }
 
 /* Avatar image */
-.avatar-simple {
+.circle {
     border-radius: 50%;
-}
-
-.avatar {
-    position: relative;
-    width: 128px;
-    height: 128px;
-    border-radius: 50%;
-    display: inline-block;
-    overflow: hidden;
-    margin: 0;
-    vertical-align: middle;
-    zoom: 0.70;
-    transform: translateZ(0);
-    -webkit-transform: scale(0.70);
-    -moz-transform: scale(0.70);
 }
 
 /* Status dots */
 .online-dot {
     border: 5px solid #4CAF50;
+    border-radius: 50%;
+}
+
+.away-dot {
+    border: 5px solid #2196F3;
+    border-radius: 50%;
+}
+
+.busy-dot {
+    border: 5px solid #F44336;
+    border-radius: 50%;
+}
+
+.offline-dot {
+    border: 5px solid #9E9E9E;
     border-radius: 50%;
 }
 

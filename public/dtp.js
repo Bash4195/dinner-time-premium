@@ -85,6 +85,14 @@ dtp.service('User', ['$http', function($http) {
                 return res.data;
             })
     };
+    this.getOnlineUsers = function() {
+        return $http.get('/api/loggedInUsers')
+            .then(function(res) {
+                return res.data;
+            }, function(res) {
+                // Notify.error(res.data.error);
+            })
+    };
     this.getUser = function(id) {
         return $http.get('/api/user/' + id)
             .then(function(res) {
@@ -167,6 +175,7 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
 
         $scope.lockLeft = true;
         $scope.lockOnlineUsers = true;
+        getUsers();
 
         $scope.toggleLeft = function() {
             $mdSidenav('left').toggle();
@@ -175,6 +184,21 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
         $scope.toggleOnlineUsers = function() {
             $mdSidenav('onlineUsers').toggle();
         };
+        
+        $scope.toggleLockOnlineUsers = function() {
+            $scope.lockOnlineUsers = !$scope.lockOnlineUsers;
+            if($scope.lockOnlineUsers) {
+                getUsers();
+            }
+        };
+
+        function getUsers() {
+            User.getOnlineUsers()
+                .then(function(users) {
+                    $scope.onlineUsers = users;
+                    console.log(users);
+                })
+        }
 
     // Used to set the active nav button
     // $scope.activeNav = function (viewLocation) {

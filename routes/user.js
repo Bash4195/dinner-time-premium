@@ -5,7 +5,23 @@ var User = require('../models/user');
 
 // TODO: Protect these routes!
 router.get('/api/users', function(req, res) {
-    // TODO: Return users
+    User.find({}, function(err, users) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to find users');
+        } else {
+            res.status(200).json(users);
+        }
+    });
+});
+
+router.get('/api/loggedInUsers', function(req, res) {
+    User.find({onlineStatus: {$ne: 'Offline'}}, function(err, users) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to find users');
+        } else {
+            res.status(200).json(users);
+        }
+    });
 });
 
 router.get('/api/user/:userId', function(req, res) {

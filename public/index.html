@@ -60,7 +60,7 @@
 
         <!-- User options -->
         <md-button layout="row" class="md-icon-button fadein fadeout" ng-hide="lockOnlineUsers"
-                   ng-click="lockOnlineUsers = !lockOnlineUsers">
+                   ng-click="toggleLockOnlineUsers()">
             <div class="online-dot"></div>
             <div flex></div>
             <md-icon>account_circle</md-icon>
@@ -76,7 +76,7 @@
         <div layout="row" layout-align="center center">
             <md-menu ng-show="user" md-position-mode="target-right target">
                 <a href="" ng-click="$mdOpenMenu($event)" layout-margin style="margin-right: 0">
-                    <img ng-src="{{user.avatar}}" alt="" class="avatar-simple">
+                    <img ng-src="{{user.avatar}}" alt="" class="circle">
                 </a>
                 <md-menu-content>
                     <md-menu-item>
@@ -102,14 +102,27 @@
 
         <md-sidenav class="md-sidenav-right" md-component-id="onlineUsers" md-is-locked-open="$mdMedia('gt-md') && lockOnlineUsers">
             <md-toolbar layout="row" layout-align="center center">
-                <md-button class="md-icon-button" ng-click="lockOnlineUsers = !lockOnlineUsers">
+                <md-button class="md-icon-button" ng-click="toggleLockOnlineUsers()">
                     <md-icon>keyboard_arrow_right</md-icon>
                 </md-button>
                 <span flex="80">Online Users</span>
             </md-toolbar>
             <md-list>
-                <md-list-item>
-                    <md-button>hi</md-button>
+                <div layout="row" layout-padding ng-hide="onlineUsers[0]._id">
+                    <div flex></div>
+                    <span flex="60">Oh no! Looks like no one else is on right now.</span>
+                    <div flex></div>
+                </div>
+                <md-list-item ng-repeat="onlineUser in onlineUsers">
+                    <md-button layout="row" layout-fill ng-href="/user/{{onlineUser._id}}">
+                        <div ng-class="{'online-dot': onlineUser.onlineStatus === 'Online',
+                        'away-dot': onlineUser.onlineStatus === 'Away',
+                        'busy-dot': onlineUser.onlineStatus === 'Busy'}" flex="2"></div>
+                        <div flex></div>
+                        <span flex="60">{{onlineUser.name}}</span>
+                        <div flex></div>
+                        <img ng-src="{{onlineUser.avatar}}" alt="" class="circle" flex="10">
+                    </md-button>
                 </md-list-item>
             </md-list>
         </md-sidenav>
