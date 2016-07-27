@@ -348,6 +348,7 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify', 
                         content: $scope.postContent,
                         authour: $scope.user
                     };
+                    // Instead of this, try just pushing the returned category to the categories array
                     Forum.newPost(Post)
                         .then(function(post) {
                             $scope.postTitle = '';

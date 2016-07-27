@@ -13,4 +13,4 @@ var forumPostSchema = mongoose.Schema({
     });
 
 
-module.exports = mongoose.model('Forum', forumPostSchema);
+module.exports = mongoose.model('Forum Post', forumPostSchema);

@@ -18,4 +18,8 @@ middleware.saveSessionPath = function(req, res, next) {
     next();
 };
 
+middleware.checkIfMissing = function(param) {
+    if(param === '' || param === 'undefined') { return true; } else { return false; }
+};
+
 module.exports = middleware;
