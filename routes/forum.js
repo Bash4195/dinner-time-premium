@@ -8,7 +8,7 @@ var Comment = require('../models/forumComment');
 /////////////////// Categories ////////////////////////////
 
 // INDEX
-router.get('/api/forum', middleware.isLoggedIn(), function(req, res) {
+router.get('/api/forum', middleware.isLoggedIn, function(req, res) {
     Category.find({}, function(err, categories) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve forum categories');
@@ -21,7 +21,7 @@ router.get('/api/forum', middleware.isLoggedIn(), function(req, res) {
 // NEW - In dialog
 
 // CREATE
-router.post('/api/forum', middleware.isLoggedIn(), function(req, res) {
+router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
     var newCategory = req.body;
     if(middleware.checkIfMissing(newCategory.title)) {
         middleware.handleError(res, 'Category title is missing', 'Title is missing', 400);
@@ -49,7 +49,7 @@ router.post('/api/forum', middleware.isLoggedIn(), function(req, res) {
 // EDIT - In Dialog
 
 // UPDATE
-router.put('/api/forum/:categoryId', middleware.isLoggedIn(), function(req, res) {
+router.put('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) {
     var editedCategory = req.body;
     if(middleware.checkIfMissing(newCategory.title)) {
         middleware.handleError(res, 'Category title is missing', 'Title is missing', 400);
@@ -73,7 +73,7 @@ router.put('/api/forum/:categoryId', middleware.isLoggedIn(), function(req, res)
 });
 
 // DELETE
-router.delete('/api/forum/:categoryId', middleware.isLoggedIn(), function(req, res) {
+router.delete('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) {
     Category.findByIdAndRemove(req.params.categoryId, function(err) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to delete category');
