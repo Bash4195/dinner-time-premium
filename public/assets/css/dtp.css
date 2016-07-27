@@ -7,14 +7,22 @@ md-sidenav.md-closed.md-locked-open-add-active {
     max-width: 304px !important;
 }
 
-/* Arrow button to show online users when closed */
 
-
-/* Side nav lists */
-md-sidenav md-list {
+/* Lists */
+md-list {
     padding: 0;
 }
 
+.list-btn-no-radius {
+    border-radius: 0 !important;
+}
+
+md-list-item.hover:hover {
+    background-color: rgba(158, 158, 158, 0.2);
+    transition: 0.4s;
+}
+
+/* Side nav lists */
 md-list-item > button {
     width: 100%;
     text-align: left !important;
@@ -32,6 +40,15 @@ md-toast.md-success-toast-theme .md-toast-content {
 
 md-toast.md-error-toast-theme .md-toast-content {
     background-color: #B71C1C;
+}
+
+/* Fixed FAB buttons for staying put while scrolling */
+.md-button.md-fab.md-fab-bottom-left {
+    top: auto;
+    /*right: auto;*/
+    bottom: 20px;
+    left: auto;
+    position: fixed;
 }
 
 /* Font alignment */
@@ -81,6 +98,13 @@ md-toast.md-error-toast-theme .md-toast-content {
 .offline-dot {
     border: 5px solid #9E9E9E;
     border-radius: 50%;
+}
+
+/* For content to hover over toolbar background */
+.move-up {
+    position: relative;
+    top: -110px;
+    z-index: 99;
 }
 
 /* Transitions */

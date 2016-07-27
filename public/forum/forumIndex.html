@@ -1,82 +1,33 @@
-<div class="container section">
-    <!-- Welcome banner -->
-    <div class="card">
-        <div class="card-content">
-            <div class="row">
-                <img src="../assets/img/icon.png" alt="DTP" class="col s12 m4 responsive-img left">
-                <div class="col s12 m8">
-                    <span class="card-title">Welcome to the Dinner Time Premium Forum!</span>
-                    <br><br>
-                    <blockquote>
-                    <p style="font-size: 16px">If you have any questions or comments, feel free to post them here!</p>
-                    <br>
-                    <p>
-                        We only ask that you keep your posts appropriate for all ages as kids do come on here as well.
-                    </p>
-                    </blockquote>
-                </div>
-            </div>
-            <!-- Add new post button -->
-            <a class="floating-button modal-trigger btn-floating btn-large waves-effect waves-light tooltipped red right" data-target="createPostModal"
-               data-position="top" data-delay="500" data-tooltip="New post" ng-show="user">
-                <i class="material-icons">add</i>
-            </a>
-        </div>
+<div layout="column">
+    <md-toolbar class="md-tall" flex="33"></md-toolbar>
+    <div flex="66" layout="row">
+        <div flex></div>
+        <md-card class="move-up" flex="80">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Forum Categories</span>
+                    <span class="md-subhead">Find a category that best suits your interests</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-divider></md-divider>
+            <md-list>
+                <md-list-item class="md-clickable hover" md-ink-ripple ng-click="goToCategory()">
+                    <md-icon class="md-avatar">weekend</md-icon>
+                    <div class="md-list-item-text">
+                        <h3>General</h3>
+                        <p>Chat about anything you like. Leave a question, comment or just show off something cool!</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card>
+        <div flex></div>
     </div>
 
-    <br>
-    <span class="grey-text" style="padding-left: 20px;">{{posts.length || 0}} posts</span>
-
-    <!-- Posts -->
-    <div class="row" ng-repeat="post in posts | orderBy : '-updatedAt'">
-        <div class="col s12">
-            <div class="card hoverable">
-                    <div class="card-content">
-                        <div class="row" style="margin: 0">
-                            <a ng-href="/forum/{{post._id}}" class="col s8 m10 text-link" style="padding: 0">
-                                <span class="card-title grey-text text-darken-3 truncate">{{post.title}}</span>
-                                <p class="grey-text text-darken-3 truncate">{{post.content}}</p>
-                            </a>
-                            <a ng-href="/user/{{post.authour._id}}" class="text-link valign-wrapper right">
-                                <span class="valign grey-text text-darken-3" style="margin-right: 5px;">{{post.authour.name}}</span>
-                                <img ng-src="{{post.authour.avatar}}" alt="Avatar" class="circle responsive-img grey-text text-darken-3"
-                                     ng-class="{'offline-pic': !post.authour.isOnline, 'online-pic': post.authour.isOnline}">
-                            </a>
-                        </div>
-                    </div>
-                <div class="card-info">
-                    <span class="grey-text" ng-hide="post.updatedAt === post.createdAt">Updated</span>
-                    <span class="grey-text" ng-show="post.updatedAt === post.createdAt">Created</span>
-                    <span class="grey-text" am-time-ago="post.updatedAt"></span>
-                    <span class="grey-text right"># comments</span>
-                </div>
-                <div class="card-action">
-                    <a ng-href="/forum/{{post._id}}" class="waves-effect waves-light btn red">View Post</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Create post modal -->
-    <div id="createPostModal" class="modal">
-        <div class="modal-content">
-            <div class="row">
-                <form class="col s12">
-                    <h4 class="col s12">New Post</h4>
-                    <div class="input-field col s12">
-                        <input id="title" type="text" ng-model="postTitle" autofocus>
-                        <label for="title">Title</label>
-                    </div>
-                    <div class="input-field col s12">
-                        <textarea id="content" class="materialize-textarea" ng-model="postContent"></textarea>
-                        <label for="content">Content</label>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="" ng-click="createPost()" class="modal-action waves-effect waves-light btn red">Create<i class="material-icons right">send</i></a>
-            <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
-        </div>
+    <div layout="row">
+        <div flex="80"></div>
+        <md-button class="md-fab md-fab-bottom-left" layout="column" layout-align="center center" ng-click="newPostDialog()">
+            <md-icon>add</md-icon>
+        </md-button>
+        <div flex></div>
     </div>
 </div>

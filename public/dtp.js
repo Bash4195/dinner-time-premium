@@ -28,7 +28,7 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
     // Themes
     $mdThemingProvider.theme('DTP')
         .primaryPalette('red')
-        .accentPalette('grey')
+        .accentPalette('blue-grey')
         .warnPalette('red');
 
     $mdThemingProvider.setDefaultTheme('DTP');
@@ -294,60 +294,74 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
 //         });
 //     });
 // }]);
-//
-// dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify',
-//     function($scope, Title, User, Forum, Notify) {
-//
-//         $scope.updatePosts = function() {
-//             Forum.getPosts()
-//                 .then(function(posts) {
-//                     $scope.posts = posts;
-//                 })
-//         };
-//         $scope.updatePosts();
-//
-//         Title.setTitle('DTP - Forum');
-//
-//         if(User.currentUser !== '') {
-//             $scope.user = User.currentUser;
-//         }
-//
-//         $scope.postTitle = '';
-//         $scope.postContent = '';
-//
-//         $scope.createPost = function() {
-//             if($scope.user === undefined) {
-//                 Notify.error('You must be logged in to create a post');
-//                 $('#createPostModal').closeModal();
-//             } else {
-//                 if($scope.postTitle === '') {
-//                     Notify.error('Your post needs a title!');
-//                 } else
-//                 if($scope.postContent === '') {
-//                     Notify.error('The content field is required');
-//                 } else {
-//                     $('#createPostModal').closeModal();
-//                         var Post = {
-//                             title: $scope.postTitle,
-//                             content: $scope.postContent,
-//                             authour: $scope.user
-//                         };
-//                     Forum.newPost(Post)
-//                         .then(function(post) {
-//                             $scope.postTitle = '';
-//                             $scope.postContent = '';
-//                             $scope.updatePosts();
-//                         });
-//                 }
-//             }
-//         };
-//
-//         $(document).ready(function(){
-//             $('.modal-trigger').leanModal();
-//             $('.tooltipped').tooltip({delay: 800});
-//         });
-// }]);
-//
+
+dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify', '$mdDialog',
+    function($scope, Title, User, Forum, Notify, $mdDialog) {
+
+        $scope.updatePosts = function() {
+            Forum.getPosts()
+                .then(function(posts) {
+                    $scope.posts = posts;
+                })
+        };
+        $scope.updatePosts();
+
+        Title.setTitle('DTP - Forum');
+        Title.setPageTitle('DTP Forum');
+
+        if(User.currentUser !== '') {
+            $scope.user = User.currentUser;
+        }
+
+        $scope.postTitle = '';
+        $scope.postContent = '';
+
+        $scope.newPostDialog = function() {
+            $mdDialog.show({
+                clickOutsideToClose: true,
+                scope: $scope,
+                preserveScope: true,
+                templateUrl: 'templates/newPostDialog.tmpl.html',
+                controller: function DialogController($scope, $mdDialog) {
+                    $scope.closeDialog = function() {
+                        $mdDialog.hide();
+                    }
+                }
+            });
+        };
+
+        $scope.createPost = function() {
+            if($scope.user === undefined) {
+                Notify.error('You must be logged in to create a post');
+                // Close dialog
+            } else {
+                if($scope.postTitle === '') {
+                    Notify.error('Your post needs a title!');
+                } else
+                if($scope.postContent === '') {
+                    Notify.error('The content field is required');
+                } else {
+                    // Close dialog
+                    var Post = {
+                        title: $scope.postTitle,
+                        content: $scope.postContent,
+                        authour: $scope.user
+                    };
+                    Forum.newPost(Post)
+                        .then(function(post) {
+                            $scope.postTitle = '';
+                            $scope.postContent = '';
+                            $scope.updatePosts();
+                        });
+                }
+            }
+        };
+        
+        $scope.goToCategory = function() {
+            // Open category page
+        }
+}]);
+
 // dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'User', 'Forum', '$location',
 //     function($scope, Title, $routeParams, User, Forum, $location) {
 //

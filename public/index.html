@@ -28,7 +28,7 @@
     <div hide-gt-sm>
         <md-list>
             <md-list-item ng-hide="user">
-                <md-button ng-href="/auth/steam" target="_self" layout="row" layout-fill>
+                <md-button class="list-btn-no-radius" ng-href="/auth/steam" target="_self" aria-label="Sign in through Steam" layout="row" layout-fill>
                     <div flex></div>
                     <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
                     <div flex></div>
@@ -38,19 +38,19 @@
     </div>
     <md-list>
         <md-list-item>
-            <md-button ng-href="http://steamcommunity.com/groups/dtpremium#announcements" target="_blank" layout="row" layout-fill>
+            <md-button class="list-btn-no-radius" ng-href="http://steamcommunity.com/groups/dtpremium#announcements" target="_blank" layout="row" layout-fill>
                 <md-icon flex="40">announcement</md-icon>
                 <p class="left-align-text" flex="60">News</p>
             </md-button>
         </md-list-item>
         <md-list-item>
-            <md-button ng-href="http://dtpremium.site.nfoservers.com/donate/" target="_blank" layout="row" layout-fill>
+            <md-button class="list-btn-no-radius" ng-href="http://dtpremium.site.nfoservers.com/donate/" target="_blank" layout="row" layout-fill>
                 <md-icon flex="40">attach_money</md-icon>
                 <p class="left-align-text" flex="60">Donate</p>
             </md-button>
         </md-list-item>
         <md-list-item>
-            <md-button ng-href="/forum" layout="row" layout-fill>
+            <md-button class="list-btn-no-radius" ng-href="/forum" layout="row" layout-fill>
                 <md-icon flex="40">forum</md-icon>
                 <p class="left-align-text" flex="60">Forum</p>
             </md-button>
@@ -59,7 +59,7 @@
         <div hide-gt-md>
             <md-divider></md-divider>
             <md-list-item>
-                <md-button layout="row" layout-fill ng-click="toggleLeftAndOnlineUsers()">
+                <md-button class="list-btn-no-radius" layout="row" layout-fill ng-click="toggleLeftAndOnlineUsers()">
                     <div layout="row" layout-align="center center" flex="40">
                         <div class="online-dot"></div>
                         <md-icon style="margin: 0">account_circle</md-icon>
@@ -100,7 +100,7 @@
             </md-tooltip>
         </md-button>
 
-        <a href="/auth/steam" target="_self" ng-hide="user || !$mdMedia('gt-sm')">
+        <a href="/auth/steam" target="_self" aria-label="Sign in through Steam" ng-hide="user || !$mdMedia('gt-sm')">
             <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
         </a>
 
@@ -133,7 +133,7 @@
 
             <!-- Page Content -->
 
-            <div layout-padding ng-view></div>
+            <div ng-view></div>
 
             <div flex></div>
 
@@ -185,7 +185,7 @@
                     <div flex></div>
                 </div>
                 <md-list-item ng-repeat="onlineUser in onlineUsers">
-                    <md-button layout="row" layout-fill ng-href="/user/{{onlineUser._id}}">
+                    <md-button class="list-btn-no-radius" ng-href="/user/{{onlineUser._id}}" layout="row" layout-fill>
                         <div ng-class="{'online-dot': onlineUser.onlineStatus === 'Online',
                         'away-dot': onlineUser.onlineStatus === 'Away',
                         'busy-dot': onlineUser.onlineStatus === 'Busy'}" flex="2">
