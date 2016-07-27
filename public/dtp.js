@@ -319,6 +319,7 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify', 
         $scope.newPostDialog = function() {
             $mdDialog.show({
                 clickOutsideToClose: true,
+                fullscreen: true,
                 scope: $scope,
                 preserveScope: true,
                 templateUrl: 'templates/newPostDialog.tmpl.html',

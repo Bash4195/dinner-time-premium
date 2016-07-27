@@ -2,7 +2,7 @@
     <md-toolbar class="md-tall" flex="33"></md-toolbar>
     <div flex="66" layout="row">
         <div flex></div>
-        <md-card class="move-up" flex="80">
+        <md-card class="move-up" flex-gt-sm="60" flex="90">
             <md-card-title>
                 <md-card-title-text>
                     <span class="md-headline">Forum Categories</span>
@@ -11,11 +11,18 @@
             </md-card-title>
             <md-divider></md-divider>
             <md-list>
-                <md-list-item class="md-clickable hover" md-ink-ripple ng-click="goToCategory()">
-                    <md-icon class="md-avatar">weekend</md-icon>
-                    <div class="md-list-item-text">
-                        <h3>General</h3>
-                        <p>Chat about anything you like. Leave a question, comment or just show off something cool!</p>
+                <md-list-item class="md-2-line md-clickable hover" md-ink-ripple ng-click="goToCategory()">
+                    <div layout="row" layout-align="center center" layout-fill layout-margin>
+                        <md-icon class="md-avatar material-icons md-36" flex="9">weekend</md-icon>
+                        <div flex="1"></div>
+                        <div class="md-list-item-text" flex="90" hide show-gt-sm>
+                            <h3>General</h3>
+                            <p>Chat about anything you like. Leave a question, comment or just show off something cool!</p>
+                        </div>
+                        <div class="md-list-item-text" flex="90" layout-padding hide-gt-sm>
+                            <h3>General</h3>
+                            <p>Chat about anything you like. Leave a question, comment or just show off something cool!</p>
+                        </div>
                     </div>
                 </md-list-item>
             </md-list>
@@ -23,11 +30,11 @@
         <div flex></div>
     </div>
 
-    <div layout="row">
-        <div flex="80"></div>
-        <md-button class="md-fab md-fab-bottom-left" layout="column" layout-align="center center" ng-click="newPostDialog()">
-            <md-icon>add</md-icon>
-        </md-button>
-        <div flex></div>
-    </div>
+</div>
+<div layout="row">
+    <div flex="80"></div>
+    <md-button class="md-fab md-fab-bottom-left" layout="column" layout-align="center center" ng-click="newPostDialog()">
+        <md-icon>add</md-icon>
+    </md-button>
+    <div flex></div>
 </div>
