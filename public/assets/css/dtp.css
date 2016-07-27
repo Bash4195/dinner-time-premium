@@ -41,6 +41,11 @@ md-toast.md-error-toast-theme .md-toast-content {
     background-color: #B71C1C;
 }
 
+/* Active navigation */
+.active {
+    background-color: rgba(189, 189, 189, 0.2);
+}
+
 /* Fixed FAB buttons for staying put while scrolling */
 .md-button.md-fab.md-fab-bottom-left {
     top: auto;

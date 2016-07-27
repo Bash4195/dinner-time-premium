@@ -8,7 +8,7 @@ var Comment = require('../models/forumComment');
 /////////////////// Categories ////////////////////////////
 
 // INDEX
-router.get('/api/forum', middleware.isLoggedIn, function(req, res) {
+router.get('/api/forum', function(req, res) {
     Category.find({}, function(err, categories) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve forum categories');

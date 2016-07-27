@@ -203,9 +203,9 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
         }
 
     // Used to set the active nav button
-    // $scope.activeNav = function (viewLocation) {
-    //     return viewLocation === $location.path();
-    // };
+    $scope.activeNav = function (path) {
+        return ($location.path().substr(0, path.length) === path) ? 'active' : '';
+    };
 }]);
 
 dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
