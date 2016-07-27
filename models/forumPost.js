@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var forumSchema = mongoose.Schema({
+var forumPostSchema = mongoose.Schema({
     title: {type: String, required: true },
     content: {type: String, required: true},
     authour: {
@@ -13,4 +13,4 @@ var forumSchema = mongoose.Schema({
     });
 
 
-module.exports = mongoose.model('Forum', forumSchema);
+module.exports = mongoose.model('Forum', forumPostSchema);

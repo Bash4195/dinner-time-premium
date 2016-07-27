@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var middleware = require('../middleware/index');
-var Forum = require('../models/forum');
+var Forum = require('../models/forumPost');
 
 // INDEX
 router.get('/api/forum', function(req, res) {
