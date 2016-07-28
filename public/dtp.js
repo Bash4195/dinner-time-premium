@@ -86,106 +86,74 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
                 Notify.error(res.data.error);
             })
     };
-    this.getUser = function(id) {
-        return $http.get('/api/user/' + id)
-            .then(function(res) {
-                return res.data;
-            }, function(res) {
-                Notify.error(res.data.error);
-            })
-    };
-
-    this.updateUser = function(id, userData) {
-        return $http.put('/api/user/' + id, userData)
-            .then(function(res) {
-                return res;
-            }, function(res) {
-                Notify.error(res.data.error);
-            })
-    }
 }]);
 
-dtp.service('Forum', ['$http', 'Notify', function($http, Notify) {
-    // Categories
-    this.getCategories = function() {
-        return $http.get('/api/forum')
+dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
+    // INDEX
+    this.getThings = function(path) {
+        return $http.get(path)
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Notify.error(res.data.error);
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Something went wrong while processing your request');
+                }
             });
     };
-
-    this.newCategory = function(newCategory) {
-        return $http.post('/api/forum', newCategory)
+    // CREATE
+    this.newThing = function(path, newCategory) {
+        return $http.post(path, newCategory)
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Notify.error(res.data.error);
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Something went wrong while processing your request');
+                }
             })
     };
-    
-    this.updateCategory = function(id, updatedCategory) {
-        console.log(id);
-        console.log(updatedCategory);
-        return $http.put('/api/forum/' + id, updatedCategory)
+    // SHOW
+    this.getThing = function(path, id) {
+        return $http.get(path + id)
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Notify.error(res.data.error);
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Something went wrong while processing your request');
+                }
             })
     };
-    
-    this.deleteCategory = function(id) {
-        return $http.delete('/api/forum/' + id)
+    // UPDATE
+    this.updateThing = function(path, id, updatedCategory) {
+        return $http.put(path + id, updatedCategory)
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Notify.error(res.data.error);
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Something went wrong while processing your request');
+                }
             })
     };
-
-    // Posts
-    this.getPosts = function() {
-        return $http.get('/api/forum')
+    // DELETE
+    this.deleteThing = function(path, id) {
+        return $http.delete(path + id, id)
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Notify.error(res.data.error);
-            });
-    };
-    this.newPost = function(post) {
-        return $http.post('/api/forum', post)
-            .then(function(res) {
-                return res.data;
-            }, function(res) {
-                Notify.error(res.data.error);
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Something went wrong while processing your request');
+                }
             })
     };
-    this.getPost = function(id) {
-        return $http.get('/api/forum/' + id)
-            .then(function(res) {
-                return res.data;
-            }, function(res) {
-                Notify.error(res.data.error);
-            })
-    };
-    this.updatePost = function(id, newContent) {
-        return $http.put('/api/forum/' + id, newContent)
-            .then(function(res) {
-                return res;
-            }, function(res) {
-                Notify.error(res.data.error);
-            })
-    };
-    this.deletePost = function(id) {
-        return $http.delete('/api/forum/' + id)
-            .then(function(res) {
-                return res;
-            }, function(res) {
-                Notify.error(res.data.error);
-            })
-    }
 }]);
 
 // Runs anytime any page loads up for the first time.
@@ -210,7 +178,7 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
 
         $scope.lockLeft = true;
         $scope.lockOnlineUsers = true;
-        getUsers();
+        getOnlineUsers();
 
         $scope.toggleLeft = function() {
             $mdSidenav('left').toggle();
@@ -219,14 +187,14 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
         $scope.toggleOnlineUsers = function() {
             $mdSidenav('onlineUsers').toggle();
             if($mdSidenav('onlineUsers').isOpen()) {
-                getUsers();
+                getOnlineUsers();
             }
         };
         
         $scope.toggleLockOnlineUsers = function() {
             $scope.lockOnlineUsers = !$scope.lockOnlineUsers;
             if($scope.lockOnlineUsers) {
-                getUsers();
+                getOnlineUsers();
             }
         };
 
@@ -235,7 +203,7 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
             $scope.toggleOnlineUsers();
         };
 
-        function getUsers() {
+        function getOnlineUsers() {
             User.getOnlineUsers()
                 .then(function(users) {
                     $scope.onlineUsers = users;
@@ -335,8 +303,8 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
 //     });
 // }]);
 
-dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify', '$mdDialog', '$location',
-    function($scope, Title, User, Forum, Notify, $mdDialog, $location) {
+dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
+    function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
 
         Title.setTitle('DTP - Forum');
         Title.setPageTitle('Forum');
@@ -346,7 +314,7 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'N
         }
 
         function getCategories() {
-            Forum.getCategories()
+            Rest.getThings('/api/forum')
                 .then(function(categories) {
                     if(categories) {
                         $scope.categories = categories;
@@ -396,7 +364,7 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'N
                     path: catPath,
                     createdBy: $scope.user
                 };
-                Forum.newCategory(newCategory)
+                Rest.newThing('/api/forum', newCategory)
                     .then(function(category) {
                         $scope.newCategory = null;
                         if($scope.categories) {
@@ -443,7 +411,7 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'N
                     icon: $scope.editingCategory.icon,
                     updatedBy: $scope.user
                 };
-                Forum.updateCategory($scope.editingCategory._id, updatedCategory)
+                Rest.updateThing('/api/forum/', $scope.editingCategory._id, updatedCategory)
                     .then(function(category) {
                         $scope.editingCategory = null;
                         getCategories();
@@ -466,7 +434,7 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'N
 
         $scope.deleteCategory = function() {
             $mdDialog.hide();
-            Forum.deleteCategory($scope.editingCategory._id)
+            Rest.deleteThing('/api/forum/', $scope.editingCategory._id)
                 .then(function() {
                     getCategories();
                 })
