@@ -51,17 +51,16 @@ router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
 // UPDATE
 router.put('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) {
     var editedCategory = req.body;
-    if(middleware.checkIfMissing(newCategory.title)) {
+    if(middleware.checkIfMissing(editedCategory.title)) {
         middleware.handleError(res, 'Category title is missing', 'Title is missing', 400);
-    } else if(middleware.checkIfMissing(newCategory.description)) {
+    } else if(middleware.checkIfMissing(editedCategory.description)) {
         middleware.handleError(res, 'Category description is missing', 'Description is missing', 400);
-    } else if(middleware.checkIfMissing(newCategory.icon)) {
+    } else if(middleware.checkIfMissing(editedCategory.icon)) {
         middleware.handleError(res, 'Category icon is missing', 'Icon is missing', 400);
-    } else if(middleware.checkIfMissing(newCategory.path)) {
-        middleware.handleError(res, 'Category path is missing', 'Path is missing (/forum/:categoryTitle)', 400);
-    } else if(middleware.checkIfMissing(newCategory.createdBy)) {
+    } else if(middleware.checkIfMissing(editedCategory.updatedBy)) {
         middleware.handleError(res, 'Category authour is missing', 'Authour is missing', 400);
     } else {
+        editedCategory.path = '/forum/' + editedCategory.title.toLowerCase();
         Category.findByIdAndUpdate(req.params.categoryId, editedCategory, function(err, category) {
             if(err) {
                 middleware.handleError(res, err.message, 'Failed to update category');

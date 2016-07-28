@@ -28,7 +28,7 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
     // Themes
     $mdThemingProvider.theme('DTP')
         .primaryPalette('red')
-        .accentPalette('blue-grey')
+        .accentPalette('amber')
         .warnPalette('red');
 
     $mdThemingProvider.setDefaultTheme('DTP');
@@ -105,7 +105,7 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
     }
 }]);
 
-dtp.service('Forum', ['$http', function($http) {
+dtp.service('Forum', ['$http', 'Notify', function($http, Notify) {
     // Categories
     this.getCategories = function() {
         return $http.get('/api/forum')
@@ -118,6 +118,26 @@ dtp.service('Forum', ['$http', function($http) {
 
     this.newCategory = function(newCategory) {
         return $http.post('/api/forum', newCategory)
+            .then(function(res) {
+                return res.data;
+            }, function(res) {
+                Notify.error(res.data.error);
+            })
+    };
+    
+    this.updateCategory = function(id, updatedCategory) {
+        console.log(id);
+        console.log(updatedCategory);
+        return $http.put('/api/forum/' + id, updatedCategory)
+            .then(function(res) {
+                return res.data;
+            }, function(res) {
+                Notify.error(res.data.error);
+            })
+    };
+    
+    this.deleteCategory = function(id) {
+        return $http.delete('/api/forum/' + id)
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -335,9 +355,11 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'N
         }
         getCategories();
 
-        $scope.categoryTitle = '';
-        $scope.categoryDescription = '';
-        $scope.categoryIcon = '';
+        $scope.goToCategory = function(path) {
+            $location.path(path)
+        };
+
+        $scope.newCategory = null;
 
         $scope.newCategoryDialog = function() {
             $mdDialog.show({
@@ -358,27 +380,25 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'N
             if($scope.user === undefined) {
                 Notify.error('You must be logged in to create a post');
                 $mdDialog.hide();
-            } else if($scope.categoryTitle === '') {
+            } else if($scope.newCategory.title === '') {
                 Notify.error('A category needs a title!');
-            } else if($scope.categoryDescription === '') {
+            } else if($scope.newCategory.icon === '') {
                 Notify.error('A category needs a description!');
-            } else if($scope.categoryIcon === '') {
+            } else if($scope.newCategory.description === '') {
                 Notify.error('A category needs an icon!');
             } else {
                 $mdDialog.hide();
-                var catPath = '/forum/' + $scope.categoryTitle.toLowerCase();
+                var catPath = '/forum/' + $scope.newCategory.title.toLowerCase();
                 var newCategory = {
-                    title: $scope.categoryTitle,
-                    description: $scope.categoryDescription,
-                    icon: $scope.categoryIcon,
+                    title: $scope.newCategory.title,
+                    description: $scope.newCategory.description,
+                    icon: $scope.newCategory.icon,
                     path: catPath,
                     createdBy: $scope.user
                 };
                 Forum.newCategory(newCategory)
                     .then(function(category) {
-                        $scope.categoryTitle = '';
-                        $scope.categoryDescription = '';
-                        $scope.categoryIcon = '';
+                        $scope.newCategory = null;
                         if($scope.categories) {
                             $scope.categories.push(category);
                         } else {
@@ -388,9 +408,69 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'N
             }
         };
         
-        $scope.goToCategory = function(path) {
-            $location.path(path)
-        }
+        $scope.editingCategory = null;
+
+        $scope.editCategoryDialog = function() {
+            $mdDialog.show({
+                clickOutsideToClose: true,
+                fullscreen: true,
+                scope: $scope,
+                preserveScope: true,
+                contentElement: '#editCategory',
+                controller: function DialogController($scope, $mdDialog) {
+                    $scope.closeDialog = function() {
+                        $mdDialog.hide();
+                    }
+                }
+            });
+        };
+
+        $scope.updateCategory = function() {
+            if($scope.user === undefined) {
+                Notify.error('You must be logged in to create a post');
+                $mdDialog.hide();
+            } else if($scope.editingCategory.title === '') {
+                Notify.error('A category needs a title!');
+            } else if($scope.editingCategory.description === '') {
+                Notify.error('A category needs a description!');
+            } else if($scope.editingCategory.icon === '') {
+                Notify.error('A category needs an icon!');
+            } else {
+                $mdDialog.hide();
+                var updatedCategory = {
+                    title: $scope.editingCategory.title,
+                    description: $scope.editingCategory.description,
+                    icon: $scope.editingCategory.icon,
+                    updatedBy: $scope.user
+                };
+                Forum.updateCategory($scope.editingCategory._id, updatedCategory)
+                    .then(function(category) {
+                        $scope.editingCategory = null;
+                        getCategories();
+                    });
+            }
+        };
+
+        $scope.confirmDelete = function() {
+            $mdDialog.show({
+                scope: $scope,
+                preserveScope: true,
+                contentElement: '#deleteCategory',
+                controller: function DialogController($scope, $mdDialog) {
+                    $scope.closeDialog = function() {
+                        $mdDialog.hide();
+                    }
+                }
+            });
+        };
+
+        $scope.deleteCategory = function() {
+            $mdDialog.hide();
+            Forum.deleteCategory($scope.editingCategory._id)
+                .then(function() {
+                    getCategories();
+                })
+        };
 }]);
 
 // dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'User', 'Forum', '$location',
