@@ -12,4 +12,4 @@ var forumCommentSchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Forum Comment', forumCommentSchema);
+module.exports = mongoose.model('Forum_Comment', forumCommentSchema);

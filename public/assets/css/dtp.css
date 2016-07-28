@@ -47,12 +47,18 @@ md-toast.md-error-toast-theme .md-toast-content {
 }
 
 /* Fixed FAB buttons for staying put while scrolling */
-.md-button.md-fab.md-fab-bottom-left {
+.md-button.md-fab.md-fab-bottom-right {
     top: auto;
     /*right: auto;*/
     bottom: 20px;
     left: auto;
     position: fixed;
+    z-index: 51;
+}
+
+/* Move FAB down half its size */
+.fab-down-half {
+    top: 28px;
 }
 
 /* Font alignment */

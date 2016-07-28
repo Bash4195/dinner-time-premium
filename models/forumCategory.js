@@ -15,4 +15,4 @@ var forumCategorySchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Forum Category', forumCategorySchema);
+module.exports = mongoose.model('Forum_Category', forumCategorySchema);

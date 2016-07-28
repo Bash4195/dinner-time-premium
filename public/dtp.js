@@ -16,8 +16,8 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
 
         // Forum Routes
         .when('/forum', {
-            templateUrl: 'forum/forumIndex.html',
-            controller: 'forumIndexCtrl'
+            templateUrl: 'forum/category/forumCategoryIndex.html',
+            controller: 'forumCategoryIndexCtrl'
         })
 
         .when('/forum/:postId', {
@@ -106,6 +106,26 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
 }]);
 
 dtp.service('Forum', ['$http', function($http) {
+    // Categories
+    this.getCategories = function() {
+        return $http.get('/api/forum')
+            .then(function(res) {
+                return res.data;
+            }, function(res) {
+                Notify.error(res.data.error);
+            });
+    };
+
+    this.newCategory = function(newCategory) {
+        return $http.post('/api/forum', newCategory)
+            .then(function(res) {
+                return res.data;
+            }, function(res) {
+                Notify.error(res.data.error);
+            })
+    };
+
+    // Posts
     this.getPosts = function() {
         return $http.get('/api/forum')
             .then(function(res) {
@@ -295,34 +315,37 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
 //     });
 // }]);
 
-dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify', '$mdDialog',
-    function($scope, Title, User, Forum, Notify, $mdDialog) {
-
-        $scope.updatePosts = function() {
-            Forum.getPosts()
-                .then(function(posts) {
-                    $scope.posts = posts;
-                })
-        };
-        $scope.updatePosts();
+dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify', '$mdDialog', '$location',
+    function($scope, Title, User, Forum, Notify, $mdDialog, $location) {
 
         Title.setTitle('DTP - Forum');
-        Title.setPageTitle('DTP Forum');
+        Title.setPageTitle('Forum');
 
         if(User.currentUser !== '') {
             $scope.user = User.currentUser;
         }
 
-        $scope.postTitle = '';
-        $scope.postContent = '';
+        function getCategories() {
+            Forum.getCategories()
+                .then(function(categories) {
+                    if(categories) {
+                        $scope.categories = categories;
+                    }
+                })
+        }
+        getCategories();
 
-        $scope.newPostDialog = function() {
+        $scope.categoryTitle = '';
+        $scope.categoryDescription = '';
+        $scope.categoryIcon = '';
+
+        $scope.newCategoryDialog = function() {
             $mdDialog.show({
                 clickOutsideToClose: true,
                 fullscreen: true,
                 scope: $scope,
                 preserveScope: true,
-                templateUrl: 'templates/newPostDialog.tmpl.html',
+                contentElement: '#createCategory',
                 controller: function DialogController($scope, $mdDialog) {
                     $scope.closeDialog = function() {
                         $mdDialog.hide();
@@ -331,36 +354,42 @@ dtp.controller('forumIndexCtrl', ['$scope', 'Title', 'User', 'Forum', 'Notify', 
             });
         };
 
-        $scope.createPost = function() {
+        $scope.createCategory = function() {
             if($scope.user === undefined) {
                 Notify.error('You must be logged in to create a post');
-                // Close dialog
+                $mdDialog.hide();
+            } else if($scope.categoryTitle === '') {
+                Notify.error('A category needs a title!');
+            } else if($scope.categoryDescription === '') {
+                Notify.error('A category needs a description!');
+            } else if($scope.categoryIcon === '') {
+                Notify.error('A category needs an icon!');
             } else {
-                if($scope.postTitle === '') {
-                    Notify.error('Your post needs a title!');
-                } else
-                if($scope.postContent === '') {
-                    Notify.error('The content field is required');
-                } else {
-                    // Close dialog
-                    var Post = {
-                        title: $scope.postTitle,
-                        content: $scope.postContent,
-                        authour: $scope.user
-                    };
-                    // Instead of this, try just pushing the returned category to the categories array
-                    Forum.newPost(Post)
-                        .then(function(post) {
-                            $scope.postTitle = '';
-                            $scope.postContent = '';
-                            $scope.updatePosts();
-                        });
-                }
+                $mdDialog.hide();
+                var catPath = '/forum/' + $scope.categoryTitle.toLowerCase();
+                var newCategory = {
+                    title: $scope.categoryTitle,
+                    description: $scope.categoryDescription,
+                    icon: $scope.categoryIcon,
+                    path: catPath,
+                    createdBy: $scope.user
+                };
+                Forum.newCategory(newCategory)
+                    .then(function(category) {
+                        $scope.categoryTitle = '';
+                        $scope.categoryDescription = '';
+                        $scope.categoryIcon = '';
+                        if($scope.categories) {
+                            $scope.categories.push(category);
+                        } else {
+                            getCategories();
+                        }
+                    });
             }
         };
         
-        $scope.goToCategory = function() {
-            // Open category page
+        $scope.goToCategory = function(path) {
+            $location.path(path)
         }
 }]);
 
