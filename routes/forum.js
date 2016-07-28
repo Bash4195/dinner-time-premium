@@ -85,7 +85,7 @@ router.delete('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res
 /////////////////// Posts ////////////////////////////
 
 // INDEX
-router.get('/api/forum', function(req, res) {
+router.get('/api/forum/:categoryId', function(req, res) {
     Post.find({}).populate('authour').exec(function(err, posts) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve forum posts');

@@ -20,7 +20,7 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
             controller: 'forumCategoryIndexCtrl'
         })
 
-        .when('/forum/:postId', {
+        .when('/forum/:categoryId', {
             templateUrl: 'forum/forumShow.html',
             controller: 'forumShowCtrl'
         });

@@ -5,19 +5,11 @@ var forumCategorySchema = mongoose.Schema({
     description: {type: String, required: true},
     icon: {type: String, required: true},
     path: {type: String, required: true},
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    updatedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    editedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Forum_Post' }]
 },
-{
-    timestamps: true
-});
+{ timestamps: true });
 
 
 module.exports = mongoose.model('Forum_Category', forumCategorySchema);
