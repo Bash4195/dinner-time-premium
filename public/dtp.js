@@ -86,6 +86,9 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
                 Notify.error(res.data.error);
             })
     };
+    this.updateOnlineStatus = function(id, status) {
+        return $http.post('/api/status', {id: id, onlineStatus: status})
+    }
 }]);
 
 dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
@@ -159,8 +162,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
 // Runs anytime any page loads up for the first time.
 // Ex. refresh or from external link. Not Angular routing
 // Used for the nav and anything on all pages
-dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$document', '$http', '$location', 'User', '$mdSidenav', '$mdMedia', '$mdDialog',
-    function($scope, Title, $timeout, $interval, $document, $http, $location, User, $mdSidenav, $mdMedia, $mdDialog) {
+dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$document', '$window', '$http', '$location', 'User', '$mdSidenav', '$mdMedia', '$mdDialog',
+    function($scope, Title, $timeout, $interval, $document, $window, $http, $location, User, $mdSidenav, $mdMedia, $mdDialog) {
         $scope.Title = Title;
 
         $scope.user = null;
@@ -172,15 +175,21 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
                     if(user) {
                         $scope.user = user;
                         onInactive();
+                        User.updateOnlineStatus($scope.user._id, 'Online');
+                        // On refresh or page close, tell the server to log this user out after 30 minutes
+                        angular.element($window).bind("beforeunload", function() {
+                            User.updateOnlineStatus($scope.user._id, 'Away');
+                        });
                     }
+                    getOnlineUsers();
                 });
         } else {
             $scope.user = User.currentUser;
+            getOnlineUsers();
         }
 
         $scope.lockLeft = true;
         $scope.lockOnlineUsers = true;
-        getOnlineUsers();
 
         $scope.toggleLeft = function() {
             $mdSidenav('left').toggle();
@@ -293,7 +302,7 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
                 $timeout.cancel(warningTimer);
 
                 /// Reset the timers
-                logoutTimer = $timeout(function(){ logoutUser() } , timeout);
+                logoutTimer = $timeout(function(){ logoutUser() }, timeout);
                 warningTimer = $timeout(function() { warnUser() }, warningTimeout);
             }
         }

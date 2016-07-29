@@ -6,6 +6,7 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var SteamStrategy = require('passport-steam').Strategy;
+var middleware = require('./middleware/index');
 
 // Route requires
 var authRoutes = require('./routes/auth');
@@ -79,6 +80,16 @@ User.update({onlineStatus: {$ne: 'Offline'}}, {onlineStatus: 'Offline'}, {multi:
 app.use(authRoutes);
 app.use(forumRoutes);
 app.use(userRoutes);
+
+app.post('/api/status', middleware.isLoggedIn, function(req, res) {
+    User.findByIdAndUpdate(req.body.id, {onlineStatus: req.body.onlineStatus}, function(err, user) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to update status');
+        } else {
+            res.status(204).end('Status updated');
+        }
+    })
+});
 
 app.get('*', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
