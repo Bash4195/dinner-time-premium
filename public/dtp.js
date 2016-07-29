@@ -159,10 +159,11 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
 // Runs anytime any page loads up for the first time.
 // Ex. refresh or from external link. Not Angular routing
 // Used for the nav and anything on all pages
-dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav', '$mdMedia',
-    function($scope, Title, $location, User, $mdSidenav, $mdMedia) {
+dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$document', '$http', '$location', 'User', '$mdSidenav', '$mdMedia', '$mdDialog',
+    function($scope, Title, $timeout, $interval, $document, $http, $location, User, $mdSidenav, $mdMedia, $mdDialog) {
         $scope.Title = Title;
 
+        $scope.user = null;
         $scope.$mdMedia = $mdMedia;
 
         if(User.currentUser === '') {
@@ -170,6 +171,7 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
                 .then(function(user) {
                     if(user) {
                         $scope.user = user;
+                        onInactive();
                     }
                 });
         } else {
@@ -183,14 +185,14 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
         $scope.toggleLeft = function() {
             $mdSidenav('left').toggle();
         };
-        
+
         $scope.toggleOnlineUsers = function() {
             $mdSidenav('onlineUsers').toggle();
             if($mdSidenav('onlineUsers').isOpen()) {
                 getOnlineUsers();
             }
         };
-        
+
         $scope.toggleLockOnlineUsers = function() {
             $scope.lockOnlineUsers = !$scope.lockOnlineUsers;
             if($scope.lockOnlineUsers) {
@@ -210,10 +212,91 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$location', 'User', '$mdSidenav'
                 })
         }
 
-    // Used to set the active nav button
-    $scope.activeNav = function (path) {
-        return ($location.path().substr(0, path.length) === path) ? 'active' : '';
-    };
+        // Used to set the active nav button
+        $scope.activeNav = function (path) {
+            return ($location.path().substr(0, path.length) === path) ? 'active' : '';
+        };
+
+        // Log the user out after 30 minutes of inactivity
+        function onInactive() {
+            // Timeout timer value in milliseconds
+            var timeout = 1800000;
+            var warningTimeout = 1200000;
+            var timeBetween = timeout - warningTimeout;
+            var loggedOut = false;
+
+            // Start a timeout
+            var logoutTimer = $timeout(function(){ logoutUser() }, timeout);
+            var warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+
+            var bodyElement = angular.element($document);
+            angular.forEach(['keydown', 'keyup', 'click', 'mousemove', 'DOMMouseScroll', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'scroll', 'focus'],
+                function(eventName) {
+                    bodyElement.bind(eventName, function (e) {
+                        // If logged out is false, reset the timer
+                        if(!loggedOut) {
+                            $scope.reset = true; // For the warning dialog
+                            resetTimers(e)
+                        }
+                    });
+                });
+
+            function warnUser() {
+                $mdDialog.show({
+                    clickOutsideToClose: true,
+                    fullscreen: true,
+                    scope: $scope,
+                    preserveScope: true,
+                    contentElement: '#logoutWarning',
+                    controller: function DialogController($scope, $mdDialog) {
+                        $scope.timeLeft = timeBetween + 1000; // Extra second because tick runs immediately
+                        $scope.reset = false;
+                        var tick = function() {
+                            if($scope.timeLeft > 0) {
+                                if($scope.reset) {
+                                    $interval.cancel(timeLeftTimer);
+                                    $timeout(function() {
+                                        $mdDialog.cancel();
+                                    }, 2000)
+                                } else {
+                                    $scope.timeLeft = $scope.timeLeft - 1000;
+                                }
+                            }
+                        };
+                        tick();
+                        var timeLeftTimer =  $interval(tick, 1000);
+
+                        $scope.closeDialog = function() {
+                            $mdDialog.cancel();
+                        }
+                    }
+                });
+            }
+
+            function logoutUser() {
+                $http.get('/auth/logout')
+                    .then(function() {
+                        $timeout.cancel(logoutTimer);
+                        $timeout.cancel(warningTimer);
+                        loggedOut = true;
+                    });
+
+                // Reset user values
+                User.currentuser = '';
+                $scope.user = null;
+                getOnlineUsers();
+            }
+
+            function resetTimers(e) {
+                /// Stop the pending timers
+                $timeout.cancel(logoutTimer);
+                $timeout.cancel(warningTimer);
+
+                /// Reset the timers
+                logoutTimer = $timeout(function(){ logoutUser() } , timeout);
+                warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+            }
+        }
 }]);
 
 dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {

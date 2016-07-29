@@ -202,6 +202,32 @@
     </div>
 </div>
 
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="logoutWarning">
+        <md-dialog aria-label="Logout Warning">
+            <md-dialog-content class="md-dialog-content">
+                <div ng-hide="timeLeft === 0 || reset">
+                    <p class="md-headline">Are you still there?</p>
+                    <p class="md-subhead">You're going to be logged out in {{timeLeft | date: 'mm:ss'}}</p>
+                </div>
+                <div ng-show="timeLeft === 0">
+                    <p class="md-headline">You have been logged out!</p>
+                    <p class="md-subhead">You were logged out due to inactivity.<br>
+                        If you still want to use the DTP website, please log in again.</p>
+                </div>
+                <div ng-show="reset" layout="column" layout-align="center center">
+                    <p class="md-headline">Welcome back!</p>
+                    <md-icon class="material-icons md-48" md-colors="{color: 'green-500'}">check_circle</md-icon>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary md-raised" ng-click="closeDialog()" ng-hide="timeLeft === 0 || reset">I'm here!</md-button>
+                <md-button class="md-primary md-raised" ng-click="closeDialog()" ng-show="timeLeft === 0">Okay</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+    </div>
+</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
 <script src="/dtp.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.min.js"></script>

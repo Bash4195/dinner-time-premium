@@ -2,6 +2,7 @@ var middleware = {};
 
 middleware.handleError = function(res, reason, message, code) {
     console.log('ERROR: ' + reason);
+    console.log('Message: ' + message);
     res.status(code || 500).json({'error': message});
 };
 

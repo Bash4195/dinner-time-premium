@@ -44,7 +44,17 @@ router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
     }
 });
 
-// SHOW - No show
+// SHOW
+router.get('/api/forum/:categoryId', function(req, res) {
+    Category.findById(req.params.categoryId.populate('posts').exec(function(err, category) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve category posts');
+        } else {
+            res.status(200).json(category);
+            console.log(category);
+        }
+    }));
+});
 
 // EDIT - In Dialog
 
@@ -84,21 +94,12 @@ router.delete('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res
 
 /////////////////// Posts ////////////////////////////
 
-// INDEX
-router.get('/api/forum/:categoryId', function(req, res) {
-    Post.find({}).populate('authour').exec(function(err, posts) {
-        if(err) {
-            middleware.handleError(res, err.message, 'Failed to retrieve forum posts');
-        } else {
-            res.status(200).json(posts);
-        }
-    })
-});
+// INDEX - No index, Category show route handles this
 
 // NEW - In dialog
 
 // CREATE
-router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
+router.post('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) {
     var newPost = req.body;
     if(newPost.title === '' || newPost.title === 'undefined') {
         middleware.handleError(res, 'Title is missing', 'Title is missing', 400);
@@ -107,18 +108,26 @@ router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
     } else if(newPost.authour === '' || newPost.authour === 'undefined') {
         middleware.handleError(res, 'Authour is missing', 'Authour is missing', 400);
     } else {
-        Post.create(newPost, function(err, post) {
+        Category.findById(req.params.categoryId, function(err, category) {
             if(err) {
-                middleware.handleError(res, err.message, 'Failed to create post');
+                middleware.handleError(res, err.message, 'Failed to retrieve category to create post in');
             } else {
-                res.status(201).json(post);
+                Post.create(newPost, function(err, post) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to create post in ' + category.title);
+                    } else {
+                        category.posts.push(post);
+                        category.save();
+                        res.status(201).json(post);
+                    }
+                });
             }
         });
     }
 });
 
 // SHOW
-router.get('/api/forum/:postId', function(req, res) {
+router.get('/api/forum/:categoryId/:postId', function(req, res) {
     Post.findById(req.params.postId).populate('authour').exec(function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to find post');
