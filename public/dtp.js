@@ -174,19 +174,29 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
                 .then(function(user) {
                     if(user) {
                         $scope.user = user;
+                        // When user logs in start checking for inactivity
                         onInactive();
                         User.updateOnlineStatus($scope.user._id, 'Online');
-                        // On refresh or page close, tell the server to log this user out after 30 minutes
+                        $scope.user.onlineStatus = 'Online';
+                        // On refresh or browser close, set user status to away
                         angular.element($window).bind("beforeunload", function() {
                             User.updateOnlineStatus($scope.user._id, 'Away');
+                            $scope.user.onlineStatus = 'Away';
                         });
                     }
                     getOnlineUsers();
                 });
         } else {
+            // If the user comes back, set status to online and watch for inactivity
             $scope.user = User.currentUser;
+            $scope.user.onlineStatus = 'Online';
+            onInactive();
             getOnlineUsers();
         }
+
+        $interval(function() {
+            getOnlineUsers();
+        }, 300000);
 
         $scope.lockLeft = true;
         $scope.lockOnlineUsers = true;
@@ -231,12 +241,14 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
             // Timeout timer value in milliseconds
             var timeout = 1800000;
             var warningTimeout = 1200000;
+            var awayStatusTimeout = 600000;
             var timeBetween = timeout - warningTimeout;
             var loggedOut = false;
 
             // Start a timeout
             var logoutTimer = $timeout(function(){ logoutUser() }, timeout);
             var warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+            var awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
 
             var bodyElement = angular.element($document);
             angular.forEach(['keydown', 'keyup', 'click', 'mousemove', 'DOMMouseScroll', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'scroll', 'focus'],
@@ -249,6 +261,11 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
                         }
                     });
                 });
+
+            function setUserAway() {
+                User.updateOnlineStatus($scope.user._id, 'Away');
+                $scope.user.onlineStatus = 'Away';
+            }
 
             function warnUser() {
                 $mdDialog.show({
@@ -300,10 +317,15 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
                 /// Stop the pending timers
                 $timeout.cancel(logoutTimer);
                 $timeout.cancel(warningTimer);
+                $timeout.cancel(awayStatusTimeout);
+
+                User.updateOnlineStatus($scope.user._id, 'Online');
+                $scope.user.onlineStatus = 'Online';
 
                 /// Reset the timers
                 logoutTimer = $timeout(function(){ logoutUser() }, timeout);
                 warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+                awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
             }
         }
 }]);
