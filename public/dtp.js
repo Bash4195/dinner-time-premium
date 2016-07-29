@@ -196,7 +196,7 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
 
         $interval(function() {
             getOnlineUsers();
-        }, 300000);
+        }, 600000);
 
         $scope.lockLeft = true;
         $scope.lockOnlineUsers = true;
