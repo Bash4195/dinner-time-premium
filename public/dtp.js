@@ -169,6 +169,8 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
         $scope.user = null;
         $scope.$mdMedia = $mdMedia;
 
+        $scope.gotOnlineUsers = false;
+
         if(User.currentUser === '') {
             User.getCurrentUser()
                 .then(function(user) {
@@ -225,9 +227,11 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
         };
 
         function getOnlineUsers() {
+            $scope.gotOnlineUsers = false;
             User.getOnlineUsers()
                 .then(function(users) {
                     $scope.onlineUsers = users;
+                    $scope.gotOnlineUsers = true;
                 })
         }
 
@@ -426,12 +430,16 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'No
         if(User.currentUser !== '') {
             $scope.user = User.currentUser;
         }
+        
+        $scope.gotCategories = false;
 
         function getCategories() {
+            $scope.gotCategories = false;
             Rest.getThings('/api/forum')
                 .then(function(categories) {
                     if(categories) {
                         $scope.categories = categories;
+                        $scope.gotCategories = true;
                     }
                 })
         }

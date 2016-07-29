@@ -179,7 +179,10 @@
                 <span flex="80">Online Users</span>
             </md-toolbar>
             <md-list>
-                <div layout="row" layout-padding ng-hide="onlineUsers[0]._id">
+                <div ng-hide="gotOnlineUsers" layout="column" layout-align="center center" layout-padding flex>
+                    <md-progress-circular class="md-accent"></md-progress-circular>
+                </div>
+                <div layout="row" layout-padding ng-hide="onlineUsers[0]._id || !gotOnlineUsers">
                     <div flex></div>
                     <span flex="60">Oh no! Looks like no one else is online right now.</span>
                     <div flex></div>

@@ -26,6 +26,9 @@
                 </md-card-title-media>
             </md-card-title>
             <md-divider></md-divider>
+            <md-card-content ng-hide="gotCategories" layout="row" layout-align="center center" flex>
+                <md-progress-circular class="md-accent"></md-progress-circular>
+            </md-card-content>
             <md-list>
                 <md-list-item class="md-2-line md-clickable hover" md-ink-ripple ng-click="goToCategory(category.path)" ng-repeat="category in categories">
                     <div layout="row" layout-align="center center" layout-fill layout-margin>
