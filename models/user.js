@@ -24,7 +24,9 @@ var userSchema = mongoose.Schema({
 
     // Permissions
     rank: String
-});
+}, 
+    { timestamps: true }
+);
 
 userSchema.plugin(findOrCreate);
 

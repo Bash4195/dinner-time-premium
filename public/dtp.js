@@ -20,9 +20,9 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
             controller: 'forumCategoryIndexCtrl'
         })
 
-        .when('/forum/:categoryId', {
-            templateUrl: 'forum/forumShow.html',
-            controller: 'forumShowCtrl'
+        .when('/forum/:categoryPath', {
+            templateUrl: 'forum/post/forumPostIndex.html',
+            controller: 'forumPostIndexCtrl'
         });
 
     // Themes
@@ -88,6 +88,11 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
     };
     this.updateOnlineStatus = function(id, status) {
         return $http.post('/api/status', {id: id, onlineStatus: status})
+            .then(function(res) {
+                return res.data;
+            }, function(res) {
+                Notify.error(res.data.error);
+            })
     }
 }]);
 
@@ -106,8 +111,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             });
     };
     // CREATE
-    this.newThing = function(path, newCategory) {
-        return $http.post(path, newCategory)
+    this.newThing = function(path, newThing) {
+        return $http.post(path, newThing)
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -132,8 +137,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // UPDATE
-    this.updateThing = function(path, id, updatedCategory) {
-        return $http.put(path + id, updatedCategory)
+    this.updateThing = function(path, id, updatedThing) {
+        return $http.put(path + id, updatedThing)
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -186,20 +191,26 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
                             $scope.user.onlineStatus = 'Away';
                         });
                     }
-                    getOnlineUsers();
                 });
         } else {
             // If the user comes back, set status to online and watch for inactivity
             $scope.user = User.currentUser;
+            User.updateOnlineStatus($scope.user._id, 'Online');
             $scope.user.onlineStatus = 'Online';
             onInactive();
-            getOnlineUsers();
+
+            angular.element($window).bind("beforeunload", function() {
+                User.updateOnlineStatus($scope.user._id, 'Away');
+                $scope.user.onlineStatus = 'Away';
+            });
         }
 
-        $interval(function() {
+        getOnlineUsers();
+        $interval(function() { // Update online user list every 5 minutes
             getOnlineUsers();
-        }, 600000);
+        }, 300000);
 
+        // Side navs
         $scope.lockLeft = true;
         $scope.lockOnlineUsers = true;
 
@@ -227,7 +238,7 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
         };
 
         function getOnlineUsers() {
-            $scope.gotOnlineUsers = false;
+            $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
             User.getOnlineUsers()
                 .then(function(users) {
                     $scope.onlineUsers = users;
@@ -240,18 +251,20 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
             return ($location.path().substr(0, path.length) === path) ? 'active' : '';
         };
 
-        // Log the user out after 30 minutes of inactivity
+        // Set user status to away after 10 minutes
+        // This function can also log users out after 30 minutes.
+        // In case we want to add it back in the future
         function onInactive() {
             // Timeout timer value in milliseconds
-            var timeout = 1800000;
-            var warningTimeout = 1200000;
+            // var timeout = 1800000;
+            // var warningTimeout = 1200000;
             var awayStatusTimeout = 600000;
-            var timeBetween = timeout - warningTimeout;
-            var loggedOut = false;
+            // var timeBetween = timeout - warningTimeout;
+            // var loggedOut = false;
 
             // Start a timeout
-            var logoutTimer = $timeout(function(){ logoutUser() }, timeout);
-            var warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+            // var logoutTimer = $timeout(function(){ logoutUser() }, timeout);
+            // var warningTimer = $timeout(function() { warnUser() }, warningTimeout);
             var awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
 
             var bodyElement = angular.element($document);
@@ -259,10 +272,10 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
                 function(eventName) {
                     bodyElement.bind(eventName, function (e) {
                         // If logged out is false, reset the timer
-                        if(!loggedOut) {
-                            $scope.reset = true; // For the warning dialog
-                            resetTimers(e)
-                        }
+                        // if(!loggedOut) {
+                        //     $scope.reset = true; // For the warning dialog
+                        resetTimers(e);
+                        // }
                     });
                 });
 
@@ -271,64 +284,66 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
                 $scope.user.onlineStatus = 'Away';
             }
 
-            function warnUser() {
-                $mdDialog.show({
-                    clickOutsideToClose: true,
-                    fullscreen: true,
-                    scope: $scope,
-                    preserveScope: true,
-                    contentElement: '#logoutWarning',
-                    controller: function DialogController($scope, $mdDialog) {
-                        $scope.timeLeft = timeBetween + 1000; // Extra second because tick runs immediately
-                        $scope.reset = false;
-                        var tick = function() {
-                            if($scope.timeLeft > 0) {
-                                if($scope.reset) {
-                                    $interval.cancel(timeLeftTimer);
-                                    $timeout(function() {
-                                        $mdDialog.cancel();
-                                    }, 2000)
-                                } else {
-                                    $scope.timeLeft = $scope.timeLeft - 1000;
-                                }
-                            }
-                        };
-                        tick();
-                        var timeLeftTimer =  $interval(tick, 1000);
+            // function warnUser() {
+            //     $mdDialog.show({
+            //         clickOutsideToClose: true,
+            //         fullscreen: true,
+            //         scope: $scope,
+            //         preserveScope: true,
+            //         contentElement: '#logoutWarning',
+            //         controller: function DialogController($scope, $mdDialog) {
+            //             $scope.timeLeft = timeBetween + 1000; // Extra second because tick runs immediately
+            //             $scope.reset = false;
+            //             var tick = function() {
+            //                 if($scope.timeLeft > 0) {
+            //                     if($scope.reset) {
+            //                         $interval.cancel(timeLeftTimer);
+            //                         $timeout(function() {
+            //                             $mdDialog.cancel();
+            //                         }, 2000)
+            //                     } else {
+            //                         $scope.timeLeft = $scope.timeLeft - 1000;
+            //                     }
+            //                 }
+            //             };
+            //             tick();
+            //             var timeLeftTimer =  $interval(tick, 1000);
+            //
+            //             $scope.closeDialog = function() {
+            //                 $mdDialog.cancel();
+            //             }
+            //         }
+            //     });
+            // }
 
-                        $scope.closeDialog = function() {
-                            $mdDialog.cancel();
-                        }
-                    }
-                });
-            }
-
-            function logoutUser() {
-                $http.get('/auth/logout')
-                    .then(function() {
-                        $timeout.cancel(logoutTimer);
-                        $timeout.cancel(warningTimer);
-                        loggedOut = true;
-                    });
-
-                // Reset user values
-                User.currentuser = '';
-                $scope.user = null;
-                getOnlineUsers();
-            }
+            // function logoutUser() {
+            //     $http.get('/auth/logout')
+            //         .then(function() {
+            //             $timeout.cancel(logoutTimer);
+            //             $timeout.cancel(warningTimer);
+            //             loggedOut = true;
+            //         });
+            //
+            //     // Reset user values
+            //     User.currentuser = '';
+            //     $scope.user = null;
+            //     getOnlineUsers();
+            // }
 
             function resetTimers(e) {
                 /// Stop the pending timers
-                $timeout.cancel(logoutTimer);
-                $timeout.cancel(warningTimer);
+                // $timeout.cancel(logoutTimer);
+                // $timeout.cancel(warningTimer);
                 $timeout.cancel(awayStatusTimeout);
 
-                User.updateOnlineStatus($scope.user._id, 'Online');
-                $scope.user.onlineStatus = 'Online';
+                if($scope.user.onlineStatus == 'Away') {
+                    User.updateOnlineStatus($scope.user._id, 'Online');
+                    $scope.user.onlineStatus = 'Online';
+                }
 
                 /// Reset the timers
-                logoutTimer = $timeout(function(){ logoutUser() }, timeout);
-                warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+                // logoutTimer = $timeout(function(){ logoutUser() }, timeout);
+                // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
                 awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
             }
         }
@@ -449,7 +464,11 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'No
             $location.path(path)
         };
 
-        $scope.newCategory = null;
+        $scope.newCategory = {
+            title: '',
+            description: '',
+            icon: ''
+        };
 
         $scope.newCategoryDialog = function() {
             $mdDialog.show({
@@ -467,15 +486,15 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'No
         };
 
         $scope.createCategory = function() {
-            if($scope.user === undefined) {
+            if(!$scope.user) {
                 Notify.error('You must be logged in to create a post');
                 $mdDialog.hide();
             } else if($scope.newCategory.title === '') {
                 Notify.error('A category needs a title!');
             } else if($scope.newCategory.icon === '') {
-                Notify.error('A category needs a description!');
-            } else if($scope.newCategory.description === '') {
                 Notify.error('A category needs an icon!');
+            } else if($scope.newCategory.description === '') {
+                Notify.error('A category needs a description!');
             } else {
                 $mdDialog.hide();
                 var catPath = '/forum/' + $scope.newCategory.title.toLowerCase();
@@ -488,17 +507,21 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'No
                 };
                 Rest.newThing('/api/forum', newCategory)
                     .then(function(category) {
-                        $scope.newCategory = null;
-                        if($scope.categories) {
-                            $scope.categories.push(category);
-                        } else {
-                            getCategories();
-                        }
+                        $scope.newCategory = {
+                            title: '',
+                            description: '',
+                            icon: ''
+                        };
+                        getCategories();
                     });
             }
         };
         
-        $scope.editingCategory = null;
+        $scope.editingCategory = {
+            title: '',
+            description: '',
+            icon: ''
+        };
 
         $scope.editCategoryDialog = function() {
             $mdDialog.show({
@@ -516,8 +539,8 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'No
         };
 
         $scope.updateCategory = function() {
-            if($scope.user === undefined) {
-                Notify.error('You must be logged in to create a post');
+            if(!$scope.user) {
+                Notify.error('You must be logged in to create a category');
                 $mdDialog.hide();
             } else if($scope.editingCategory.title === '') {
                 Notify.error('A category needs a title!');
@@ -535,7 +558,11 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'No
                 };
                 Rest.updateThing('/api/forum/', $scope.editingCategory._id, updatedCategory)
                     .then(function(category) {
-                        $scope.editingCategory = null;
+                        $scope.editingCategory = {
+                            title: '',
+                            description: '',
+                            icon: ''
+                        };
                         getCategories();
                     });
             }
@@ -563,52 +590,72 @@ dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'No
         };
 }]);
 
-// dtp.controller('forumShowCtrl', ['$scope', 'Title', '$routeParams', 'User', 'Forum', '$location',
-//     function($scope, Title, $routeParams, User, Forum, $location) {
-//
-//         var id = $routeParams.postId;
-//         $scope.Title = Title.setTitle('DTP - Forum');
-//
-//         if(User.currentUser !== '') {
-//             $scope.user = User.currentUser;
-//         }
-//
-//         $scope.getPost = function() {
-//             Forum.getPost(id)
-//                 .then(function(post) {
-//                     $scope.post = post;
-//                     $scope.postTitle = post.title;
-//                     $scope.postContent = post.content;
-//                     $scope.Title = Title.setTitle(post.title);
-//                 });
-//         };
-//         $scope.getPost();
-//
-//         $scope.openModal = function() {
-//             $('#content').trigger('autoresize');
-//         };
-//
-//         $scope.updatePost = function() {
-//             var updatedPost = {
-//                 title: $scope.postTitle,
-//                 content: $scope.postContent,
-//                 editedBy: $scope.user
-//             };
-//             Forum.updatePost(id, updatedPost)
-//                 .then(function() {
-//                     $scope.getPost();
-//                 })
-//         };
-//
-//         $scope.deletePost = function() {
-//             Forum.deletePost(id)
-//                 .then(function() {
-//                     $location.path('/forum');
-//                 })
-//         };
-//
-//         $(document).ready(function(){
-//             $('.modal-trigger').leanModal();
-//             $('.tooltipped').tooltip();
-//         });
-// }]);
+dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', '$routeParams', 'User', 'Rest', 'Notify', '$mdDialog',
+    function($scope, Title, $routeParams, User, Rest, Notify, $mdDialog) {
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        var categoryPath = $routeParams.categoryPath;
+        Title.setTitle(capitalizeFirstLetter(categoryPath));
+        Title.setPageTitle(capitalizeFirstLetter(categoryPath));
+
+        if(User.currentUser !== '') {
+            $scope.user = User.currentUser;
+        }
+
+        function getPosts() {
+            Rest.getThings('/api/forum/' + categoryPath)
+                .then(function(res) {
+                    $scope.posts = res;
+                })
+        }
+        getPosts();
+        
+        $scope.newPost = {
+            title: '',
+            content: ''
+        };
+
+        $scope.newPostDialog = function() {
+            $mdDialog.show({
+                clickOutsideToClose: true,
+                fullscreen: true,
+                scope: $scope,
+                preserveScope: true,
+                contentElement: '#createPost',
+                controller: function DialogController($scope, $mdDialog) {
+                    $scope.closeDialog = function() {
+                        $mdDialog.hide();
+                    }
+                }
+            });
+        };
+
+        $scope.createPost = function() {
+            if(!$scope.user) {
+                Notify.error('You must be logged in to create a post');
+                $mdDialog.hide();
+            } else if($scope.newPost.title === undefined) {
+                Notify.error('Your post needs a title!');
+            } else if($scope.newPost.content === undefined) {
+                Notify.error('Your post needs some content');
+            } else {
+                $mdDialog.hide();
+                var newPost = {
+                    title: $scope.newPost.title,
+                    content: $scope.newPost.content,
+                    authour: $scope.user
+                };
+                Rest.newThing('/api/forum/' + categoryPath, newPost)
+                    .then(function(post) {
+                        $scope.newPost = {
+                            title: '',
+                            content: ''
+                        };
+                        getPosts();
+                    });
+            }
+        };
+}]);

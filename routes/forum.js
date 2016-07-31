@@ -44,17 +44,7 @@ router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
     }
 });
 
-// SHOW
-router.get('/api/forum/:categoryId', function(req, res) {
-    Category.findById(req.params.categoryId.populate('posts').exec(function(err, category) {
-        if(err) {
-            middleware.handleError(res, err.message, 'Failed to retrieve category posts');
-        } else {
-            res.status(200).json(category);
-            console.log(category);
-        }
-    }));
-});
+// SHOW - No show
 
 // EDIT - In Dialog
 
@@ -94,12 +84,27 @@ router.delete('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res
 
 /////////////////// Posts ////////////////////////////
 
-// INDEX - No index, Category show route handles this
+// INDEX
+router.get('/api/forum/:categoryPath', function(req, res) {
+    Category.findOne({path: '/forum/' + req.params.categoryPath}, function(err, category) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve category');
+        } else {
+            Post.find({category: category._id}).populate('authour').exec(function(err, posts) {
+                if(err) {
+                    middleware.handleError(res, err.message, 'Failed to retrieve category');
+                } else {
+                    res.status(200).json(posts);
+                }
+            });
+        }
+    });
+});
 
 // NEW - In dialog
 
 // CREATE
-router.post('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) {
+router.post('/api/forum/:categoryPath', middleware.isLoggedIn, function(req, res) {
     var newPost = req.body;
     if(newPost.title === '' || newPost.title === 'undefined') {
         middleware.handleError(res, 'Title is missing', 'Title is missing', 400);
@@ -108,10 +113,11 @@ router.post('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) 
     } else if(newPost.authour === '' || newPost.authour === 'undefined') {
         middleware.handleError(res, 'Authour is missing', 'Authour is missing', 400);
     } else {
-        Category.findById(req.params.categoryId, function(err, category) {
+        Category.findOne({path: '/forum/' + req.params.categoryPath}, function(err, category) {
             if(err) {
                 middleware.handleError(res, err.message, 'Failed to retrieve category to create post in');
             } else {
+                newPost.category = category._id;
                 Post.create(newPost, function(err, post) {
                     if(err) {
                         middleware.handleError(res, err.message, 'Failed to create post in ' + category.title);
@@ -127,7 +133,7 @@ router.post('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) 
 });
 
 // SHOW
-router.get('/api/forum/:categoryId/:postId', function(req, res) {
+router.get('/api/forum/:categoryPath/:postId', function(req, res) {
     Post.findById(req.params.postId).populate('authour').exec(function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to find post');

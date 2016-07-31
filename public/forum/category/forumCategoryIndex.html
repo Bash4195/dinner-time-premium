@@ -30,17 +30,19 @@
                 <md-progress-circular class="md-accent"></md-progress-circular>
             </md-card-content>
             <md-list>
-                <md-list-item class="md-2-line md-clickable hover" md-ink-ripple ng-click="goToCategory(category.path)" ng-repeat="category in categories">
+                <md-list-item class="md-3-line" ng-click="goToCategory(category.path)" ng-repeat="category in categories">
                     <div layout="row" layout-align="center center" layout-fill layout-margin>
                         <md-icon class="md-avatar material-icons md-36" flex="9">{{category.icon}}</md-icon>
                         <div flex="1"></div>
                         <div class="md-list-item-text" flex="90" hide show-gt-sm>
                             <h3>{{category.title}}</h3>
-                            <p>{{category.description}}</p>
+                            <h4>{{category.description}}</h4>
+                            <p>{{category.posts.length}} posts</p>
                         </div>
                         <div class="md-list-item-text" flex="90" layout-padding hide-gt-sm>
                             <h3>{{category.title}}</h3>
-                            <p>{{category.description}}</p>
+                            <h4>{{category.description}}</h4>
+                            <p>{{category.posts.length}} posts</p>
                         </div>
                     </div>
                     <md-divider></md-divider>
@@ -99,7 +101,7 @@
                         <md-input-container>
                             <label>Category</label>
                             <md-select ng-model="editingCategory" md-auto-focus>
-                                <md-option ng-repeat="category in categories" ng-value="{{category}}">
+                                <md-option ng-repeat="category in categories" ng-value="category">
                                     {{category.title}}
                                 </md-option>
                             </md-select>

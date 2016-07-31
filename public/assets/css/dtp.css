@@ -92,6 +92,14 @@ md-toast.md-error-toast-theme .md-toast-content {
     width: 48px;
 }
 
+/* Truncate text */
+.truncate {
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 /* Avatar image */
 .circle {
     border-radius: 50%;
