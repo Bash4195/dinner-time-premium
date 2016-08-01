@@ -600,9 +600,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
 
     var categoryPath = $routeParams.categoryPath;
 
-    Title.setTitle('DTP - Forum');
-    Title.setPageTitle('DTP - Forum');
-
     if(User.currentUser !== '') {
         $scope.user = User.currentUser;
     }

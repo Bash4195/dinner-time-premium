@@ -86,7 +86,7 @@ router.delete('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res
 
 // Recent Posts
 router.get('/api/forum/recentPosts', function(req, res) {
-    Post.find({}).populate('authour').limit(6).exec(function(err, posts) {
+    Post.find({}).sort('-updatedAt').populate('authour').limit(6).exec(function(err, posts) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve recent posts');
         } else {

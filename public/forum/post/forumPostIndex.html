@@ -16,7 +16,7 @@
                 <md-progress-circular class="md-accent"></md-progress-circular>
             </md-card-content>
             <md-list>
-                <md-list-item class="md-3-line" ng-click="goToPost(post._id)" ng-repeat="post in posts">
+                <md-list-item class="md-3-line" ng-click="goToPost(post._id)" ng-repeat="post in posts | orderBy: '-updatedAt'">
                     <div layout="row" layout-align="center center" layout-fill layout-margin>
                         <img ng-src="{{post.authour.avatar}}" alt="" class="md-avatar">
                         <div class="md-list-item-text">
