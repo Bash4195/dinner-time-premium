@@ -34,11 +34,16 @@ md-sidenav md-list-item > button {
 
 /* Toast Themes */
 md-toast.md-success-toast-theme .md-toast-content {
-    background-color: #4CAF50;
+    color: #4CAF50;
 }
 
 md-toast.md-error-toast-theme .md-toast-content {
-    background-color: #B71C1C;
+    color: #F44336;
+}
+
+/* Pre font */
+pre {
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 /* Active navigation */
@@ -49,7 +54,7 @@ md-toast.md-error-toast-theme .md-toast-content {
 /* Fixed FAB buttons for staying put while scrolling */
 .md-button.md-fab.md-fab-bottom-right {
     top: auto;
-    /*right: auto;*/
+    right: 20px;
     bottom: 20px;
     left: auto;
     position: fixed;
@@ -59,6 +64,10 @@ md-toast.md-error-toast-theme .md-toast-content {
 /* Move FAB down half its size */
 .fab-down-half {
     top: 28px;
+}
+
+.fab-right-half {
+    left: 28px;
 }
 
 /* Font alignment */
@@ -73,23 +82,23 @@ md-toast.md-error-toast-theme .md-toast-content {
 /* Icon font sizes */
 .material-icons.md-18 {
     font-size: 18px;
-    height: 18px;
-    width: 18px;
+    height: 18px !important;
+    width: 18px !important;
 }
 .material-icons.md-24 {
     font-size: 24px;
-    height: 24px;
-    width: 24px;
+    height: 24px !important;
+    width: 24px !important;
 }
 .material-icons.md-36 {
     font-size: 36px;
-    height: 36px;
-    width: 36px;
+    height: 36px !important;
+    width: 36px !important;
 }
 .material-icons.md-48 {
     font-size: 48px;
-    height: 48px;
-    width: 48px;
+    height: 48px !important;
+    width: 48px !important;
 }
 
 /* Truncate text */
@@ -131,6 +140,28 @@ md-toast.md-error-toast-theme .md-toast-content {
     position: relative;
     top: -110px;
     z-index: 50;
+}
+
+/* Word wrap */
+.wrap-word{
+    white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    white-space: pre-wrap;       /* css-3 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+    word-break: break-all;
+    white-space: pre-line;
+}
+
+/* Info colour */
+.info-colour {
+    color: rgba(0,0,0,0.54) !important;
+}
+
+/* Icon to the left of text */
+.icon-left-of-text {
+    margin-right: 5px;
 }
 
 /* Transitions */

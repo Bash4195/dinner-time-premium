@@ -1,0 +1,69 @@
+<div layout="row" layout-padding>
+    <div layout="column" flex="20">
+        <md-card>
+            <md-toolbar class="md-toolbar-tools md-accent">
+                <span>More Discussions</span>
+            </md-toolbar>
+            <md-list>
+                <md-list-item class="md-2-line" ng-click="null" ng-repeat="post in recentPosts">
+                    <div class="md-list-item-text" layout="row" layout-align="center center">
+                        <div layout="column" flex>
+                            <h3>{{post.title}}</h3>
+                            <h4 class="info-colour">By {{post.authour.name}}</h4>
+                        </div>
+                        <div layout="row" flex="20">
+                            <md-icon class="icon-left-of-text">comment</md-icon>
+                            <span ng-show="post.comments[0]._id">{{post.comments}}</span>
+                            <span ng-hide="post.comments[0]._id">0</span>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card>
+    </div>
+    <div flex="80">
+        <md-card>
+            <md-card-title>
+                <md-card-title-media style="margin-right: 20px;">
+                    <img ng-src="{{post.authour.avatarMedium}}" alt="" class="md-media card-media md-avatar circle">
+                </md-card-title-media>
+                <md-card-title-text>
+                    <span class="md-headline wrap-word">{{post.title}}</span>
+                    <span class="md-subhead">By {{post.authour.name}}</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <md-divider></md-divider>
+                <p class="wrap-word">{{post.content}}</p>
+                <md-divider style="padding-bottom: 10px;"></md-divider>
+                <div layout="row" layout-align="center center">
+                    <md-icon class="icon-left-of-text">access_time</md-icon>
+                    <span class="md-subhead info-colour" am-time-ago="post.createdAt"></span>
+                    <span flex></span>
+                    <md-icon class="icon-left-of-text">comment</md-icon>
+                    <span class="md-subhead info-colour">
+                        <span ng-show="post.comments[0]._id">{{post.comments}}</span>
+                        <span ng-hide="post.comments[0]._id">0</span>
+                        replies</span>
+                </div>
+            </md-card-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button class="md-icon-button md-accent">
+                    <md-icon>mode_edit</md-icon>
+                    <md-tooltip>Edit post</md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button md-accent">
+                    <md-icon>delete</md-icon>
+                    <md-tooltip>Delete post</md-tooltip>
+                </md-button>
+            </md-card-actions>
+        </md-card>
+
+        <form>
+            <md-input-container class="md-block">
+                <label>Comment</label>
+                <textarea></textarea>
+            </md-input-container>
+        </form>
+    </div>
+</div>

@@ -84,6 +84,17 @@ router.delete('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res
 
 /////////////////// Posts ////////////////////////////
 
+// Recent Posts
+router.get('/api/forum/recentPosts', function(req, res) {
+    Post.find({}).populate('authour').limit(6).exec(function(err, posts) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve recent posts');
+        } else {
+            res.status(200).json(posts);
+        }
+    })
+});
+
 // INDEX
 router.get('/api/forum/:categoryPath', function(req, res) {
     Category.findOne({path: '/forum/' + req.params.categoryPath}, function(err, category) {
@@ -94,7 +105,11 @@ router.get('/api/forum/:categoryPath', function(req, res) {
                 if(err) {
                     middleware.handleError(res, err.message, 'Failed to retrieve category');
                 } else {
-                    res.status(200).json(posts);
+                    data = {
+                        category: category,
+                        posts: posts
+                    };
+                    res.status(200).json(data);
                 }
             });
         }
@@ -162,7 +177,7 @@ router.put('/api/forum/:postId', middleware.isLoggedIn, function(req, res ) {
     }
 });
 
-// DESTROY
+// DELETE
 router.delete('/api/forum/:postId', middleware.isLoggedIn, function(req, res) {
     Post.findByIdAndRemove(req.params.postId, function(err) {
         if(err) {

@@ -23,12 +23,17 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
         .when('/forum/:categoryPath', {
             templateUrl: 'forum/post/forumPostIndex.html',
             controller: 'forumPostIndexCtrl'
+        })
+    
+        .when('/forum/:categoryPath/:postId', {
+            templateUrl: 'forum/post/forumPostShow.html',
+            controller: 'forumPostShowCtrl'
         });
 
     // Themes
     $mdThemingProvider.theme('DTP')
         .primaryPalette('red')
-        .accentPalette('amber')
+        .accentPalette('orange')
         .warnPalette('red');
 
     $mdThemingProvider.setDefaultTheme('DTP');
@@ -124,8 +129,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // SHOW
-    this.getThing = function(path, id) {
-        return $http.get(path + id)
+    this.getThing = function(path) {
+        return $http.get(path)
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -137,8 +142,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // UPDATE
-    this.updateThing = function(path, id, updatedThing) {
-        return $http.put(path + id, updatedThing)
+    this.updateThing = function(path, updatedThing) {
+        return $http.put(path, updatedThing)
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -151,7 +156,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
     };
     // DELETE
     this.deleteThing = function(path, id) {
-        return $http.delete(path + id, id)
+        return $http.delete(path, id)
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -167,186 +172,186 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
 // Runs anytime any page loads up for the first time.
 // Ex. refresh or from external link. Not Angular routing
 // Used for the nav and anything on all pages
-dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$document', '$window', '$http', '$location', 'User', '$mdSidenav', '$mdMedia', '$mdDialog',
-    function($scope, Title, $timeout, $interval, $document, $window, $http, $location, User, $mdSidenav, $mdMedia, $mdDialog) {
-        $scope.Title = Title;
+dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$document', '$window', '$http', '$location', 'User', '$mdSidenav', '$mdMedia',
+function($scope, Title, $timeout, $interval, $document, $window, $http, $location, User, $mdSidenav, $mdMedia) {
+    $scope.Title = Title;
 
-        $scope.user = null;
-        $scope.$mdMedia = $mdMedia;
+    $scope.user = null;
+    $scope.$mdMedia = $mdMedia;
 
-        $scope.gotOnlineUsers = false;
+    $scope.gotOnlineUsers = false;
 
-        if(User.currentUser === '') {
-            User.getCurrentUser()
-                .then(function(user) {
-                    if(user) {
-                        $scope.user = user;
-                        // When user logs in start checking for inactivity
-                        onInactive();
-                        User.updateOnlineStatus($scope.user._id, 'Online');
-                        $scope.user.onlineStatus = 'Online';
-                        // On refresh or browser close, set user status to away
-                        angular.element($window).bind("beforeunload", function() {
-                            User.updateOnlineStatus($scope.user._id, 'Away');
-                            $scope.user.onlineStatus = 'Away';
-                        });
-                    }
-                });
-        } else {
-            // If the user comes back, set status to online and watch for inactivity
-            $scope.user = User.currentUser;
-            User.updateOnlineStatus($scope.user._id, 'Online');
-            $scope.user.onlineStatus = 'Online';
-            onInactive();
-
-            angular.element($window).bind("beforeunload", function() {
-                User.updateOnlineStatus($scope.user._id, 'Away');
-                $scope.user.onlineStatus = 'Away';
-            });
-        }
-
-        getOnlineUsers();
-        $interval(function() { // Update online user list every 5 minutes
-            getOnlineUsers();
-        }, 300000);
-
-        // Side navs
-        $scope.lockLeft = true;
-        $scope.lockOnlineUsers = true;
-
-        $scope.toggleLeft = function() {
-            $mdSidenav('left').toggle();
-        };
-
-        $scope.toggleOnlineUsers = function() {
-            $mdSidenav('onlineUsers').toggle();
-            if($mdSidenav('onlineUsers').isOpen()) {
-                getOnlineUsers();
-            }
-        };
-
-        $scope.toggleLockOnlineUsers = function() {
-            $scope.lockOnlineUsers = !$scope.lockOnlineUsers;
-            if($scope.lockOnlineUsers) {
-                getOnlineUsers();
-            }
-        };
-
-        $scope.toggleLeftAndOnlineUsers = function() {
-            $scope.toggleLeft();
-            $scope.toggleOnlineUsers();
-        };
-
-        function getOnlineUsers() {
-            $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
-            User.getOnlineUsers()
-                .then(function(users) {
-                    $scope.onlineUsers = users;
-                    $scope.gotOnlineUsers = true;
-                })
-        }
-
-        // Used to set the active nav button
-        $scope.activeNav = function (path) {
-            return ($location.path().substr(0, path.length) === path) ? 'active' : '';
-        };
-
-        // Set user status to away after 10 minutes
-        // This function can also log users out after 30 minutes.
-        // In case we want to add it back in the future
-        function onInactive() {
-            // Timeout timer value in milliseconds
-            // var timeout = 1800000;
-            // var warningTimeout = 1200000;
-            var awayStatusTimeout = 600000;
-            // var timeBetween = timeout - warningTimeout;
-            // var loggedOut = false;
-
-            // Start a timeout
-            // var logoutTimer = $timeout(function(){ logoutUser() }, timeout);
-            // var warningTimer = $timeout(function() { warnUser() }, warningTimeout);
-            var awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
-
-            var bodyElement = angular.element($document);
-            angular.forEach(['keydown', 'keyup', 'click', 'mousemove', 'DOMMouseScroll', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'scroll', 'focus'],
-                function(eventName) {
-                    bodyElement.bind(eventName, function (e) {
-                        // If logged out is false, reset the timer
-                        // if(!loggedOut) {
-                        //     $scope.reset = true; // For the warning dialog
-                        resetTimers(e);
-                        // }
-                    });
-                });
-
-            function setUserAway() {
-                User.updateOnlineStatus($scope.user._id, 'Away');
-                $scope.user.onlineStatus = 'Away';
-            }
-
-            // function warnUser() {
-            //     $mdDialog.show({
-            //         clickOutsideToClose: true,
-            //         fullscreen: true,
-            //         scope: $scope,
-            //         preserveScope: true,
-            //         contentElement: '#logoutWarning',
-            //         controller: function DialogController($scope, $mdDialog) {
-            //             $scope.timeLeft = timeBetween + 1000; // Extra second because tick runs immediately
-            //             $scope.reset = false;
-            //             var tick = function() {
-            //                 if($scope.timeLeft > 0) {
-            //                     if($scope.reset) {
-            //                         $interval.cancel(timeLeftTimer);
-            //                         $timeout(function() {
-            //                             $mdDialog.cancel();
-            //                         }, 2000)
-            //                     } else {
-            //                         $scope.timeLeft = $scope.timeLeft - 1000;
-            //                     }
-            //                 }
-            //             };
-            //             tick();
-            //             var timeLeftTimer =  $interval(tick, 1000);
-            //
-            //             $scope.closeDialog = function() {
-            //                 $mdDialog.cancel();
-            //             }
-            //         }
-            //     });
-            // }
-
-            // function logoutUser() {
-            //     $http.get('/auth/logout')
-            //         .then(function() {
-            //             $timeout.cancel(logoutTimer);
-            //             $timeout.cancel(warningTimer);
-            //             loggedOut = true;
-            //         });
-            //
-            //     // Reset user values
-            //     User.currentuser = '';
-            //     $scope.user = null;
-            //     getOnlineUsers();
-            // }
-
-            function resetTimers(e) {
-                /// Stop the pending timers
-                // $timeout.cancel(logoutTimer);
-                // $timeout.cancel(warningTimer);
-                $timeout.cancel(awayStatusTimeout);
-
-                if($scope.user.onlineStatus == 'Away') {
+    if(User.currentUser === '') {
+        User.getCurrentUser()
+            .then(function(user) {
+                if(user) {
+                    $scope.user = user;
+                    // When user logs in start checking for inactivity
+                    onInactive();
                     User.updateOnlineStatus($scope.user._id, 'Online');
                     $scope.user.onlineStatus = 'Online';
+                    // On refresh or browser close, set user status to away
+                    angular.element($window).bind("beforeunload", function() {
+                        User.updateOnlineStatus($scope.user._id, 'Away');
+                        $scope.user.onlineStatus = 'Away';
+                    });
                 }
+            });
+    } else {
+        // If the user comes back, set status to online and watch for inactivity
+        $scope.user = User.currentUser;
+        User.updateOnlineStatus($scope.user._id, 'Online');
+        $scope.user.onlineStatus = 'Online';
+        onInactive();
 
-                /// Reset the timers
-                // logoutTimer = $timeout(function(){ logoutUser() }, timeout);
-                // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
-                awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
-            }
+        angular.element($window).bind("beforeunload", function() {
+            User.updateOnlineStatus($scope.user._id, 'Away');
+            $scope.user.onlineStatus = 'Away';
+        });
+    }
+
+    getOnlineUsers();
+    $interval(function() { // Update online user list every 5 minutes
+        getOnlineUsers();
+    }, 300000);
+
+    // Side navs
+    $scope.lockLeft = true;
+    $scope.lockOnlineUsers = true;
+
+    $scope.toggleLeft = function() {
+        $mdSidenav('left').toggle();
+    };
+
+    $scope.toggleOnlineUsers = function() {
+        $mdSidenav('onlineUsers').toggle();
+        if($mdSidenav('onlineUsers').isOpen()) {
+            getOnlineUsers();
         }
+    };
+
+    $scope.toggleLockOnlineUsers = function() {
+        $scope.lockOnlineUsers = !$scope.lockOnlineUsers;
+        if($scope.lockOnlineUsers) {
+            getOnlineUsers();
+        }
+    };
+
+    $scope.toggleLeftAndOnlineUsers = function() {
+        $scope.toggleLeft();
+        $scope.toggleOnlineUsers();
+    };
+
+    function getOnlineUsers() {
+        $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
+        User.getOnlineUsers()
+            .then(function(users) {
+                $scope.onlineUsers = users;
+                $scope.gotOnlineUsers = true;
+            })
+    }
+
+    // Used to set the active nav button
+    $scope.activeNav = function (path) {
+        return ($location.path().substr(0, path.length) === path) ? 'active' : '';
+    };
+
+    // Set user status to away after 10 minutes
+    // This function can also log users out after 30 minutes.
+    // In case we want to add it back in the future
+    function onInactive() {
+        // Timeout timer value in milliseconds
+        // var timeout = 1800000;
+        // var warningTimeout = 1200000;
+        var awayStatusTimeout = 600000;
+        // var timeBetween = timeout - warningTimeout;
+        // var loggedOut = false;
+
+        // Start a timeout
+        // var logoutTimer = $timeout(function(){ logoutUser() }, timeout);
+        // var warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+        var awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
+
+        var bodyElement = angular.element($document);
+        angular.forEach(['keydown', 'keyup', 'click', 'mousemove', 'DOMMouseScroll', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'scroll', 'focus'],
+            function(eventName) {
+                bodyElement.bind(eventName, function () {
+                    // If logged out is false, reset the timer
+                    // if(!loggedOut) {
+                    //     $scope.reset = true; // For the warning dialog
+                    resetTimers();
+                    // }
+                });
+            });
+
+        function setUserAway() {
+            User.updateOnlineStatus($scope.user._id, 'Away');
+            $scope.user.onlineStatus = 'Away';
+        }
+
+        // function warnUser() {
+        //     $mdDialog.show({
+        //         clickOutsideToClose: true,
+        //         fullscreen: true,
+        //         scope: $scope,
+        //         preserveScope: true,
+        //         contentElement: '#logoutWarning',
+        //         controller: function DialogController($scope, $mdDialog) {
+        //             $scope.timeLeft = timeBetween + 1000; // Extra second because tick runs immediately
+        //             $scope.reset = false;
+        //             var tick = function() {
+        //                 if($scope.timeLeft > 0) {
+        //                     if($scope.reset) {
+        //                         $interval.cancel(timeLeftTimer);
+        //                         $timeout(function() {
+        //                             $mdDialog.cancel();
+        //                         }, 2000)
+        //                     } else {
+        //                         $scope.timeLeft = $scope.timeLeft - 1000;
+        //                     }
+        //                 }
+        //             };
+        //             tick();
+        //             var timeLeftTimer =  $interval(tick, 1000);
+        //
+        //             $scope.closeDialog = function() {
+        //                 $mdDialog.cancel();
+        //             }
+        //         }
+        //     });
+        // }
+
+        // function logoutUser() {
+        //     $http.get('/auth/logout')
+        //         .then(function() {
+        //             $timeout.cancel(logoutTimer);
+        //             $timeout.cancel(warningTimer);
+        //             loggedOut = true;
+        //         });
+        //
+        //     // Reset user values
+        //     User.currentuser = '';
+        //     $scope.user = null;
+        //     getOnlineUsers();
+        // }
+
+        function resetTimers() {
+            /// Stop the pending timers
+            // $timeout.cancel(logoutTimer);
+            // $timeout.cancel(warningTimer);
+            $timeout.cancel(awayStatusTimeout);
+
+            if($scope.user.onlineStatus == 'Away') {
+                User.updateOnlineStatus($scope.user._id, 'Online');
+                $scope.user.onlineStatus = 'Online';
+            }
+
+            /// Reset the timers
+            // logoutTimer = $timeout(function(){ logoutUser() }, timeout);
+            // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+            awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
+        }
+    }
 }]);
 
 dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
@@ -437,225 +442,264 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
 // }]);
 
 dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
-    function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
+function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
 
-        Title.setTitle('DTP - Forum');
-        Title.setPageTitle('Forum');
+    Title.setTitle('DTP - Forum');
+    Title.setPageTitle('Forum');
 
-        if(User.currentUser !== '') {
-            $scope.user = User.currentUser;
-        }
-        
+    if(User.currentUser !== '') {
+        $scope.user = User.currentUser;
+    }
+    
+    $scope.gotCategories = false;
+
+    function getCategories() {
         $scope.gotCategories = false;
-
-        function getCategories() {
-            $scope.gotCategories = false;
-            Rest.getThings('/api/forum')
-                .then(function(categories) {
-                    if(categories) {
-                        $scope.categories = categories;
-                        $scope.gotCategories = true;
-                    }
-                })
-        }
-        getCategories();
-
-        $scope.goToCategory = function(path) {
-            $location.path(path)
-        };
-
-        $scope.newCategory = {
-            title: '',
-            description: '',
-            icon: ''
-        };
-
-        $scope.newCategoryDialog = function() {
-            $mdDialog.show({
-                clickOutsideToClose: true,
-                fullscreen: true,
-                scope: $scope,
-                preserveScope: true,
-                contentElement: '#createCategory',
-                controller: function DialogController($scope, $mdDialog) {
-                    $scope.closeDialog = function() {
-                        $mdDialog.hide();
-                    }
+        Rest.getThings('/api/forum')
+            .then(function(categories) {
+                if(categories) {
+                    $scope.categories = categories;
+                    $scope.gotCategories = true;
                 }
-            });
-        };
+            })
+    }
+    getCategories();
 
-        $scope.createCategory = function() {
-            if(!$scope.user) {
-                Notify.error('You must be logged in to create a post');
-                $mdDialog.hide();
-            } else if($scope.newCategory.title === '') {
-                Notify.error('A category needs a title!');
-            } else if($scope.newCategory.icon === '') {
-                Notify.error('A category needs an icon!');
-            } else if($scope.newCategory.description === '') {
-                Notify.error('A category needs a description!');
-            } else {
-                $mdDialog.hide();
-                var catPath = '/forum/' + $scope.newCategory.title.toLowerCase();
-                var newCategory = {
-                    title: $scope.newCategory.title,
-                    description: $scope.newCategory.description,
-                    icon: $scope.newCategory.icon,
-                    path: catPath,
-                    createdBy: $scope.user
-                };
-                Rest.newThing('/api/forum', newCategory)
-                    .then(function(category) {
-                        $scope.newCategory = {
-                            title: '',
-                            description: '',
-                            icon: ''
-                        };
-                        getCategories();
-                    });
+    $scope.goToCategory = function(path) {
+        $location.path(path)
+    };
+
+    $scope.newCategory = {
+        title: '',
+        description: '',
+        icon: ''
+    };
+
+    $scope.newCategoryDialog = function() {
+        $mdDialog.show({
+            clickOutsideToClose: true,
+            fullscreen: true,
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#createCategory',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                }
             }
-        };
-        
-        $scope.editingCategory = {
-            title: '',
-            description: '',
-            icon: ''
-        };
+        });
+    };
 
-        $scope.editCategoryDialog = function() {
-            $mdDialog.show({
-                clickOutsideToClose: true,
-                fullscreen: true,
-                scope: $scope,
-                preserveScope: true,
-                contentElement: '#editCategory',
-                controller: function DialogController($scope, $mdDialog) {
-                    $scope.closeDialog = function() {
-                        $mdDialog.hide();
-                    }
-                }
-            });
-        };
-
-        $scope.updateCategory = function() {
-            if(!$scope.user) {
-                Notify.error('You must be logged in to create a category');
-                $mdDialog.hide();
-            } else if($scope.editingCategory.title === '') {
-                Notify.error('A category needs a title!');
-            } else if($scope.editingCategory.description === '') {
-                Notify.error('A category needs a description!');
-            } else if($scope.editingCategory.icon === '') {
-                Notify.error('A category needs an icon!');
-            } else {
-                $mdDialog.hide();
-                var updatedCategory = {
-                    title: $scope.editingCategory.title,
-                    description: $scope.editingCategory.description,
-                    icon: $scope.editingCategory.icon,
-                    updatedBy: $scope.user
-                };
-                Rest.updateThing('/api/forum/', $scope.editingCategory._id, updatedCategory)
-                    .then(function(category) {
-                        $scope.editingCategory = {
-                            title: '',
-                            description: '',
-                            icon: ''
-                        };
-                        getCategories();
-                    });
-            }
-        };
-
-        $scope.confirmDelete = function() {
-            $mdDialog.show({
-                scope: $scope,
-                preserveScope: true,
-                contentElement: '#deleteCategory',
-                controller: function DialogController($scope, $mdDialog) {
-                    $scope.closeDialog = function() {
-                        $mdDialog.hide();
-                    }
-                }
-            });
-        };
-
-        $scope.deleteCategory = function() {
+    $scope.createCategory = function() {
+        if(!$scope.user) {
+            Notify.error('You must be logged in to create a post');
             $mdDialog.hide();
-            Rest.deleteThing('/api/forum/', $scope.editingCategory._id)
+        } else if($scope.newCategory.title === '') {
+            Notify.error('A category needs a title!');
+        } else if($scope.newCategory.icon === '') {
+            Notify.error('A category needs an icon!');
+        } else if($scope.newCategory.description === '') {
+            Notify.error('A category needs a description!');
+        } else {
+            $mdDialog.hide();
+            var catPath = '/forum/' + $scope.newCategory.title.toLowerCase();
+            var newCategory = {
+                title: $scope.newCategory.title,
+                description: $scope.newCategory.description,
+                icon: $scope.newCategory.icon,
+                path: catPath,
+                createdBy: $scope.user
+            };
+            Rest.newThing('/api/forum', newCategory)
                 .then(function() {
+                    $scope.newCategory = {
+                        title: '',
+                        description: '',
+                        icon: ''
+                    };
                     getCategories();
-                })
-        };
+                });
+        }
+    };
+    
+    $scope.editingCategory = {
+        title: '',
+        description: '',
+        icon: ''
+    };
+
+    $scope.editCategoryDialog = function() {
+        $mdDialog.show({
+            clickOutsideToClose: true,
+            fullscreen: true,
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#editCategory',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                }
+            }
+        });
+    };
+
+    $scope.updateCategory = function() {
+        if(!$scope.user) {
+            Notify.error('You must be logged in to create a category');
+            $mdDialog.hide();
+        } else if($scope.editingCategory.title === '') {
+            Notify.error('A category needs a title!');
+        } else if($scope.editingCategory.description === '') {
+            Notify.error('A category needs a description!');
+        } else if($scope.editingCategory.icon === '') {
+            Notify.error('A category needs an icon!');
+        } else {
+            $mdDialog.hide();
+            var updatedCategory = {
+                title: $scope.editingCategory.title,
+                description: $scope.editingCategory.description,
+                icon: $scope.editingCategory.icon,
+                updatedBy: $scope.user
+            };
+            Rest.updateThing('/api/forum/', $scope.editingCategory._id, updatedCategory)
+                .then(function() {
+                    $scope.editingCategory = {
+                        title: '',
+                        description: '',
+                        icon: ''
+                    };
+                    getCategories();
+                });
+        }
+    };
+
+    $scope.confirmDelete = function() {
+        $mdDialog.show({
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#deleteCategory',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                }
+            }
+        });
+    };
+
+    $scope.deleteCategory = function() {
+        $mdDialog.hide();
+        Rest.deleteThing('/api/forum/', $scope.editingCategory._id)
+            .then(function() {
+                getCategories();
+            })
+    };
 }]);
 
-dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', '$routeParams', 'User', 'Rest', 'Notify', '$mdDialog',
-    function($scope, Title, $routeParams, User, Rest, Notify, $mdDialog) {
+dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
 
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
+    var categoryPath = $routeParams.categoryPath;
 
-        var categoryPath = $routeParams.categoryPath;
-        Title.setTitle(capitalizeFirstLetter(categoryPath));
-        Title.setPageTitle(capitalizeFirstLetter(categoryPath));
+    Title.setTitle('DTP - Forum');
+    Title.setPageTitle('DTP - Forum');
 
-        if(User.currentUser !== '') {
-            $scope.user = User.currentUser;
-        }
+    if(User.currentUser !== '') {
+        $scope.user = User.currentUser;
+    }
 
-        function getPosts() {
-            Rest.getThings('/api/forum/' + categoryPath)
-                .then(function(res) {
-                    $scope.posts = res;
-                })
-        }
-        getPosts();
-        
-        $scope.newPost = {
-            title: '',
-            content: ''
-        };
+    $scope.gotPosts = false;
 
-        $scope.newPostDialog = function() {
-            $mdDialog.show({
-                clickOutsideToClose: true,
-                fullscreen: true,
-                scope: $scope,
-                preserveScope: true,
-                contentElement: '#createPost',
-                controller: function DialogController($scope, $mdDialog) {
-                    $scope.closeDialog = function() {
-                        $mdDialog.hide();
-                    }
+    function getPosts() {
+        $scope.gotPosts = false;
+        Rest.getThings('/api/forum/' + categoryPath)
+            .then(function(res) {
+                $scope.posts = res.posts;
+                $scope.category = res.category;
+                $scope.gotPosts = true;
+
+                Title.setTitle($scope.category.title);
+                Title.setPageTitle($scope.category.title);
+            })
+    }
+    getPosts();
+    
+    $scope.newPost = {
+        title: '',
+        content: ''
+    };
+
+    $scope.newPostDialog = function() {
+        $mdDialog.show({
+            clickOutsideToClose: true,
+            fullscreen: true,
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#createPost',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
                 }
-            });
-        };
-
-        $scope.createPost = function() {
-            if(!$scope.user) {
-                Notify.error('You must be logged in to create a post');
-                $mdDialog.hide();
-            } else if($scope.newPost.title === undefined) {
-                Notify.error('Your post needs a title!');
-            } else if($scope.newPost.content === undefined) {
-                Notify.error('Your post needs some content');
-            } else {
-                $mdDialog.hide();
-                var newPost = {
-                    title: $scope.newPost.title,
-                    content: $scope.newPost.content,
-                    authour: $scope.user
-                };
-                Rest.newThing('/api/forum/' + categoryPath, newPost)
-                    .then(function(post) {
-                        $scope.newPost = {
-                            title: '',
-                            content: ''
-                        };
-                        getPosts();
-                    });
             }
-        };
+        });
+    };
+
+    $scope.createPost = function() {
+        if(!$scope.user) {
+            Notify.error('You must be logged in to create a post');
+            $mdDialog.hide();
+        } else if(!$scope.newPost.title) {
+            Notify.error('Your post needs a title!');
+        } else if(!$scope.newPost.content) {
+            Notify.error('Your post needs some content');
+        } else {
+            $mdDialog.hide();
+            var newPost = {
+                title: $scope.newPost.title,
+                content: $scope.newPost.content,
+                authour: $scope.user
+            };
+            Rest.newThing('/api/forum/' + categoryPath, newPost)
+                .then(function() {
+                    $scope.newPost = {
+                        title: '',
+                        content: ''
+                    };
+                    getPosts();
+                });
+        }
+    };
+
+    $scope.goToPost = function(id) {
+        $location.path('/forum/' + categoryPath + '/' + id);
+    };
+}]);
+
+dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams) {
+
+    var categoryPath = $routeParams.categoryPath;
+    var postId = $routeParams.postId;
+
+    Title.setTitle('DTP - Forum');
+    Title.setPageTitle('DTP - Forum');
+
+    if(User.currentUser !== '') {
+        $scope.user = User.currentUser;
+    }
+
+    function getPost() {
+        Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
+            .then(function(res) {
+                $scope.post = res;
+            })
+    }
+    getPost();
+
+    function getRecentPosts() {
+        Rest.getThings('/api/forum/recentPosts')
+            .then(function(res) {
+                $scope.recentPosts = res;
+            })
+    }
+    getRecentPosts();
 }]);
