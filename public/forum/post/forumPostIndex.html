@@ -16,16 +16,13 @@
                 <md-progress-circular class="md-accent"></md-progress-circular>
             </md-card-content>
             <md-list>
-                <md-list-item class="md-3-line" ng-click="goToPost(post._id)" ng-repeat="post in posts | orderBy: '-updatedAt'">
-                    <div layout="row" layout-align="center center" layout-fill layout-margin>
-                        <img ng-src="{{post.authour.avatar}}" alt="" class="md-avatar">
-                        <div class="md-list-item-text">
-                            <h3>{{post.title}}</h3>
-                            <h4>{{post.content}}</h4>
-                            <p>By {{post.authour.name}}</p>
-                        </div>
+                <md-list-item class="md-2-line" ng-click="goToPost(post._id)" ng-repeat="post in posts | orderBy: '-updatedAt'">
+                    <img ng-src="{{post.authour.avatar}}" alt="" class="md-avatar">
+                    <div class="md-list-item-text">
+                        <h3>{{post.title}}</h3>
+                        <p>By {{post.authour.name}}</p>
                     </div>
-                    <md-divider></md-divider>
+                    <md-divider md-inset></md-divider>
                 </md-list-item>
             </md-list>
         </md-card>

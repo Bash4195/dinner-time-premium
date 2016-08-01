@@ -66,4 +66,52 @@
             </md-input-container>
         </form>
     </div>
+
+    <!-- Edit Post Dialog -->
+    <div style="visibility: hidden">
+        <div class="md-dialog-container" id="editPost">
+            <md-dialog aria-label="Edit {{post.title}}" flex-gt-sm="50" flex>
+                <md-toolbar class="md-toolbar-tools">
+                    <span>Edit {{post.title}}</span>
+                </md-toolbar>
+                <md-dialog-content class="md-dialog-content">
+                    <form>
+                        <md-input-container class="md-block">
+                            <label>Title</label>
+                            <input ng-model="editingPost.title">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Description</label>
+                            <textarea ng-model="editingCategory.description" ng-disabled="editingCategory === null"></textarea>
+                        </md-input-container>
+                    </form>
+                </md-dialog-content>
+                <md-dialog-actions>
+                    <md-button class="md-icon-button md-primary" ng-click="confirmDelete()" ng-disabled="editingCategory === null">
+                        <md-icon>delete</md-icon>
+                        <md-tooltip>Delete category</md-tooltip>
+                    </md-button>
+                    <div flex></div>
+                    <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                    <md-button class="md-primary md-raised" ng-click="updateCategory()">Update</md-button>
+                </md-dialog-actions>
+            </md-dialog>
+        </div>
+    </div>
+
+    <!-- Delete Post Dialog Confirm -->
+    <div style="visibility: hidden">
+        <div class="md-dialog-container" id="deleteCategory">
+            <md-dialog aria-label="Delete Category">
+                <md-dialog-content class="md-dialog-content">
+                    <p class="md-headline">Delete {{editingCategory.title}} forever?</p>
+                    <p class="md-subhead">You won't be able to undo this!</p>
+                </md-dialog-content>
+                <md-dialog-actions>
+                    <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                    <md-button class="md-primary md-raised" ng-click="deleteCategory()">Delete</md-button>
+                </md-dialog-actions>
+            </md-dialog>
+        </div>
+    </div>
 </div>
