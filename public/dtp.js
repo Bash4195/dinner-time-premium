@@ -217,7 +217,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
 
     // Side navs
     $scope.lockLeft = true;
-    $scope.lockOnlineUsers = true;
+    $scope.lockOnlineUsers = false;
 
     $scope.toggleLeft = function() {
         $mdSidenav('left').toggle();
