@@ -151,7 +151,7 @@ router.post('/api/forum/:categoryPath', middleware.isLoggedIn, function(req, res
 
 // SHOW
 router.get('/api/forum/:categoryPath/:postId', function(req, res) {
-    Post.findById(req.params.postId).populate('authour').populate('comments').exec(function(err, post) {
+    Post.findById(req.params.postId).populate('authour').populate({path: 'comments', populate: {path: 'authour'}}).exec(function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to find post');
         } else {
@@ -198,9 +198,9 @@ router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(
 // CREATE
 router.post('/api/forum/:categoryPath/:postId', middleware.isLoggedIn, function(req, res) {
     var newComment = req.body;
-    if(newComment.comment === '' || newComment.comment === 'undefined') {
+    if(!newComment.comment || newComment.comment === '') {
         middleware.handleError(res, 'Comment content is missing', 'Comment content is missing', 400);
-    } else if(newComment.authour === '' || newComment.authour === 'undefined') {
+    } else if(!newComment.authour || newComment.authour === '') {
         middleware.handleError(res, 'Comment authour is missing', 'Comment authour is missing', 400);
     } else {
         Post.findById(req.params.postId, function(err, post) {

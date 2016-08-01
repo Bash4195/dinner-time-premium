@@ -1,27 +1,7 @@
 <div layout="row" layout-padding>
-    <div layout="column" flex="20">
-        <md-card>
-            <md-toolbar class="md-toolbar-tools md-accent">
-                <span>More Discussions</span>
-            </md-toolbar>
-            <md-list>
-                <md-list-item class="md-2-line" ng-click="null" ng-repeat="post in recentPosts">
-                    <div class="md-list-item-text" layout="row" layout-align="center center">
-                        <div layout="column" flex>
-                            <h3>{{post.title}}</h3>
-                            <h4 class="info-colour">By {{post.authour.name}}</h4>
-                        </div>
-                        <div layout="row" flex="20">
-                            <md-icon class="icon-left-of-text">comment</md-icon>
-                            <span ng-show="post.comments[0]._id">{{post.comments}}</span>
-                            <span ng-hide="post.comments[0]._id">0</span>
-                        </div>
-                    </div>
-                </md-list-item>
-            </md-list>
-        </md-card>
-    </div>
+
     <div flex="80">
+        <!-- Post -->
         <md-card>
             <md-card-title>
                 <md-card-title-media style="margin-right: 20px;">
@@ -33,21 +13,20 @@
                 </md-card-title-text>
             </md-card-title>
             <md-card-content>
-                <md-divider></md-divider>
                 <p class="wrap-word">{{post.content}}</p>
                 <md-divider style="padding-bottom: 10px;"></md-divider>
                 <div layout="row" layout-align="center center">
-                    <md-icon class="icon-left-of-text">access_time</md-icon>
+                    <md-icon class="icon-left-of-text" class="icon-left-of-text" md-colors="{color: 'orange-500'}">access_time</md-icon>
                     <span class="md-subhead info-colour" am-time-ago="post.createdAt"></span>
                     <span flex></span>
-                    <md-icon class="icon-left-of-text">comment</md-icon>
+                    <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
                     <span class="md-subhead info-colour">
-                        <span ng-show="post.comments[0]._id">{{post.comments}}</span>
+                        <span ng-show="post.comments[0]._id">{{post.comments.length}}</span>
                         <span ng-hide="post.comments[0]._id">0</span>
-                        replies</span>
+                    </span>
                 </div>
             </md-card-content>
-            <md-card-actions layout="row" layout-align="end center">
+            <md-card-actions layout="row" layout-align="end center" ng-show="user">
                 <md-button class="md-icon-button md-accent" ng-click="editPostDialog()">
                     <md-icon>edit</md-icon>
                     <md-tooltip>Edit post</md-tooltip>
@@ -59,12 +38,65 @@
             </md-card-actions>
         </md-card>
 
-        <form>
-            <md-input-container class="md-block">
-                <label>Comment</label>
-                <textarea></textarea>
+        <!-- Comment Form -->
+        <form style="margin: 8px">
+            <md-input-container layout="row">
+                <div flex>
+                    <label ng-show="user">Comment</label>
+                    <label ng-hide="user">Sign in to comment</label>
+                    <textarea ng-model="newComment.comment" ng-disabled="!user"></textarea>
+                </div>
+                <md-button class="md-fab md-accent" ng-show="user" ng-disabled="newComment.comment === ''" ng-click="createComment()">
+                    <md-icon>send</md-icon>
+                    <md-tooltip>Post Comment</md-tooltip>
+                </md-button>
             </md-input-container>
         </form>
+
+        <!-- Comments -->
+        <div ng-show="post.comments[0]._id">
+            <md-subheader class="md-accent">Comments</md-subheader>
+            <md-card ng-repeat="comment in post.comments">
+                <md-card-title>
+                    <md-card-title-media style="margin-right: 20px;" layout="row">
+                        <img ng-src="{{comment.authour.avatarMedium}}" alt="" class="md-media card-media md-avatar circle">
+                    </md-card-title-media>
+                    <md-card-title-text>
+                        <span class="md-title wrap-word">{{comment.authour.name}}</span>
+                        <span class="md-subhead" am-time-ago="comment.createdAt"></span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <p class="wrap-word">{{comment.comment}}</p>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+
+    <div layout="column" flex="20">
+        <!-- Recent Posts -->
+        <md-card>
+            <md-toolbar class="md-toolbar-tools md-accent">
+                <span>More Discussions</span>
+            </md-toolbar>
+            <md-list>
+                <md-list-item class="md-2-line" ng-click="null" ng-repeat="recentPost in recentPosts">
+                    <div class="md-list-item-text" layout="row" layout-align="center center">
+                        <div layout="column" flex>
+                            <h3>{{recentPost.title}}</h3>
+                            <h4 class="info-colour">By {{post.authour.name}}</h4>
+                        </div>
+                        <div layout="row" flex="20">
+                            <md-icon class="icon-left-of-text" class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
+                            <span class="md-subhead info-colour">
+                                <span ng-show="recentPost.comments[0]">{{recentPost.comments.length}}</span>
+                                <span ng-hide="recentPost.comments[0]">0</span>
+                            </span>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card>
     </div>
 
     <!-- Edit Post Dialog -->

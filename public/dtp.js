@@ -693,6 +693,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
             .then(function(res) {
                 $scope.post = res;
+                console.log($scope.post);
             })
     }
     getPost();
@@ -701,6 +702,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         Rest.getThings('/api/forum/recentPosts')
             .then(function(res) {
                 $scope.recentPosts = res;
+                console.log(res);
             })
     }
     getRecentPosts();
@@ -766,5 +768,24 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                 };
             }
         });
+    };
+
+    $scope.newComment = {
+        comment: '',
+        authour: $scope.user
+    };
+
+    $scope.createComment = function() {
+        if(!$scope.user) {
+            Notify.error('You must be logged in to create a comment');
+        } else if(!$scope.newComment.comment) {
+            Notify.error('Your comment needs to say something!');
+        } else {
+            Rest.newThing('/api/forum/' + categoryPath + '/' + $scope.post._id, $scope.newComment)
+                .then(function() {
+                    $scope.newComment.comment = '';
+                    getPost();
+                });
+        }
     };
 }]);
