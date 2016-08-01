@@ -57,8 +57,8 @@ router.put('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) {
         middleware.handleError(res, 'Category description is missing', 'Description is missing', 400);
     } else if(middleware.checkIfMissing(editedCategory.icon)) {
         middleware.handleError(res, 'Category icon is missing', 'Icon is missing', 400);
-    } else if(middleware.checkIfMissing(editedCategory.updatedBy)) {
-        middleware.handleError(res, 'Category authour is missing', 'Authour is missing', 400);
+    } else if(middleware.checkIfMissing(editedCategory.editedBy)) {
+        middleware.handleError(res, 'Category editor is missing', 'Editor is missing', 400);
     } else {
         editedCategory.path = '/forum/' + editedCategory.title.toLowerCase();
         Category.findByIdAndUpdate(req.params.categoryId, editedCategory, function(err, category) {
@@ -161,24 +161,25 @@ router.get('/api/forum/:categoryPath/:postId', function(req, res) {
 // EDIT - In dialog
 
 // UPDATE
-router.put('/api/forum/:postId', middleware.isLoggedIn, function(req, res ) {
-    if(req.body.title === '' || req.body.title === 'undefined') {
-        middleware.handleError(res, 'Title is missing', 'Title is missing', 400);
-    } else if(req.body.content === '' || req.body.content === 'undefined') {
-        middleware.handleError(res, 'Content is missing', 'Content is missing', 400);
+router.put('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(req, res) {
+    var editedPost = req.body;
+    if(middleware.checkIfMissing(editedPost.title)) {
+        middleware.handleError(res, 'Post title is missing', 'Title is missing', 400);
+    } else if(middleware.checkIfMissing(editedPost.content)) {
+        middleware.handleError(res, 'Post content is missing', 'Content is missing', 400);
     } else {
-        Post.findByIdAndUpdate(req.params.postId, req.body, function(err, post) {
+        Post.findByIdAndUpdate(req.params.postId, editedPost, function(err, post) {
             if(err) {
                 middleware.handleError(res, err.message, 'Failed to update post');
             } else {
-                res.status(204).end('Updated post');
+                res.status(204).end('Updated post')
             }
         })
     }
 });
 
 // DELETE
-router.delete('/api/forum/:postId', middleware.isLoggedIn, function(req, res) {
+router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(req, res) {
     Post.findByIdAndRemove(req.params.postId, function(err) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to delete post');
@@ -187,6 +188,7 @@ router.delete('/api/forum/:postId', middleware.isLoggedIn, function(req, res) {
         }
     })
 });
+
 
 /////////////////// Comments ////////////////////////////
 

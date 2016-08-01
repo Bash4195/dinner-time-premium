@@ -48,11 +48,11 @@
                 </div>
             </md-card-content>
             <md-card-actions layout="row" layout-align="end center">
-                <md-button class="md-icon-button md-accent">
+                <md-button class="md-icon-button md-accent" ng-click="editPostDialog()">
                     <md-icon>edit</md-icon>
                     <md-tooltip>Edit post</md-tooltip>
                 </md-button>
-                <md-button class="md-icon-button md-accent">
+                <md-button class="md-icon-button md-accent" ng-click="confirmDeletePost()">
                     <md-icon>delete</md-icon>
                     <md-tooltip>Delete post</md-tooltip>
                 </md-button>
@@ -78,22 +78,18 @@
                     <form>
                         <md-input-container class="md-block">
                             <label>Title</label>
-                            <input ng-model="editingPost.title">
+                            <input ng-model="post.title" md-auto-focus>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Description</label>
-                            <textarea ng-model="editingCategory.description" ng-disabled="editingCategory === null"></textarea>
+                            <label>Content</label>
+                            <textarea ng-model="post.content"></textarea>
                         </md-input-container>
                     </form>
                 </md-dialog-content>
                 <md-dialog-actions>
-                    <md-button class="md-icon-button md-primary" ng-click="confirmDelete()" ng-disabled="editingCategory === null">
-                        <md-icon>delete</md-icon>
-                        <md-tooltip>Delete category</md-tooltip>
-                    </md-button>
                     <div flex></div>
                     <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                    <md-button class="md-primary md-raised" ng-click="updateCategory()">Update</md-button>
+                    <md-button class="md-primary md-raised" ng-click="updatePost()">Update</md-button>
                 </md-dialog-actions>
             </md-dialog>
         </div>
@@ -101,15 +97,15 @@
 
     <!-- Delete Post Dialog Confirm -->
     <div style="visibility: hidden">
-        <div class="md-dialog-container" id="deleteCategory">
-            <md-dialog aria-label="Delete Category">
+        <div class="md-dialog-container" id="deletePost">
+            <md-dialog aria-label="Delete {{post.title}}">
                 <md-dialog-content class="md-dialog-content">
-                    <p class="md-headline">Delete {{editingCategory.title}} forever?</p>
+                    <p class="md-headline">Delete {{post.title}} forever?</p>
                     <p class="md-subhead">You won't be able to undo this!</p>
                 </md-dialog-content>
                 <md-dialog-actions>
                     <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                    <md-button class="md-primary md-raised" ng-click="deleteCategory()">Delete</md-button>
+                    <md-button class="md-primary md-raised" ng-click="deletePost()">Delete</md-button>
                 </md-dialog-actions>
             </md-dialog>
         </div>
