@@ -13,13 +13,13 @@ var Comment = require('../models/forumComment');
 
 // INDEX
 router.get('/api/forum', function(req, res) {
-    Category.find({}, function(err, categories) {
+    Category.find({}).populate({path: 'posts', populate: {path: 'authour'}}).limit(6).exec(function(err, categories) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve forum categories');
         } else {
             res.status(200).json(categories);
         }
-    })
+    });
 });
 
 // NEW - In dialog

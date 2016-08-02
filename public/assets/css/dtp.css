@@ -62,11 +62,6 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
     z-index: 51;
 }
 
-/* Breadcrumbs shouldn't have an underline */
-.md-subheader a {
-    text-decoration: none;
-}
-
 .md-subheader.no-bg-col {
     background-color: inherit;
 }
@@ -164,7 +159,11 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
     white-space: pre-line;
 }
 
-/* Info colour */
+.no-underline {
+    text-decoration: none;
+}
+
+/* Info colour - grey that's used for minor information */
 .info-colour {
     color: rgba(0,0,0,0.54) !important;
 }

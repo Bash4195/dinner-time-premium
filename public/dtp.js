@@ -459,6 +459,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         Rest.getThings('/api/forum')
             .then(function(categories) {
                 if(categories) {
+                    console.log(categories);
                     $scope.categories = categories;
                     $scope.gotCategories = true;
                 }
@@ -466,8 +467,10 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
     }
     getCategories();
 
-    $scope.goToCategory = function(path) {
-        $location.path(path)
+    $scope.goToPath = function(path, id) { // Id is for posts
+        var uri = path;
+        if(id) { uri = uri + '/' + id }
+        $location.path(uri)
     };
 
     $scope.newCategory = {
