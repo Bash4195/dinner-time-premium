@@ -5,7 +5,9 @@ var Category = require('../models/forumCategory');
 var Post = require('../models/forumPost');
 var Comment = require('../models/forumComment');
 
-// TODO: Fix up this mess! Ex. Each create route should return the same things, etc.
+// TODO: Fix up this mess! Ex. Each route should return the same things, etc.
+
+// TODO: Delete routes need to delete references to that object in other collections
 
 /////////////////// Categories ////////////////////////////
 

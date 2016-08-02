@@ -682,9 +682,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
     var categoryPath = $routeParams.categoryPath;
     var postId = $routeParams.postId;
 
-    Title.setTitle('DTP - Forum');
-    Title.setPageTitle('DTP - Forum');
-
     if(User.currentUser !== '') {
         $scope.user = User.currentUser;
     }
@@ -693,7 +690,9 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
             .then(function(res) {
                 $scope.post = res;
-                console.log($scope.post);
+
+                Title.setTitle($scope.post.title);
+                Title.setPageTitle($scope.post.title);
             })
     }
     getPost();
@@ -702,7 +701,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         Rest.getThings('/api/forum/recentPosts')
             .then(function(res) {
                 $scope.recentPosts = res;
-                console.log(res);
             })
     }
     getRecentPosts();
@@ -787,5 +785,50 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                     getPost();
                 });
         }
+    };
+    
+    $scope.editingComment = false;
+    
+    $scope.updateComment = function(comment) {
+        if(!$scope.user) {
+            Notify.error('You must be logged in to update a comment');
+        } else if(!comment.comment) {
+            Notify.error('Your comment needs to say something!');
+        } else {
+            var updatedComment = {
+                comment: comment.comment,
+                editedBy: $scope.user
+            };
+            Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + comment._id, updatedComment)
+                .then(function() {
+                    getPost();
+                })
+        }
+    };
+    
+    $scope.confirmDeleteComment = function(commentId) {
+        $mdDialog.show({
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#deleteComment',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+
+                $scope.deleteComment = function() {
+                    if(!$scope.user) {
+                        Notify.error('You must be logged in to delete a comment');
+                        $mdDialog.hide();
+                    } else{
+                        $mdDialog.hide();
+                        Rest.deleteThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + commentId)
+                            .then(function() {
+                                getPost();
+                            })
+                    }
+                };
+            }
+        });
     };
 }]);
