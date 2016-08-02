@@ -617,7 +617,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         Rest.getThings('/api/forum/' + categoryPath)
             .then(function(res) {
                 $scope.posts = res.posts;
-                $scope.category = res.category;
+                $scope.category = res;
                 $scope.gotPosts = true;
 
                 Title.setTitle($scope.category.title);

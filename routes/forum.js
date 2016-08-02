@@ -77,11 +77,31 @@ router.put('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) {
 
 // DELETE
 router.delete('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) {
-    Category.findByIdAndRemove(req.params.categoryId, function(err) {
+    Category.findById(req.params.categoryId).populate('posts').exec(function(err, category) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to delete category');
         } else {
-            res.status(204).end('Deleted category');
+            category.posts.forEach(function(post) {
+                post.comments.forEach(function(comment) {
+                    Comment.findByIdAndRemove(comment, function(err) {
+                        if(err) {
+                            middleware.handleError(res, err.message, 'Failed to delete the comments associated with this categories posts');
+                        }
+                    })
+                });
+                Post.findByIdAndRemove(post._id, function(err) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to delete the posts associated with this category');
+                    }
+                })
+            });
+            Category.findByIdAndRemove(category._id, function(err) {
+                if(err) {
+                    middleware.handleError(res, err.message, 'Failed to delete category');
+                } else {
+                    res.status(204).end('Deleted category');
+                }
+            });
         }
     })
 });
@@ -101,21 +121,11 @@ router.get('/api/forum/recentPosts', function(req, res) {
 
 // INDEX
 router.get('/api/forum/:categoryPath', function(req, res) {
-    Category.findOne({path: '/forum/' + req.params.categoryPath}, function(err, category) {
+    Category.findOne({path: '/forum/' + req.params.categoryPath}).populate({path: 'posts', populate: {path: 'authour'}}).exec(function(err, category) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve category');
         } else {
-            Post.find({category: category._id}).populate('authour').exec(function(err, posts) {
-                if(err) {
-                    middleware.handleError(res, err.message, 'Failed to retrieve category');
-                } else {
-                    data = {
-                        category: category,
-                        posts: posts
-                    };
-                    res.status(200).json(data);
-                }
-            });
+            res.status(200).json(category); // Including posts
         }
     });
 });
