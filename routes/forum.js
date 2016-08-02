@@ -184,11 +184,24 @@ router.put('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(req
 
 // DELETE
 router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(req, res) {
-    Post.findByIdAndRemove(req.params.postId, function(err) {
+    Post.findById(req.params.postId, function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to delete post');
         } else {
-            res.status(204).end('Deleted post');
+            post.comments.forEach(function(comment) {
+                Comment.findByIdAndRemove(comment, function(err) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to delete the comments associated with this post');
+                    }
+                })
+            });
+            Post.findByIdAndRemove(post._id, function(err) {
+                if(err) {
+                    middleware.handleError(res, err.message, 'Failed to delete post');
+                } else {
+                    res.status(204).end('Deleted post');
+                }
+            });
         }
     })
 });

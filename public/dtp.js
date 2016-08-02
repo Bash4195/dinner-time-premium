@@ -211,6 +211,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
     }
 
     getOnlineUsers();
+
     $interval(function() { // Update online user list every 5 minutes
         getOnlineUsers();
     }, 300000);

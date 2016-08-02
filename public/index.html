@@ -85,15 +85,14 @@
             </md-button>
         </div>
         <span flex></span>
-        <h3>{{Title.pageTitle()}}</h3>
+        <h3 class="truncate">{{Title.pageTitle()}}</h3>
         <span flex></span>
 
         <!-- User options -->
 
-        <md-button layout="row" class="md-icon-button fadein fadeout" ng-hide="lockOnlineUsers"
+        <md-button layout="row" class="md-icon-button fadein fadeout" style="min-width: 40px;" ng-hide="lockOnlineUsers"
                    ng-click="toggleLockOnlineUsers()" hide show-gt-md>
             <div class="online-dot"></div>
-            <div flex></div>
             <md-icon>account_circle</md-icon>
             <md-tooltip>
                 Show online users
@@ -104,9 +103,9 @@
             <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
         </a>
 
-        <div layout="row" layout-align="center center">
-            <md-menu ng-show="user" md-position-mode="target-right target">
-                <a href="" ng-click="$mdOpenMenu($event)" layout-margin style="margin-right: 0">
+        <div layout="row" layout-align="center center" ng-show="user" layout-padding>
+            <md-menu md-position-mode="target-right target">
+                <a href="" ng-click="$mdOpenMenu($event)">
                     <img ng-src="{{user.avatar}}" alt="" class="circle">
                 </a>
                 <md-menu-content>
