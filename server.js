@@ -40,8 +40,7 @@ passport.use(new SteamStrategy({
     },
     function(identifier, profile, done) {
         var user = profile._json;
-        User.findOneAndUpdate({openIdIdentifier: identifier}, {
-            // Updates these properties on creating or finding
+        var userData = {
             openIdIdentifier: identifier,
             steamId: user.steamid,
             name: user.personaname,
@@ -51,8 +50,17 @@ passport.use(new SteamStrategy({
             avatarFull: user.avatarfull,
             countryCode: user.loccountrycode,
             onlineStatus: 'Online'
-        }, {upsert: true}, function(err, user) { // Upsert allows the object to be updated if it's found
-            return done(err, user);
+        };
+        User.findOneAndUpdate({openIdIdentifier: identifier}, userData, {upsert: true}, function(error, foundOrNewUser) { // Upsert allows the object to be updated if it's found
+            if(error) {
+                console.log('ERROR: Failed to find and update/upsert user.');
+            }
+            User.findOne({openIdIdentifier: identifier}, function(err, foundUser) {
+                if(err) {
+                    console.log('Error: Failed to find user');
+                }
+                return done(err, foundUser);
+            });
         })
     }
 ));
