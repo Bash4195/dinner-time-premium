@@ -32,18 +32,19 @@ md-sidenav md-list-item > button {
     border-radius: 0 !important;
 }
 
+
 /* Toast Themes */
 md-toast.md-success-toast-theme .md-toast-content {
-    color: #4CAF50;
+color: #4CAF50;
 }
 
 md-toast.md-error-toast-theme .md-toast-content {
-    color: #F44336;
+color: #F44336;
 }
 
 /* Pre font */
 pre {
-    font-family: Roboto, 'Helvetica Neue', sans-serif;
+font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 /* Active navigation */
@@ -59,6 +60,15 @@ pre {
     left: auto;
     position: fixed;
     z-index: 51;
+}
+
+/* Breadcrumbs shouldn't have an underline */
+.md-subheader a {
+    text-decoration: none;
+}
+
+.md-subheader.no-bg-col {
+    background-color: inherit;
 }
 
 /* Move FAB down half its size */
