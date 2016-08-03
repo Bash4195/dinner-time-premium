@@ -14,7 +14,10 @@
                             <md-list-item ng-hide="category.posts[0]">
                                 <div class="md-list-item-text" flex>
                                     <p layout-padding>Looks like no one else has posted in this category yet. Why not start things off?</p>
-                                    <md-button class="md-raised md-primary" ng-click="newPost.category = category; newPostDialog()" ng-disabled="!user">New Post</md-button>
+                                    <md-button class="md-raised md-primary" ng-click="newPost.category = category; newPostDialog()" ng-disabled="!user">
+                                        <span ng-show="user">New Post</span>
+                                        <span ng-hide="user">Sign in to Post</span>
+                                    </md-button>
                                 </div>
                             </md-list-item>
                             <md-list-item class="md-2-line" ng-repeat="post in category.posts" ng-click="goToPath(category.path + '/' + post._id)">
@@ -41,7 +44,10 @@
                 </md-card>
             </div>
             <div flex="25" layout="column">
-                <md-button class="md-raised md-primary" style="margin-top: 8px" ng-click="newPostDialog()" ng-disabled="!user">New Post</md-button>
+                <md-button class="md-raised md-primary" style="margin-top: 8px" ng-click="newPostDialog()" ng-disabled="!user">
+                    <span ng-show="user">New Post</span>
+                    <span ng-hide="user">Sign in to Post</span>
+                </md-button>
 
                 <div layout="column" ng-if="user">
                     <md-subheader class="md-no-sticky">Staff Options</md-subheader>
