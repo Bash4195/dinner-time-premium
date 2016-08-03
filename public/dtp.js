@@ -56,13 +56,17 @@ dtp.factory('Title', function() {
 });
 
 dtp.service('Notify', ['$mdToast', function($mdToast) {
+    this.generic = function(message) {
+        var generic = $mdToast.simple(message)
+            .position('top right')
+        $mdToast.show(generic);
+    };
     this.success = function(message) {
         var success = $mdToast.simple(message)
             .position('top right')
             .theme('error-toast');
         $mdToast.show(success);
     };
-
     this.error = function(message) {
         var error = $mdToast.simple(message)
             .position('top right')
@@ -80,7 +84,11 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
                 self.currentUser = res.data; // Keep current user variable up to date
                 return res.data;
             }, function(res) {
-                Notify.error(res.data.error || 'Failed to retrieve your user information');
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Failed to retrieve your user information');
+                }
             })
     };
     this.getOnlineUsers = function() {
@@ -88,7 +96,11 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Notify.error(res.data.error);
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Something went wrong while processing your request');
+                }
             })
     };
     this.updateOnlineStatus = function(id, status) {
@@ -96,7 +108,11 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                Notify.error(res.data.error);
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Something went wrong while processing your request');
+                }
             })
     }
 }]);
@@ -459,7 +475,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         Rest.getThings('/api/forum')
             .then(function(categories) {
                 if(categories) {
-                    console.log(categories);
                     $scope.categories = categories;
                     $scope.gotCategories = true;
                 }
@@ -467,10 +482,59 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
     }
     getCategories();
 
-    $scope.goToPath = function(path, id) { // Id is for posts
-        var uri = path;
-        if(id) { uri = uri + '/' + id }
-        $location.path(uri)
+    $scope.goToPath = function(path) {
+        $location.path(path)
+    };
+
+    $scope.newPost = {
+        category: '',
+        title: '',
+        content: ''
+    };
+
+    $scope.newPostDialog = function() {
+        $mdDialog.show({
+            clickOutsideToClose: true,
+            fullscreen: true,
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#createPost',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+
+                $scope.createPost = function() {
+                    if(!$scope.user) {
+                        Notify.generic('You must be logged in to create a post');
+                        $mdDialog.hide();
+                    } else if(!$scope.newPost.category) {
+                        Notify.generic('Select a category for your post to go in')
+                    } else if(!$scope.newPost.title) {
+                        Notify.generic('Your post needs a title!');
+                    } else if(!$scope.newPost.content) {
+                        Notify.generic('Your post needs some content');
+                    } else {
+                        $mdDialog.hide();
+                        var catPath = $scope.newPost.category.path;
+                        var newPost = {
+                            title: $scope.newPost.title,
+                            content: $scope.newPost.content,
+                            authour: $scope.user
+                        };
+                        Rest.newThing('/api' + catPath, newPost)
+                            .then(function(res) {
+                                $scope.newPost = {
+                                    category: '',
+                                    title: '',
+                                    content: ''
+                                };
+                                $scope.goToPath(catPath + '/' + res._id)
+                            });
+                    }
+                };
+            }
+        });
     };
 
     $scope.newCategory = {
@@ -493,14 +557,14 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
 
                 $scope.createCategory = function() {
                     if(!$scope.user) {
-                        Notify.error('You must be logged in to create a category');
+                        Notify.generic('You must be logged in to create a category');
                         $mdDialog.hide();
                     } else if($scope.newCategory.title === '') {
-                        Notify.error('A category needs a title!');
+                        Notify.generic('A category needs a title!');
                     } else if($scope.newCategory.icon === '') {
-                        Notify.error('A category needs an icon!');
+                        Notify.generic('A category needs an icon!');
                     } else if($scope.newCategory.description === '') {
-                        Notify.error('A category needs a description!');
+                        Notify.generic('A category needs a description!');
                     } else {
                         $mdDialog.hide();
                         var catPath = '/forum/' + $scope.newCategory.title.toLowerCase();
@@ -546,14 +610,14 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
 
                 $scope.updateCategory = function() {
                     if(!$scope.user) {
-                        Notify.error('You must be logged in to edit a category');
+                        Notify.generic('You must be logged in to edit a category');
                         $mdDialog.hide();
                     } else if($scope.editingCategory.title === '') {
-                        Notify.error('A category needs a title!');
+                        Notify.generic('A category needs a title!');
                     } else if($scope.editingCategory.description === '') {
-                        Notify.error('A category needs a description!');
+                        Notify.generic('A category needs a description!');
                     } else if($scope.editingCategory.icon === '') {
-                        Notify.error('A category needs an icon!');
+                        Notify.generic('A category needs an icon!');
                     } else {
                         $mdDialog.hide();
                         var updatedCategory = {
@@ -588,13 +652,18 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                 };
 
                 if(!$scope.user) {
-                    Notify.error('You must be logged in to delete a category');
+                    Notify.generic('You must be logged in to delete a category');
                     $mdDialog.hide();
                 } else {
                     $scope.deleteCategory = function() {
                         $mdDialog.hide();
                         Rest.deleteThing('/api/forum/' + $scope.editingCategory._id)
                             .then(function() {
+                                $scope.editingCategory = {
+                                    title: '',
+                                    description: '',
+                                    icon: ''
+                                };
                                 getCategories();
                             })
                     };
@@ -648,12 +717,12 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
 
                 $scope.createPost = function() {
                     if(!$scope.user) {
-                        Notify.error('You must be logged in to create a post');
+                        Notify.generic('You must be logged in to create a post');
                         $mdDialog.hide();
                     } else if(!$scope.newPost.title) {
-                        Notify.error('Your post needs a title!');
+                        Notify.generic('Your post needs a title!');
                     } else if(!$scope.newPost.content) {
-                        Notify.error('Your post needs some content');
+                        Notify.generic('Your post needs some content');
                     } else {
                         $mdDialog.hide();
                         var newPost = {
@@ -723,12 +792,12 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
 
                 $scope.updatePost = function() {
                     if(!$scope.user) {
-                        Notify.error('You must be logged in to edit a post');
+                        Notify.generic('You must be logged in to edit a post');
                         $mdDialog.hide();
                     } else if($scope.post.title === '') {
-                        Notify.error('A post needs a title!');
+                        Notify.generic('A post needs a title!');
                     } else if($scope.post.content === '') {
-                        Notify.error('A post needs content!');
+                        Notify.generic('A post needs content!');
                     } else {
                         $mdDialog.hide();
                         var updatedPost = {
@@ -758,7 +827,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
 
                 $scope.deletePost = function() {
                     if(!$scope.user) {
-                        Notify.error('You must be logged in to delete a post');
+                        Notify.generic('You must be logged in to delete a post');
                         $mdDialog.hide();
                     } else{
                         $mdDialog.hide();
@@ -779,9 +848,9 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
 
     $scope.createComment = function() {
         if(!$scope.user) {
-            Notify.error('You must be logged in to create a comment');
+            Notify.generic('You must be logged in to create a comment');
         } else if(!$scope.newComment.comment) {
-            Notify.error('Your comment needs to say something!');
+            Notify.generic('Your comment needs to say something!');
         } else {
             Rest.newThing('/api/forum/' + categoryPath + '/' + $scope.post._id, $scope.newComment)
                 .then(function() {
@@ -795,9 +864,9 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
     
     $scope.updateComment = function(comment) {
         if(!$scope.user) {
-            Notify.error('You must be logged in to update a comment');
+            Notify.generic('You must be logged in to update a comment');
         } else if(!comment.comment) {
-            Notify.error('Your comment needs to say something!');
+            Notify.generic('Your comment needs to say something!');
         } else {
             var updatedComment = {
                 comment: comment.comment,
@@ -822,7 +891,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
 
                 $scope.deleteComment = function() {
                     if(!$scope.user) {
-                        Notify.error('You must be logged in to delete a comment');
+                        Notify.generic('You must be logged in to delete a comment');
                         $mdDialog.hide();
                     } else{
                         $mdDialog.hide();

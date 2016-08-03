@@ -50,6 +50,7 @@
         <!--</md-card>-->
         <!--<div flex></div>-->
     <!--</div>-->
+<!--</div>-->
 
 <div layout="row">
     <div flex></div>
@@ -67,13 +68,13 @@
                             <md-list-item ng-hide="category.posts[0]">
                                 <div class="md-list-item-text" flex>
                                     <p layout-padding>Looks like no one else has posted in this category yet. Why not start things off?</p>
-                                    <md-button class="md-raised md-primary">New Post</md-button>
+                                    <md-button class="md-raised md-primary" ng-click="newPost.category = category; newPostDialog()" ng-disabled="!user">New Post</md-button>
                                 </div>
                             </md-list-item>
-                            <md-list-item class="md-2-line" ng-repeat="post in category.posts" ng-click="goToPath(category.path, post._id)">
+                            <md-list-item class="md-2-line" ng-repeat="post in category.posts" ng-click="goToPath(category.path + '/' + post._id)">
                                 <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="">
                                 <div class="md-list-item-text">
-                                    <h3>{{post.title}}</h3>
+                                    <h3 flex="90">{{post.title}}</h3>
                                     <div layout="row">
                                         <p flex>By {{post.authour.name}} <span am-time-ago="post.createdAt"></span></p>
                                         <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
@@ -85,7 +86,7 @@
                                 </div>
                                 <md-divider md-inset></md-divider>
                             </md-list-item>
-                            <div layout="row" ng-show="category.posts[0]">
+                            <div layout="row" ng-show="category.__v > 6">
                                 <div flex></div>
                                 <md-button ng-href="{{category.path}}" class="md-accent">More discussions</md-button>
                             </div>
@@ -94,10 +95,13 @@
                 </md-card>
             </div>
             <div flex="25" layout="column">
-                <md-button class="md-raised md-primary" style="margin-top: 8px">New Post</md-button>
+                <md-button class="md-raised md-primary" style="margin-top: 8px" ng-click="newPostDialog()" ng-disabled="!user">New Post</md-button>
 
-                <md-subheader class="md-no-sticky">Staff Options</md-subheader>
-                <md-button class="md-raised md-primary" ng-click="newCategoryDialog()">New Category</md-button>
+                <div layout="column" ng-if="user">
+                    <md-subheader class="md-no-sticky">Staff Options</md-subheader>
+                    <md-button class="md-raised md-primary" ng-click="newCategoryDialog()">New Category</md-button>
+                    <md-button class="md-raised md-primary" ng-click="editCategoryDialog()">Edit Category</md-button>
+                </div>
 
                 <md-subheader class="md-no-sticky">Categories</md-subheader>
                 <md-card>
@@ -108,7 +112,7 @@
                                 <div class="md-secondary" layout="row">
                                     <md-icon class="icon-left-of-text" md-colors="{color: 'green-500'}">message</md-icon>
                                     <span class="md-subhead info-colour">
-                                        <span ng-show="category.posts[0]">{{category.posts.length}}</span>
+                                        <span ng-show="category.posts[0]">{{category.__v}}</span>
                                         <span ng-hide="category.posts[0]">0</span>
                                     </span>
                                 </div>
@@ -122,101 +126,135 @@
     <div flex></div>
 </div>
 
-    <md-button class="md-fab md-fab-bottom-right" layout="column" layout-align="center center" hide-gt-sm
-               ng-show="user" ng-click="newCategoryDialog()">
-        <md-icon>add</md-icon>
-    </md-button>
+<md-button class="md-fab md-fab-bottom-right" layout="column" layout-align="center center" hide-gt-sm
+           ng-show="user" ng-click="newCategoryDialog()">
+    <md-icon>add</md-icon>
+</md-button>
 
-    <!-- Create Category Dialog -->
-    <div style="visibility: hidden">
-        <div class="md-dialog-container" id="createCategory">
-            <md-dialog aria-label="Create Category" flex-gt-sm="50" flex>
-                <md-toolbar class="md-toolbar-tools">
-                    <span>Create Category</span>
-                </md-toolbar>
-                <md-dialog-content class="md-dialog-content">
-                    <form>
-                        <md-input-container class="md-block">
-                            <label>Title</label>
-                            <input ng-model="newCategory.title" md-autofocus>
-                        </md-input-container>
-                        <p>Icons can be found <a href="https://design.google.com/icons/" target="_blank" class="md-accent">here</a>. Make sure you type it in all lower case and instead of a space, put an underscore.</p>
-                        <md-input-container>
-                            <label>Icon</label>
-                            <input ng-model="newCategory.icon">
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Description</label>
-                            <textarea ng-model="newCategory.description"></textarea>
-                        </md-input-container>
-                    </form>
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                    <md-button class="md-primary md-raised" ng-click="createCategory()">Create</md-button>
-                </md-dialog-actions>
-            </md-dialog>
-        </div>
+<!-- Create Post Dialog -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="createPost">
+        <md-dialog aria-label="Create Post" flex-gt-sm="50" flex>
+            <md-toolbar class="md-toolbar-tools">
+                <span>Create Post</span>
+            </md-toolbar>
+            <md-dialog-content class="md-dialog-content">
+                <form>
+                    <md-input-container>
+                        <label>Category</label>
+                        <md-select ng-model="newPost.category" md-auto-focus="newPost.category === ''">
+                            <md-option ng-repeat="category in categories" ng-value="category">
+                                {{category.title}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Title</label>
+                        <input ng-model="newPost.title" md-auto-focus="newPost.category !== ''">
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Content</label>
+                        <textarea ng-model="newPost.content"></textarea>
+                    </md-input-container>
+                </form>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="createPost()">Create</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
+</div>
 
-    <!-- Edit Category Dialog -->
-    <div style="visibility: hidden">
-        <div class="md-dialog-container" id="editCategory">
-            <md-dialog aria-label="Edit Category" flex-gt-sm="50" flex>
-                <md-toolbar class="md-toolbar-tools">
-                    <span>Edit Category</span>
-                </md-toolbar>
-                <md-dialog-content class="md-dialog-content">
-                    <form>
-                        <md-input-container>
-                            <label>Category</label>
-                            <md-select ng-model="editingCategory" md-auto-focus>
-                                <md-option ng-repeat="category in categories" ng-value="category">
-                                    {{category.title}}
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Title</label>
-                            <input ng-model="editingCategory.title" ng-disabled="editingCategory === null">
-                        </md-input-container>
-                        <p>Icons can be found <a href="https://design.google.com/icons/" target="_blank" class="md-accent">here</a>. Make sure you type it in all lower case and instead of a space, put an underscore.</p>
-                        <md-input-container>
-                            <label>Icon</label>
-                            <input ng-model="editingCategory.icon" ng-disabled="editingCategory === null">
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Description</label>
-                            <textarea ng-model="editingCategory.description" ng-disabled="editingCategory === null"></textarea>
-                        </md-input-container>
-                    </form>
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <md-button class="md-icon-button md-primary" ng-click="confirmDeleteCategory()" ng-disabled="editingCategory === null">
-                        <md-icon>delete</md-icon>
-                        <md-tooltip>Delete category</md-tooltip>
-                    </md-button>
-                    <div flex></div>
-                    <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                    <md-button class="md-primary md-raised" ng-click="updateCategory()">Update</md-button>
-                </md-dialog-actions>
-            </md-dialog>
-        </div>
+<!-- Create Category Dialog -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="createCategory">
+        <md-dialog aria-label="Create Category" flex-gt-sm="50" flex>
+            <md-toolbar class="md-toolbar-tools">
+                <span>Create Category</span>
+            </md-toolbar>
+            <md-dialog-content class="md-dialog-content">
+                <form>
+                    <md-input-container class="md-block">
+                        <label>Title</label>
+                        <input ng-model="newCategory.title" md-autofocus>
+                    </md-input-container>
+                    <p>Icons can be found <a href="https://design.google.com/icons/" target="_blank" class="md-accent">here</a>. Make sure you type it in all lower case and instead of a space, put an underscore.</p>
+                    <md-input-container>
+                        <label>Icon</label>
+                        <input ng-model="newCategory.icon">
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Description</label>
+                        <textarea ng-model="newCategory.description"></textarea>
+                    </md-input-container>
+                </form>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="createCategory()">Create</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
+</div>
 
-    <!-- Delete Category Dialog Confirm -->
-    <div style="visibility: hidden">
-        <div class="md-dialog-container" id="deleteCategory">
-            <md-dialog aria-label="Delete Category">
-                <md-dialog-content class="md-dialog-content">
-                    <p class="md-headline">Delete {{editingCategory.title}} forever?</p>
-                    <p class="md-subhead">You won't be able to undo this!</p>
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                    <md-button class="md-primary md-raised" ng-click="deleteCategory()">Delete</md-button>
-                </md-dialog-actions>
-            </md-dialog>
-        </div>
+<!-- Edit Category Dialog -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="editCategory">
+        <md-dialog aria-label="Edit Category" flex-gt-sm="50" flex>
+            <md-toolbar class="md-toolbar-tools">
+                <span>Edit Category</span>
+            </md-toolbar>
+            <md-dialog-content class="md-dialog-content">
+                <form>
+                    <md-input-container>
+                        <label>Category</label>
+                        <md-select ng-model="editingCategory" md-auto-focus>
+                            <md-option ng-repeat="category in categories" ng-value="category">
+                                {{category.title}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Title</label>
+                        <input ng-model="editingCategory.title" ng-disabled="editingCategory === null">
+                    </md-input-container>
+                    <p>Icons can be found <a href="https://design.google.com/icons/" target="_blank" class="md-accent">here</a>. Make sure you type it in all lower case and instead of a space, put an underscore.</p>
+                    <md-input-container>
+                        <label>Icon</label>
+                        <input ng-model="editingCategory.icon" ng-disabled="editingCategory === null">
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Description</label>
+                        <textarea ng-model="editingCategory.description" ng-disabled="editingCategory === null"></textarea>
+                    </md-input-container>
+                </form>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-icon-button md-primary" ng-click="confirmDeleteCategory()" ng-disabled="editingCategory === null">
+                    <md-icon>delete</md-icon>
+                    <md-tooltip>Delete category</md-tooltip>
+                </md-button>
+                <div flex></div>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="updateCategory()">Update</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+    </div>
+</div>
+
+<!-- Delete Category Dialog Confirm -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="deleteCategory">
+        <md-dialog aria-label="Delete Category">
+            <md-dialog-content class="md-dialog-content">
+                <p class="md-headline">Delete {{editingCategory.title}} forever?</p>
+                <p class="md-subhead">You won't be able to undo this!</p>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="deleteCategory()">Delete</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
 </div>

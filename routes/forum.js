@@ -7,13 +7,11 @@ var Comment = require('../models/forumComment');
 
 // TODO: Fix up this mess! Ex. Each route should return the same things, etc.
 
-// TODO: Delete routes need to delete references to that object in other collections
-
 /////////////////// Categories ////////////////////////////
 
 // INDEX
 router.get('/api/forum', function(req, res) {
-    Category.find({}).populate({path: 'posts', populate: {path: 'authour'}}).limit(6).exec(function(err, categories) {
+    Category.find({}).populate({path: 'posts', populate: {path: 'authour'}, options: {sort: { updatedAt: -1 }, limit: 6}}).exec(function(err, categories) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve forum categories');
         } else {
