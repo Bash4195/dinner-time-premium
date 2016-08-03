@@ -19,10 +19,10 @@
 <!-- Sidenav -->
 
 <md-sidenav md-is-locked-open="$mdMedia('gt-md') && lockLeft" md-component-id="left"
-            class="md-sidenav-left" md-whiteframe="4dp">
-    <md-toolbar layout="row" layout-align="center center" style="background-color: #FFF"> <!-- TODO: Fix this to integrate with themes -->
+            class="md-sidenav-left" md-whiteframe md-colors="{background: 'accent-800'}">
+    <md-toolbar layout="row" layout-align="center center" style="background-color: transparent">
         <a href="/" layout="row" layout-align="center center" layout-wrap>
-            <img src="assets/img/logo.png" alt="DTP" flex="100">
+            <img src="assets/img/logo.png" alt="DTP" class="no-select" flex="100">
         </a>
     </md-toolbar>
     <div hide-gt-sm>
@@ -171,7 +171,7 @@
         <!-- Online Users Sidenav -->
 
         <md-sidenav class="md-sidenav-right" md-component-id="onlineUsers" md-is-locked-open="$mdMedia('gt-md') && lockOnlineUsers">
-            <md-toolbar class="md-hue-2" layout="row" layout-align="center center">
+            <md-toolbar layout="row" layout-align="center center">
                 <md-button class="md-icon-button" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
                     <md-icon>keyboard_arrow_right</md-icon>
                 </md-button>
