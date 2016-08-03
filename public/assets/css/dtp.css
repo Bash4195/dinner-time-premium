@@ -157,6 +157,7 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
     white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
     word-break: break-all;
     white-space: pre-line;
+    word-break: keep-all;
 }
 
 .no-underline {
