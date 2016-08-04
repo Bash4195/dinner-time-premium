@@ -19,7 +19,7 @@
 <!-- Sidenav -->
 
 <md-sidenav md-is-locked-open="$mdMedia('gt-md') && lockLeft" md-component-id="left"
-            class="md-sidenav-left" md-whiteframe md-colors="{background: 'accent-800'}">
+            class="md-sidenav-left" md-whiteframe >
     <md-toolbar layout="row" layout-align="center center" style="background-color: transparent">
         <a href="/" layout="row" layout-align="center center" layout-wrap>
             <img src="assets/img/logo.png" alt="DTP" class="no-select" flex="100">
@@ -94,7 +94,7 @@
                    ng-click="toggleLockOnlineUsers()" hide show-gt-md>
             <div class="online-dot"></div>
             <md-icon>account_circle</md-icon>
-            <md-tooltip>
+            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
                 Show online users
             </md-tooltip>
         </md-button>
@@ -191,7 +191,7 @@
                         <div ng-class="{'online-dot': onlineUser.onlineStatus === 'Online',
                         'away-dot': onlineUser.onlineStatus === 'Away',
                         'busy-dot': onlineUser.onlineStatus === 'Busy'}" flex="2">
-                            <md-tooltip>{{onlineUser.onlineStatus}}</md-tooltip>
+                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
                         </div>
                         <div flex></div>
                         <span flex="60">{{onlineUser.name}}</span>

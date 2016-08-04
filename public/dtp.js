@@ -31,13 +31,13 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
         });
 
     // Themes
-    $mdThemingProvider.theme('DTP-Dark')
+    $mdThemingProvider.theme('DTPDark')
         .primaryPalette('red')
         .accentPalette('grey')
         .warnPalette('red')
         .dark();
 
-    $mdThemingProvider.setDefaultTheme('DTP-Dark');
+    $mdThemingProvider.setDefaultTheme('DTPDark');
 
         // Toast themes
     $mdThemingProvider.theme('success-toast');
@@ -232,9 +232,6 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
     $interval(function() { // Update online user list every 5 minutes
         getOnlineUsers();
     }, 300000);
-
-    // Logo
-    $scope.theme = $scope.theme || 'DTP-Dark';
 
     // Side navs
     $scope.lockLeft = true;

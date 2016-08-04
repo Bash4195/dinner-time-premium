@@ -29,11 +29,11 @@
             <md-card-actions layout="row" layout-align="end center" ng-show="user">
                 <md-button class="md-icon-button md-accent" ng-click="editPostDialog()">
                     <md-icon>edit</md-icon>
-                    <md-tooltip>Edit post</md-tooltip>
+                    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit post</md-tooltip>
                 </md-button>
                 <md-button class="md-icon-button md-accent" ng-click="confirmDeletePost()">
                     <md-icon>delete</md-icon>
-                    <md-tooltip>Delete post</md-tooltip>
+                    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete post</md-tooltip>
                 </md-button>
             </md-card-actions>
         </md-card>
@@ -48,7 +48,7 @@
                 </div>
                 <md-button class="md-fab md-mini md-primary" ng-show="user" ng-disabled="newComment.comment === ''" ng-click="createComment()">
                     <md-icon>send</md-icon>
-                    <md-tooltip>Post Comment</md-tooltip>
+                    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Post Comment</md-tooltip>
                 </md-button>
             </md-input-container>
         </form>
@@ -76,11 +76,11 @@
                 <md-card-actions layout="row" layout-align="end center" ng-show="user">
                     <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="editingComment = true">
                         <md-icon>edit</md-icon>
-                        <md-tooltip>Edit comment</md-tooltip>
+                        <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
                     </md-button>
                     <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="confirmDeleteComment(comment._id)">
                         <md-icon>delete</md-icon>
-                        <md-tooltip>Delete comment</md-tooltip>
+                        <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
                     </md-button>
                     <md-button class="md-accent" ng-show="editingComment" ng-click="editingComment = false">Cancel</md-button>
                     <md-button class="md-raised md-accent" ng-show="editingComment" ng-click="updateComment(comment)">Update</md-button>
