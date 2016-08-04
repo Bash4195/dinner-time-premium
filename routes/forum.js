@@ -27,10 +27,6 @@ router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
     var newCategory = req.body;
     if(middleware.checkIfMissing(newCategory.title)) {
         middleware.handleError(res, 'Category title is missing', 'Title is missing', 400);
-    } else if(middleware.checkIfMissing(newCategory.description)) {
-        middleware.handleError(res, 'Category description is missing', 'Description is missing', 400);
-    } else if(middleware.checkIfMissing(newCategory.icon)) {
-        middleware.handleError(res, 'Category icon is missing', 'Icon is missing', 400);
     } else if(middleware.checkIfMissing(newCategory.path)) {
         middleware.handleError(res, 'Category path is missing', 'Path is missing (/forum/:categoryTitle)', 400);
     } else if(middleware.checkIfMissing(newCategory.createdBy)) {
@@ -46,7 +42,7 @@ router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
     }
 });
 
-// SHOW - No show
+// SHOW - Same as post index
 
 // EDIT - In Dialog
 
@@ -55,10 +51,6 @@ router.put('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res) {
     var editedCategory = req.body;
     if(middleware.checkIfMissing(editedCategory.title)) {
         middleware.handleError(res, 'Category title is missing', 'Title is missing', 400);
-    } else if(middleware.checkIfMissing(editedCategory.description)) {
-        middleware.handleError(res, 'Category description is missing', 'Description is missing', 400);
-    } else if(middleware.checkIfMissing(editedCategory.icon)) {
-        middleware.handleError(res, 'Category icon is missing', 'Icon is missing', 400);
     } else if(middleware.checkIfMissing(editedCategory.editedBy)) {
         middleware.handleError(res, 'Category editor is missing', 'Editor is missing', 400);
     } else {
@@ -108,7 +100,7 @@ router.delete('/api/forum/:categoryId', middleware.isLoggedIn, function(req, res
 
 // Recent Posts
 router.get('/api/forum/recentPosts', function(req, res) {
-    Post.find({}).sort('-updatedAt').populate('authour').limit(6).exec(function(err, posts) {
+    Post.find({}).sort('-updatedAt').populate('authour category').limit(6).exec(function(err, posts) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve recent posts');
         } else {
@@ -161,7 +153,7 @@ router.post('/api/forum/:categoryPath', middleware.isLoggedIn, function(req, res
 
 // SHOW
 router.get('/api/forum/:categoryPath/:postId', function(req, res) {
-    Post.findById(req.params.postId).populate('authour').populate({path: 'comments', populate: {path: 'authour'}}).exec(function(err, post) {
+    Post.findById(req.params.postId).populate('authour category').populate({path: 'comments', populate: {path: 'authour'}}).exec(function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to find post');
         } else {

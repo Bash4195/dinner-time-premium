@@ -483,9 +483,15 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
     }
     getCategories();
 
-    $scope.goToPath = function(path) {
-        $location.path(path)
-    };
+    function getRecentPosts() {
+        Rest.getThings('/api/forum/recentPosts')
+            .then(function(res) {
+                $scope.recentPosts = res;
+            })
+    }
+    getRecentPosts();
+
+    $scope.$location = $location;
 
     $scope.newPost = {
         category: '',
@@ -530,7 +536,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                                     title: '',
                                     content: ''
                                 };
-                                $scope.goToPath(catPath + '/' + res._id)
+                                $location.path(catPath + '/' + res._id)
                             });
                     }
                 };
@@ -538,11 +544,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         });
     };
 
-    $scope.newCategory = {
-        title: '',
-        description: '',
-        icon: ''
-    };
+    $scope.newCategory = '';
 
     $scope.newCategoryDialog = function() {
         $mdDialog.show({
@@ -560,29 +562,19 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                     if(!$scope.user) {
                         Notify.generic('You must be logged in to create a category');
                         $mdDialog.hide();
-                    } else if($scope.newCategory.title === '') {
+                    } else if($scope.newCategory === '') {
                         Notify.generic('A category needs a title!');
-                    } else if($scope.newCategory.icon === '') {
-                        Notify.generic('A category needs an icon!');
-                    } else if($scope.newCategory.description === '') {
-                        Notify.generic('A category needs a description!');
                     } else {
                         $mdDialog.hide();
-                        var catPath = '/forum/' + $scope.newCategory.title.toLowerCase();
+                        var catPath = '/forum/' + $scope.newCategory.toLowerCase();
                         var newCategory = {
-                            title: $scope.newCategory.title,
-                            description: $scope.newCategory.description,
-                            icon: $scope.newCategory.icon,
+                            title: $scope.newCategory,
                             path: catPath,
                             createdBy: $scope.user
                         };
                         Rest.newThing('/api/forum', newCategory)
                             .then(function() {
-                                $scope.newCategory = {
-                                    title: '',
-                                    description: '',
-                                    icon: ''
-                                };
+                                $scope.newCategory = '';
                                 getCategories();
                             });
                     }
@@ -591,11 +583,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         });
     };
     
-    $scope.editingCategory = {
-        title: '',
-        description: '',
-        icon: ''
-    };
+    $scope.editingCategory = { title: '' };
 
     $scope.editCategoryDialog = function() {
         $mdDialog.show({
@@ -613,27 +601,17 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                     if(!$scope.user) {
                         Notify.generic('You must be logged in to edit a category');
                         $mdDialog.hide();
-                    } else if($scope.editingCategory.title === '') {
+                    } else if($scope.editingCategory === '') {
                         Notify.generic('A category needs a title!');
-                    } else if($scope.editingCategory.description === '') {
-                        Notify.generic('A category needs a description!');
-                    } else if($scope.editingCategory.icon === '') {
-                        Notify.generic('A category needs an icon!');
                     } else {
                         $mdDialog.hide();
                         var updatedCategory = {
                             title: $scope.editingCategory.title,
-                            description: $scope.editingCategory.description,
-                            icon: $scope.editingCategory.icon,
                             editedBy: $scope.user
                         };
                         Rest.updateThing('/api/forum/' + $scope.editingCategory._id, updatedCategory)
                             .then(function() {
-                                $scope.editingCategory = {
-                                    title: '',
-                                    description: '',
-                                    icon: ''
-                                };
+                                $scope.editingCategory= { title: '' };
                                 getCategories();
                             });
                     }
@@ -698,6 +676,26 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
             })
     }
     getPosts();
+
+    function getRecentPosts() {
+        Rest.getThings('/api/forum/recentPosts')
+            .then(function(res) {
+                $scope.recentPosts = res;
+            })
+    }
+    getRecentPosts();
+
+    function getCategories() {
+        $scope.gotCategories = false;
+        Rest.getThings('/api/forum')
+            .then(function(categories) {
+                if(categories) {
+                    $scope.categories = categories;
+                    $scope.gotCategories = true;
+                }
+            })
+    }
+    getCategories();
     
     $scope.newPost = {
         title: '',
@@ -745,9 +743,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         });
     };
 
-    $scope.goToPost = function(id) {
-        $location.path('/forum/' + categoryPath + '/' + id);
-    };
+    $scope.$location = $location;
 }]);
 
 dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
@@ -771,6 +767,18 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
     }
     getPost();
 
+    function getCategories() {
+        $scope.gotCategories = false;
+        Rest.getThings('/api/forum')
+            .then(function(categories) {
+                if(categories) {
+                    $scope.categories = categories;
+                    $scope.gotCategories = true;
+                }
+            })
+    }
+    getCategories();
+
     function getRecentPosts() {
         Rest.getThings('/api/forum/recentPosts')
             .then(function(res) {
@@ -778,6 +786,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
             })
     }
     getRecentPosts();
+
+    $scope.$location = $location;
 
     $scope.editPostDialog = function() {
         $mdDialog.show({

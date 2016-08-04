@@ -1,177 +1,199 @@
-<div layout="row" layout-padding>
-
-    <div flex="80">
-        <!-- Post -->
-        <md-card>
-            <md-card-title>
-                <md-card-title-media style="margin-right: 15px;">
-                    <img ng-src="{{post.authour.avatarMedium}}" alt="" class="md-media card-media md-avatar circle">
-                </md-card-title-media>
-                <md-card-title-text>
-                    <span class="md-headline wrap-word">{{post.title}}</span>
-                    <span class="md-subhead">By {{post.authour.name}}</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content>
-                <p class="wrap-word">{{post.content}}</p>
-                <md-divider style="padding-bottom: 10px;"></md-divider>
-                <div layout="row" layout-align="center center">
-                    <md-icon class="icon-left-of-text" md-colors="{color: 'orange-500'}">access_time</md-icon>
-                    <span class="md-subhead info-colour" am-time-ago="post.createdAt"></span>
-                    <span flex></span>
-                    <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
-                    <span class="md-subhead info-colour">
-                        <span ng-show="post.comments[0]._id">{{post.comments.length}}</span>
-                        <span ng-hide="post.comments[0]._id">0</span>
-                    </span>
-                </div>
-            </md-card-content>
-            <md-card-actions layout="row" layout-align="end center" ng-show="user">
-                <md-button class="md-icon-button md-accent" ng-click="editPostDialog()">
-                    <md-icon>edit</md-icon>
-                    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit post</md-tooltip>
-                </md-button>
-                <md-button class="md-icon-button md-accent" ng-click="confirmDeletePost()">
-                    <md-icon>delete</md-icon>
-                    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete post</md-tooltip>
-                </md-button>
-            </md-card-actions>
-        </md-card>
-
-        <!-- Comment Form -->
-        <form style="margin: 8px">
-            <md-input-container layout="row">
-                <div flex>
-                    <label ng-show="user">Comment</label>
-                    <label ng-hide="user">Sign in to comment</label>
-                    <textarea class="md-accent" ng-model="newComment.comment" ng-disabled="!user"></textarea>
-                </div>
-                <md-button class="md-fab md-mini md-primary" ng-show="user" ng-disabled="newComment.comment === ''" ng-click="createComment()">
-                    <md-icon>send</md-icon>
-                    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Post Comment</md-tooltip>
-                </md-button>
-            </md-input-container>
-        </form>
-
-        <!-- Comments -->
-        <div ng-show="post.comments[0]._id">
-            <md-subheader class="md-accent md-no-sticky">Comments</md-subheader>
-            <md-card ng-repeat="comment in post.comments">
-                <md-card-title>
-                    <md-card-title-media style="margin-right: 15px;" layout="row" layout-align="center center">
-                        <img ng-src="{{comment.authour.avatar}}" alt="" class="md-media card-media md-avatar circle">
-                    </md-card-title-media>
-                    <md-card-title-text>
-                        <span class="md-title wrap-word">{{comment.authour.name}}</span>
-                        <span class="md-subhead" am-time-ago="comment.createdAt"></span>
-                    </md-card-title-text>
-                </md-card-title>
-                <md-card-content>
-                    <p class="wrap-word" ng-hide="editingComment">{{comment.comment}}</p>
-                    <md-input-container class="md-block" ng-if="editingComment">
-                        <label>Comment</label>
-                        <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user"></textarea>
-                    </md-input-container>
-                </md-card-content>
-                <md-card-actions layout="row" layout-align="end center" ng-show="user">
-                    <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="editingComment = true">
-                        <md-icon>edit</md-icon>
-                        <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
-                    </md-button>
-                    <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="confirmDeleteComment(comment._id)">
-                        <md-icon>delete</md-icon>
-                        <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
-                    </md-button>
-                    <md-button class="md-accent" ng-show="editingComment" ng-click="editingComment = false">Cancel</md-button>
-                    <md-button class="md-raised md-accent" ng-show="editingComment" ng-click="updateComment(comment)">Update</md-button>
-                </md-card-actions>
-            </md-card>
-        </div>
-    </div>
-
-    <div layout="column" flex="20">
-        <!-- Recent Posts -->
-        <md-card>
-            <md-toolbar class="md-toolbar-tools md-accent">
-                <span>More Discussions</span>
-            </md-toolbar>
-            <md-list>
-                <md-list-item class="md-2-line" ng-click="null" ng-repeat="recentPost in recentPosts">
-                    <div class="md-list-item-text" layout="row" layout-align="center center">
-                        <div layout="column" flex>
-                            <h3>{{recentPost.title}}</h3>
-                            <h4 class="info-colour">By {{post.authour.name}}</h4>
-                        </div>
-                        <div layout="row" flex="20">
+<div layout="row">
+    <div flex></div>
+    <div flex-gt-sm="70" flex="90">
+        <md-subheader class="md-no-sticky">
+            <a href="/forum" class="md-accent no-underline">Home</a>
+            <md-icon class="material-icons md-18 md-accent">keyboard_arrow_right</md-icon>
+            <a ng-href="{{post.category.path}}" class="md-accent no-underline">{{post.category.title}}</a>
+            <md-icon class="material-icons md-18 md-accent">keyboard_arrow_right</md-icon>
+            <a ng-href="{{post.category.path}}/{{post._id}}" class="md-accent no-underline">{{post.title | limitTo: 100}}</a>
+        </md-subheader>
+        <div layout="row">
+            <div flex="75" layout="column">
+                <md-card>
+                    <md-card-title>
+                        <md-card-title-media style="margin-right: 15px;">
+                            <img ng-src="{{post.authour.avatarMedium}}" alt="" class="md-media card-media md-avatar circle">
+                        </md-card-title-media>
+                        <md-card-title-text>
+                            <span class="md-headline wrap-word">{{post.title}}</span>
+                            <span class="md-subhead">By <a ng-href="/user/{{post.authour._id}}" class="md-accent no-underline">{{post.authour.name}}</a></span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-content>
+                        <p class="wrap-word">{{post.content}}</p>
+                        <md-divider style="padding-bottom: 10px;"></md-divider>
+                        <div layout="row" layout-align="center center">
+                            <md-icon class="icon-left-of-text" md-colors="{color: 'orange-500'}">access_time</md-icon>
+                            <span class="md-subhead info-colour" am-time-ago="post.createdAt"></span>
+                            <span flex></span>
                             <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
                             <span class="md-subhead info-colour">
-                                <span ng-show="recentPost.comments[0]">{{recentPost.comments.length}}</span>
-                                <span ng-hide="recentPost.comments[0]">0</span>
+                                <span ng-show="post.comments[0]._id">{{post.comments.length}}</span>
+                                <span ng-hide="post.comments[0]._id">0</span>
                             </span>
                         </div>
-                    </div>
-                </md-list-item>
-            </md-list>
-        </md-card>
-    </div>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center" ng-show="user">
+                        <md-button class="md-icon-button md-accent" ng-click="editPostDialog()">
+                            <md-icon>edit</md-icon>
+                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit post</md-tooltip>
+                        </md-button>
+                        <md-button class="md-icon-button md-accent" ng-click="confirmDeletePost()">
+                            <md-icon>delete</md-icon>
+                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete post</md-tooltip>
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
 
-    <!-- Edit Post Dialog -->
-    <div style="visibility: hidden">
-        <div class="md-dialog-container" id="editPost">
-            <md-dialog aria-label="Edit {{post.title}}" flex-gt-sm="50" flex>
-                <md-toolbar class="md-toolbar-tools">
-                    <span>Edit {{post.title}}</span>
-                </md-toolbar>
-                <md-dialog-content class="md-dialog-content">
-                    <form>
-                        <md-input-container class="md-block">
-                            <label>Title</label>
-                            <input ng-model="post.title" md-auto-focus>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Content</label>
-                            <textarea ng-model="post.content"></textarea>
-                        </md-input-container>
-                    </form>
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <div flex></div>
-                    <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                    <md-button class="md-primary md-raised" ng-click="updatePost()">Update</md-button>
-                </md-dialog-actions>
-            </md-dialog>
+                <!-- Comments -->
+                <div ng-show="post.comments[0]._id">
+                    <md-subheader class="md-accent md-no-sticky">Comments</md-subheader>
+                    <md-card ng-repeat="comment in post.comments">
+                        <md-card-title>
+                            <md-card-title-media style="margin-right: 15px;" layout="row" layout-align="center center">
+                                <img ng-src="{{comment.authour.avatar}}" alt="" class="md-media card-media md-avatar circle">
+                            </md-card-title-media>
+                            <md-card-title-text>
+                                <span class="md-title wrap-word">{{comment.authour.name}}</span>
+                                <span class="md-subhead" am-time-ago="comment.createdAt"></span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content>
+                            <pre class="wrap-word" ng-hide="editingComment">{{comment.comment}}</pre>
+                            <md-input-container class="md-block" ng-if="editingComment">
+                                <label>Comment</label>
+                                <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user"></textarea>
+                            </md-input-container>
+                        </md-card-content>
+                        <md-card-actions layout="row" layout-align="end center" ng-show="user">
+                            <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="editingComment = true">
+                                <md-icon>edit</md-icon>
+                                <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
+                            </md-button>
+                                <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="confirmDeleteComment(comment._id)">
+                                <md-icon>delete</md-icon>
+                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
+                            </md-button>
+                            <md-button class="md-accent" ng-show="editingComment" ng-click="editingComment = false">Cancel</md-button>
+                            <md-button class="md-raised md-accent" ng-show="editingComment" ng-click="updateComment(comment)">Update</md-button>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+
+                <!-- Comment Form -->
+                <form style="margin: 8px">
+                    <md-input-container layout="row">
+                        <div flex>
+                            <label ng-show="user">Comment</label>
+                            <label ng-hide="user">Sign in to comment</label>
+                            <textarea class="md-accent" ng-model="newComment.comment" ng-disabled="!user"></textarea>
+                        </div>
+                        <md-button class="md-fab md-mini md-primary" ng-show="user" ng-disabled="newComment.comment === ''" ng-click="createComment()">
+                            <md-icon>send</md-icon>
+                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Post Comment</md-tooltip>
+                        </md-button>
+                    </md-input-container>
+                </form>
+            </div>
+            <div flex="25" layout="column">
+                <md-subheader class="md-no-sticky">Categories</md-subheader>
+                <md-card>
+                    <md-list>
+                        <md-list-item ng-repeat="category in categories" ng-click="$location.path(category.path)">
+                            <div class="md-list-item-text" layout="row" layout-align="center center">
+                                <span>{{category.title}}</span>
+                                <div class="md-secondary" layout="row">
+                                    <md-icon class="icon-left-of-text" md-colors="{color: 'green-500'}">message</md-icon>
+                                    <span class="md-subhead">
+                                        <span ng-show="category.posts[0]">{{category.__v}}</span>
+                                        <span ng-hide="category.posts[0]">0</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-card>
+
+                <md-subheader class="md-no-sticky">Recent Discussions</md-subheader>
+                <md-card>
+                    <md-list>
+                        <md-list-item ng-repeat="recentPost in recentPosts" ng-click="$location.path(recentPost.category.path + '/' + recentPost._id)">
+                            <div class="md-list-item-text" layout="row" layout-align="center center">
+                                <span>{{recentPost.title | limitTo: 22}}</span>
+                                <div class="md-secondary" layout="row">
+                                    <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
+                                    <span class="md-subhead">
+                                        <span ng-show="recentPost.posts[0]">{{recentPost.__v}}</span>
+                                        <span ng-hide="recentPost.posts[0]">0</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-card>
+            </div>
         </div>
     </div>
+    <div flex></div>
+</div>
 
-    <!-- Delete Post Dialog Confirm -->
-    <div style="visibility: hidden">
-        <div class="md-dialog-container" id="deletePost">
-            <md-dialog aria-label="Delete {{post.title}}">
-                <md-dialog-content class="md-dialog-content">
-                    <p class="md-headline">Delete {{post.title}} forever?</p>
-                    <p class="md-subhead">You won't be able to undo this!</p>
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                    <md-button class="md-primary md-raised" ng-click="deletePost()">Delete</md-button>
-                </md-dialog-actions>
-            </md-dialog>
-        </div>
+<!-- Edit Post Dialog -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="editPost">
+        <md-dialog aria-label="Edit {{post.title}}" flex-gt-sm="50" flex>
+            <md-toolbar class="md-toolbar-tools">
+                <span class="truncate">Edit {{post.title}}</span>
+            </md-toolbar>
+            <md-dialog-content class="md-dialog-content">
+                <form>
+                    <md-input-container class="md-block">
+                        <label>Title</label>
+                        <input ng-model="post.title" md-auto-focus>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Content</label>
+                        <textarea ng-model="post.content"></textarea>
+                    </md-input-container>
+                </form>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <div flex></div>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="updatePost()">Update</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
+</div>
 
-    <!-- Delete Comment Dialog Confirm -->
-    <div style="visibility: hidden">
-        <div class="md-dialog-container" id="deleteComment">
-            <md-dialog aria-label="Delete Comment">
-                <md-dialog-content class="md-dialog-content">
-                    <p class="md-headline">Delete this comment forever?</p>
-                    <p class="md-subhead">You won't be able to undo this!</p>
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                    <md-button class="md-primary md-raised" ng-click="deleteComment()">Delete</md-button>
-                </md-dialog-actions>
-            </md-dialog>
-        </div>
+<!-- Delete Post Dialog Confirm -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="deletePost">
+        <md-dialog aria-label="Delete {{post.title}}">
+            <md-dialog-content class="md-dialog-content">
+                <p class="md-headline">Delete {{post.title}} forever?</p>
+                <p class="md-subhead">You won't be able to undo this!</p>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="deletePost()">Delete</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+    </div>
+</div>
+
+<!-- Delete Comment Dialog Confirm -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="deleteComment">
+        <md-dialog aria-label="Delete Comment">
+            <md-dialog-content class="md-dialog-content">
+                <p class="md-headline">Delete this comment forever?</p>
+                <p class="md-subhead">You won't be able to undo this!</p>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="deleteComment()">Delete</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
 </div>

@@ -8,19 +8,19 @@
                     <md-toolbar class="md-toolbar-tools">
                         <h3>All Categories</h3>
                     </md-toolbar>
-                    <section ng-repeat="category in categories" layout-padding>
+                    <section ng-repeat="category in categories">
                         <md-subheader class="no-bg-col md-no-sticky"><a ng-href="{{category.path}}" class="md-accent md-hue-1 no-underline">{{category.title}}</a></md-subheader>
                         <md-list>
-                            <md-list-item ng-hide="category.posts[0]">
+                            <md-list-item ng-hide="category.posts[0]" layout-padding>
                                 <div class="md-list-item-text" flex>
-                                    <p layout-padding>Looks like no one else has posted in this category yet. Why not start things off?</p>
+                                    <p>Looks like no one else has posted in this category yet. Why not start things off?</p>
                                     <md-button class="md-raised md-primary" ng-click="newPost.category = category; newPostDialog()" ng-disabled="!user">
                                         <span ng-show="user">New Post</span>
                                         <span ng-hide="user">Sign in to Post</span>
                                     </md-button>
                                 </div>
                             </md-list-item>
-                            <md-list-item class="md-2-line" ng-repeat="post in category.posts" ng-click="goToPath(category.path + '/' + post._id)">
+                            <md-list-item class="md-2-line" ng-repeat="post in category.posts" ng-click="$location.path(category.path + '/' + post._id)">
                                 <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="">
                                 <div class="md-list-item-text">
                                     <h3 flex="90">{{post.title}}</h3>
@@ -58,7 +58,7 @@
                 <md-subheader class="md-no-sticky">Categories</md-subheader>
                 <md-card>
                     <md-list>
-                        <md-list-item ng-repeat="category in categories" ng-click="goToPath(category.path)">
+                        <md-list-item ng-repeat="category in categories" ng-click="$location.path(category.path)">
                             <div class="md-list-item-text" layout="row" layout-align="center center">
                                 <span>{{category.title}}</span>
                                 <div class="md-secondary" layout="row">
@@ -66,6 +66,24 @@
                                     <span class="md-subhead">
                                         <span ng-show="category.posts[0]">{{category.__v}}</span>
                                         <span ng-hide="category.posts[0]">0</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-card>
+
+                <md-subheader class="md-no-sticky">Recent Discussions</md-subheader>
+                <md-card>
+                    <md-list>
+                        <md-list-item ng-repeat="recentPost in recentPosts" ng-click="$location.path(recentPost.category.path + '/' + recentPost._id)">
+                            <div class="md-list-item-text" layout="row" layout-align="center center">
+                                <span>{{recentPost.title | limitTo: 22}}</span>
+                                <div class="md-secondary" layout="row">
+                                    <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
+                                    <span class="md-subhead">
+                                        <span ng-show="recentPost.posts[0]">{{recentPost.__v}}</span>
+                                        <span ng-hide="recentPost.posts[0]">0</span>
                                     </span>
                                 </div>
                             </div>
@@ -129,16 +147,7 @@
                 <form>
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="newCategory.title" md-autofocus>
-                    </md-input-container>
-                    <p>Icons can be found <a href="https://design.google.com/icons/" target="_blank" class="md-accent">here</a>. Make sure you type it in all lower case and instead of a space, put an underscore.</p>
-                    <md-input-container>
-                        <label>Icon</label>
-                        <input ng-model="newCategory.icon">
-                    </md-input-container>
-                    <md-input-container class="md-block">
-                        <label>Description</label>
-                        <textarea ng-model="newCategory.description"></textarea>
+                        <input ng-model="newCategory" md-autofocus>
                     </md-input-container>
                 </form>
             </md-dialog-content>
@@ -170,15 +179,6 @@
                     <md-input-container class="md-block">
                         <label>Title</label>
                         <input ng-model="editingCategory.title" ng-disabled="editingCategory === null">
-                    </md-input-container>
-                    <p>Icons can be found <a href="https://design.google.com/icons/" target="_blank" class="md-accent">here</a>. Make sure you type it in all lower case and instead of a space, put an underscore.</p>
-                    <md-input-container>
-                        <label>Icon</label>
-                        <input ng-model="editingCategory.icon" ng-disabled="editingCategory === null">
-                    </md-input-container>
-                    <md-input-container class="md-block">
-                        <label>Description</label>
-                        <textarea ng-model="editingCategory.description" ng-disabled="editingCategory === null"></textarea>
                     </md-input-container>
                 </form>
             </md-dialog-content>
