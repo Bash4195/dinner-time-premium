@@ -9,6 +9,17 @@ var Comment = require('../models/forumComment');
 
 /////////////////// Categories ////////////////////////////
 
+// Get the number of posts in a category
+router.get('/api/forum/allCategories', function(req, res) {
+    Category.find({}, function(err, categories) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve forum categories');
+        } else {
+            res.status(200).json(categories);
+        }
+    });
+});
+
 // INDEX
 router.get('/api/forum', function(req, res) {
     Category.find({}).populate({path: 'posts', populate: {path: 'authour'}, options: {sort: { updatedAt: -1 }, limit: 6}}).exec(function(err, categories) {
@@ -188,6 +199,15 @@ router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(
         if(err) {
             middleware.handleError(res, err.message, 'Failed to delete post');
         } else {
+            Category.findById(post.category, function(err, category) {
+                if(err) {
+                    middleware.handleError(res, err.message, 'Failed to delete post');
+                } else {
+                    var postToRemove = category.posts.indexOf(post._id);
+                    category.posts.splice(postToRemove, 1);
+                    category.save();
+                }
+            });
             post.comments.forEach(function(comment) {
                 Comment.findByIdAndRemove(comment, function(err) {
                     if(err) {

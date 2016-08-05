@@ -483,6 +483,18 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
     }
     getCategories();
 
+    function getCategoryPosts() {
+        $scope.gotCategoryPosts = false;
+        Rest.getThings('/api/forum/allCategories')
+            .then(function(categoryPosts) {
+                if(categoryPosts) {
+                    $scope.categoryPosts = categoryPosts;
+                    $scope.gotCategoryPosts = true;
+                }
+            })
+    }
+    getCategoryPosts();
+
     function getRecentPosts() {
         Rest.getThings('/api/forum/recentPosts')
             .then(function(res) {
@@ -687,7 +699,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
 
     function getCategories() {
         $scope.gotCategories = false;
-        Rest.getThings('/api/forum')
+        Rest.getThings('/api/forum/allCategories')
             .then(function(categories) {
                 if(categories) {
                     $scope.categories = categories;
@@ -769,7 +781,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
 
     function getCategories() {
         $scope.gotCategories = false;
-        Rest.getThings('/api/forum')
+        Rest.getThings('/api/forum/allCategories')
             .then(function(categories) {
                 if(categories) {
                     $scope.categories = categories;

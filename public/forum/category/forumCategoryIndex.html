@@ -21,7 +21,7 @@
                                 </div>
                             </md-list-item>
                             <md-list-item class="md-2-line" ng-repeat="post in category.posts" ng-click="$location.path(category.path + '/' + post._id)">
-                                <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="">
+                                <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="../../assets/img/blank_user.png">
                                 <div class="md-list-item-text">
                                     <h3 flex="90">{{post.title}}</h3>
                                     <div layout="row">
@@ -58,13 +58,13 @@
                 <md-subheader class="md-no-sticky">Categories</md-subheader>
                 <md-card>
                     <md-list>
-                        <md-list-item ng-repeat="category in categories" ng-click="$location.path(category.path)">
+                        <md-list-item ng-repeat="category in categoryPosts" ng-click="$location.path(category.path)">
                             <div class="md-list-item-text" layout="row" layout-align="center center">
                                 <span>{{category.title}}</span>
                                 <div class="md-secondary" layout="row">
                                     <md-icon class="icon-left-of-text" md-colors="{color: 'green-500'}">message</md-icon>
                                     <span class="md-subhead">
-                                        <span ng-show="category.posts[0]">{{category.__v}}</span>
+                                        <span ng-show="category.posts[0]">{{category.posts.length}}</span>
                                         <span ng-hide="category.posts[0]">0</span>
                                     </span>
                                 </div>
