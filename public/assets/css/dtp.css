@@ -187,32 +187,3 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
 .icon-left-of-text {
     margin-right: 5px;
 }
-
-/* Transitions */
-.fadeout.ng-hide-add {
-    animation: 0.5s fadeOut ease;
-}
-
-.fadein.ng-hide-remove {
-    animation: 0.5s fadeIn ease;
-}
-
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeOut {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}

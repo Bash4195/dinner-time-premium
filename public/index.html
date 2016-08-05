@@ -90,12 +90,19 @@
 
         <!-- User options -->
 
-        <md-button layout="row" class="md-icon-button fadein fadeout" style="min-width: 40px;" ng-hide="lockOnlineUsers"
-                   ng-click="toggleLockOnlineUsers()" hide show-gt-md>
+        <md-button layout="row" class="md-icon-button fadein fadeout" style="min-width: 40px;" ng-hide="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
             <div class="online-dot"></div>
             <md-icon>account_circle</md-icon>
             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
                 Show online users
+            </md-tooltip>
+        </md-button>
+
+        <md-button layout="row" class="md-icon-button fadein fadeout" style="min-width: 40px;" ng-show="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
+            <div class="online-dot"></div>
+            <md-icon>account_circle</md-icon>
+            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
+                Hide online users
             </md-tooltip>
         </md-button>
 
@@ -171,11 +178,12 @@
         <!-- Online Users Sidenav -->
 
         <md-sidenav class="md-sidenav-right" md-component-id="onlineUsers" md-is-locked-open="$mdMedia('gt-md') && lockOnlineUsers">
-            <md-toolbar layout="row" layout-align="center center">
-                <md-button class="md-icon-button" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
-                    <md-icon>keyboard_arrow_right</md-icon>
+            <md-toolbar class="md-toolbar-tools" layout="row" layout-align="center center">
+                <span>Online Users</span>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="getOnlineUsers()" hide show-gt-md>
+                    <md-icon>refresh</md-icon>
                 </md-button>
-                <span flex="80">Online Users</span>
             </md-toolbar>
             <md-list>
                 <div ng-hide="gotOnlineUsers" layout="column" layout-align="center center" layout-padding flex>

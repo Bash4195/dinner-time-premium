@@ -227,10 +227,18 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         });
     }
 
-    getOnlineUsers();
+    $scope.getOnlineUsers = function() {
+        $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
+        User.getOnlineUsers()
+            .then(function(users) {
+                $scope.onlineUsers = users;
+                $scope.gotOnlineUsers = true;
+            })
+    };
+    $scope.getOnlineUsers();
 
     $interval(function() { // Update online user list every 5 minutes
-        getOnlineUsers();
+        $scope.getOnlineUsers();
     }, 300000);
 
     // Side navs
@@ -244,14 +252,14 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
     $scope.toggleOnlineUsers = function() {
         $mdSidenav('onlineUsers').toggle();
         if($mdSidenav('onlineUsers').isOpen()) {
-            getOnlineUsers();
+            $scope.getOnlineUsers();
         }
     };
 
     $scope.toggleLockOnlineUsers = function() {
         $scope.lockOnlineUsers = !$scope.lockOnlineUsers;
         if($scope.lockOnlineUsers) {
-            getOnlineUsers();
+            $scope.getOnlineUsers();
         }
     };
 
@@ -259,15 +267,6 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         $scope.toggleLeft();
         $scope.toggleOnlineUsers();
     };
-
-    function getOnlineUsers() {
-        $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
-        User.getOnlineUsers()
-            .then(function(users) {
-                $scope.onlineUsers = users;
-                $scope.gotOnlineUsers = true;
-            })
-    }
 
     // Used to set the active nav button
     $scope.activeNav = function (path) {
@@ -350,7 +349,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         //     // Reset user values
         //     User.currentuser = '';
         //     $scope.user = null;
-        //     getOnlineUsers();
+        //     $scope.getOnlineUsers();
         // }
 
         function resetTimers() {
