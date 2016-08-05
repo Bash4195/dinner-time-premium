@@ -587,6 +587,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                             .then(function() {
                                 $scope.newCategory = '';
                                 getCategories();
+                                getRecentPosts();
+                                getCategoryPosts();
                             });
                     }
                 };
@@ -624,6 +626,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                             .then(function() {
                                 $scope.editingCategory= { title: '' };
                                 getCategories();
+                                getRecentPosts();
+                                getCategoryPosts();
                             });
                     }
                 };
@@ -655,6 +659,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                                     icon: ''
                                 };
                                 getCategories();
+                                getRecentPosts();
+                                getCategoryPosts();
                             })
                     };
                 }
@@ -741,12 +747,12 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                             authour: $scope.user
                         };
                         Rest.newThing('/api/forum/' + categoryPath, newPost)
-                            .then(function() {
+                            .then(function(post) {
                                 $scope.newPost = {
                                     title: '',
                                     content: ''
                                 };
-                                getPosts();
+                                $location.path($scope.category.path + '/' + post._id)
                             });
                     }
                 };
@@ -878,6 +884,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                 .then(function() {
                     $scope.newComment.comment = '';
                     getPost();
+                    getRecentPosts();
                 });
         }
     };
@@ -897,6 +904,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
             Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + comment._id, updatedComment)
                 .then(function() {
                     getPost();
+                    getRecentPosts();
                 })
         }
     };
@@ -920,6 +928,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                         Rest.deleteThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + commentId)
                             .then(function() {
                                 getPost();
+                                getRecentPosts();
                             })
                     }
                 };

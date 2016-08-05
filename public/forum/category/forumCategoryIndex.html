@@ -8,7 +8,7 @@
                     <md-toolbar class="md-toolbar-tools">
                         <h3>All Categories</h3>
                     </md-toolbar>
-                    <section ng-repeat="category in categories">
+                    <section ng-repeat="category in categories | orderBy: 'createdAt'">
                         <md-subheader class="no-bg-col md-no-sticky"><a ng-href="{{category.path}}" class="md-accent md-hue-1 no-underline">{{category.title}}</a></md-subheader>
                         <md-list>
                             <md-list-item ng-hide="category.posts[0]" layout-padding>
