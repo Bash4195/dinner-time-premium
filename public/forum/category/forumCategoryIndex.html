@@ -21,7 +21,7 @@
                                 </div>
                             </md-list-item>
                             <md-list-item class="md-2-line" ng-repeat="post in category.posts" ng-click="$location.path(category.path + '/' + post._id)">
-                                <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="../../assets/img/blank_user.png">
+                                <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="">
                                 <div class="md-list-item-text">
                                     <h3 flex="90">{{post.title}}</h3>
                                     <div layout="row">
