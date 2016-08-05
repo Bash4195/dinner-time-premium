@@ -358,7 +358,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
             // $timeout.cancel(warningTimer);
             $timeout.cancel(awayStatusTimeout);
 
-            if($scope.user.onlineStatus == 'Away') {
+            if($scope.user.onlineStatus === 'Away') {
                 User.updateOnlineStatus($scope.user._id, 'Online');
                 $scope.user.onlineStatus = 'Online';
             }
