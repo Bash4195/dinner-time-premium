@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var forumCommentSchema = mongoose.Schema({
-    comment: { type: String, required: true },
+    comment: { type: String, required: true, maxlength: 1000 },
     post: { type: mongoose.Schema.Types.ObjectId, ref: 'Forum_Post' },
     authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     editedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', date: { type: Date, default: Date.now() } }
