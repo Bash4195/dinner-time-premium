@@ -669,8 +669,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
     };
 }]);
 
-dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
-function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
+dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location', '$http',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, $http) {
 
     var categoryPath = $routeParams.categoryPath;
 
@@ -678,21 +678,48 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         $scope.user = User.currentUser;
     }
 
-    $scope.gotPosts = false;
-
-    function getPosts() {
-        $scope.gotPosts = false;
-        Rest.getThings('/api/forum/' + categoryPath)
+    function getCategory() {
+        Rest.getThing('/api/forum/singleCategory/' + categoryPath)
             .then(function(res) {
-                $scope.posts = res.posts;
                 $scope.category = res;
-                $scope.gotPosts = true;
+                $scope.postLabels = [1];
 
                 Title.setTitle($scope.category.title);
                 Title.setPageTitle($scope.category.title);
+
+                var count = 0;
+                var postsPerPage = 20;
+                $scope.category.posts.forEach(function() {
+                    count++;
+                    if(count > postsPerPage) {
+                        var nextPage = $scope.postLabels.length + 1;
+                        $scope.postLabels.push(nextPage);
+                        postsPerPage += 20;
+                    }
+                });
             })
     }
-    getPosts();
+    getCategory();
+
+    $scope.gotPosts = false;
+    
+    $scope.getPosts = function(label) {
+        $scope.gotPosts = false;
+        var skip = (label - 1) * 20;
+        $http.get('/api/forum/' + categoryPath, {params: {skip: skip}})
+            .then(function(res) {
+                $scope.posts = res.data.posts;
+                console.log($scope.posts);
+                $scope.gotPosts = true;
+            }, function(res) {
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Failed to retrieve posts');
+                }
+            });
+    };
+    $scope.getPosts(1);
 
     function getRecentPosts() {
         Rest.getThings('/api/forum/recentPosts')

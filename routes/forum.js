@@ -120,14 +120,27 @@ router.get('/api/forum/recentPosts', function(req, res) {
     })
 });
 
-// INDEX
-router.get('/api/forum/:categoryPath', function(req, res) {
-    Category.findOne({path: '/forum/' + req.params.categoryPath}).populate({path: 'posts', populate: {path: 'authour'}}).exec(function(err, category) {
+// Category - used to count the posts and use other category attributes
+router.get('/api/forum/singleCategory/:categoryPath', function(req, res) {
+    Category.findOne({path: '/forum/' + req.params.categoryPath}, function(err, category) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve category');
         } else {
-            res.status(200).json(category); // Including posts
+            res.status(200).json(category);
         }
+    });
+});
+
+// INDEX
+// Returns the category but is only used for the posts in said category
+router.get('/api/forum/:categoryPath', function(req, res) {
+    Category.findOne({path: '/forum/' + req.params.categoryPath})
+        .populate({path: 'posts', populate: {path: 'authour'}, options: {skip: req.query.skip, limit: 20, sort: {'updatedAt': -1}}}).exec(function(err, posts) {
+            if(err) {
+                middleware.handleError(res, err.message, 'Failed to retrieve posts');
+            } else {
+                res.status(200).json(posts);
+            }
     });
 });
 
