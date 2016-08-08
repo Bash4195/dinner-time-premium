@@ -17,15 +17,21 @@
                         </md-card-title-media>
                         <md-card-title-text>
                             <span class="md-headline wrap-word">{{post.title}}</span>
-                            <span class="md-subhead">By <a ng-href="/user/{{post.authour._id}}" class="md-accent no-underline">{{post.authour.name}}</a></span>
+                            <span class="md-subhead">
+                                By <a ng-href="/user/{{post.authour._id}}" class="md-accent no-underline">{{post.authour.name}}</a>
+                                <span am-time-ago="post.createdAt"></span>
+                            </span>
                         </md-card-title-text>
                     </md-card-title>
                     <md-card-content>
                         <p class="wrap-word">{{post.content}}</p>
                         <md-divider style="padding-bottom: 10px;"></md-divider>
                         <div layout="row" layout-align="center center">
-                            <md-icon class="icon-left-of-text" md-colors="{color: 'orange-500'}">access_time</md-icon>
-                            <span class="md-subhead info-colour" am-time-ago="post.createdAt"></span>
+                            <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}" ng-if="post.updatedAt !== post.createdAt">access_time</md-icon>
+                            <span class="md-subhead" ng-if="post.updatedAt !== post.createdAt">Edited by
+                                <a ng-href="/user/{{post.editedBy._id}}" class="no-underline" md-colors="{color: 'accent-500'}">{{post.editedBy.name}}</a>
+                                <span class="md-subhead" am-time-ago="post.updatedAt"></span>
+                            </span>
                             <span flex></span>
                             <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
                             <span class="md-subhead info-colour">
@@ -67,15 +73,24 @@
                                         <label>Comment</label>
                                         <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user"></textarea>
                                     </md-input-container>
+                                    <div ng-if="comment.updatedAt !== comment.createdAt">
+                                        <md-divider style="padding-bottom: 10px;"></md-divider>
+                                        <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}">access_time</md-icon>
+                                        <span class="md-subhead">Edited by
+                                            <a ng-href="/user/{{comment.editedBy._id}}" class="no-underline" md-colors="{color: 'accent-500'}">{{comment.editedBy.name}}</a>
+                                            <span class="md-subhead" am-time-ago="post.updatedAt"></span>
+                                        </span>
+                                        <span flex></span>
+                                    </div>
                                 </md-card-content>
                                 <md-card-actions layout="row" layout-align="end center" ng-show="user">
                                     <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="editingComment = true">
                                         <md-icon>edit</md-icon>
                                         <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
                                     </md-button>
-                                        <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="confirmDeleteComment(comment._id)">
+                                    <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="confirmDeleteComment(comment._id)">
                                         <md-icon>delete</md-icon>
-                                    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
+                                        <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
                                     </md-button>
                                     <md-button class="md-accent" ng-show="editingComment" ng-click="editingComment = false">Cancel</md-button>
                                     <md-button class="md-raised md-accent" ng-show="editingComment" ng-click="updateComment(comment)">Update</md-button>

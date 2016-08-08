@@ -177,7 +177,7 @@ router.post('/api/forum/:categoryPath', middleware.isLoggedIn, function(req, res
 
 // SHOW
 router.get('/api/forum/:categoryPath/:postId', function(req, res) {
-    Post.findById(req.params.postId).populate('authour category').exec(function(err, post) {
+    Post.findById(req.params.postId).populate('authour category editedBy').exec(function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to find post');
         } else {
@@ -246,7 +246,7 @@ router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(
 // INDEX
 router.get('/api/forum/:categoryPath/:postId/comments', function(req, res) {
     Post.findById(req.params.postId)
-        .populate({path: 'comments', populate: {path: 'authour'}, options: {skip: req.query.skip, limit: 20, sort: {createdAt: 1}}}).exec(function(err, comments) {
+        .populate({path: 'comments', populate: {path: 'authour editedBy'}, options: {skip: req.query.skip, limit: 20, sort: {createdAt: 1}}}).exec(function(err, comments) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve comments');
         } else {

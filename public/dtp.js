@@ -802,6 +802,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
     function getPost() {
         Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
             .then(function(res) {
+                console.log(res);
                 $scope.post = res;
                 $scope.commentLabels = [1];
 
@@ -830,6 +831,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
         var skip = (label - 1) * 20;
         $http.get('/api/forum/' + categoryPath + '/' + $scope.post._id + '/comments', {params: {skip: skip}})
             .then(function(res) {
+                console.log(res);
                 $scope.comments = res.data.comments;
                 $scope.gotComments = true;
             }, function(res) {
