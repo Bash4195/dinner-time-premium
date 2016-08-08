@@ -112,7 +112,7 @@
             </md-dialog-content>
             <md-dialog-actions>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                <md-button class="md-primary md-raised" ng-click="createPost()">Create</md-button>
+                <md-button class="md-primary md-raised" ng-click="createPost()" ng-disabled="!newPost.title || !newPost.content">Create</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>
