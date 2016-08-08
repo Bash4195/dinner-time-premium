@@ -78,7 +78,7 @@
                                         <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}">access_time</md-icon>
                                         <span class="md-subhead">Edited by
                                             <a ng-href="/user/{{comment.editedBy._id}}" class="no-underline" md-colors="{color: 'accent-500'}">{{comment.editedBy.name}}</a>
-                                            <span class="md-subhead" am-time-ago="post.updatedAt"></span>
+                                            <span class="md-subhead" am-time-ago="comment.updatedAt"></span>
                                         </span>
                                         <span flex></span>
                                     </div>
@@ -93,7 +93,7 @@
                                         <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
                                     </md-button>
                                     <md-button class="md-accent" ng-show="editingComment" ng-click="editingComment = false">Cancel</md-button>
-                                    <md-button class="md-raised md-accent" ng-show="editingComment" ng-click="updateComment(comment)">Update</md-button>
+                                    <md-button class="md-raised md-accent" ng-show="editingComment" ng-click="updateComment(comment)" ng-disabled="!comment.comment">Update</md-button>
                                 </md-card-actions>
                             </md-card>
                         </md-tab>
@@ -179,7 +179,7 @@
             <md-dialog-actions>
                 <div flex></div>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                <md-button class="md-primary md-raised" ng-click="updatePost()">Update</md-button>
+                <md-button class="md-primary md-raised" ng-click="updatePost()" ng-disabled="!post.title || !post.content">Update</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>
