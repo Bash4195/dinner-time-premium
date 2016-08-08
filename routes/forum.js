@@ -135,7 +135,7 @@ router.get('/api/forum/singleCategory/:categoryPath', function(req, res) {
 // Returns the category but is only used for the posts in said category
 router.get('/api/forum/:categoryPath', function(req, res) {
     Category.findOne({path: '/forum/' + req.params.categoryPath})
-        .populate({path: 'posts', populate: {path: 'authour'}, options: {skip: req.query.skip, limit: 20, sort: {'updatedAt': -1}}}).exec(function(err, posts) {
+        .populate({path: 'posts', populate: {path: 'authour'}, options: {skip: req.query.skip, limit: 20, sort: {updatedAt: -1}}}).exec(function(err, posts) {
             if(err) {
                 middleware.handleError(res, err.message, 'Failed to retrieve posts');
             } else {
@@ -177,7 +177,7 @@ router.post('/api/forum/:categoryPath', middleware.isLoggedIn, function(req, res
 
 // SHOW
 router.get('/api/forum/:categoryPath/:postId', function(req, res) {
-    Post.findById(req.params.postId).populate('authour category').populate({path: 'comments', populate: {path: 'authour'}}).exec(function(err, post) {
+    Post.findById(req.params.postId).populate('authour category').exec(function(err, post) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to find post');
         } else {
@@ -241,7 +241,19 @@ router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(
 
 
 /////////////////// Comments ////////////////////////////
-// Only need CREATE, UPDATE and DELETE
+// Only need INDEX, CREATE, UPDATE and DELETE
+
+// INDEX
+router.get('/api/forum/:categoryPath/:postId/comments', function(req, res) {
+    Post.findById(req.params.postId)
+        .populate({path: 'comments', populate: {path: 'authour'}, options: {skip: req.query.skip, limit: 20, sort: {createdAt: 1}}}).exec(function(err, comments) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve comments');
+        } else {
+            res.status(200).json(comments);
+        }
+    });
+});
 
 // CREATE
 router.post('/api/forum/:categoryPath/:postId', middleware.isLoggedIn, function(req, res) {

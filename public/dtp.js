@@ -709,7 +709,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
         $http.get('/api/forum/' + categoryPath, {params: {skip: skip}})
             .then(function(res) {
                 $scope.posts = res.data.posts;
-                console.log($scope.posts);
                 $scope.gotPosts = true;
             }, function(res) {
                 if(res.data.error) {
@@ -790,8 +789,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
     $scope.$location = $location;
 }]);
 
-dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
-function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
+dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location', '$http',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, $http) {
 
     var categoryPath = $routeParams.categoryPath;
     var postId = $routeParams.postId;
@@ -804,12 +803,43 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
             .then(function(res) {
                 $scope.post = res;
+                $scope.commentLabels = [1];
 
                 Title.setTitle($scope.post.title);
                 Title.setPageTitle($scope.post.title);
+
+                var count = 0;
+                var commentsPerPage = 20;
+                $scope.post.comments.forEach(function() {
+                    count++;
+                    if (count > commentsPerPage) {
+                        var nextPage = $scope.commentLabels.length + 1;
+                        $scope.commentLabels.push(nextPage);
+                        commentsPerPage += 20;
+                    }
+                });
+                $scope.getComments(1);
             })
     }
     getPost();
+
+    $scope.gotComments = false;
+
+    $scope.getComments = function(label) {
+        $scope.gotComments = false;
+        var skip = (label - 1) * 20;
+        $http.get('/api/forum/' + categoryPath + '/' + $scope.post._id + '/comments', {params: {skip: skip}})
+            .then(function(res) {
+                $scope.comments = res.data.comments;
+                $scope.gotComments = true;
+            }, function(res) {
+                if(res.data.error) {
+                    Notify.error(res.data.error);
+                } else {
+                    Notify.error('Failed to retrieve comments');
+                }
+            });
+    };
 
     function getCategories() {
         $scope.gotCategories = false;

@@ -29,8 +29,8 @@
                             <span flex></span>
                             <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
                             <span class="md-subhead info-colour">
-                                <span ng-show="post.comments[0]._id">{{post.comments.length}}</span>
-                                <span ng-hide="post.comments[0]._id">0</span>
+                                <span ng-show="post.comments[0]">{{post.comments.length}}</span>
+                                <span ng-hide="post.comments[0]">0</span>
                             </span>
                         </div>
                     </md-card-content>
@@ -47,38 +47,42 @@
                 </md-card>
 
                 <!-- Comments -->
-                <div ng-show="post.comments[0]._id">
-                    <md-subheader class="md-accent md-no-sticky">Comments</md-subheader>
-                    <md-card ng-repeat="comment in post.comments">
-                        <md-card-title>
-                            <md-card-title-media style="margin-right: 15px;" layout="row" layout-align="center center">
-                                <img ng-src="{{comment.authour.avatar}}" alt="" class="md-media card-media md-avatar circle">
-                            </md-card-title-media>
-                            <md-card-title-text>
-                                <span class="md-title wrap-word">{{comment.authour.name}}</span>
-                                <span class="md-subhead" am-time-ago="comment.createdAt"></span>
-                            </md-card-title-text>
-                        </md-card-title>
-                        <md-card-content>
-                            <pre class="wrap-word" ng-hide="editingComment">{{comment.comment}}</pre>
-                            <md-input-container class="md-block" ng-if="editingComment">
-                                <label>Comment</label>
-                                <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user"></textarea>
-                            </md-input-container>
-                        </md-card-content>
-                        <md-card-actions layout="row" layout-align="end center" ng-show="user">
-                            <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="editingComment = true">
-                                <md-icon>edit</md-icon>
-                                <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
-                            </md-button>
-                                <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="confirmDeleteComment(comment._id)">
-                                <md-icon>delete</md-icon>
-                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
-                            </md-button>
-                            <md-button class="md-accent" ng-show="editingComment" ng-click="editingComment = false">Cancel</md-button>
-                            <md-button class="md-raised md-accent" ng-show="editingComment" ng-click="updateComment(comment)">Update</md-button>
-                        </md-card-actions>
-                    </md-card>
+                <div ng-show="comments[0]._id">
+                    <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>
+                        <md-tab label="Page {{label}}" ng-click="getComments(label)" ng-repeat="label in commentLabels">
+                            <md-subheader class="md-accent md-no-sticky">Comments</md-subheader>
+                            <md-card ng-repeat="comment in comments">
+                                <md-card-title>
+                                    <md-card-title-media style="margin-right: 15px;" layout="row" layout-align="center center">
+                                        <img ng-src="{{comment.authour.avatar}}" alt="" class="md-media card-media md-avatar circle">
+                                    </md-card-title-media>
+                                    <md-card-title-text>
+                                        <span class="md-title wrap-word">{{comment.authour.name}}</span>
+                                        <span class="md-subhead" am-time-ago="comment.createdAt"></span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content>
+                                    <pre class="wrap-word" ng-hide="editingComment">{{comment.comment}}</pre>
+                                    <md-input-container class="md-block" ng-if="editingComment">
+                                        <label>Comment</label>
+                                        <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user"></textarea>
+                                    </md-input-container>
+                                </md-card-content>
+                                <md-card-actions layout="row" layout-align="end center" ng-show="user">
+                                    <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="editingComment = true">
+                                        <md-icon>edit</md-icon>
+                                        <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
+                                    </md-button>
+                                        <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="confirmDeleteComment(comment._id)">
+                                        <md-icon>delete</md-icon>
+                                    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
+                                    </md-button>
+                                    <md-button class="md-accent" ng-show="editingComment" ng-click="editingComment = false">Cancel</md-button>
+                                    <md-button class="md-raised md-accent" ng-show="editingComment" ng-click="updateComment(comment)">Update</md-button>
+                                </md-card-actions>
+                            </md-card>
+                        </md-tab>
+                    </md-tabs>
                 </div>
 
                 <!-- Comment Form -->
