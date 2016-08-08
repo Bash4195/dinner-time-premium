@@ -596,7 +596,10 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         });
     };
     
-    $scope.editingCategory = { title: '' };
+    $scope.editingCategory = {
+        category: '',
+        title: ''
+    };
 
     $scope.editCategoryDialog = function() {
         $mdDialog.show({
@@ -622,9 +625,12 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                             title: $scope.editingCategory.title,
                             editedBy: $scope.user
                         };
-                        Rest.updateThing('/api/forum/' + $scope.editingCategory._id, updatedCategory)
+                        Rest.updateThing('/api/forum/' + $scope.editingCategory.category._id, updatedCategory)
                             .then(function() {
-                                $scope.editingCategory= { title: '' };
+                                $scope.editingCategory = {
+                                    category: '',
+                                    title: ''
+                                };
                                 getCategories();
                                 getRecentPosts();
                                 getCategoryPosts();
@@ -651,12 +657,11 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                 } else {
                     $scope.deleteCategory = function() {
                         $mdDialog.hide();
-                        Rest.deleteThing('/api/forum/' + $scope.editingCategory._id)
+                        Rest.deleteThing('/api/forum/' + $scope.editingCategory.category._id)
                             .then(function() {
                                 $scope.editingCategory = {
-                                    title: '',
-                                    description: '',
-                                    icon: ''
+                                    category: '',
+                                    title: ''
                                 };
                                 getCategories();
                                 getRecentPosts();

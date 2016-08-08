@@ -130,7 +130,7 @@
             </md-dialog-content>
             <md-dialog-actions>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                <md-button class="md-primary md-raised" ng-click="createPost()">Create</md-button>
+                <md-button class="md-primary md-raised" ng-click="createPost()" ng-disabled="!newPost.category || !newPost.title || !newPost.content">Create</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>
@@ -153,7 +153,7 @@
             </md-dialog-content>
             <md-dialog-actions>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                <md-button class="md-primary md-raised" ng-click="createCategory()">Create</md-button>
+                <md-button class="md-primary md-raised" ng-click="createCategory()" ng-disabled="!newCategory">Create</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>
@@ -170,7 +170,7 @@
                 <form>
                     <md-input-container>
                         <label>Category</label>
-                        <md-select ng-model="editingCategory" md-auto-focus>
+                        <md-select ng-model="editingCategory.category" md-auto-focus>
                             <md-option ng-repeat="category in categories" ng-value="category">
                                 {{category.title}}
                             </md-option>
@@ -183,13 +183,13 @@
                 </form>
             </md-dialog-content>
             <md-dialog-actions>
-                <md-button class="md-icon-button md-primary" ng-click="confirmDeleteCategory()" ng-disabled="editingCategory === null">
+                <md-button class="md-icon-button md-primary" ng-click="confirmDeleteCategory()" ng-disabled="!editingCategory.category">
                     <md-icon>delete</md-icon>
                     <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete category</md-tooltip>
                 </md-button>
                 <div flex></div>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                <md-button class="md-primary md-raised" ng-click="updateCategory()">Update</md-button>
+                <md-button class="md-primary md-raised" ng-click="updateCategory()" ng-disabled="!editingCategory.category || !editingCategory.title">Update</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>
@@ -200,7 +200,7 @@
     <div class="md-dialog-container" id="deleteCategory">
         <md-dialog aria-label="Delete Category">
             <md-dialog-content class="md-dialog-content">
-                <p class="md-headline">Delete {{editingCategory.title}} forever?</p>
+                <p class="md-headline">Delete {{editingCategory.category.title}} forever?</p>
                 <p class="md-subhead">You won't be able to undo this!</p>
             </md-dialog-content>
             <md-dialog-actions>

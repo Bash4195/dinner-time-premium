@@ -108,7 +108,7 @@
                             <label ng-hide="user">Sign in to comment</label>
                             <textarea class="md-accent" ng-model="newComment.comment" ng-disabled="!user"></textarea>
                         </div>
-                        <md-button class="md-fab md-mini md-primary" ng-show="user" ng-disabled="newComment.comment === ''" ng-click="createComment()">
+                        <md-button class="md-fab md-mini md-primary" ng-show="user" ng-disabled="!newComment.comment" ng-click="createComment()">
                             <md-icon>send</md-icon>
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Post Comment</md-tooltip>
                         </md-button>
