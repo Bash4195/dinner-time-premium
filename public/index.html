@@ -61,7 +61,7 @@
             <md-list-item>
                 <md-button class="list-btn-no-radius" layout="row" layout-fill ng-click="toggleLeftAndOnlineUsers()">
                     <div layout="row" layout-align="center center" flex="40">
-                        <div class="online-dot"></div>
+                        <div class="status-online"></div>
                         <md-icon style="margin: 0">account_circle</md-icon>
                     </div>
                     <p class="left-align-text" flex="60">Online Users</p>
@@ -91,7 +91,7 @@
         <!-- User options -->
 
         <md-button layout="row" class="md-icon-button fadein fadeout" style="min-width: 40px;" ng-hide="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
-            <div class="online-dot"></div>
+            <div class="status-online"></div>
             <md-icon>account_circle</md-icon>
             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
                 Show online users
@@ -99,7 +99,7 @@
         </md-button>
 
         <md-button layout="row" class="md-icon-button fadein fadeout" style="min-width: 40px;" ng-show="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
-            <div class="online-dot"></div>
+            <div class="status-online"></div>
             <md-icon>account_circle</md-icon>
             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
                 Hide online users
@@ -196,9 +196,9 @@
                 </div>
                 <md-list-item ng-repeat="onlineUser in onlineUsers">
                     <md-button class="list-btn-no-radius" ng-href="/user/{{onlineUser._id}}" layout="row" layout-fill>
-                        <div ng-class="{'online-dot': onlineUser.onlineStatus === 'Online',
-                        'away-dot': onlineUser.onlineStatus === 'Away',
-                        'busy-dot': onlineUser.onlineStatus === 'Busy'}" flex="2">
+                        <div ng-class="{'status-online': onlineUser.onlineStatus === 'Online',
+                        'status-away': onlineUser.onlineStatus === 'Away',
+                        'status-busy': onlineUser.onlineStatus === 'Busy'}" flex="2">
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
                         </div>
                         <div flex></div>

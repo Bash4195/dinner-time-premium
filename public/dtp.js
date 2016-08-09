@@ -10,8 +10,8 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
 
         //User Routes
         .when('/user/:userId', {
-            templateUrl: 'user/userIndex.html',
-            controller: 'userIndexCtrl'
+            templateUrl: 'user/userShow.html',
+            controller: 'userShowCtrl'
         })
 
         // Forum Routes
@@ -89,18 +89,6 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
                     Notify.error(res.data.error);
                 } else {
                     Notify.error('Failed to retrieve your user information');
-                }
-            })
-    };
-    this.getOnlineUsers = function() {
-        return $http.get('/api/loggedInUsers')
-            .then(function(res) {
-                return res.data;
-            }, function(res) {
-                if(res.data.error) {
-                    Notify.error(res.data.error);
-                } else {
-                    Notify.error('Something went wrong while processing your request');
                 }
             })
     };
@@ -189,8 +177,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
 // Runs anytime any page loads up for the first time.
 // Ex. refresh or from external link. Not Angular routing
 // Used for the nav and anything on all pages
-dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$document', '$window', '$http', '$location', 'User', '$mdSidenav', '$mdMedia',
-function($scope, Title, $timeout, $interval, $document, $window, $http, $location, User, $mdSidenav, $mdMedia) {
+dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$document', '$window', '$http', '$location', 'User', 'Rest', '$mdSidenav', '$mdMedia',
+function($scope, Title, $timeout, $interval, $document, $window, $http, $location, User, Rest, $mdSidenav, $mdMedia) {
     $scope.Title = Title;
 
     $scope.user = null;
@@ -229,7 +217,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
 
     $scope.getOnlineUsers = function() {
         $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
-        User.getOnlineUsers()
+        Rest.getThings('/api/loggedInUsers')
             .then(function(users) {
                 $scope.onlineUsers = users;
                 $scope.gotOnlineUsers = true;
@@ -376,87 +364,72 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
     Title.setPageTitle('Dinner Time Premium');
 }]);
 
-// dtp.controller('userIndexCtrl', ['$scope', 'Title', 'User', '$routeParams', '$filter', function($scope, Title, User, $routeParams, $filter) {
-//     var id = $routeParams.userId;
-//
-//     Title.setTitle('User Profile');
-//
-//     if(User.currentUser !== '') {
-//         $scope.user = User.currentUser;
-//     }
-//
-//     $scope.getUserProfile = function() {
-//         User.getUser(id)
-//             .then(function(user) {
-//                 $scope.userProfile = user;
-//                 Title.setTitle(user.name + '\'s Profile');
-//                 // Have to do this to display online/offline text
-//                 if(user.isOnline) {
-//                     $scope.onlineStatus = 'Online';
-//                 } else {
-//                     $scope.onlineStatus = 'Offline';
-//                 }
-//                 // Age will display properly based on birthday if one is provided
-//                 // Age may not be saved properly to the database, but will display properly regardless
-//                 if($scope.userProfile.birthday) {
-//                     $scope.userProfile.age = getAge($scope.userProfile.birthday);
-//                 }
-//                 $scope.userProfile.birthday = $filter('date')($scope.userProfile.birthday, 'dd MMMM, yyyy');
-//             })
-//     };
-//
-//     $scope.getUserProfile();
-//
-//     $scope.editing = false;
-//
-//     $scope.editProfile = function() {
-//         $scope.editing = true;
-//         Materialize.updateTextFields();
-//     };
-//
-//     $scope.saveProfile = function() {
-//         var birthday = $('#birthday').val();
-//         if(birthday) {
-//             birthday = Date.parse(birthday);
-//             birthday = new Date(birthday).toISOString();
-//         }
-//
-//         var userData = {
-//             realName: $scope.userProfile.realName,
-//             age: $scope.userProfile.age,
-//             birthday: birthday,
-//             location: $scope.userProfile.location,
-//             occupation: $scope.userProfile.occupation,
-//             bio: $scope.userProfile.bio
-//         };
-//
-//         User.updateUser(id, userData)
-//             .then(function() {
-//                 $scope.editing = false;
-//                 $scope.getUserProfile();
-//             })
-//     };
-//
-//     function getAge(dateString) {
-//         var today = new Date();
-//         var birthDate = new Date(dateString);
-//         var age = today.getFullYear() - birthDate.getFullYear();
-//         var m = today.getMonth() - birthDate.getMonth();
-//         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-//             age--;
-//         }
-//         return age;
-//     }
-//
-//     $(document).ready(function(){
-//         $('.tooltipped').tooltip({delay: 800});
-//         $('.datepicker').pickadate({
-//             selectMonths: true, // Creates a dropdown to control month
-//             selectYears: 99, // Creates a dropdown of 40 years to control year
-//             max: moment().year(moment().year()).toDate()
-//         });
-//     });
-// }]);
+dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', '$routeParams', '$filter', function($scope, Title, User, Rest, $routeParams, $filter) {
+    
+    var userId = $routeParams.userId;
+
+    if(User.currentUser !== '') {
+        $scope.user = User.currentUser;
+    }
+
+    $scope.getUserProfile = function() {
+        Rest.getThing('/api/user/' + userId)
+            .then(function(user) {
+                console.log(user);
+                $scope.userProfile = user;
+                Title.setTitle(user.name + '\'s Profile');
+                Title.setPageTitle(user.name + '\'s Profile');
+                // Age will display properly based on birthday if one is provided
+                // Age may not be saved properly to the database, but will display properly regardless
+                if($scope.userProfile.birthday) {
+                    $scope.userProfile.age = getAge($scope.userProfile.birthday);
+                }
+                $scope.userProfile.birthday = $filter('date')($scope.userProfile.birthday, 'dd MMMM, yyyy');
+            })
+    };
+
+    $scope.getUserProfile();
+
+    $scope.editing = false;
+
+    $scope.editProfile = function() {
+        $scope.editing = true;
+    };
+
+    $scope.saveProfile = function() {
+        var birthday = $('#birthday').val();
+        if(birthday) {
+            birthday = Date.parse(birthday);
+            birthday = new Date(birthday).toISOString();
+        }
+
+        var userData = {
+            realName: $scope.userProfile.realName,
+            age: $scope.userProfile.age,
+            birthday: birthday,
+            location: $scope.userProfile.location,
+            occupation: $scope.userProfile.occupation,
+            bio: $scope.userProfile.bio
+        };
+
+        Rest.updateThing('/api/user/' + userId, userData)
+            .then(function() {
+                $scope.editing = false;
+                $scope.getUserProfile();
+            })
+    };
+
+    function getAge(dateString) {
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+}]);
 
 dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
 function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
@@ -807,7 +780,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
     function getPost() {
         Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
             .then(function(res) {
-                console.log(res);
                 $scope.post = res;
                 $scope.commentLabels = [1];
 
@@ -836,7 +808,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
         var skip = (label - 1) * 20;
         $http.get('/api/forum/' + categoryPath + '/' + $scope.post._id + '/comments', {params: {skip: skip}})
             .then(function(res) {
-                console.log(res);
                 $scope.comments = res.data.comments;
                 $scope.gotComments = true;
             }, function(res) {

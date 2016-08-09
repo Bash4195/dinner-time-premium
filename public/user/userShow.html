@@ -1,0 +1,15 @@
+<div layout-padding>
+    <md-card>
+        <md-card-title layout="column" layout-align="center center">
+            <md-card-title-media style="margin-bottom: 20px;">
+                <img ng-src="{{userProfile.avatarFull}}" alt="" class="md-avatar circle" ng-class="{'status-online': userProfile.onlineStatus === 'Online',
+                        'status-away': userProfile.onlineStatus === 'Away',
+                        'status-busy': userProfile.onlineStatus === 'Busy',
+                        'status-offline': userProfile.onlineStatus === 'Offline'}">
+            </md-card-title-media>
+            <md-card-title-text>
+                <span class="md-headline">{{userProfile.name}}</span>
+            </md-card-title-text>
+        </md-card-title>
+    </md-card>
+</div>

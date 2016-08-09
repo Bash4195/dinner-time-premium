@@ -128,22 +128,22 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 /* Status dots */
-.online-dot {
+.status-online {
     border: 5px solid #4CAF50;
     border-radius: 50%;
 }
 
-.away-dot {
+.status-away {
     border: 5px solid #2196F3;
     border-radius: 50%;
 }
 
-.busy-dot {
+.status-busy {
     border: 5px solid #F44336;
     border-radius: 50%;
 }
 
-.offline-dot {
+.status-offline {
     border: 5px solid #9E9E9E;
     border-radius: 50%;
 }
