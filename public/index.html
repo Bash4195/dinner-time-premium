@@ -122,7 +122,23 @@
                             Profile
                         </md-button>
                     </md-menu-item>
-                    <md-divider></md-divider>
+                    <md-menu-item>
+                        <md-menu>
+                            <md-button ng-click="$mdOpenMenu($event)">
+                                <md-icon>account_circle</md-icon>
+                                Update Status
+                            </md-button>
+                            <md-menu-content>
+                                <md-menu-item>
+                                    <md-button>
+                                        <div class="status-online"></div>
+                                        Online
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
                     <md-menu-item>
                         <md-button ng-href="/auth/logout" target="_self">
                             <md-icon>power_settings_new</md-icon>
@@ -196,9 +212,20 @@
                 </div>
                 <md-list-item ng-repeat="onlineUser in onlineUsers">
                     <md-button class="list-btn-no-radius" ng-href="/user/{{onlineUser._id}}" layout="row" layout-fill>
-                        <div ng-class="{'status-online': onlineUser.onlineStatus === 'Online',
-                        'status-away': onlineUser.onlineStatus === 'Away',
-                        'status-busy': onlineUser.onlineStatus === 'Busy'}" flex="2">
+                        <div ng-if="onlineUser.onlineStatus === 'Online'">
+                            <md-icon md-colors="{color: 'green-500'}">check_circle</md-icon>
+                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
+                        </div>
+                        <div ng-if="onlineUser.onlineStatus === 'Away'">
+                            <md-icon md-colors="{color: 'yellow-500'}">access_time</md-icon>
+                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
+                        </div>
+                        <div ng-if="onlineUser.onlineStatus === 'Busy'">
+                            <md-icon md-colors="{color: 'red-A700'}">do_not_disturb_on</md-icon>
+                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
+                        </div>
+                        <div ng-if="onlineUser.onlineStatus === 'Offline'">
+                            <md-icon md-colors="{color: 'grey-500'}">highlight_off</md-icon>
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
                         </div>
                         <div flex></div>

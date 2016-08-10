@@ -375,7 +375,6 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', '$routeParams
     $scope.getUserProfile = function() {
         Rest.getThing('/api/user/' + userId)
             .then(function(user) {
-                console.log(user);
                 $scope.userProfile = user;
                 Title.setTitle(user.name + '\'s Profile');
                 Title.setPageTitle(user.name + '\'s Profile');
