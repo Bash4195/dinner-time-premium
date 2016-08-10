@@ -16,7 +16,7 @@
                             <img ng-src="{{post.authour.avatarMedium}}" alt="" class="md-media card-media md-avatar circle" style="width: auto;">
                         </md-card-title-media>
                         <md-card-title-text>
-                            <span class="md-headline wrap-word">{{post.title}}</span>
+                            <span class="md-headline wrap-title">{{post.title}}</span>
                             <span class="md-subhead">
                                 By <a ng-href="/user/{{post.authour._id}}" class="md-accent no-underline">{{post.authour.name}}</a>
                                 <span am-time-ago="post.createdAt"></span>
@@ -24,7 +24,7 @@
                         </md-card-title-text>
                     </md-card-title>
                     <md-card-content>
-                        <p class="wrap-word">{{post.content}}</p>
+                        <p class="wrap-content">{{post.content}}</p>
                         <md-divider style="padding-bottom: 10px;"></md-divider>
                         <div layout="row" layout-align="center center">
                             <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}" ng-if="post.updatedAt !== post.createdAt">access_time</md-icon>
@@ -63,12 +63,12 @@
                                         <img ng-src="{{comment.authour.avatar}}" alt="" class="md-media card-media md-avatar circle">
                                     </md-card-title-media>
                                     <md-card-title-text>
-                                        <span class="md-title wrap-word">{{comment.authour.name}}</span>
+                                        <span class="md-title wrap-content">{{comment.authour.name}}</span>
                                         <span class="md-subhead" am-time-ago="comment.createdAt"></span>
                                     </md-card-title-text>
                                 </md-card-title>
                                 <md-card-content>
-                                    <pre class="wrap-word" ng-hide="editingComment">{{comment.comment}}</pre>
+                                    <p class="wrap-content" ng-hide="editingComment">{{comment.comment}}</p>
                                     <md-input-container class="md-block" ng-if="editingComment">
                                         <label>Comment</label>
                                         <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user"></textarea>
