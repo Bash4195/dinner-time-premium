@@ -215,6 +215,14 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         });
     }
 
+    var noUpdateStatus = false; // Tells everything else not to change the status if it was forcibly set by the user
+
+    $scope.setUserStatus = function(status) {
+        User.updateOnlineStatus($scope.user._id, status);
+        $scope.user.onlineStatus = 'Away';
+        noUpdateStatus = true;
+    };
+
     $scope.getOnlineUsers = function() {
         $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
         Rest.getThings('/api/loggedInUsers')
@@ -346,7 +354,8 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
             // $timeout.cancel(warningTimer);
             $timeout.cancel(awayStatusTimeout);
 
-            if($scope.user.onlineStatus === 'Away') {
+            if($scope.user.onlineStatus === 'Away' && !noUpdateStatus) {
+                console.log('Set status to online');
                 User.updateOnlineStatus($scope.user._id, 'Online');
                 $scope.user.onlineStatus = 'Online';
             }

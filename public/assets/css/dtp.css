@@ -75,6 +75,34 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
     left: 28px;
 }
 
+/* MdButton in menu list styles (For update status button) */
+.md-list-button-style {
+    border-radius: 0;
+    margin: auto 0;
+    font-size: 15px;
+    text-transform: none;
+    font-weight: 400;
+    height: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+    text-align: left;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: baseline;
+    -ms-flex-align: baseline;
+    align-items: baseline;
+    -webkit-align-content: flex-start;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    width: 100%;
+}
+
+/* Same as above but for the icon */
+.md-list-icon-style{
+    margin: auto 16px auto 0;
+}
+
 /* Font alignment */
 .left-align-text {
     text-align: left;
@@ -134,7 +162,7 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 .status-away {
-    border: 5px solid #2196F3;
+    border: 5px solid #FFEB3B;
     border-radius: 50%;
 }
 

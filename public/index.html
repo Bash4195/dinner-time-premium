@@ -123,16 +123,28 @@
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-menu>
-                            <md-button ng-click="$mdOpenMenu($event)">
-                                <md-icon>account_circle</md-icon>
-                                Update Status
+                        <md-menu style="padding: 0; margin: 0;">
+                            <md-button class="md-list-button-style" ng-click="$mdOpenMenu($event)">
+                                <md-icon class="md-list-icon-style">account_circle</md-icon>
+                                Set Status
                             </md-button>
                             <md-menu-content>
                                 <md-menu-item>
-                                    <md-button>
-                                        <div class="status-online"></div>
+                                    <md-button ng-click="setUserStatus('Online')">
+                                        <md-icon md-colors="{color: 'green-500'}">check_circle</md-icon>
                                         Online
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <md-button ng-click="setUserStatus('Away')">
+                                        <md-icon md-colors="{color: 'yellow-500'}">access_time</md-icon>
+                                        Away
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <md-button ng-click="setUserStatus('Busy')">
+                                        <md-icon md-colors="{color: 'red-A700'}">do_not_disturb_on</md-icon>
+                                        Busy
                                     </md-button>
                                 </md-menu-item>
                             </md-menu-content>
@@ -212,20 +224,10 @@
                 </div>
                 <md-list-item ng-repeat="onlineUser in onlineUsers">
                     <md-button class="list-btn-no-radius" ng-href="/user/{{onlineUser._id}}" layout="row" layout-fill>
-                        <div ng-if="onlineUser.onlineStatus === 'Online'">
-                            <md-icon md-colors="{color: 'green-500'}">check_circle</md-icon>
-                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
-                        </div>
-                        <div ng-if="onlineUser.onlineStatus === 'Away'">
-                            <md-icon md-colors="{color: 'yellow-500'}">access_time</md-icon>
-                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
-                        </div>
-                        <div ng-if="onlineUser.onlineStatus === 'Busy'">
-                            <md-icon md-colors="{color: 'red-A700'}">do_not_disturb_on</md-icon>
-                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
-                        </div>
-                        <div ng-if="onlineUser.onlineStatus === 'Offline'">
-                            <md-icon md-colors="{color: 'grey-500'}">highlight_off</md-icon>
+                        <div>
+                            <md-icon md-colors="{color: 'green-500'}" ng-if="onlineUser.onlineStatus === 'Online'">check_circle</md-icon>
+                            <md-icon md-colors="{color: 'yellow-500'}" ng-if="onlineUser.onlineStatus === 'Away'">access_time</md-icon>
+                            <md-icon md-colors="{color: 'red-A700'}"  ng-if="onlineUser.onlineStatus === 'Busy'">do_not_disturb_on</md-icon>
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
                         </div>
                         <div flex></div>
