@@ -60,7 +60,7 @@
                     <md-list>
                         <md-list-item ng-repeat="category in categoryPosts" ng-click="$location.path(category.path)">
                             <div class="md-list-item-text" layout="row" layout-align="center center">
-                                <span>{{category.title}}</span>
+                                <span class="wrap-title">{{category.title}}</span>
                                 <div class="md-secondary" layout="row">
                                     <md-icon class="icon-left-of-text" md-colors="{color: 'green-500'}">message</md-icon>
                                     <span class="md-subhead">
@@ -78,7 +78,7 @@
                     <md-list>
                         <md-list-item ng-repeat="recentPost in recentPosts" ng-click="$location.path(recentPost.category.path + '/' + recentPost._id)">
                             <div class="md-list-item-text" layout="row" layout-align="center center">
-                                <span>{{recentPost.title | limitTo: 22}}</span>
+                                <span class="wrap-title">{{recentPost.title | limitTo: 22}}</span>
                                 <div class="md-secondary" layout="row">
                                     <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
                                     <span class="md-subhead">
