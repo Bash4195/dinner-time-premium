@@ -1,15 +1,17 @@
-<div layout-padding>
-    <md-card>
-        <md-card-title layout="column" layout-align="center center">
-            <md-card-title-media style="margin-bottom: 20px;">
-                <img ng-src="{{userProfile.avatarFull}}" alt="" class="md-avatar circle" ng-class="{'status-online': userProfile.onlineStatus === 'Online',
-                        'status-away': userProfile.onlineStatus === 'Away',
-                        'status-busy': userProfile.onlineStatus === 'Busy',
-                        'status-offline': userProfile.onlineStatus === 'Offline'}">
-            </md-card-title-media>
-            <md-card-title-text>
-                <span class="md-headline">{{userProfile.name}}</span>
-            </md-card-title-text>
-        </md-card-title>
-    </md-card>
+<div layout="column">
+    <div style="background: url(https://4kwallpapers.co/wp-content/uploads/2015/07/Dark-Grey-Red-Material-Design-4K-Wallpaper-900x506.jpg);
+    background-size: cover; height: 400px; width: 100%;"></div>
+    <div layout="row">
+        <div flex></div>
+        <img ng-src="{{userProfile.avatarFull}}" alt="" class="md-avatar circle" style="margin-top: -92px; border: 2px solid #FFF;">
+        <div flex></div>
+    </div>
+    <div layout="row">
+        <div flex></div>
+        <div layout="column" layout-align="center center">
+            <span class="md-display-2">{{userProfile.name}}</span>
+            <span class="md-headline">GOD</span>
+        </div>
+        <div flex></div>
+    </div>
 </div>

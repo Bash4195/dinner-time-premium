@@ -176,13 +176,6 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
     border-radius: 50%;
 }
 
-/* For content to hover over toolbar background */
-.move-up {
-    position: relative;
-    top: -110px;
-    z-index: 50;
-}
-
 /* Word wrap */
 .wrap-word{
     white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
