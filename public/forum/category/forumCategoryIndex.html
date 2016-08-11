@@ -49,6 +49,10 @@
                     <span ng-hide="user">Sign in to Post</span>
                 </md-button>
 
+                <a ng-href="/auth/steam" target="_self" aria-label="Sign in through Steam" layout="row" layout-align="center center" ng-hide="user">
+                    <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
+                </a>
+
                 <div layout="column" ng-if="user">
                     <md-subheader class="md-no-sticky">Staff Options</md-subheader>
                     <md-button class="md-raised md-primary" ng-click="newCategoryDialog()">New Category</md-button>
