@@ -1,4 +1,4 @@
-var dtp = angular.module('dtp', ['ngRoute', 'ngMaterial', 'angularMoment']);
+var dtp = angular.module('dtp', ['ngRoute', 'ngMaterial', 'angularMoment', 'ngSanitize']);
 
 dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
     $locationProvider.html5Mode(true);
@@ -43,6 +43,42 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
     $mdThemingProvider.theme('success-toast');
 
     $mdThemingProvider.theme('error-toast');
+});
+
+// Filter to display links as links as well as sanitized html
+dtp.filter('htmlLinky', function($sanitize, linkyFilter) {
+    var ELEMENT_NODE = 1;
+    var TEXT_NODE = 3;
+    var linkifiedDOM = document.createElement('div');
+    var inputDOM = document.createElement('div');
+
+    var linkify = function linkify(startNode) {
+        var i, ii, currentNode;
+
+        for (i = 0, ii = startNode.childNodes.length; i < ii; i++) {
+            currentNode = startNode.childNodes[i];
+
+            switch (currentNode.nodeType) {
+                case ELEMENT_NODE:
+                    linkify(currentNode);
+                    break;
+                case TEXT_NODE:
+                    linkifiedDOM.innerHTML = linkyFilter(currentNode.textContent);
+                    i += linkifiedDOM.childNodes.length - 1;
+                    while(linkifiedDOM.childNodes.length) {
+                        startNode.insertBefore(linkifiedDOM.childNodes[0], currentNode);
+                    }
+                    startNode.removeChild(currentNode);
+            }
+        }
+
+        return startNode;
+    };
+
+    return function(input) {
+        inputDOM.innerHTML = input;
+        return linkify(inputDOM).innerHTML;
+    };
 });
 
 dtp.factory('Title', function() {

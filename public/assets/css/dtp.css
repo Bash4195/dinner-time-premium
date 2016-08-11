@@ -47,6 +47,15 @@ pre {
 font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+/* Links */
+a {
+    color: #F44336;
+}
+
+a:hover {
+    color: #B71C1C;
+}
+
 /* Active navigation */
 .active {
     background-color: rgba(189, 189, 189, 0.2);
