@@ -66,11 +66,13 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
     background-color: inherit;
 }
 
-/* Move FAB down half its size */
+/* Move FAB half its size */
+.fab-up-half {
+    bottom: 28px;
+}
 .fab-down-half {
     top: 28px;
 }
-
 .fab-right-half {
     left: 28px;
 }
