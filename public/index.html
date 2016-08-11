@@ -212,8 +212,8 @@
                     <md-icon>refresh</md-icon>
                 </md-button>
             </md-toolbar>
-            <md-list>
-                <div ng-hide="gotOnlineUsers" layout="column" layout-align="center center" layout-padding flex>
+            <md-list style="height: 100%;">
+                <div ng-hide="gotOnlineUsers" layout="column" layout-align="center center" layout-fill>
                     <md-progress-circular class="md-accent"></md-progress-circular>
                 </div>
                 <div layout="row" layout-padding ng-hide="onlineUsers[0]._id || !gotOnlineUsers">
