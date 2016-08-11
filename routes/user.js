@@ -33,7 +33,6 @@ router.get('/api/user/:userId', function(req, res) {
     })
 });
 
-// TODO: Protect this route!
 router.put('/api/user/:userId', middleware.isLoggedIn, function(req, res) {
     User.findByIdAndUpdate(req.params.userId, req.body, function(err, user) {
         if(err) {

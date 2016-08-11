@@ -387,56 +387,54 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', '$routeParams
                 $scope.userProfile = user;
                 Title.setTitle(user.name + '\'s Profile');
                 Title.setPageTitle(user.name + '\'s Profile');
-                // Age will display properly based on birthday if one is provided
-                // Age may not be saved properly to the database, but will display properly regardless
-                if($scope.userProfile.birthday) {
-                    $scope.userProfile.age = getAge($scope.userProfile.birthday);
-                }
-                $scope.userProfile.birthday = $filter('date')($scope.userProfile.birthday, 'dd MMMM, yyyy');
+
+                $scope.bio = {
+                    bio: $scope.userProfile.bio
+                };
+
+                $scope.about = {
+                    name: $scope.userProfile.realName,
+                    age: $scope.userProfile.age,
+                    birthday: $scope.userProfile.birthday,
+                    locations: $scope.userProfile.location,
+                    occupation: $scope.userProfile.occupation
+                };
             })
     };
 
     $scope.getUserProfile();
 
-    $scope.editing = false;
+    $scope.editingAbout = false;
 
-    $scope.editProfile = function() {
-        $scope.editing = true;
-    };
+    $scope.editingAboutToggle = function() { $scope.editingAbout = !$scope.editingAbout; };
 
-    $scope.saveProfile = function() {
-        var birthday = $('#birthday').val();
-        if(birthday) {
-            birthday = Date.parse(birthday);
-            birthday = new Date(birthday).toISOString();
-        }
+    $scope.editingBio = false;
+    
+    $scope.editingBioToggle = function() { $scope.editingBio = !$scope.editingBio; };
 
-        var userData = {
-            realName: $scope.userProfile.realName,
-            age: $scope.userProfile.age,
-            birthday: birthday,
-            location: $scope.userProfile.location,
-            occupation: $scope.userProfile.occupation,
-            bio: $scope.userProfile.bio
-        };
-
+    $scope.saveProfile = function(userData) {
         Rest.updateThing('/api/user/' + userId, userData)
             .then(function() {
-                $scope.editing = false;
+                if(userData === $scope.bio) {
+                    $scope.editingBio = false;
+                } else {
+                    $scope.editingAbout = false;
+                }
                 $scope.getUserProfile();
             })
     };
 
-    function getAge(dateString) {
-        var today = new Date();
-        var birthDate = new Date(dateString);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    }
+    // Function to calculate age based on birthday
+    // function getAge(dateString) {
+    //     var today = new Date();
+    //     var birthDate = new Date(dateString);
+    //     var age = today.getFullYear() - birthDate.getFullYear();
+    //     var m = today.getMonth() - birthDate.getMonth();
+    //     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    //         age--;
+    //     }
+    //     return age;
+    // }
 }]);
 
 dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
