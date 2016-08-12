@@ -24,8 +24,8 @@
                         </md-card-title-text>
                     </md-card-title>
                     <md-card-content>
-                        <p class="wrap-content" ng-bind-html="post.content | htmlLinky"></p>
-                        <md-divider style="padding-bottom: 10px;"></md-divider>
+                        <md-content class="wrap-content" style="background-color: transparent" ng-bind-html="post.content | htmlLinky"></md-content>
+                        <md-divider style="margin-top: 16px; padding-bottom: 10px;"></md-divider>
                         <div layout="row" layout-align="center center">
                             <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}" ng-if="post.updatedAt !== post.createdAt">access_time</md-icon>
                             <span class="md-subhead" ng-if="post.updatedAt !== post.createdAt">Edited by
@@ -68,7 +68,7 @@
                                     </md-card-title-text>
                                 </md-card-title>
                                 <md-card-content>
-                                    <p class="wrap-content" ng-hide="editingComment" ng-bind-html="comment.comment | htmlLinky"></p>
+                                    <p class="wrap-content" ng-hide="editingComment">{{comment.comment}}</p>
                                     <md-input-container class="md-block" ng-if="editingComment">
                                         <label>Comment</label>
                                         <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user"></textarea>

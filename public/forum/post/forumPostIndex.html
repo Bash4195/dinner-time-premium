@@ -113,8 +113,12 @@
                         <textarea ng-model="newPost.content"></textarea>
                     </md-input-container>
                 </form>
+                <formatting-help ng-show="showFormattingHelp"></formatting-help>
             </md-dialog-content>
             <md-dialog-actions>
+                <md-button class="md-primary" ng-hide="showFormattingHelp" ng-click="toggleFormattingHelp()">Formatting Help <md-icon>arrow_drop_down</md-icon></md-button>
+                <md-button class="md-primary" ng-show="showFormattingHelp" ng-click="toggleFormattingHelp()">Formatting Help <md-icon>arrow_drop_up</md-icon></md-button>
+                <span flex></span>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
                 <md-button class="md-primary md-raised" ng-click="createPost()" ng-disabled="!newPost.title || !newPost.content">Create</md-button>
             </md-dialog-actions>

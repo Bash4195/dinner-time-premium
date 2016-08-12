@@ -210,6 +210,15 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
     };
 }]);
 
+dtp.directive('formattingHelp', function() {
+    return {
+        templateUrl: '../directives/formattingHelp.html',
+        scope: {},
+        replace: true,
+        transclude: true
+    }
+});
+
 // Runs anytime any page loads up for the first time.
 // Ex. refresh or from external link. Not Angular routing
 // Used for the nav and anything on all pages
@@ -569,6 +578,12 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
             }
         });
     };
+    
+    $scope.showFormattingHelp = false;
+    
+    $scope.toggleFormattingHelp = function() {
+        $scope.showFormattingHelp = !$scope.showFormattingHelp;
+    };
 
     $scope.newCategory = '';
 
@@ -804,6 +819,12 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
                 };
             }
         });
+    };
+
+    $scope.showFormattingHelp = false;
+
+    $scope.toggleFormattingHelp = function() {
+        $scope.showFormattingHelp = !$scope.showFormattingHelp;
     };
 
     $scope.$location = $location;
