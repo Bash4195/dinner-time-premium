@@ -36,7 +36,7 @@
                                 </div>
                                 <md-divider md-inset></md-divider>
                             </md-list-item>
-                            <div layout="row" ng-show="category.__v > 6">
+                            <div layout="row" ng-show="categoryPosts[$index].posts.length > 6">
                                 <div flex></div>
                                 <md-button ng-href="{{category.path}}" class="md-accent">More discussions</md-button>
                             </div>
@@ -179,7 +179,7 @@
                 <form>
                     <md-input-container>
                         <label>Category</label>
-                        <md-select ng-model="editingCategory.category" md-auto-focus>
+                        <md-select ng-model="editingCategory" md-auto-focus>
                             <md-option ng-repeat="category in categories" ng-value="category">
                                 {{category.title}}
                             </md-option>
@@ -187,18 +187,18 @@
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="editingCategory.title" ng-disabled="editingCategory === null">
+                        <input ng-model="editingCategory.title" ng-disabled="!editingCategory">
                     </md-input-container>
                 </form>
             </md-dialog-content>
             <md-dialog-actions>
-                <md-button class="md-icon-button md-primary" ng-click="confirmDeleteCategory()" ng-disabled="!editingCategory.category">
+                <md-button class="md-icon-button md-primary" ng-click="confirmDeleteCategory()" ng-disabled="!editingCategory">
                     <md-icon>delete</md-icon>
                     <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete category</md-tooltip>
                 </md-button>
                 <div flex></div>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                <md-button class="md-primary md-raised" ng-click="updateCategory()" ng-disabled="!editingCategory.category || !editingCategory.title">Update</md-button>
+                <md-button class="md-primary md-raised" ng-click="updateCategory()" ng-disabled="!editingCategory || !editingCategory.title">Update</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>

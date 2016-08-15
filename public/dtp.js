@@ -498,6 +498,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         Rest.getThings('/api/forum')
             .then(function(categories) {
                 if(categories) {
+                    console.log(categories);
                     $scope.categories = categories;
                     $scope.gotCategories = true;
                 }
@@ -510,6 +511,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         Rest.getThings('/api/forum/allCategories')
             .then(function(categoryPosts) {
                 if(categoryPosts) {
+                    console.log(categoryPosts);
                     $scope.categoryPosts = categoryPosts;
                     $scope.gotCategoryPosts = true;
                 }
@@ -625,10 +627,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         });
     };
     
-    $scope.editingCategory = {
-        category: '',
-        title: ''
-    };
+    $scope.editingCategory = '';
 
     $scope.editCategoryDialog = function() {
         $mdDialog.show({
@@ -654,12 +653,9 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                             title: $scope.editingCategory.title,
                             editedBy: $scope.user
                         };
-                        Rest.updateThing('/api/forum/' + $scope.editingCategory.category._id, updatedCategory)
+                        Rest.updateThing('/api/forum/' + $scope.editingCategory._id, updatedCategory)
                             .then(function() {
-                                $scope.editingCategory = {
-                                    category: '',
-                                    title: ''
-                                };
+                                $scope.editingCategory = '';
                                 getCategories();
                                 getRecentPosts();
                                 getCategoryPosts();
@@ -686,12 +682,9 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                 } else {
                     $scope.deleteCategory = function() {
                         $mdDialog.hide();
-                        Rest.deleteThing('/api/forum/' + $scope.editingCategory.category._id)
+                        Rest.deleteThing('/api/forum/' + $scope.editingCategory._id)
                             .then(function() {
-                                $scope.editingCategory = {
-                                    category: '',
-                                    title: ''
-                                };
+                                $scope.editingCategory = '';
                                 getCategories();
                                 getRecentPosts();
                                 getCategoryPosts();
