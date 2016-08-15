@@ -498,7 +498,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         Rest.getThings('/api/forum')
             .then(function(categories) {
                 if(categories) {
-                    console.log(categories);
                     $scope.categories = categories;
                     $scope.gotCategories = true;
                 }
@@ -511,7 +510,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
         Rest.getThings('/api/forum/allCategories')
             .then(function(categoryPosts) {
                 if(categoryPosts) {
-                    console.log(categoryPosts);
                     $scope.categoryPosts = categoryPosts;
                     $scope.gotCategoryPosts = true;
                 }
