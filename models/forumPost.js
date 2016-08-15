@@ -5,7 +5,6 @@ var forumPostSchema = mongoose.Schema({
     content: { type: String, required: true, maxlength: 2000 },
     authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     editedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', date: { type: Date, default: Date.now() } },
-    pinned: { type: Boolean, default: false },
     locked: { type: Boolean, default: false },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Forum_Category', required: true },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Forum_Comment' }]
