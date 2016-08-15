@@ -115,7 +115,13 @@
                     </md-input-container>
                 </form>
             </div>
+
             <div flex="25" layout="column">
+                <div layout="column" ng-if="user">
+                    <md-subheader class="md-no-sticky">Staff Options</md-subheader>
+                    <md-button class="md-raised md-primary" ng-click="movePostDialog()">Move Post</md-button>
+                </div>
+
                 <md-subheader class="md-no-sticky">Categories</md-subheader>
                 <md-card>
                     <md-list>
@@ -212,6 +218,34 @@
             <md-dialog-actions>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
                 <md-button class="md-primary md-raised" ng-click="deleteComment()">Delete</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+    </div>
+</div>
+
+<!-- Move Post Dialog -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="movePost">
+        <md-dialog aria-label="Move {{post.title}}">
+            <md-toolbar class="md-toolbar-tools">
+                <span class="truncate">Move {{post.title}}</span>
+            </md-toolbar>
+            <md-dialog-content class="md-dialog-content">
+                <form>
+                    <md-input-container>
+                        <label>Category</label>
+                        <md-select ng-model="movingPost.category" md-auto-focus>
+                            <md-option ng-if="category._id !== post.category._id" ng-repeat="category in categories" ng-value="category">
+                                {{category.title}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </form>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <div flex></div>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="movePost()" ng-disabled="!movingPost.category">Move</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>

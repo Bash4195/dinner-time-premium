@@ -239,6 +239,40 @@ router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(
     })
 });
 
+// MOVE POST
+router.put('/api/forum/:categoryId/:postId/move', middleware.isLoggedIn, function(req, res) {
+    var newCategory = req.body;
+    if(middleware.checkIfMissing(newCategory)) {
+        middleware.handleError(res, 'No category to move post to was supplied', 'No category to move post to was supplied', 400);
+    } else {
+        Post.findByIdAndUpdate(req.params.postId, newCategory, function(err, post) {
+            if(err) {
+                middleware.handleError(res, err.message, 'Failed to move post');
+            } else {
+                Category.findById(post.category, function(err, category) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to move post');
+                    } else {
+                        var removePost = category.posts.indexOf(req.params.postId);
+                        category.posts.splice(removePost, 1);
+                        category.save();
+                        
+                        Category.findById(newCategory.category._id, function(err, newCategory) {
+                            if(err) {
+                                middleware.handleError(res, err.message, 'Failed to move post');
+                            } else {
+                                newCategory.posts.push(post);
+                                newCategory.save();
+                                res.status(200).json(post);
+                            }
+                        });
+                    }
+                });
+            }
+        })
+    }
+});
+
 
 /////////////////// Comments ////////////////////////////
 // Only need INDEX, CREATE, UPDATE and DELETE

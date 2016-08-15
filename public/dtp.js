@@ -400,7 +400,6 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
             $timeout.cancel(awayStatusTimeout);
 
             if($scope.user.onlineStatus === 'Away' && !noUpdateStatus) {
-                console.log('Set status to online');
                 User.updateOnlineStatus($scope.user._id, 'Online');
                 $scope.user.onlineStatus = 'Online';
             }
@@ -960,6 +959,42 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
                         Rest.deleteThing('/api/forum/' + categoryPath + '/' + $scope.post._id)
                             .then(function() {
                                 $location.path('/forum/' + categoryPath);
+                            })
+                    }
+                };
+            }
+        });
+    };
+
+    $scope.movingPost = {
+        category: '',
+        editedBy: $scope.user
+    };
+
+    $scope.movePostDialog = function() {
+        $mdDialog.show({
+            clickOutsideToClose: true,
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#movePost',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+
+                $scope.movePost = function() {
+                    if(!$scope.user) {
+                        Notify.generic('You must be logged in to move a post');
+                        $mdDialog.hide();
+                    } else{
+                        $mdDialog.hide();
+                        Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/move', $scope.movingPost)
+                            .then(function(res) {
+                                $location.path($scope.movingPost.category.path + '/' + $scope.post._id);
+                                $scope.movingPost = {
+                                    category: '',
+                                    editedBy: $scope.user
+                                };
                             })
                     }
                 };
