@@ -226,6 +226,10 @@ a {
     margin-right: 5px;
 }
 
+.icon-left-of-text-far {
+    margin-right: 10px;
+}
+
 /* Datepicker fix */
 .md-datepicker-calendar, .md-datepicker-input-mask-opaque {
     background: rgb(255, 255, 255);

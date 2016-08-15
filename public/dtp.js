@@ -965,6 +965,15 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
             }
         });
     };
+    
+    $scope.lockPost = function(val) {
+        Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id, {locked: val})
+            .then(function() {
+                getPost();
+                getCategories();
+                getRecentPosts();
+            })
+    };
 
     $scope.movingPost = {
         category: '',

@@ -10,6 +10,15 @@
         </md-subheader>
         <div layout="row">
             <div flex="75" layout="column">
+                <md-card ng-if="post.locked">
+                    <md-card-title>
+                        <md-card-title-text layout="column" layout-align="center center">
+                            <md-icon class="material-icons md-36">lock</md-icon>
+                            <br>
+                            <span class="md-headline wrap-title">This post is locked</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                </md-card>
                 <md-card>
                     <md-card-title>
                         <md-card-title-media style="margin-right: 15px;">
@@ -40,7 +49,7 @@
                             </span>
                         </div>
                     </md-card-content>
-                    <md-card-actions layout="row" layout-align="end center" ng-show="user">
+                    <md-card-actions layout="row" layout-align="end center" ng-if="user && !post.locked">
                         <md-button class="md-icon-button md-accent" ng-click="editPostDialog()">
                             <md-icon>edit</md-icon>
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit post</md-tooltip>
@@ -83,7 +92,7 @@
                                         <span flex></span>
                                     </div>
                                 </md-card-content>
-                                <md-card-actions layout="row" layout-align="end center" ng-show="user">
+                                <md-card-actions layout="row" layout-align="end center" ng-if="user && !post.locked">
                                     <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="editingComment = true">
                                         <md-icon>edit</md-icon>
                                         <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
@@ -104,11 +113,12 @@
                 <form style="margin: 8px">
                     <md-input-container layout="row">
                         <div flex>
-                            <label ng-show="user">Comment</label>
-                            <label ng-hide="user">Sign in to comment</label>
-                            <textarea class="md-accent" ng-model="newComment.comment" ng-disabled="!user"></textarea>
+                            <label ng-show="user && !post.locked">Comment</label>
+                            <label ng-hide="user || post.locked">Sign in to comment</label>
+                            <label ng-show="post.locked">Commenting is disabled on locked posts</label>
+                            <textarea class="md-accent" ng-model="newComment.comment" ng-disabled="!user || post.locked"></textarea>
                         </div>
-                        <md-button class="md-fab md-mini md-primary" ng-show="user" ng-disabled="!newComment.comment" ng-click="createComment()">
+                        <md-button class="md-fab md-mini md-primary" ng-if="user && !post.locked" ng-disabled="!newComment.comment" ng-click="createComment()">
                             <md-icon>send</md-icon>
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Post Comment</md-tooltip>
                         </md-button>
@@ -119,7 +129,34 @@
             <div flex="25" layout="column">
                 <div layout="column" ng-if="user">
                     <md-subheader class="md-no-sticky">Staff Options</md-subheader>
-                    <md-button class="md-raised md-primary" ng-click="movePostDialog()">Move Post</md-button>
+                    <md-card>
+                        <md-list>
+                            <md-list-item ng-if="!post.locked" ng-click="lockPost(true)">
+                                <div class="md-list-item-text" layout="row" layout-align="center center">
+                                    <md-icon class="icon-left-of-text-far">lock</md-icon>
+                                    <span class="wrap-title">Lock Post</span>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-if="post.locked" ng-click="lockPost(false)">
+                                <div class="md-list-item-text" layout="row" layout-align="center center">
+                                    <md-icon class="icon-left-of-text-far">lock_open</md-icon>
+                                    <span class="wrap-title">Unlock Post</span>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-click="null">
+                                <div class="md-list-item-text" layout="row" layout-align="center center">
+                                    <md-icon class="icon-left-of-text-far">fiber_pin</md-icon>
+                                    <span class="wrap-title">Pin Post</span>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-click="movePostDialog()">
+                                <div class="md-list-item-text" layout="row" layout-align="center center">
+                                    <md-icon class="icon-left-of-text-far">forward</md-icon>
+                                    <span class="wrap-title">Move Post</span>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </md-card>
                 </div>
 
                 <md-subheader class="md-no-sticky">Categories</md-subheader>

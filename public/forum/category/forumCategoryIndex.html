@@ -26,6 +26,7 @@
                                     <h3 flex="90">{{post.title}}</h3>
                                     <div layout="row">
                                         <p flex>By {{post.authour.name}} <span am-time-ago="post.createdAt"></span></p>
+                                        <md-icon class="icon-left-of-text-far" ng-if="post.locked">lock</md-icon>
                                         <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
                                         <span class="md-subhead">
                                             <span ng-show="post.comments[0]">{{post.comments.length}}</span>
