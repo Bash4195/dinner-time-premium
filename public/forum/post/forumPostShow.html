@@ -19,7 +19,10 @@
                         </md-card-title-text>
                     </md-card-title>
                 </md-card>
-                <md-card>
+                <md-card layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotPost">
+                    <md-progress-circular class="md-accent"></md-progress-circular>
+                </md-card>
+                <md-card ng-show="gotPost">
                     <md-card-title>
                         <md-card-title-media style="margin-right: 15px;">
                             <img ng-src="{{post.authour.avatarMedium}}" alt="" class="md-media card-media md-avatar circle" style="width: auto;">
@@ -62,10 +65,13 @@
                 </md-card>
 
                 <!-- Comments -->
-                <div ng-show="comments[0]._id">
+                <div>
                     <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>
                         <md-tab label="Page {{label}}" ng-click="getComments(label)" ng-repeat="label in commentLabels">
                             <md-subheader class="md-accent md-no-sticky">Comments</md-subheader>
+                            <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-hide="gotComments">
+                                <md-progress-circular class="md-accent"></md-progress-circular>
+                            </div>
                             <md-card ng-repeat="comment in comments">
                                 <md-card-title>
                                     <md-card-title-media style="margin-right: 15px;" layout="row" layout-align="center center">
@@ -77,13 +83,14 @@
                                     </md-card-title-text>
                                 </md-card-title>
                                 <md-card-content>
-                                    <p class="wrap-content" ng-hide="editingComment">{{comment.comment}}</p>
-                                    <md-input-container class="md-block" ng-if="editingComment">
+                                    <p class="wrap-content" ng-hide="editingComment && editingCommentId === comment._id">{{comment.comment}}</p>
+                                    <md-input-container class="md-block" ng-if="editingComment && editingCommentId === comment._id">
                                         <label>Comment</label>
                                         <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user"></textarea>
                                     </md-input-container>
-                                    <div ng-if="comment.updatedAt !== comment.createdAt">
-                                        <md-divider style="padding-bottom: 10px;"></md-divider>
+                                </md-card-content>
+                                <md-card-actions layout="row" layout-align="end center" ng-if="user && !post.locked">
+                                    <div layout="row" flex ng-if="comment.updatedAt !== comment.createdAt">
                                         <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}">access_time</md-icon>
                                         <span class="md-subhead">Edited by
                                             <a ng-href="/user/{{comment.editedBy._id}}" class="md-accent no-underline">{{comment.editedBy.name}}</a>
@@ -91,18 +98,16 @@
                                         </span>
                                         <span flex></span>
                                     </div>
-                                </md-card-content>
-                                <md-card-actions layout="row" layout-align="end center" ng-if="user && !post.locked">
-                                    <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="editingComment = true">
+                                    <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id" ng-click="toggleEditingComment(comment._id)">
                                         <md-icon>edit</md-icon>
                                         <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
                                     </md-button>
-                                    <md-button class="md-icon-button md-accent" ng-hide="editingComment" ng-click="confirmDeleteComment(comment._id)">
+                                    <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id" ng-click="confirmDeleteComment(comment._id)">
                                         <md-icon>delete</md-icon>
                                         <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
                                     </md-button>
-                                    <md-button class="md-accent" ng-show="editingComment" ng-click="editingComment = false">Cancel</md-button>
-                                    <md-button class="md-raised md-accent" ng-show="editingComment" ng-click="updateComment(comment)" ng-disabled="!comment.comment">Update</md-button>
+                                    <md-button class="md-accent" ng-show="editingComment && editingCommentId === comment._id" ng-click="toggleEditingComment(comment._id)">Cancel</md-button>
+                                    <md-button class="md-raised md-accent" ng-show="editingComment && editingCommentId === comment._id" ng-click="updateComment(comment)" ng-disabled="!comment.comment">Update</md-button>
                                 </md-card-actions>
                             </md-card>
                         </md-tab>
@@ -156,6 +161,9 @@
                 <md-subheader class="md-no-sticky">Categories</md-subheader>
                 <md-card>
                     <md-list>
+                        <md-list-item layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotCategories">
+                            <md-progress-circular class="md-accent"></md-progress-circular>
+                        </md-list-item>
                         <md-list-item ng-repeat="category in categories" ng-click="$location.path(category.path)">
                             <div class="md-list-item-text" layout="row" layout-align="center center">
                                 <span class="wrap-title">{{category.title}}</span>
@@ -174,6 +182,9 @@
                 <md-subheader class="md-no-sticky">Recent Discussions</md-subheader>
                 <md-card>
                     <md-list>
+                        <md-list-item layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotRecentPosts">
+                            <md-progress-circular class="md-accent"></md-progress-circular>
+                        </md-list-item>
                         <md-list-item ng-repeat="recentPost in recentPosts" ng-click="$location.path(recentPost.category.path + '/' + recentPost._id)">
                             <div class="md-list-item-text" layout="row" layout-align="center center">
                                 <span class="wrap-title">{{recentPost.title | limitTo: 22}}</span>

@@ -505,6 +505,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
     }
     getCategories();
 
+    $scope.gotCategoryPosts = false;
+
     function getCategoryPosts() {
         $scope.gotCategoryPosts = false;
         Rest.getThings('/api/forum/allCategories')
@@ -517,10 +519,14 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
     }
     getCategoryPosts();
 
+    $scope.gotRecentPosts = false;
+
     function getRecentPosts() {
+        $scope.gotRecentPosts = false;
         Rest.getThings('/api/forum/recentPosts')
             .then(function(res) {
                 $scope.recentPosts = res;
+                $scope.gotRecentPosts = true;
             })
     }
     getRecentPosts();
@@ -745,13 +751,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
     };
     $scope.getPosts(1);
 
-    function getRecentPosts() {
-        Rest.getThings('/api/forum/recentPosts')
-            .then(function(res) {
-                $scope.recentPosts = res;
-            })
-    }
-    getRecentPosts();
+    $scope.gotCategories = false;
 
     function getCategories() {
         $scope.gotCategories = false;
@@ -764,6 +764,18 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
             })
     }
     getCategories();
+
+    $scope.gotRecentPosts = false;
+
+    function getRecentPosts() {
+        $scope.gotRecentPosts = false;
+        Rest.getThings('/api/forum/recentPosts')
+            .then(function(res) {
+                $scope.recentPosts = res;
+                $scope.gotRecentPosts = true;
+            })
+    }
+    getRecentPosts();
     
     $scope.newPost = {
         title: '',
@@ -830,10 +842,14 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
         $scope.user = User.currentUser;
     }
 
+    $scope.gotPost = false;
+
     function getPost() {
+        $scope.gotPost = false;
         Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
             .then(function(res) {
                 $scope.post = res;
+                $scope.gotPost = true;
                 $scope.commentLabels = [1];
 
                 Title.setTitle($scope.post.title);
@@ -871,6 +887,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
                 }
             });
     };
+    
+    $scope.gotCategories = false;
 
     function getCategories() {
         $scope.gotCategories = false;
@@ -883,11 +901,15 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
             })
     }
     getCategories();
+    
+    $scope.gotRecentPosts = false;
 
     function getRecentPosts() {
+        $scope.gotRecentPosts = false;
         Rest.getThings('/api/forum/recentPosts')
             .then(function(res) {
                 $scope.recentPosts = res;
+                $scope.gotRecentPosts = true;
             })
     }
     getRecentPosts();
@@ -1024,7 +1046,13 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
     
     $scope.editingComment = false;
     
+    $scope.toggleEditingComment = function(id) {
+        $scope.editingComment = !$scope.editingComment;
+        $scope.editingCommentId = id;
+    };
+    
     $scope.updateComment = function(comment) {
+        $scope.editingComment = false;
         if(!$scope.user) {
             Notify.generic('You must be logged in to update a comment');
         } else if(!comment.comment) {
