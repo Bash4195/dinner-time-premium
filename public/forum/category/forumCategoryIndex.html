@@ -2,8 +2,8 @@
     <div flex></div>
     <div flex-gt-sm="70" flex="90">
         <md-subheader class="md-no-sticky"><a href="/forum" class="md-accent no-underline">Home</a></md-subheader>
-        <div layout="row">
-            <div flex="75" layout="column">
+        <div layout-gt-sm="row" layout="column">
+            <div flex-gt-sm="75" flex="100" layout="column">
                 <md-card>
                     <md-toolbar class="md-toolbar-tools">
                         <h3>All Categories</h3>
@@ -47,8 +47,8 @@
                     </section>
                 </md-card>
             </div>
-            <div flex="25" layout="column">
-                <md-button class="md-raised md-primary" style="margin-top: 8px" ng-click="newPostDialog()" ng-disabled="!user">
+            <div flex-gt-sm="25" flex="100" layout="column">
+                <md-button hide show-gt-sm class="md-raised md-primary" style="margin-top: 8px" ng-click="newPostDialog()" ng-disabled="!user">
                     <span ng-show="user">New Post</span>
                     <span ng-hide="user">Sign in to Post</span>
                 </md-button>
@@ -110,8 +110,8 @@
     <div flex></div>
 </div>
 
-<md-button class="md-fab md-fab-bottom-right" layout="column" layout-align="center center" hide-gt-sm
-           ng-show="user" ng-click="newCategoryDialog()">
+<md-button class="md-fab md-fab-bottom-right md-primary" layout="column" layout-align="center center" hide-gt-sm
+           ng-show="user" ng-click="newPostDialog()">
     <md-icon>add</md-icon>
 </md-button>
 

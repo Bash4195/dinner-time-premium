@@ -8,8 +8,8 @@
             <md-icon class="material-icons md-18 md-accent">keyboard_arrow_right</md-icon>
             <a ng-href="{{post.category.path}}/{{post._id}}" class="md-accent no-underline">{{post.title | limitTo: 100}}</a>
         </md-subheader>
-        <div layout="row">
-            <div flex="75" layout="column">
+        <div layout-gt-sm="row" layout="column">
+            <div flex-gt-sm="75" flex="100" layout="column">
                 <md-card ng-if="post.locked">
                     <md-card-title>
                         <md-card-title-text layout="column" layout-align="center center">
@@ -131,7 +131,7 @@
                 </form>
             </div>
 
-            <div flex="25" layout="column">
+            <div flex-gt-sm="25" flex="100" layout="column">
                 <div layout="column" ng-if="user">
                     <md-subheader class="md-no-sticky">Staff Options</md-subheader>
                     <md-card>
