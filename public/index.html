@@ -59,9 +59,8 @@
         <div hide-gt-md>
             <md-divider></md-divider>
             <md-list-item>
-                <md-button class="list-btn-no-radius" layout="row" layout-fill ng-click="toggleLeftAndOnlineUsers()">
+                <md-button class="list-btn-no-radius" layout="row" layout-fill ng-href="" ng-click="toggleLeftAndOnlineUsers()">
                     <div layout="row" layout-align="center center" flex="40">
-                        <div class="status-online"></div>
                         <md-icon style="margin: 0">account_circle</md-icon>
                     </div>
                     <p class="left-align-text" flex="60">Online Users</p>
@@ -89,16 +88,14 @@
 
         <!-- User options -->
 
-        <md-button layout="row" class="md-icon-button fadein fadeout" style="min-width: 40px;" ng-hide="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
-            <div class="status-online"></div>
+        <md-button layout="row" class="md-icon-button" style="min-width: 40px;" ng-hide="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
             <md-icon>account_circle</md-icon>
             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
                 Show online users
             </md-tooltip>
         </md-button>
 
-        <md-button layout="row" class="md-icon-button fadein fadeout" style="min-width: 40px;" ng-show="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
-            <div class="status-online"></div>
+        <md-button layout="row" class="md-icon-button" style="min-width: 40px;" ng-show="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
             <md-icon>account_circle</md-icon>
             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
                 Hide online users
@@ -212,7 +209,7 @@
                     <md-icon>refresh</md-icon>
                 </md-button>
             </md-toolbar>
-            <md-list style="height: 100%;">
+            <md-list style="height: 80%;">
                 <div ng-hide="gotOnlineUsers" layout="column" layout-align="center center" layout-fill>
                     <md-progress-circular class="md-accent"></md-progress-circular>
                 </div>
