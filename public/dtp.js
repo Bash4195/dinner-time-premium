@@ -437,7 +437,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', '$routeParams
                 };
 
                 $scope.about = {
-                    name: $scope.userProfile.realName,
+                    realName: $scope.userProfile.realName,
                     age: $scope.userProfile.age,
                     birthday: $scope.userProfile.birthday,
                     locations: $scope.userProfile.location,
