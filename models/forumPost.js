@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var forumPostSchema = mongoose.Schema({
     title: { type: String, required: true, maxlength: 50 },
-    content: { type: String, required: true, maxlength: 2000 },
+    content: { type: String, required: true, maxlength: 10000 },
     authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     editedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', date: { type: Date, default: Date.now() } },
     locked: { type: Boolean, default: false },

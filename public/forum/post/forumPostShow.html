@@ -86,7 +86,7 @@
                                     <p class="wrap-content" ng-hide="editingComment && editingCommentId === comment._id">{{comment.comment}}</p>
                                     <md-input-container class="md-block" ng-if="editingComment && editingCommentId === comment._id">
                                         <label>Comment</label>
-                                        <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user"></textarea>
+                                        <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user" md-maxlength="1000"></textarea>
                                     </md-input-container>
                                 </md-card-content>
                                 <md-card-actions layout="row" layout-align="end center" ng-if="user && !post.locked">
@@ -121,7 +121,7 @@
                             <label ng-show="user && !post.locked">Comment</label>
                             <label ng-hide="user || post.locked">Sign in to comment</label>
                             <label ng-show="post.locked">Commenting is disabled on locked posts</label>
-                            <textarea class="md-accent" ng-model="newComment.comment" ng-disabled="!user || post.locked"></textarea>
+                            <textarea class="md-accent" ng-model="newComment.comment" ng-disabled="!user || post.locked" md-maxlength="1000"></textarea>
                         </div>
                         <md-button class="md-fab md-mini md-primary" ng-if="user && !post.locked" ng-disabled="!newComment.comment" ng-click="createComment()">
                             <md-icon>send</md-icon>
@@ -216,11 +216,11 @@
                 <form>
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="post.title" md-auto-focus>
+                        <input ng-model="post.title" md-auto-focus md-maxlength="50">
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Content</label>
-                        <textarea ng-model="post.content"></textarea>
+                        <textarea ng-model="post.content" md-maxlength="10000"></textarea>
                     </md-input-container>
                 </form>
             </md-dialog-content>

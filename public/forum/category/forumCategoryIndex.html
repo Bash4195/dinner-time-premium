@@ -134,18 +134,20 @@
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="newPost.title" md-auto-focus="newPost.category !== ''">
+                        <input ng-model="newPost.title" md-auto-focus="newPost.category !== ''" md-maxlength="50">
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Content</label>
-                        <textarea ng-model="newPost.content"></textarea>
+                        <textarea ng-model="newPost.content" md-maxlength="10000"></textarea>
                     </md-input-container>
                 </form>
                 <formatting-help ng-show="showFormattingHelp"></formatting-help>
             </md-dialog-content>
             <md-dialog-actions>
-                <md-button class="md-primary" ng-hide="showFormattingHelp" ng-click="toggleFormattingHelp()">Formatting Help <md-icon>arrow_drop_down</md-icon></md-button>
-                <md-button class="md-primary" ng-show="showFormattingHelp" ng-click="toggleFormattingHelp()">Formatting Help <md-icon>arrow_drop_up</md-icon></md-button>
+                <md-button class="md-primary" ng-click="toggleFormattingHelp()">Formatting Help
+                    <md-icon ng-hide="showFormattingHelp">arrow_drop_down</md-icon>
+                    <md-icon ng-show="showFormattingHelp">arrow_drop_up</md-icon>
+                </md-button>
                 <span flex></span>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
                 <md-button class="md-primary md-raised" ng-click="createPost()" ng-disabled="!newPost.category || !newPost.title || !newPost.content">Create</md-button>
@@ -165,7 +167,7 @@
                 <form>
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="newCategory" md-autofocus>
+                        <input ng-model="newCategory" md-autofocus md-maxlength="50">
                     </md-input-container>
                 </form>
             </md-dialog-content>
@@ -196,7 +198,7 @@
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="editingCategory.title" ng-disabled="!editingCategory">
+                        <input ng-model="editingCategory.title" ng-disabled="!editingCategory" md-maxlength="50">
                     </md-input-container>
                 </form>
             </md-dialog-content>
