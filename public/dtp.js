@@ -440,7 +440,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', '$routeParams
                     realName: $scope.userProfile.realName,
                     age: $scope.userProfile.age,
                     birthday: $scope.userProfile.birthday,
-                    locations: $scope.userProfile.location,
+                    location: $scope.userProfile.location,
                     occupation: $scope.userProfile.occupation
                 };
             })
