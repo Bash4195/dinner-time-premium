@@ -120,25 +120,25 @@
                     </md-menu-item>
                     <md-menu-item>
                         <md-menu style="padding: 0; margin: 0;">
-                            <md-button class="md-list-button-style" ng-click="$mdOpenMenu($event)">
+                            <md-button class="md-list-button-style" ng-href="" ng-click="$mdOpenMenu($event)">
                                 <md-icon class="md-list-icon-style">account_circle</md-icon>
-                                Set Status
+                                <span layout-fill layout="row" layout-align="center center">Set Status</span>
                             </md-button>
                             <md-menu-content>
                                 <md-menu-item>
-                                    <md-button ng-click="setUserStatus('Online')">
+                                    <md-button ng-href="" ng-click="setUserStatus('Online')">
                                         <md-icon md-colors="{color: 'green-500'}">check_circle</md-icon>
                                         Online
                                     </md-button>
                                 </md-menu-item>
                                 <md-menu-item>
-                                    <md-button ng-click="setUserStatus('Away')">
+                                    <md-button ng-href="" ng-click="setUserStatus('Away')">
                                         <md-icon md-colors="{color: 'yellow-500'}">access_time</md-icon>
                                         Away
                                     </md-button>
                                 </md-menu-item>
                                 <md-menu-item>
-                                    <md-button ng-click="setUserStatus('Busy')">
+                                    <md-button ng-href="" ng-click="setUserStatus('Busy')">
                                         <md-icon md-colors="{color: 'red-A700'}">do_not_disturb_on</md-icon>
                                         Busy
                                     </md-button>
