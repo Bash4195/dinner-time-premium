@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var findOrCreate = require('mongoose-findorcreate');
 
 var userSchema = mongoose.Schema({
     // stuff from steam
@@ -23,7 +22,7 @@ var userSchema = mongoose.Schema({
     bio: String,
 
     // Permissions
-    rank: String
+    rank: { type: String, default: 'User' }
 }, 
     { timestamps: true }
 );
