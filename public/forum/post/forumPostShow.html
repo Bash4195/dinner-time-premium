@@ -39,8 +39,8 @@
                         <md-content class="wrap-content" style="background-color: transparent" ng-bind-html="post.content | htmlLinky"></md-content>
                         <md-divider style="margin-top: 16px; padding-bottom: 10px;"></md-divider>
                         <div layout="row" layout-align="center center">
-                            <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}" ng-if="post.updatedAt !== post.createdAt">access_time</md-icon>
-                            <span class="md-subhead" ng-if="post.updatedAt !== post.createdAt">Edited by
+                            <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}" ng-if="post.editedBy">access_time</md-icon>
+                            <span class="md-subhead" ng-if="post.editedBy">Edited by
                                 <a ng-href="/user/{{post.editedBy._id}}" class="md-accent no-underline">{{post.editedBy.name}}</a>
                                 <span class="md-subhead" am-time-ago="post.updatedAt"></span>
                             </span>
@@ -90,7 +90,7 @@
                                     </md-input-container>
                                 </md-card-content>
                                 <md-card-actions layout="row" layout-align="end center" ng-if="user && !post.locked">
-                                    <div layout="row" flex ng-if="comment.updatedAt !== comment.createdAt">
+                                    <div layout="row" flex ng-if="comment.editedBy">
                                         <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}">access_time</md-icon>
                                         <span class="md-subhead">Edited by
                                             <a ng-href="/user/{{comment.editedBy._id}}" class="md-accent no-underline">{{comment.editedBy.name}}</a>
