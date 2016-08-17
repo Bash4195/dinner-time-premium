@@ -42,7 +42,7 @@
                             <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}" ng-if="post.editedBy">access_time</md-icon>
                             <span class="md-subhead" ng-if="post.editedBy">Edited by
                                 <a ng-href="/user/{{post.editedBy._id}}" class="md-accent no-underline">{{post.editedBy.name}}</a>
-                                <span class="md-subhead" am-time-ago="post.updatedAt"></span>
+                                <span class="md-subhead" am-time-ago="post.editedAt"></span>
                             </span>
                             <span flex></span>
                             <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
@@ -94,7 +94,7 @@
                                         <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}">access_time</md-icon>
                                         <span class="md-subhead">Edited by
                                             <a ng-href="/user/{{comment.editedBy._id}}" class="md-accent no-underline">{{comment.editedBy.name}}</a>
-                                            <span class="md-subhead" am-time-ago="comment.updatedAt"></span>
+                                            <span class="md-subhead" am-time-ago="comment.editedAt"></span>
                                         </span>
                                         <span flex></span>
                                     </div>

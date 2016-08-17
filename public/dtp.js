@@ -655,7 +655,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                         $mdDialog.hide();
                         var updatedCategory = {
                             title: $scope.editingCategory.title,
-                            editedBy: $scope.user
+                            editedBy: $scope.user,
+                            editedAt: new Date()
                         };
                         Rest.updateThing('/api/forum/' + $scope.editingCategory._id, updatedCategory)
                             .then(function() {
@@ -848,6 +849,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
         $scope.gotPost = false;
         Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
             .then(function(res) {
+                console.log(res);
                 $scope.post = res;
                 $scope.gotPost = true;
                 $scope.commentLabels = [1];
@@ -947,7 +949,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
                         var updatedPost = {
                             title: $scope.post.title,
                             content: $scope.post.content,
-                            editedBy: $scope.user
+                            editedBy: $scope.user,
+                            editedAt: new Date()
                         };
                         Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id, updatedPost)
                             .then(function() {
@@ -1021,7 +1024,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
                                 $location.path($scope.movingPost.category.path + '/' + $scope.post._id);
                                 $scope.movingPost = {
                                     category: '',
-                                    editedBy: $scope.user
+                                    editedBy: $scope.user,
+                                    editedAt: new Date()
                                 };
                             })
                     }
@@ -1066,7 +1070,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
         } else {
             var updatedComment = {
                 comment: comment.comment,
-                editedBy: $scope.user
+                editedBy: $scope.user,
+                editedAt: new Date()
             };
             Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + comment._id, updatedComment)
                 .then(function() {
