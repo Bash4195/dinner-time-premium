@@ -547,6 +547,12 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
             preserveScope: true,
             contentElement: '#createPost',
             controller: function DialogController($scope, $mdDialog) {
+                $scope.showFormattingHelp = false;
+
+                $scope.toggleFormattingHelp = function() {
+                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
+                };
+                
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 };
@@ -582,12 +588,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                 };
             }
         });
-    };
-    
-    $scope.showFormattingHelp = false;
-    
-    $scope.toggleFormattingHelp = function() {
-        $scope.showFormattingHelp = !$scope.showFormattingHelp;
     };
 
     $scope.newCategory = '';
@@ -790,6 +790,12 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
             preserveScope: true,
             contentElement: '#createPost',
             controller: function DialogController($scope, $mdDialog) {
+                $scope.showFormattingHelp = false;
+
+                $scope.toggleFormattingHelp = function() {
+                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
+                };
+                
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 };
@@ -821,12 +827,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
                 };
             }
         });
-    };
-
-    $scope.showFormattingHelp = false;
-
-    $scope.toggleFormattingHelp = function() {
-        $scope.showFormattingHelp = !$scope.showFormattingHelp;
     };
 
     $scope.$location = $location;
@@ -924,6 +924,12 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
             preserveScope: true,
             contentElement: '#editPost',
             controller: function DialogController($scope, $mdDialog) {
+                $scope.showFormattingHelp = false;
+
+                $scope.toggleFormattingHelp = function() {
+                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
+                };
+
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 };

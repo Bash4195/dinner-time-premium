@@ -223,9 +223,14 @@
                         <textarea ng-model="post.content" md-maxlength="10000"></textarea>
                     </md-input-container>
                 </form>
+                <formatting-help ng-show="showFormattingHelp"></formatting-help>
             </md-dialog-content>
             <md-dialog-actions>
-                <div flex></div>
+                <md-button class="md-primary" ng-click="toggleFormattingHelp()">Formatting Help
+                    <md-icon ng-hide="showFormattingHelp">arrow_drop_down</md-icon>
+                    <md-icon ng-show="showFormattingHelp">arrow_drop_up</md-icon>
+                </md-button>
+                <span flex></span>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
                 <md-button class="md-primary md-raised" ng-click="updatePost()" ng-disabled="!post.title || !post.content">Update</md-button>
             </md-dialog-actions>
