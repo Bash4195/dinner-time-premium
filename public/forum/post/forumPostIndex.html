@@ -21,6 +21,15 @@
                         <md-list>
                             <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>
                                 <md-tab label="Page {{label}}" ng-click="getPosts(label)" ng-repeat="label in postLabels">
+                                    <md-list-item ng-hide="posts[0]" layout-padding>
+                                        <div class="md-list-item-text" flex>
+                                            <p>Looks like no one else has posted in this category yet. Why not start things off?</p>
+                                            <md-button class="md-raised md-primary" ng-click="newPostDialog()" ng-disabled="!user">
+                                                <span ng-show="user">New Post</span>
+                                                <span ng-hide="user">Sign in to Post</span>
+                                            </md-button>
+                                        </div>
+                                    </md-list-item>
                                     <md-list-item class="md-2-line" ng-repeat="post in posts | orderBy: '-updatedAt'" ng-click="$location.path(category.path + '/' + post._id)">
                                         <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="">
                                         <div class="md-list-item-text">
