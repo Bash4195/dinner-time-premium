@@ -5,19 +5,19 @@ var ranks = {
         rank: 'GOD',
         permissions: {
             forum: {
-                createCategories: {type: String, default: true},
-                updateCategories: {type: String, default: true},
-                deleteCategories: {type: String, default: true},
+                createCategories: true,
+                updateCategories: true,
+                deleteCategories: true,
 
-                createPosts: {type: String, default: true},
-                updatePosts: {type: String, default: true},
-                deletePosts: {type: String, default: true},
-                lockPosts: {type: String, default: true},
-                movePosts: {type: String, default: true},
+                createPosts: true,
+                updatePosts: true,
+                deletePosts: true,
+                lockPosts: true,
+                movePosts: true,
 
-                createComments: {type: String, default: true},
-                updateComments: {type: String, default: true},
-                deleteComments: {type: String, default: true}
+                createComments: true,
+                updateComments: true,
+                deleteComments: true
             }
         }
     },
@@ -25,19 +25,19 @@ var ranks = {
         rank: 'GODDESS',
         permissions: {
             forum: {
-                createCategories: {type: String, default: true},
-                updateCategories: {type: String, default: true},
-                deleteCategories: {type: String, default: true},
+                createCategories: true,
+                updateCategories: true,
+                deleteCategories: true,
 
-                createPosts: {type: String, default: true},
-                updatePosts: {type: String, default: true},
-                deletePosts: {type: String, default: true},
-                lockPosts: {type: String, default: true},
-                movePosts: {type: String, default: true},
+                createPosts: true,
+                updatePosts: true,
+                deletePosts: true,
+                lockPosts: true,
+                movePosts: true,
 
-                createComments: {type: String, default: true},
-                updateComments: {type: String, default: true},
-                deleteComments: {type: String, default: true}
+                createComments: true,
+                updateComments: true,
+                deleteComments: true
             }
         }
     },
@@ -45,19 +45,19 @@ var ranks = {
         rank: 'Seraph',
         permissions: {
             forum: {
-                createCategories: {type: String, default: true},
-                updateCategories: {type: String, default: true},
-                deleteCategories: {type: String, default: true},
+                createCategories: true,
+                updateCategories: true,
+                deleteCategories: true,
 
-                createPosts: {type: String, default: true},
-                updatePosts: {type: String, default: true},
-                deletePosts: {type: String, default: true},
-                lockPosts: {type: String, default: true},
-                movePosts: {type: String, default: true},
+                createPosts: true,
+                updatePosts: true,
+                deletePosts: true,
+                lockPosts: true,
+                movePosts: true,
 
-                createComments: {type: String, default: true},
-                updateComments: {type: String, default: true},
-                deleteComments: {type: String, default: true}
+                createComments: true,
+                updateComments: true,
+                deleteComments: true
             }
         }
     },
@@ -65,19 +65,19 @@ var ranks = {
         rank: 'Lord',
         permissions: {
             forum: {
-                createCategories: {type: String, default: true},
-                updateCategories: {type: String, default: true},
-                deleteCategories: {type: String, default: true},
+                createCategories: true,
+                updateCategories: true,
+                deleteCategories: true,
 
-                createPosts: {type: String, default: true},
-                updatePosts: {type: String, default: true},
-                deletePosts: {type: String, default: true},
-                lockPosts: {type: String, default: true},
-                movePosts: {type: String, default: true},
+                createPosts: true,
+                updatePosts: true,
+                deletePosts: true,
+                lockPosts: true,
+                movePosts: true,
 
-                createComments: {type: String, default: true},
-                updateComments: {type: String, default: true},
-                deleteComments: {type: String, default: true}
+                createComments: true,
+                updateComments: true,
+                deleteComments: true
             }
         }
     },
@@ -85,19 +85,19 @@ var ranks = {
         rank: 'Admin',
         permissions: {
             forum: {
-                createCategories: {type: String, default: false},
-                updateCategories: {type: String, default: false},
-                deleteCategories: {type: String, default: false},
+                createCategories: false,
+                updateCategories: false,
+                deleteCategories: false,
 
-                createPosts: {type: String, default: true},
-                updatePosts: {type: String, default: true},
-                deletePosts: {type: String, default: true},
-                lockPosts: {type: String, default: true},
-                movePosts: {type: String, default: true},
+                createPosts: true,
+                updatePosts: true,
+                deletePosts: true,
+                lockPosts: true,
+                movePosts: true,
 
-                createComments: {type: String, default: true},
-                updateComments: {type: String, default: true},
-                deleteComments: {type: String, default: true}
+                createComments: true,
+                updateComments: true,
+                deleteComments: true
             }
         }
     },
@@ -105,19 +105,19 @@ var ranks = {
         rank: 'Moderator',
         permissions: {
             forum: {
-                createCategories: {type: String, default: false},
-                updateCategories: {type: String, default: false},
-                deleteCategories: {type: String, default: false},
+                createCategories: false,
+                updateCategories: false,
+                deleteCategories: false,
 
-                createPosts: {type: String, default: true},
-                updatePosts: {type: String, default: true},
-                deletePosts: {type: String, default: true},
-                lockPosts: {type: String, default: true},
-                movePosts: {type: String, default: true},
+                createPosts: true,
+                updatePosts: true,
+                deletePosts: true,
+                lockPosts: true,
+                movePosts: true,
 
-                createComments: {type: String, default: true},
-                updateComments: {type: String, default: true},
-                deleteComments: {type: String, default: true}
+                createComments: true,
+                updateComments: true,
+                deleteComments: true
             }
         }
     },
@@ -125,19 +125,19 @@ var ranks = {
         rank: 'Aristocrat',
         permissions: {
             forum: {
-                createCategories: {type: String, default: false},
-                updateCategories: {type: String, default: false},
-                deleteCategories: {type: String, default: false},
+                createCategories: false,
+                updateCategories: false,
+                deleteCategories: false,
 
-                createPosts: {type: String, default: true},
-                updatePosts: {type: String, default: false},
-                deletePosts: {type: String, default: false},
-                lockPosts: {type: String, default: false},
-                movePosts: {type: String, default: false},
+                createPosts: true,
+                updatePosts: false,
+                deletePosts: false,
+                lockPosts: false,
+                movePosts: false,
 
-                createComments: {type: String, default: true},
-                updateComments: {type: String, default: false},
-                deleteComments: {type: String, default: false}
+                createComments: true,
+                updateComments: false,
+                deleteComments: false
             }
         }
     },
@@ -145,19 +145,19 @@ var ranks = {
         rank: 'VIP',
         permissions: {
             forum: {
-                createCategories: {type: String, default: false},
-                updateCategories: {type: String, default: false},
-                deleteCategories: {type: String, default: false},
+                createCategories: false,
+                updateCategories: false,
+                deleteCategories: false,
 
-                createPosts: {type: String, default: true},
-                updatePosts: {type: String, default: false},
-                deletePosts: {type: String, default: false},
-                lockPosts: {type: String, default: false},
-                movePosts: {type: String, default: false},
+                createPosts: true,
+                updatePosts: false,
+                deletePosts: false,
+                lockPosts: false,
+                movePosts: false,
 
-                createComments: {type: String, default: true},
-                updateComments: {type: String, default: false},
-                deleteComments: {type: String, default: false}
+                createComments: true,
+                updateComments: false,
+                deleteComments: false
             }
         }
     },
@@ -165,19 +165,19 @@ var ranks = {
         rank: 'Donator',
         permissions: {
             forum: {
-                createCategories: {type: String, default: false},
-                updateCategories: {type: String, default: false},
-                deleteCategories: {type: String, default: false},
+                createCategories: false,
+                updateCategories: false,
+                deleteCategories: false,
 
-                createPosts: {type: String, default: true},
-                updatePosts: {type: String, default: false},
-                deletePosts: {type: String, default: false},
-                lockPosts: {type: String, default: false},
-                movePosts: {type: String, default: false},
+                createPosts: true,
+                updatePosts: false,
+                deletePosts: false,
+                lockPosts: false,
+                movePosts: false,
 
-                createComments: {type: String, default: true},
-                updateComments: {type: String, default: false},
-                deleteComments: {type: String, default: false}
+                createComments: true,
+                updateComments: false,
+                deleteComments: false
             }
         }
     }
