@@ -51,7 +51,7 @@ passport.use(new SteamStrategy({
             countryCode: user.loccountrycode,
             onlineStatus: 'Online'
         };
-        User.findOneAndUpdate({openIdIdentifier: identifier}, userData, {upsert: true}, function(error, foundOrNewUser) { // Upsert allows the object to be updated if it's found
+        User.findOneAndUpdate({openIdIdentifier: identifier}, userData, {upsert: true, setDefaultsOnInsert: true}, function(error, foundOrNewUser) { // Upsert allows the object to be updated if it's found
             if(error) {
                 console.log('ERROR: Failed to find and update/upsert user.');
             }
