@@ -54,11 +54,13 @@
                     </md-card-content>
                     <md-card-actions layout="row" layout-align="end center" ng-if="!post.locked && user._id === post.authour._id ||
                     !post.locked && user.permissions.forum.updatePosts || !post.locked && user.permissions.forum.deletePosts">
-                        <md-button class="md-icon-button md-accent" ng-if="user.permissions.forum.updatePosts" ng-click="editPostDialog()">
+                        <md-button class="md-icon-button md-accent" ng-if="!post.locked && user._id === post.authour._id ||
+                        !post.locked && user.permissions.forum.updatePosts" ng-click="editPostDialog()">
                             <md-icon>edit</md-icon>
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit post</md-tooltip>
                         </md-button>
-                        <md-button class="md-icon-button md-accent" ng-if="user.permissions.forum.deletePosts" ng-click="confirmDeletePost()">
+                        <md-button class="md-icon-button md-accent" ng-if="!post.locked && user._id === post.authour._id ||
+                        !post.locked && user.permissions.forum.deletePosts" ng-click="confirmDeletePost()">
                             <md-icon>delete</md-icon>
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete post</md-tooltip>
                         </md-button>
