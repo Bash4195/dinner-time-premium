@@ -36,9 +36,26 @@ router.get('/api/user/:userId', function(req, res) {
 router.put('/api/user/:userId', middleware.isLoggedIn, function(req, res) {
     User.findByIdAndUpdate(req.params.userId, req.body, function(err, user) {
         if(err) {
-            middleware.handleError(res, err.message, 'Failed to update');
+            middleware.handleError(res, err.message, 'Failed to update user');
         } else {
             res.status(204).end('Updated user');
+        }
+    })
+});
+
+// Same as user update route but checks that the user is part of the Super Admin role to be able to update permissions
+router.put('/api/user/:userId/updatePermissions', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
+    if(req.body.rank !== req.user.rank) {
+        req.body.roles = middleware.setRoles(req.body.rank, req.body.roles);
+    }
+    User.findByIdAndUpdate(req.params.userId, req.body, function(err, user) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to update user permissions');
+        } else {
+            req.user.rank = req.body.rank;
+            req.user.roles = req.body.roles;
+            req.user.permissions = req.body.permissions;
+            res.status(204).end('Updated user permissions');
         }
     })
 });

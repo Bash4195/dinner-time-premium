@@ -3,6 +3,7 @@
 var ranks = {
     GOD: {
         rank: 'GOD',
+        roles: ['User', 'Staff', 'Admin', 'Super Admin', 'Owner'],
         permissions: {
             forum: {
                 createCategories: true,
@@ -23,6 +24,7 @@ var ranks = {
     },
     GODDESS: {
         rank: 'GODDESS',
+        roles: ['User', 'Staff', 'Admin', 'Super Admin', 'Owner'],
         permissions: {
             forum: {
                 createCategories: true,
@@ -43,6 +45,7 @@ var ranks = {
     },
     Seraph: {
         rank: 'Seraph',
+        roles: ['User', 'Staff', 'Admin', 'Super Admin'],
         permissions: {
             forum: {
                 createCategories: true,
@@ -63,6 +66,7 @@ var ranks = {
     },
     Lord: {
         rank: 'Lord',
+        roles: ['User', 'Staff', 'Admin', 'Super Admin'],
         permissions: {
             forum: {
                 createCategories: true,
@@ -83,6 +87,7 @@ var ranks = {
     },
     Admin: {
         rank: 'Admin',
+        roles: ['User'],
         permissions: {
             forum: {
                 createCategories: false,
@@ -103,6 +108,7 @@ var ranks = {
     },
     Moderator: {
         rank: 'Moderator',
+        roles: ['User'],
         permissions: {
             forum: {
                 createCategories: false,
@@ -123,6 +129,7 @@ var ranks = {
     },
     Aristocrat: {
         rank: 'Aristocrat',
+        roles: ['User'],
         permissions: {
             forum: {
                 createCategories: false,
@@ -143,6 +150,7 @@ var ranks = {
     },
     VIP: {
         rank: 'VIP',
+        roles: ['User'],
         permissions: {
             forum: {
                 createCategories: false,
@@ -163,6 +171,7 @@ var ranks = {
     },
     Donator: {
         rank: 'Donator',
+        roles: ['User'],
         permissions: {
             forum: {
                 createCategories: false,

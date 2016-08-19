@@ -24,8 +24,7 @@
     <br>
     <div layout-gt-sm="row" layout="column">
         <div flex></div>
-        <div layout="column" flex-gt-sm="50" flex="100">
-            <md-card>
+            <md-card flex-gt-sm="50" flex="100">
                 <md-card-header layout="row">
                     <md-card-header-text>
                         <span class="md-headline">Summary</span>
@@ -50,9 +49,7 @@
                     <md-button class="md-primary md-raised" ng-click="saveProfile(bio)">Save</md-button>
                 </md-card-actions>
             </md-card>
-        </div>
-        <div layout="column" flex-gt-sm="30" flex="100">
-            <md-card>
+            <md-card flex-gt-sm="30" flex="100">
                 <md-card-header layout="row">
                     <md-card-header-text>
                         <span class="md-headline">About</span>
@@ -100,7 +97,46 @@
                     <md-button class="md-primary md-raised" ng-click="saveProfile(about)">Save</md-button>
                 </md-card-actions>
             </md-card>
-        </div>
+        <div flex></div>
+    </div>
+    <!-- Permissions -->
+    <div layout="row" ng-if="user.roles.includes('Staff')">
+        <div flex></div>
+        <md-card flex-gt-sm="90" flex="100">
+            <md-card-header layout="row">
+                <md-card-header-text>
+                    <span class="md-headline">Permissions</span>
+                </md-card-header-text>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-if="user.roles.includes('Super Admin') && !editingPermissions" ng-click="editingPermissionsToggle()"><md-icon>edit</md-icon></md-button>
+            </md-card-header>
+            <md-card-content>
+                <md-list>
+                    <md-list-item>
+                        <md-input-container>
+                            <label>Rank</label>
+                            <md-select class="md-primary" ng-model="permissions.rank" ng-disabled="!editingPermissions">
+                                <md-option ng-repeat="rank in ranks" ng-value="rank">
+                                    {{rank}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </md-list-item>
+                    <div ng-class="{'two-cols': $mdMedia('gt-sm')}" ng-repeat="(permissionGroup, permissions) in userProfile.permissions">
+                        <md-subheader class="md-no-sticky" style="background: transparent"><span class="md-title">{{permissionGroup}}</span></md-subheader>
+                        <md-list-item ng-repeat="(permission, value) in permissions">
+                            <p>{{permission}}</p>
+                            <md-switch class="md-primary md-secondary" ng-model="permissions[permission]" ng-disabled="!editingPermissions"></md-switch>
+                        </md-list-item>
+                    </div>
+                </md-list>
+            </md-card-content>
+            <md-card-actions layout="row" ng-if="editingPermissions">
+                <span flex></span>
+                <md-button class="md-primary" ng-click="editingPermissionsToggle()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="savePermissions()">Save</md-button>
+            </md-card-actions>
+        </md-card>
         <div flex></div>
     </div>
 </div>

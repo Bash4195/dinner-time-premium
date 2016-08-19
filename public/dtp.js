@@ -92,6 +92,21 @@ dtp.factory('Title', function() {
     };
 });
 
+dtp.factory('Ranks', function() {
+    return [
+        'GOD',
+        'GODDESS',
+        'Seraph',
+        'Lord',
+        'Admin',
+        'Moderator',
+        'Aristocrat',
+        'VIP',
+        'Donator',
+        'User'
+    ];
+});
+
 dtp.service('Notify', ['$mdToast', function($mdToast) {
     this.generic = function(message) {
         var generic = $mdToast.simple(message)
@@ -417,68 +432,103 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
     Title.setPageTitle('Dinner Time Premium');
 }]);
 
-dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', '$routeParams', '$filter', function($scope, Title, User, Rest, $routeParams, $filter) {
+dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$routeParams',
+    function($scope, Title, User, Rest, Ranks, $routeParams) {
     
-    var userId = $routeParams.userId;
+        var userId = $routeParams.userId;
 
-    if(User.currentUser !== '') {
-        $scope.user = User.currentUser;
-    }
+        if(User.currentUser !== '') {
+            $scope.user = User.currentUser;
+        }
 
-    $scope.getUserProfile = function() {
-        Rest.getThing('/api/user/' + userId)
-            .then(function(user) {
-                $scope.userProfile = user;
-                Title.setTitle(user.name + '\'s Profile');
-                Title.setPageTitle(user.name + '\'s Profile');
+        $scope.getUserProfile = function() {
+            Rest.getThing('/api/user/' + userId)
+                .then(function(user) {
+                    $scope.userProfile = user;
+                    Title.setTitle(user.name + '\'s Profile');
+                    Title.setPageTitle(user.name + '\'s Profile');
 
-                $scope.bio = {
-                    bio: $scope.userProfile.bio
-                };
+                    $scope.bio = {
+                        bio: $scope.userProfile.bio
+                    };
 
-                $scope.about = {
-                    realName: $scope.userProfile.realName,
-                    age: $scope.userProfile.age,
-                    birthday: new Date($scope.userProfile.birthday),
-                    location: $scope.userProfile.location,
-                    occupation: $scope.userProfile.occupation
-                };
-            })
-    };
+                    $scope.about = {
+                        realName: $scope.userProfile.realName,
+                        age: $scope.userProfile.age,
+                        birthday: new Date($scope.userProfile.birthday),
+                        location: $scope.userProfile.location,
+                        occupation: $scope.userProfile.occupation
+                    };
+                    
+                    $scope.permissions = {
+                        rank: $scope.userProfile.rank,
+                        roles: $scope.userProfile.roles,
+                        permissions: $scope.userProfile.permissions
+                    }
+                })
+        };
 
-    $scope.getUserProfile();
+        $scope.getUserProfile();
 
-    $scope.editingAbout = false;
+        $scope.editingAbout = false;
 
-    $scope.editingAboutToggle = function() { $scope.editingAbout = !$scope.editingAbout; };
+        $scope.editingAboutToggle = function() { $scope.editingAbout = !$scope.editingAbout; };
 
-    $scope.editingBio = false;
-    
-    $scope.editingBioToggle = function() { $scope.editingBio = !$scope.editingBio; };
+        $scope.editingBio = false;
 
-    $scope.saveProfile = function(userData) {
-        Rest.updateThing('/api/user/' + userId, userData)
-            .then(function() {
-                if(userData === $scope.bio) {
-                    $scope.editingBio = false;
-                } else {
-                    $scope.editingAbout = false;
-                }
-                $scope.getUserProfile();
-            })
-    };
+        $scope.editingBioToggle = function() { $scope.editingBio = !$scope.editingBio; };
 
-    // Function to calculate age based on birthday
-    // function getAge(dateString) {
-    //     var today = new Date();
-    //     var birthDate = new Date(dateString);
-    //     var age = today.getFullYear() - birthDate.getFullYear();
-    //     var m = today.getMonth() - birthDate.getMonth();
-    //     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    //         age--;
-    //     }
-    //     return age;
-    // }
+        $scope.saveProfile = function(userData) {
+            Rest.updateThing('/api/user/' + userId, userData)
+                .then(function() {
+                    if(userData === $scope.bio) {
+                        $scope.editingBio = false;
+                    } else {
+                        $scope.editingAbout = false;
+                    }
+                    $scope.getUserProfile();
+                    User.getCurrentUser()
+                        .then(function(user) {
+                            $scope.user = user;
+                            console.log(user);
+                        })
+                })
+        };
+
+        // Function to calculate age based on birthday
+        // function getAge(dateString) {
+        //     var today = new Date();
+        //     var birthDate = new Date(dateString);
+        //     var age = today.getFullYear() - birthDate.getFullYear();
+        //     var m = today.getMonth() - birthDate.getMonth();
+        //     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        //         age--;
+        //     }
+        //     return age;
+        // }
+
+        $scope.ranks = Ranks;
+        
+        $scope.editingPermissions = false;
+
+        $scope.editingPermissionsToggle = function() {
+            if($scope.user.roles.includes('Super Admin')) {
+                $scope.editingPermissions = !$scope.editingPermissions;
+            }
+        };
+        
+        $scope.savePermissions = function() {
+            Rest.updateThing('/api/user/' + userId + '/updatePermissions', $scope.permissions)
+                .then(function() {
+                    $scope.editingPermissions = false;
+                    $scope.getUserProfile();
+                    User.getCurrentUser()
+                        .then(function(user) {
+                            $scope.user = user;
+                            console.log(user);
+                        })
+                })
+        };
 }]);
 
 dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
@@ -490,7 +540,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
     if(User.currentUser !== '') {
         $scope.user = User.currentUser;
     }
-    
+
     $scope.gotCategories = false;
 
     function getCategories() {
@@ -849,7 +899,6 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
         $scope.gotPost = false;
         Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
             .then(function(res) {
-                console.log(res);
                 $scope.post = res;
                 $scope.gotPost = true;
                 $scope.commentLabels = [1];

@@ -23,21 +23,22 @@ var userSchema = mongoose.Schema({
 
     // Permissions
     rank: { type: String, default: 'User', required: true },
+    roles: { type: Array, default: 'User', required: true },
     permissions: {
-        forum: {
-            createCategories: {type: Boolean, default: false},
-            updateCategories: {type: Boolean, default: false},
-            deleteCategories: {type: Boolean, default: false},
+        Forum: {
+            'Create Categories': {type: Boolean, default: false},
+            'Update Categories': {type: Boolean, default: false},
+            'Delete Categories': {type: Boolean, default: false},
 
-            createPosts: {type: Boolean, default: true},
-            updatePosts: {type: Boolean, default: false},
-            deletePosts: {type: Boolean, default: false},
-            lockPosts: {type: Boolean, default: false},
-            movePosts: {type: Boolean, default: false},
+            'Create Posts': {type: Boolean, default: true},
+            'Update Posts': {type: Boolean, default: false},
+            'Delete Posts': {type: Boolean, default: false},
+            'Lock Posts': {type: Boolean, default: false},
+            'Move Posts': {type: Boolean, default: false},
 
-            createComments: {type: Boolean, default: true},
-            updateComments: {type: Boolean, default: false},
-            deleteComments: {type: Boolean, default: false}
+            'Create Comments': {type: Boolean, default: true},
+            'Update Comments': {type: Boolean, default: false},
+            'Delete Comments': {type: Boolean, default: false}
         }
     }
 }, 

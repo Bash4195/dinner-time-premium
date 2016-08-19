@@ -250,3 +250,8 @@ a {
 .md-calendar-date-disabled, .md-calendar-month-label-disabled {
     color: rgba(0, 0, 0, 0.26);
 }
+
+/* Columns */
+.two-cols {
+    columns: 2;
+}

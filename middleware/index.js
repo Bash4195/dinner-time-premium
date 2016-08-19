@@ -1,4 +1,5 @@
 var middleware = {};
+var ranks = require('../ranks/ranks');
 
 middleware.handleError = function(res, reason, message, code) {
     console.log('ERROR: ' + reason);
@@ -6,11 +7,63 @@ middleware.handleError = function(res, reason, message, code) {
     res.status(code || 500).json({'error': message});
 };
 
+// User stuff
 middleware.isLoggedIn = function(req, res, next) {
     if(req.isAuthenticated()) {
         return next();
     } else {
         middleware.handleError(res, 'User is not logged in', 'You must be logged in to do that', 401);
+    }
+};
+
+middleware.setRoles = function(rank, roles) {
+    if(rank === 'GOD' || rank === 'GODDESS') {
+        roles = ['User', 'Staff', 'Admin', 'Super Admin', 'Owner'];
+        return roles;
+    } else if(rank === 'Seraph' || rank === 'Lord') {
+        roles = ['User', 'Staff', 'Admin', 'Super Admin'];
+        return roles;
+    } else if(rank === 'Admin') {
+        roles = ['User', 'Staff', 'Admin'];
+        return roles;
+    } else if(rank === 'Moderator') {
+        roles = ['User', 'Staff'];
+        return roles;
+    } else {
+        roles = ['User'];
+        return roles;
+    }
+};
+
+middleware.isOwner = function(req, res, next) {
+    if(req.user.roles.includes('Owner')) {
+        return next();
+    } else {
+        middleware.handleError(res, 'User does not have permission to run this action', 'You do not have permission to do that', 401);
+    }
+};
+
+middleware.isSuperAdmin = function(req, res, next) {
+    if(req.user.roles.includes('Super Admin')) {
+        return next();
+    } else {
+        middleware.handleError(res, 'User does not have permission to run this action', 'You do not have permission to do that', 401);
+    }
+};
+
+middleware.isAdmin = function(req, res, next) {
+    if(req.user.roles.includes('Admin')) {
+        return next();
+    } else {
+        middleware.handleError(res, 'User does not have permission to run this action', 'You do not have permission to do that', 401);
+    }
+};
+
+middleware.isStaff = function(req, res, next) {
+    if(req.user.roles.includes('Staff')) {
+        return next();
+    } else {
+        middleware.handleError(res, 'User does not have permission to run this action', 'You do not have permission to do that', 401);
     }
 };
 
