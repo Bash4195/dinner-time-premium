@@ -141,8 +141,8 @@
             </div>
 
             <div flex-gt-sm="25" flex="100" layout="column">
-                <div layout="column" ng-if="!post.locked && user._id === post.authour._id || !post.locked && user.permissions.forum.lockPosts ||
-                !post.locked && user.permissions.forum.movePosts">
+                <div layout="column" ng-if="user._id === post.authour._id || user.permissions.forum.lockPosts ||
+                user.permissions.forum.movePosts">
                     <md-subheader class="md-no-sticky">Post Options</md-subheader>
                     <md-card>
                         <md-list>
