@@ -52,9 +52,7 @@ router.put('/api/user/:userId/updatePermissions', middleware.isLoggedIn, middlew
         if(err) {
             middleware.handleError(res, err.message, 'Failed to update user permissions');
         } else {
-            req.user.rank = req.body.rank;
-            req.user.roles = req.body.roles;
-            req.user.permissions = req.body.permissions;
+            req.user = user;
             res.status(204).end('Updated user permissions');
         }
     })

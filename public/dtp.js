@@ -487,7 +487,8 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
                         $scope.editingAbout = false;
                     }
                     $scope.getUserProfile();
-                    User.getCurrentUser()
+
+                    User.getCurrentUser() // Using this instead of a returned user to keep the front end updated with the latest permissions
                         .then(function(user) {
                             $scope.user = user;
                         })
