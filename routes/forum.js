@@ -35,21 +35,25 @@ router.get('/api/forum', function(req, res) {
 
 // CREATE
 router.post('/api/forum', middleware.isLoggedIn, function(req, res) {
-    var newCategory = req.body;
-    if(middleware.checkIfMissing(newCategory.title)) {
-        middleware.handleError(res, 'Category title is missing', 'Title is missing', 400);
-    } else if(middleware.checkIfMissing(newCategory.path)) {
-        middleware.handleError(res, 'Category path is missing', 'Path is missing (/forum/:categoryTitle)', 400);
-    } else if(middleware.checkIfMissing(newCategory.createdBy)) {
-        middleware.handleError(res, 'Category authour is missing', 'Authour is missing', 400);
+    if(middleware.hasPermission(req.user, 'forum', 'createCategories')) {
+        var newCategory = req.body;
+        if(middleware.checkIfMissing(newCategory.title)) {
+            middleware.handleError(res, 'Category title is missing', 'Title is missing', 400);
+        } else if(middleware.checkIfMissing(newCategory.path)) {
+            middleware.handleError(res, 'Category path is missing', 'Path is missing (/forum/:categoryTitle)', 400);
+        } else if(middleware.checkIfMissing(newCategory.createdBy)) {
+            middleware.handleError(res, 'Category authour is missing', 'Authour is missing', 400);
+        } else {
+            Category.create(newCategory, function(err, category) {
+                if(err) {
+                    middleware.handleError(res, err.message, 'Failed to create category');
+                } else {
+                    res.status(201).json(category);
+                }
+            });
+        }
     } else {
-        Category.create(newCategory, function(err, category) {
-            if(err) {
-                middleware.handleError(res, err.message, 'Failed to create category');
-            } else {
-                res.status(201).json(category);
-            }
-        });
+        middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
     }
 });
 

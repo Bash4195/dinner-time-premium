@@ -48,11 +48,17 @@ router.put('/api/user/:userId/updatePermissions', middleware.isLoggedIn, middlew
     if(req.body.rank !== req.user.rank) {
         req.body.roles = middleware.setRoles(req.body.rank, req.body.roles);
     }
-    User.findByIdAndUpdate(req.params.userId, req.body, function(err, user) {
+    User.findByIdAndUpdate(req.params.userId, req.body, {new: true}, function(err, user) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to update user permissions');
         } else {
             req.user = user;
+            req.logIn(req.user, function(err) {
+                if (err) {
+                    req.logout();
+                    middleware.handleError(res, err.message, 'Something went wrong, please login again');
+                }
+            });
             res.status(204).end('Updated user permissions');
         }
     })

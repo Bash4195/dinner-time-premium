@@ -16,6 +16,10 @@ middleware.isLoggedIn = function(req, res, next) {
     }
 };
 
+middleware.hasPermission = function(user, permissionGroup, permission) {
+    return user.permissions[permissionGroup][permission];
+};
+
 middleware.setRoles = function(rank, roles) {
     if(rank === 'GOD' || rank === 'GODDESS') {
         roles = ['User', 'Staff', 'Admin', 'Super Admin', 'Owner'];
