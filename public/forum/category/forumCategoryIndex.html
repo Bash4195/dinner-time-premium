@@ -14,7 +14,7 @@
                     <section ng-repeat="category in categories | orderBy: 'createdAt'">
                         <md-subheader class="no-bg-col md-no-sticky"><a ng-href="{{category.path}}" class="md-accent md-hue-1 no-underline">{{category.title}}</a></md-subheader>
                         <md-list>
-                            <md-list-item ng-hide="category.posts[0]" layout-padding>
+                            <md-list-item ng-hide="category.posts[0]" ng-if="user.permissions.forum.createPosts || !user" layout-padding>
                                 <div class="md-list-item-text" flex>
                                     <p>Looks like no one else has posted in this category yet. Why not start things off?</p>
                                     <md-button class="md-raised md-primary" ng-click="newPost.category = category; newPostDialog()" ng-disabled="!user">
@@ -48,7 +48,7 @@
                 </md-card>
             </div>
             <div flex-gt-sm="25" flex="100" layout="column">
-                <md-button hide show-gt-sm class="md-raised md-primary" style="margin-top: 8px" ng-click="newPostDialog()" ng-disabled="!user">
+                <md-button hide show-gt-sm class="md-raised md-primary" style="margin-top: 8px" ng-if="user.permissions.forum.createPosts || !user" ng-click="newPostDialog()" ng-disabled="!user">
                     <span ng-show="user">New Post</span>
                     <span ng-hide="user">Sign in to Post</span>
                 </md-button>
@@ -57,10 +57,11 @@
                     <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
                 </a>
 
-                <div layout="column" ng-if="user">
-                    <md-subheader class="md-no-sticky">Staff Options</md-subheader>
-                    <md-button class="md-raised md-primary" ng-click="newCategoryDialog()">New Category</md-button>
-                    <md-button class="md-raised md-primary" ng-click="editCategoryDialog()">Edit Category</md-button>
+                <div layout="column" ng-if="user.permissions.forum.createCategories || user.permissions.forum.updateCategories || user.permissions.forum.deleteCategories">
+                    <md-subheader class="md-no-sticky">Category Options</md-subheader>
+                    <md-button class="md-raised md-primary" ng-if="user.permissions.forum.createCategories" ng-click="newCategoryDialog()">New Category</md-button>
+                    <md-button class="md-raised md-primary" ng-if="user.permissions.forum.updateCategories || user.permissions.forum.deleteCategories"
+                               ng-click="editCategoryDialog()">Edit Category</md-button>
                 </div>
 
                 <md-subheader class="md-no-sticky">Categories</md-subheader>
@@ -203,13 +204,14 @@
                 </form>
             </md-dialog-content>
             <md-dialog-actions>
-                <md-button class="md-icon-button md-primary" ng-click="confirmDeleteCategory()" ng-disabled="!editingCategory">
+                <md-button class="md-icon-button md-primary" ng-if="user.permissions.forum.deleteCategories" ng-click="confirmDeleteCategory()" ng-disabled="!editingCategory">
                     <md-icon>delete</md-icon>
                     <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete category</md-tooltip>
                 </md-button>
                 <div flex></div>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                <md-button class="md-primary md-raised" ng-click="updateCategory()" ng-disabled="!editingCategory || !editingCategory.title">Update</md-button>
+                <md-button class="md-primary md-raised" ng-click="updateCategory()"
+                           ng-disabled="!editingCategory || !editingCategory.title || !user.permissions.forum.updateCategories">Update</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>

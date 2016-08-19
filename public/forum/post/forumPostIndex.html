@@ -21,7 +21,7 @@
                         <md-list>
                             <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>
                                 <md-tab label="Page {{label}}" ng-click="getPosts(label)" ng-repeat="label in postLabels">
-                                    <md-list-item ng-hide="posts[0]" layout-padding>
+                                    <md-list-item ng-hide="posts[0]" ng-if="user.permissions.forum.createPosts || !user" layout-padding>
                                         <div class="md-list-item-text" flex>
                                             <p>Looks like no one else has posted in this category yet. Why not start things off?</p>
                                             <md-button class="md-raised md-primary" ng-click="newPostDialog()" ng-disabled="!user">
@@ -53,7 +53,7 @@
                 </md-card>
             </div>
             <div flex-gt-sm="25" flex="100" layout="column">
-                <md-button class="md-raised md-primary" style="margin-top: 8px" ng-click="newPostDialog()" ng-disabled="!user">
+                <md-button class="md-raised md-primary" style="margin-top: 8px" ng-if="user.permissions.forum.createPosts || !user" ng-click="newPostDialog()" ng-disabled="!user">
                     <span ng-show="user">New Post</span>
                     <span ng-hide="user">Sign in to Post</span>
                 </md-button>

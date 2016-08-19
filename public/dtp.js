@@ -490,7 +490,6 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
                     User.getCurrentUser()
                         .then(function(user) {
                             $scope.user = user;
-                            console.log(user);
                         })
                 })
         };
@@ -525,7 +524,6 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
                     User.getCurrentUser()
                         .then(function(user) {
                             $scope.user = user;
-                            console.log(user);
                         })
                 })
         };

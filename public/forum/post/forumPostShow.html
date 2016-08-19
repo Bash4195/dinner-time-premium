@@ -52,12 +52,13 @@
                             </span>
                         </div>
                     </md-card-content>
-                    <md-card-actions layout="row" layout-align="end center" ng-if="user && !post.locked">
-                        <md-button class="md-icon-button md-accent" ng-click="editPostDialog()">
+                    <md-card-actions layout="row" layout-align="end center" ng-if="!post.locked && user._id === post.authour._id ||
+                    !post.locked && user.permissions.forum.updatePosts || !post.locked && user.permissions.forum.deletePosts">
+                        <md-button class="md-icon-button md-accent" ng-if="user.permissions.forum.updatePosts" ng-click="editPostDialog()">
                             <md-icon>edit</md-icon>
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit post</md-tooltip>
                         </md-button>
-                        <md-button class="md-icon-button md-accent" ng-click="confirmDeletePost()">
+                        <md-button class="md-icon-button md-accent" ng-if="user.permissions.forum.deletePosts" ng-click="confirmDeletePost()">
                             <md-icon>delete</md-icon>
                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete post</md-tooltip>
                         </md-button>
@@ -98,17 +99,21 @@
                                         </span>
                                         <span flex></span>
                                     </div>
-                                    <div ng-if="user && !post.locked">
-                                        <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id" ng-click="toggleEditingComment(comment._id)">
+                                    <div ng-if="!post.locked && user._id === comment.authour._id">
+                                        <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id"
+                                                   ng-if="user._id === comment.authour._id || user.permissions.forum.updateComments" ng-click="toggleEditingComment(comment._id)">
                                             <md-icon>edit</md-icon>
                                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
                                         </md-button>
-                                        <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id" ng-click="confirmDeleteComment(comment._id)">
+                                        <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id"
+                                                   ng-if="user._id === comment.authour._id || user.permissions.forum.deleteComments" ng-click="confirmDeleteComment(comment._id)">
                                             <md-icon>delete</md-icon>
                                             <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
                                         </md-button>
-                                        <md-button class="md-accent" ng-show="editingComment && editingCommentId === comment._id" ng-click="toggleEditingComment(comment._id)">Cancel</md-button>
-                                        <md-button class="md-raised md-accent" ng-show="editingComment && editingCommentId === comment._id" ng-click="updateComment(comment)" ng-disabled="!comment.comment">Update</md-button>
+                                        <md-button class="md-accent" ng-show="editingComment && editingCommentId === comment._id"
+                                                   ng-click="toggleEditingComment(comment._id)">Cancel</md-button>
+                                        <md-button class="md-raised md-accent" ng-show="editingComment && editingCommentId === comment._id"
+                                                   ng-click="updateComment(comment)" ng-disabled="!comment.comment">Update</md-button>
                                     </div>
                                 </md-card-actions>
                             </md-card>
@@ -117,7 +122,7 @@
                 </div>
 
                 <!-- Comment Form -->
-                <form style="margin: 8px">
+                <form style="margin: 8px" ng-if="!user || user.permissions.forum.createComments">
                     <md-input-container layout="row">
                         <div flex>
                             <label ng-show="user && !post.locked">Comment</label>
@@ -134,23 +139,24 @@
             </div>
 
             <div flex-gt-sm="25" flex="100" layout="column">
-                <div layout="column" ng-if="user">
-                    <md-subheader class="md-no-sticky">Staff Options</md-subheader>
+                <div layout="column" ng-if="!post.locked && user._id === post.authour._id || !post.locked && user.permissions.forum.lockPosts ||
+                !post.locked && user.permissions.forum.movePosts">
+                    <md-subheader class="md-no-sticky">Post Options</md-subheader>
                     <md-card>
                         <md-list>
-                            <md-list-item ng-if="!post.locked" ng-click="lockPost(true)">
+                            <md-list-item ng-if="!post.locked && user._id === post.authour._id || !post.locked && user.permissions.forum.lockPosts" ng-click="lockPost(true)">
                                 <div class="md-list-item-text" layout="row" layout-align="center center">
                                     <md-icon class="icon-left-of-text-far">lock</md-icon>
                                     <span class="wrap-title">Lock Post</span>
                                 </div>
                             </md-list-item>
-                            <md-list-item ng-if="post.locked" ng-click="lockPost(false)">
+                            <md-list-item ng-if="post.locked && user._id === post.authour._id || post.locked && user.permissions.forum.lockPosts" ng-click="lockPost(false)">
                                 <div class="md-list-item-text" layout="row" layout-align="center center">
                                     <md-icon class="icon-left-of-text-far">lock_open</md-icon>
                                     <span class="wrap-title">Unlock Post</span>
                                 </div>
                             </md-list-item>
-                            <md-list-item ng-click="movePostDialog()">
+                            <md-list-item ng-if="!post.locked && user._id === post.authour._id || user.permissions.forum.movePosts" ng-click="movePostDialog()">
                                 <div class="md-list-item-text" layout="row" layout-align="center center">
                                     <md-icon class="icon-left-of-text-far">forward</md-icon>
                                     <span class="wrap-title">Move Post</span>
