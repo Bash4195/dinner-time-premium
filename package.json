@@ -4,7 +4,7 @@
   "description": "Web application for the Dinner Time Premium Gmod server.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "babel-node --presets es2015 ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brendan Strong",
@@ -17,6 +17,8 @@
     "mongoose": "^4.5.3",
     "passport": "^0.3.2",
     "passport-steam": "^1.0.4",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "babel-cli": "^6.0.0",
+    "babel-preset-es2015": "^6.0.0"
   }
 }
