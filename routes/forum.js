@@ -276,31 +276,41 @@ router.put('/api/forum/:categoryId/:postId/move', middleware.isLoggedIn, functio
     if(middleware.checkIfMissing(newCategory)) {
         middleware.handleError(res, 'No category to move post to was supplied', 'No category to move post to was supplied', 400);
     } else {
-        Post.findByIdAndUpdate(req.params.postId, newCategory, function(err, post) {
+        Post.findById(req.params.postId, function(err, post) {
             if(err) {
                 middleware.handleError(res, err.message, 'Failed to move post');
             } else {
-                Category.findById(post.category, function(err, category) {
-                    if(err) {
-                        middleware.handleError(res, err.message, 'Failed to move post');
-                    } else {
-                        var removePost = category.posts.indexOf(req.params.postId);
-                        category.posts.splice(removePost, 1);
-                        category.save();
-                        
-                        Category.findById(newCategory.category._id, function(err, newCategory) {
-                            if(err) {
-                                middleware.handleError(res, err.message, 'Failed to move post');
-                            } else {
-                                newCategory.posts.push(post);
-                                newCategory.save();
-                                res.status(200).json(post);
-                            }
-                        });
-                    }
-                });
+                if(req.user._id == post.authour || middleware.hasPermission(req.user, 'forum', 'movePosts')) {
+                    Post.findByIdAndUpdate(req.params.postId, newCategory, function(err, post) {
+                        if(err) {
+                            middleware.handleError(res, err.message, 'Failed to move post');
+                        } else {
+                            Category.findById(post.category, function(err, category) {
+                                if(err) {
+                                    middleware.handleError(res, err.message, 'Failed to move post');
+                                } else {
+                                    var removePost = category.posts.indexOf(req.params.postId);
+                                    category.posts.splice(removePost, 1);
+                                    category.save();
+
+                                    Category.findById(newCategory.category._id, function(err, newCategory) {
+                                        if(err) {
+                                            middleware.handleError(res, err.message, 'Failed to move post');
+                                        } else {
+                                            newCategory.posts.push(post);
+                                            newCategory.save();
+                                            res.status(200).json(post);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    })
+                } else {
+                    middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
+                }
             }
-        })
+        });
     }
 });
 
@@ -322,28 +332,32 @@ router.get('/api/forum/:categoryPath/:postId/comments', function(req, res) {
 
 // CREATE
 router.post('/api/forum/:categoryPath/:postId', middleware.isLoggedIn, function(req, res) {
-    var newComment = req.body;
-    if(!newComment.comment || newComment.comment === '') {
-        middleware.handleError(res, 'Comment content is missing', 'Comment content is missing', 400);
-    } else if(!newComment.authour || newComment.authour === '') {
-        middleware.handleError(res, 'Comment authour is missing', 'Comment authour is missing', 400);
+    if(middleware.hasPermission(req.user, 'forum', 'createComments')) {
+        var newComment = req.body;
+        if(!newComment.comment || newComment.comment === '') {
+            middleware.handleError(res, 'Comment content is missing', 'Comment content is missing', 400);
+        } else if(!newComment.authour || newComment.authour === '') {
+            middleware.handleError(res, 'Comment authour is missing', 'Comment authour is missing', 400);
+        } else {
+            Post.findById(req.params.postId, function(err, post) {
+                if(err) {
+                    middleware.handleError(res, err.message, 'Failed to retrieve post to create comment in');
+                } else {
+                    newComment.post = post._id;
+                    Comment.create(newComment, function(err, comment) {
+                        if(err) {
+                            middleware.handleError(res, err.message, 'Failed to create comment in ' + post.title);
+                        } else {
+                            post.comments.push(comment);
+                            post.save();
+                            res.status(201).json(comment);
+                        }
+                    });
+                }
+            });
+        }
     } else {
-        Post.findById(req.params.postId, function(err, post) {
-            if(err) {
-                middleware.handleError(res, err.message, 'Failed to retrieve post to create comment in');
-            } else {
-                newComment.post = post._id;
-                Comment.create(newComment, function(err, comment) {
-                    if(err) {
-                        middleware.handleError(res, err.message, 'Failed to create comment in ' + post.title);
-                    } else {
-                        post.comments.push(comment);
-                        post.save();
-                        res.status(201).json(comment);
-                    }
-                });
-            }
-        });
+        middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
     }
 });
 
@@ -355,13 +369,23 @@ router.put('/api/forum/:categoryId/:postId/:commentId', middleware.isLoggedIn, f
     } else if(middleware.checkIfMissing(editedComment.editedBy)) {
         middleware.handleError(res, 'Comment editor is missing', 'Comment editor is missing', 400);
     } else {
-        Comment.findByIdAndUpdate(req.params.commentId, editedComment, function(err, comment) {
+        Comment.findById(req.params.commentId, function(err, comment) {
             if(err) {
                 middleware.handleError(res, err.message, 'Failed to update comment');
             } else {
-                res.status(204).end('Updated comment')
+                if(req.user._id == comment.authour || middleware.hasPermission(req.user, 'forum', 'updateComments')) {
+                    Comment.findByIdAndUpdate(req.params.commentId, editedComment, function(err, comment) {
+                        if(err) {
+                            middleware.handleError(res, err.message, 'Failed to update comment');
+                        } else {
+                            res.status(204).end('Updated comment')
+                        }
+                    })
+                } else {
+                    middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
+                }
             }
-        })
+        });
     }
 });
 
@@ -371,22 +395,26 @@ router.delete('/api/forum/:categoryId/:postId/:commentId', middleware.isLoggedIn
         if(err) {
             middleware.handleError(res, err.message, 'Failed to delete comment');
         } else {
-            Post.findById(comment.post, function(err, post) {
-                if(err) {
-                    middleware.handleError(res, err.message, 'Failed to delete comment');
-                } else {
-                    var commentToRemove = post.comments.indexOf(comment._id);
-                    post.comments.splice(commentToRemove, 1);
-                    post.save();
-                }
-            });
-            Comment.findByIdAndRemove(comment._id, function(err) {
-                if(err) {
-                    middleware.handleError(res, err.message, 'Failed to delete comment');
-                } else {
-                    res.status(204).end('Deleted comment');
-                }
-            });
+            if(req.user._id == comment.authour || middleware.hasPermission(req.user, 'forum', 'deleteComments')) {
+                Post.findById(comment.post, function(err, post) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to delete comment');
+                    } else {
+                        var commentToRemove = post.comments.indexOf(comment._id);
+                        post.comments.splice(commentToRemove, 1);
+                        post.save();
+                    }
+                });
+                Comment.findByIdAndRemove(comment._id, function(err) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to delete comment');
+                    } else {
+                        res.status(204).end('Deleted comment');
+                    }
+                });
+            } else {
+                middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
+            }
         }
     })
 });
