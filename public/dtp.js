@@ -9,6 +9,10 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
         })
 
         //User Routes
+        .when('/users', {
+            templateUrl: 'user/userIndex.html',
+            controller: 'userIndexCtrl'
+        })
         .when('/user/:userId', {
             templateUrl: 'user/userShow.html',
             controller: 'userShowCtrl'
@@ -19,12 +23,10 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
             templateUrl: 'forum/category/forumCategoryIndex.html',
             controller: 'forumCategoryIndexCtrl'
         })
-
         .when('/forum/:categoryPath', {
             templateUrl: 'forum/post/forumPostIndex.html',
             controller: 'forumPostIndexCtrl'
         })
-    
         .when('/forum/:categoryPath/:postId', {
             templateUrl: 'forum/post/forumPostShow.html',
             controller: 'forumPostShowCtrl'
@@ -430,6 +432,11 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
 dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
     Title.setTitle('DTP');
     Title.setPageTitle('Dinner Time Premium');
+}]);
+
+dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', function($scope, Title, Rest) {
+    Title.setTitle('Users');
+    Title.setPageTitle('Search Users');
 }]);
 
 dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$routeParams',

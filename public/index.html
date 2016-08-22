@@ -56,17 +56,21 @@
             </md-button>
         </md-list-item>
 
-        <div hide-gt-md>
-            <md-divider></md-divider>
-            <md-list-item>
-                <md-button class="list-btn-no-radius" layout="row" layout-fill ng-href="" ng-click="toggleLeftAndOnlineUsers()">
-                    <div layout="row" layout-align="center center" flex="40">
-                        <md-icon style="margin: 0">account_circle</md-icon>
-                    </div>
-                    <p class="left-align-text" flex="60">Online Users</p>
-                </md-button>
-            </md-list-item>
-        </div>
+        <md-divider></md-divider>
+        <md-list-item>
+            <md-button class="list-btn-no-radius" ng-href="/users" ng-class="{'md-primary active': activeNav('/users')}" layout="row" layout-fill>
+                <md-icon flex="40">people</md-icon>
+                <p class="left-align-text" flex="60">Users</p>
+            </md-button>
+        </md-list-item>
+        <md-list-item hide-gt-md>
+            <md-button class="list-btn-no-radius" layout="row" layout-fill ng-href="" ng-click="toggleLeftAndOnlineUsers()">
+                <div layout="row" layout-align="center center" flex="40">
+                    <md-icon style="margin: 0">account_circle</md-icon>
+                </div>
+                <p class="left-align-text" flex="60">Online Users</p>
+            </md-button>
+        </md-list-item>
     </md-list>
 </md-sidenav>
 
