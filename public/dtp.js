@@ -161,8 +161,8 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
 
 dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
     // INDEX
-    this.getThings = function(path) {
-        return $http.get(path)
+    this.getThings = function(path, params) {
+        return $http.get(path, {params: params})
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -174,8 +174,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             });
     };
     // CREATE
-    this.newThing = function(path, newThing) {
-        return $http.post(path, newThing)
+    this.newThing = function(path, newThing, params) {
+        return $http.post(path, newThing, {params: params})
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -187,8 +187,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // SHOW
-    this.getThing = function(path) {
-        return $http.get(path)
+    this.getThing = function(path, params) {
+        return $http.get(path, {params: params})
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -200,8 +200,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // UPDATE
-    this.updateThing = function(path, updatedThing) {
-        return $http.put(path, updatedThing)
+    this.updateThing = function(path, updatedThing, params) {
+        return $http.put(path, updatedThing, {params: params})
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -213,8 +213,8 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // DELETE
-    this.deleteThing = function(path) {
-        return $http.delete(path)
+    this.deleteThing = function(path, params) {
+        return $http.delete(path, {params: params})
             .then(function(res) {
                 return res.data;
             }, function(res) {
@@ -434,9 +434,23 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
     Title.setPageTitle('Dinner Time Premium');
 }]);
 
-dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', function($scope, Title, Rest) {
+dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', function($scope, Title, Rest, $location) {
     Title.setTitle('Users');
     Title.setPageTitle('Search Users');
+    
+    $scope.$location = $location;
+
+    $scope.search = '';
+
+    $scope.gotUsers = false;
+    $scope.$watch('search', function() {
+        $scope.gotUsers = false;
+        Rest.getThings('/api/users', {search: $scope.search})
+            .then(function(users) {
+                $scope.users = users;
+                $scope.gotUsers = true;
+            })
+    }, true);
 }]);
 
 dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$routeParams',
@@ -757,8 +771,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
     };
 }]);
 
-dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location', '$http',
-function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, $http) {
+dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
 
     var categoryPath = $routeParams.categoryPath;
 
@@ -794,16 +808,10 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
     $scope.getPosts = function(label) {
         $scope.gotPosts = false;
         var skip = (label - 1) * 20;
-        $http.get('/api/forum/' + categoryPath, {params: {skip: skip}})
-            .then(function(res) {
-                $scope.posts = res.data.posts;
+        Rest.getThings('/api/forum/' + categoryPath, {skip: skip})
+            .then(function(category) {
+                $scope.posts = category.posts;
                 $scope.gotPosts = true;
-            }, function(res) {
-                if(res.data.error) {
-                    Notify.error(res.data.error);
-                } else {
-                    Notify.error('Failed to retrieve posts');
-                }
             });
     };
     $scope.getPosts(1);

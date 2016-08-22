@@ -1,1 +1,23 @@
-<h1>User Index</h1>
+<div layout="row" layout-align="center center">
+    <md-card flex-gt-sm="80" flex>
+        <md-card-header layout="row" layout-align="center center">
+            <md-input-container md-no-float class="md-block" flex-gt-sm="50" flex>
+                <md-icon>search</md-icon>
+                <input ng-model="search" type="text" placeholder="Search by name or Steam 64 ID">
+            </md-input-container>
+        </md-card-header>
+        <md-card-content style="padding: 0;">
+            <md-list flex>
+                <md-list-item class="md-3-line" ng-repeat="user in users" ng-click="$location.path('/user/' + user._id)">
+                    <img ng-src="{{user.avatar}}" alt="" class="md-avatar">
+                    <div class="md-list-item-text">
+                        <h3>{{user.name}}</h3>
+                        <h4>{{user.onlineStatus}}</h4>
+                        <p>{{user.rank}}</p>
+                        <md-button class="md-secondary md-raised md-primary" ng-click="$location.path('/user/' + user._id)">View Profile</md-button>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
+</div>

@@ -3,26 +3,34 @@ var router = express.Router();
 var middleware = require('../middleware/index');
 var User = require('../models/user');
 
+// INDEX
 router.get('/api/users', function(req, res) {
-    User.find({}, function(err, users) {
+    var query = req.query.search;
+    var params = {};
+    if(Object.keys(req.query).length > 0 && req.query.constructor === Object) {
+        params = {name: {$regex: query}};
+    }
+    User.find(params, function(err, namedUsers) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve users');
         } else {
-            res.status(200).json(users);
+            if(namedUsers.length <= 0) {
+                params = {steamId: query};
+                User.find(params, function(err, steamIdUsers) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to retrieve users');
+                    } else {
+                        res.status(200).json(steamIdUsers);
+                    }
+                });
+            } else {
+                res.status(200).json(namedUsers);
+            }
         }
     });
 });
 
-router.get('/api/loggedInUsers', function(req, res) {
-    User.find({onlineStatus: {$ne: 'Offline'}}, function(err, users) {
-        if(err) {
-            middleware.handleError(res, err.message, 'Failed to retrieve online users');
-        } else {
-            res.status(200).json(users);
-        }
-    });
-});
-
+// SHOW
 router.get('/api/user/:userId', function(req, res) {
     User.findById(req.params.userId, function(err, user) {
         if(err) {
@@ -33,6 +41,7 @@ router.get('/api/user/:userId', function(req, res) {
     })
 });
 
+// UPDATE
 router.put('/api/user/:userId', middleware.isLoggedIn, function(req, res) {
     User.findByIdAndUpdate(req.params.userId, req.body, function(err, user) {
         if(err) {
@@ -62,6 +71,17 @@ router.put('/api/user/:userId/updatePermissions', middleware.isLoggedIn, middlew
             res.status(204).end('Updated user permissions');
         }
     })
+});
+
+// Online Users sidenav
+router.get('/api/loggedInUsers', function(req, res) {
+    User.find({onlineStatus: {$ne: 'Offline'}}, function(err, users) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve online users');
+        } else {
+            res.status(200).json(users);
+        }
+    });
 });
 
 module.exports = router;

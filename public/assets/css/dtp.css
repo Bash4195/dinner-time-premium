@@ -166,25 +166,21 @@ a {
     border-radius: 50%;
 }
 
-/* Status dots */
+/* Status colours */
 .status-online {
-    border: 5px solid #4CAF50;
-    border-radius: 50%;
+    color: #4CAF50;
 }
 
 .status-away {
-    border: 5px solid #FFEB3B;
-    border-radius: 50%;
+    color: #FFEB3B;
 }
 
 .status-busy {
-    border: 5px solid #F44336;
-    border-radius: 50%;
+    color: #F44336;
 }
 
 .status-offline {
-    border: 5px solid #9E9E9E;
-    border-radius: 50%;
+    color: #9E9E9E;
 }
 
 /* Word wrap */
