@@ -27292,7 +27292,6 @@ User.create([
     }
 });
 
-
 // Routes
 app.use(authRoutes);
 app.use(forumRoutes);
