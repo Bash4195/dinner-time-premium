@@ -435,7 +435,7 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
 }]);
 
 dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', function($scope, Title, Rest, $location) {
-    Title.setTitle('Users');
+    Title.setTitle('DTP - Users');
     Title.setPageTitle('Search Users');
     
     $scope.retrieveUsers = function() {
@@ -443,13 +443,13 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
         
         Rest.getThing('/api/users/count', {search: $scope.search})
             .then(function(numUsers) {
-                $scope.userLabels = [1];
+                $scope.userLabels = [];
                 var tabs = numUsers / 20;
 
                 for(var i = 1; i < tabs; i++) {
-                    $scope.userLabels.push(i + 1);
+                    $scope.userLabels.push(i);
                 }
-                
+
                 $scope.getUsers(1);
             });
     };
@@ -808,11 +808,11 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                 Title.setTitle($scope.category.title);
                 Title.setPageTitle($scope.category.title);
 
-                $scope.postLabels = [1];
+                $scope.postLabels = [0];
                 var tabs = $scope.category.posts.length / 20;
 
                 for(var i = 1; i < tabs; i++) {
-                    $scope.postLabels.push(i + 1);
+                    $scope.postLabels.push(i);
                 }
             })
     }
@@ -935,11 +935,11 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                 Title.setTitle($scope.post.title);
                 Title.setPageTitle($scope.post.title);
 
-                $scope.commentLabels = [1];
+                $scope.commentLabels = [];
                 var tabs = $scope.post.comments.length / 20;
 
                 for(var i = 1; i < tabs; i++) {
-                    $scope.commentLabels.push(i + 1);
+                    $scope.commentLabels.push(i);
                 }
                 $scope.getComments($scope.label);
             })
