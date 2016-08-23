@@ -5,12 +5,12 @@ var User = require('../models/user');
 
 // INDEX
 router.get('/api/users', function(req, res) {
-    User.find({name: {$regex: req.query.search}}).skip(req.query.skip).limit(20).exec(function(err, namedUsers) {
+    User.find({name: {$regex: req.query.search}}).limit(100).exec(function(err, namedUsers) {// .skip(req.query.skip).limit(100).exec(function(err, namedUsers) { // Pagination
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve users');
         } else {
             if(namedUsers.length <= 0) {
-                User.find({steamId: req.query.search}).limit(20).exec(function(err, steamIdUsers) {
+                User.find({steamId: req.query.search}).limit(100).exec(function(err, steamIdUsers) {// .skip(req.query.skip).limit(100).exec(function(err, steamIdUsers) { // Pagination
                     if(err) {
                         middleware.handleError(res, err.message, 'Failed to retrieve users');
                     } else {

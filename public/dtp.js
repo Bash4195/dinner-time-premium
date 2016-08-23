@@ -442,25 +442,25 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
 
     $scope.gotUsers = true;
 
-    $scope.retrieveUsers = function() {
-        $scope.gotUsers = false;
+    // Used for pagination but angular material tabs cause so many $digests that the page freezes with enough tabs
+    // $scope.retrieveUsers = function() {
+    //     $scope.gotUsers = false;
+    //    
+    //     Rest.getThing('/api/users/count', {search: $scope.search})
+    //         .then(function(numUsers) {
+    //             $scope.userLabels = [];
+    //             var tabs = numUsers / 20;
+    //    
+    //             for(var i = 0; i < tabs; i++) {
+    //                 $scope.userLabels.push(i + 1);
+    //             }
+    //             $scope.getUsers(1);
+    //         });
+    // };
 
-        Rest.getThing('/api/users/count', {search: $scope.search})
-            .then(function(numUsers) {
-                $scope.userLabels = [];
-                var tabs = numUsers / 20;
-
-                for(var i = 0; i < tabs; i++) {
-                    $scope.userLabels.push(i + 1);
-                }
-
-                $scope.getUsers(1);
-            });
-    };
-
-    $scope.getUsers = function(label) {
-        var skip = (label - 1) * 20;
-        Rest.getThings('/api/users', {search: $scope.search, skip: skip})
+    $scope.getUsers = function() {
+        // var skip = (label - 1) * 20; // For pagination
+        Rest.getThings('/api/users', {search: $scope.search})//, skip: skip}) // Pagination
             .then(function(users) {
                 $scope.users = users;
                 $scope.gotUsers = true;
@@ -470,7 +470,7 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     $scope.$location = $location;
 
     $scope.submitSearch = function() {
-        $scope.retrieveUsers(1);
+        $scope.getUsers();
     };
 }]);
 

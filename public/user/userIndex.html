@@ -16,8 +16,8 @@
                 <md-progress-circular class="md-accent"></md-progress-circular>
             </div>
             <md-list flex>
-                <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>
-                    <md-tab label="{{label}}" ng-click="getUsers(label)" ng-repeat="label in userLabels">
+                <!--<md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>-->
+                    <!--<md-tab label="{{label}}" ng-click="getUsers(label)" ng-repeat="label in userLabels">-->
                         <md-list-item class="md-3-line" ng-repeat="user in users" ng-click="$location.path('/user/' + user._id)">
                             <img ng-src="{{user.avatar}}" alt="" class="md-avatar">
                             <div class="md-list-item-text" layout="row">
@@ -30,9 +30,12 @@
                                 <md-button ng-show="$mdMedia('gt-sm')" class="md-secondary md-raised md-primary" ng-click="$location.path('/user/' + user._id)">View Profile</md-button>
                             </div>
                         </md-list-item>
-                    </md-tab>
-                </md-tabs>
+                    <!--</md-tab>-->
+                <!--</md-tabs>-->
             </md-list>
         </md-card-content>
     </md-card>
+</div>
+<div layout="row" layout-align="center center">
+    <md-subheader flex-gt-sm="80" flex>Results are limited to 100 for performance</md-subheader>
 </div>
