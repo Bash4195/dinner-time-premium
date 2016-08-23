@@ -84,7 +84,7 @@ router.get('/api/users/count', function(req, res) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve users');
         } else {
-            if(numNamedUsers.length <= 0) {
+            if(numNamedUsers <= 0) {
                 User.find({steamId: req.query.search}).count().exec(function(err, numSteamIdUsers) {
                     if(err) {
                         middleware.handleError(res, err.message, 'Failed to retrieve users');

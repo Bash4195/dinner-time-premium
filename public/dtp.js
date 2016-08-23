@@ -437,23 +437,27 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
 dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', function($scope, Title, Rest, $location) {
     Title.setTitle('DTP - Users');
     Title.setPageTitle('Search Users');
-    
+
+    $scope.search = '';
+
+    $scope.gotUsers = true;
+
     $scope.retrieveUsers = function() {
         $scope.gotUsers = false;
-        
+
         Rest.getThing('/api/users/count', {search: $scope.search})
             .then(function(numUsers) {
                 $scope.userLabels = [];
                 var tabs = numUsers / 20;
 
-                for(var i = 1; i < tabs; i++) {
-                    $scope.userLabels.push(i);
+                for(var i = 0; i < tabs; i++) {
+                    $scope.userLabels.push(i + 1);
                 }
 
                 $scope.getUsers(1);
             });
     };
-    
+
     $scope.getUsers = function(label) {
         var skip = (label - 1) * 20;
         Rest.getThings('/api/users', {search: $scope.search, skip: skip})
@@ -462,20 +466,17 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
                 $scope.gotUsers = true;
             })
     };
-    
+
     $scope.$location = $location;
 
-    $scope.search = '';
-
-    $scope.gotUsers = false;
-    $scope.$watch('search', function() { // Will run when page loads up
+    $scope.submitSearch = function() {
         $scope.retrieveUsers(1);
-    }, true);
+    };
 }]);
 
 dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$routeParams',
     function($scope, Title, User, Rest, Ranks, $routeParams) {
-    
+
         var userId = $routeParams.userId;
 
         if(User.currentUser !== '') {
@@ -500,7 +501,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
                         location: $scope.userProfile.location,
                         occupation: $scope.userProfile.occupation
                     };
-                    
+
                     $scope.permissions = {
                         rank: $scope.userProfile.rank,
                         roles: $scope.userProfile.roles,
@@ -549,7 +550,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
         // }
 
         $scope.ranks = Ranks;
-        
+
         $scope.editingPermissions = false;
 
         $scope.editingPermissionsToggle = function() {
@@ -557,7 +558,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
                 $scope.editingPermissions = !$scope.editingPermissions;
             }
         };
-        
+
         $scope.savePermissions = function() {
             Rest.updateThing('/api/user/' + userId + '/updatePermissions', $scope.permissions)
                 .then(function() {
