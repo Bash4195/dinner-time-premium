@@ -438,18 +438,38 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     Title.setTitle('Users');
     Title.setPageTitle('Search Users');
     
+    $scope.retrieveUsers = function() {
+        $scope.gotUsers = false;
+        
+        Rest.getThing('/api/users/count', {search: $scope.search})
+            .then(function(numUsers) {
+                $scope.userLabels = [1];
+                var tabs = numUsers / 20;
+
+                for(var i = 1; i < tabs; i++) {
+                    $scope.userLabels.push(i + 1);
+                }
+                
+                $scope.getUsers(1);
+            });
+    };
+    
+    $scope.getUsers = function(label) {
+        var skip = (label - 1) * 20;
+        Rest.getThings('/api/users', {search: $scope.search, skip: skip})
+            .then(function(users) {
+                $scope.users = users;
+                $scope.gotUsers = true;
+            })
+    };
+    
     $scope.$location = $location;
 
     $scope.search = '';
 
     $scope.gotUsers = false;
-    $scope.$watch('search', function() {
-        $scope.gotUsers = false;
-        Rest.getThings('/api/users', {search: $scope.search})
-            .then(function(users) {
-                $scope.users = users;
-                $scope.gotUsers = true;
-            })
+    $scope.$watch('search', function() { // Will run when page loads up
+        $scope.retrieveUsers(1);
     }, true);
 }]);
 
@@ -784,21 +804,16 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         Rest.getThing('/api/forum/singleCategory/' + categoryPath)
             .then(function(res) {
                 $scope.category = res;
-                $scope.postLabels = [1];
 
                 Title.setTitle($scope.category.title);
                 Title.setPageTitle($scope.category.title);
 
-                var count = 0;
-                var postsPerPage = 20;
-                $scope.category.posts.forEach(function() {
-                    count++;
-                    if(count > postsPerPage) {
-                        var nextPage = $scope.postLabels.length + 1;
-                        $scope.postLabels.push(nextPage);
-                        postsPerPage += 20;
-                    }
-                });
+                $scope.postLabels = [1];
+                var tabs = $scope.category.posts.length / 20;
+
+                for(var i = 1; i < tabs; i++) {
+                    $scope.postLabels.push(i + 1);
+                }
             })
     }
     getCategory();
@@ -897,8 +912,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
     $scope.$location = $location;
 }]);
 
-dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location', '$http',
-function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, $http) {
+dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
 
     var categoryPath = $routeParams.categoryPath;
     var postId = $routeParams.postId;
@@ -907,6 +922,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
         $scope.user = User.currentUser;
     }
 
+    $scope.label = 1;
     $scope.gotPost = false;
 
     function getPost() {
@@ -915,22 +931,17 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
             .then(function(res) {
                 $scope.post = res;
                 $scope.gotPost = true;
-                $scope.commentLabels = [1];
 
                 Title.setTitle($scope.post.title);
                 Title.setPageTitle($scope.post.title);
 
-                var count = 0;
-                var commentsPerPage = 20;
-                $scope.post.comments.forEach(function() {
-                    count++;
-                    if (count > commentsPerPage) {
-                        var nextPage = $scope.commentLabels.length + 1;
-                        $scope.commentLabels.push(nextPage);
-                        commentsPerPage += 20;
-                    }
-                });
-                $scope.getComments(1);
+                $scope.commentLabels = [1];
+                var tabs = $scope.post.comments.length / 20;
+
+                for(var i = 1; i < tabs; i++) {
+                    $scope.commentLabels.push(i + 1);
+                }
+                $scope.getComments($scope.label);
             })
     }
     getPost();
@@ -940,16 +951,11 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, 
     $scope.getComments = function(label) {
         $scope.gotComments = false;
         var skip = (label - 1) * 20;
-        $http.get('/api/forum/' + categoryPath + '/' + $scope.post._id + '/comments', {params: {skip: skip}})
-            .then(function(res) {
-                $scope.comments = res.data.comments;
+        Rest.getThings('/api/forum/' + categoryPath + '/' + $scope.post._id + '/comments', {skip: skip})
+            .then(function(post) {
+                $scope.comments = post.comments;
+                $scope.label = label;
                 $scope.gotComments = true;
-            }, function(res) {
-                if(res.data.error) {
-                    Notify.error(res.data.error);
-                } else {
-                    Notify.error('Failed to retrieve comments');
-                }
             });
     };
     

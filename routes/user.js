@@ -5,18 +5,12 @@ var User = require('../models/user');
 
 // INDEX
 router.get('/api/users', function(req, res) {
-    var query = req.query.search;
-    var params = {};
-    if(Object.keys(req.query).length > 0 && req.query.constructor === Object) {
-        params = {name: {$regex: query}};
-    }
-    User.find(params, function(err, namedUsers) {
+    User.find({name: {$regex: req.query.search}}).skip(req.query.skip).limit(20).exec(function(err, namedUsers) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve users');
         } else {
             if(namedUsers.length <= 0) {
-                params = {steamId: query};
-                User.find(params, function(err, steamIdUsers) {
+                User.find({steamId: req.query.search}).limit(20).exec(function(err, steamIdUsers) {
                     if(err) {
                         middleware.handleError(res, err.message, 'Failed to retrieve users');
                     } else {
@@ -80,6 +74,27 @@ router.get('/api/loggedInUsers', function(req, res) {
             middleware.handleError(res, err.message, 'Failed to retrieve online users');
         } else {
             res.status(200).json(users);
+        }
+    });
+});
+
+// Count Users
+router.get('/api/users/count', function(req, res) {
+    User.find({name: {$regex: req.query.search}}).count().exec(function(err, numNamedUsers) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve users');
+        } else {
+            if(numNamedUsers.length <= 0) {
+                User.find({steamId: req.query.search}).count().exec(function(err, numSteamIdUsers) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to retrieve users');
+                    } else {
+                        res.status(200).json(numSteamIdUsers);
+                    }
+                });
+            } else {
+                res.status(200).json(numNamedUsers);
+            }
         }
     });
 });

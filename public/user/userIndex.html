@@ -8,15 +8,22 @@
         </md-card-header>
         <md-card-content style="padding: 0;">
             <md-list flex>
-                <md-list-item class="md-3-line" ng-repeat="user in users" ng-click="$location.path('/user/' + user._id)">
-                    <img ng-src="{{user.avatar}}" alt="" class="md-avatar">
-                    <div class="md-list-item-text">
-                        <h3>{{user.name}}</h3>
-                        <h4>{{user.onlineStatus}}</h4>
-                        <p>{{user.rank}}</p>
-                        <md-button class="md-secondary md-raised md-primary" ng-click="$location.path('/user/' + user._id)">View Profile</md-button>
-                    </div>
-                </md-list-item>
+                <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>
+                    <md-tab label="{{label}}" ng-click="getUsers(label)" ng-repeat="label in userLabels">
+                        <section layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotUsers">
+                            <md-progress-circular class="md-accent"></md-progress-circular>
+                        </section>
+                        <md-list-item class="md-3-line" ng-repeat="user in users | orderBy: 'name'" ng-click="$location.path('/user/' + user._id)">
+                            <img ng-src="{{user.avatar}}" alt="" class="md-avatar">
+                            <div class="md-list-item-text">
+                                <h3>{{user.name}}</h3>
+                                <h4>{{user.onlineStatus}}</h4>
+                                <p>{{user.rank}}</p>
+                                <md-button class="md-secondary md-raised md-primary" ng-click="$location.path('/user/' + user._id)">View Profile</md-button>
+                            </div>
+                        </md-list-item>
+                    </md-tab>
+                </md-tabs>
             </md-list>
         </md-card-content>
     </md-card>
