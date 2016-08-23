@@ -440,17 +440,17 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
 
     $scope.search = '';
 
-    $scope.gotUsers = true;
+    $scope.gotUsers = false;
 
     // Used for pagination but angular material tabs cause so many $digests that the page freezes with enough tabs
     // $scope.retrieveUsers = function() {
     //     $scope.gotUsers = false;
-    //    
+    //
     //     Rest.getThing('/api/users/count', {search: $scope.search})
     //         .then(function(numUsers) {
     //             $scope.userLabels = [];
     //             var tabs = numUsers / 20;
-    //    
+    //
     //             for(var i = 0; i < tabs; i++) {
     //                 $scope.userLabels.push(i + 1);
     //             }
@@ -458,20 +458,22 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     //         });
     // };
 
-    $scope.getUsers = function() {
+    function getUsers() {
+        $scope.gotUsers = false;
         // var skip = (label - 1) * 20; // For pagination
         Rest.getThings('/api/users', {search: $scope.search})//, skip: skip}) // Pagination
             .then(function(users) {
                 $scope.users = users;
                 $scope.gotUsers = true;
             })
+    }
+    getUsers();
+
+    $scope.submitSearch = function() {
+        getUsers();
     };
 
     $scope.$location = $location;
-
-    $scope.submitSearch = function() {
-        $scope.getUsers();
-    };
 }]);
 
 dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$routeParams',
@@ -643,7 +645,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
                 $scope.toggleFormattingHelp = function() {
                     $scope.showFormattingHelp = !$scope.showFormattingHelp;
                 };
-                
+
                 $scope.closeDialog = function() {
                     $mdDialog.hide();
                 };
@@ -721,7 +723,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
             }
         });
     };
-    
+
     $scope.editingCategory = '';
 
     $scope.editCategoryDialog = function() {
