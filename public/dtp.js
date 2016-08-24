@@ -305,10 +305,11 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
                 $scope.onlineUsers = users;
             })
     };
-    $scope.getOnlineUsers();
 
     $interval(function() { // Update online user list every 5 minutes
-        $scope.getOnlineUsers();
+        if($scope.lockOnlineUsers || $mdSidenav('onlineUsers').isOpen()) {
+            $scope.getOnlineUsers();
+        }
     }, 300000);
 
     // Side navs
@@ -586,7 +587,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
         };
 }]);
 
-dtp.controller('newsCtrl', ['$scope', 'Title', 'User', 'Rest', function($scope, Title, User, Rest) {
+dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', function($scope, Title, User, Rest) {
     Title.setTitle('DTP - News');
     Title.setPageTitle('News');
 
