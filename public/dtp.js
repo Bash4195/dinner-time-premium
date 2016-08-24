@@ -1187,7 +1187,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 }]);
 
-dtp.controller('rulesCtrl', ['$scope', 'Title', 'User', 'Rest', function($scope, Title, User, Rest) {
+dtp.controller('rulesCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog', function($scope, Title, User, Rest, $mdDialog) {
     Title.setTitle('DTP - Rules');
     Title.setPageTitle('Rules');
 
@@ -1198,8 +1198,49 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'User', 'Rest', function($scope,
     function getRules() {
         Rest.getThing('/api/rules')
             .then(function(rules) {
-                $scope.rules = rules
+                $scope.rules = rules.rules;
             });
     }
     getRules();
+
+    $scope.editRulesDialog = function() {
+        $mdDialog.show({
+            clickOutsideToClose: true,
+            fullscreen: true,
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#editRules',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.showFormattingHelp = false;
+
+                $scope.toggleFormattingHelp = function() {
+                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
+                };
+
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+
+                $scope.updateRules = function() {
+                    if(!$scope.user) {
+                        Notify.generic('You must be logged in to do that');
+                        $mdDialog.hide();
+                    } else if($scope.rules === '') {
+                        Notify.generic('The server must have rules! That\'s a rule');
+                    } else {
+                        $mdDialog.hide();
+                        var updatedRules = {
+                            rules: $scope.rules,
+                            editedBy: $scope.user,
+                            editedAt: new Date()
+                        };
+                        Rest.updateThing('/api/rules', updatedRules)
+                            .then(function() {
+                                getRules();
+                            });
+                    }
+                };
+            }
+        });
+    };
 }]);

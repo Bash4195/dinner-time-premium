@@ -4,7 +4,37 @@
             <md-card-title-text>
                 <span class="md-headline">Rules</span>
             </md-card-title-text>
+            <md-button class="md-icon-button" ng-if="user.permissions.general.modifyRules" ng-click="editRulesDialog()"><md-icon>edit</md-icon></md-button>
         </md-card-title>
         <md-card-content class="wrap-content" style="background-color: transparent" ng-bind-html="rules | htmlLinky"></md-card-content>
     </md-card>
+</div>
+
+<!-- Edit Rules Dialog -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="editRules">
+        <md-dialog aria-label="Edit Rules" flex-gt-sm="50" flex>
+            <md-toolbar class="md-toolbar-tools">
+                <span class="truncate">Edit Rules</span>
+            </md-toolbar>
+            <md-dialog-content class="md-dialog-content">
+                <form>
+                    <md-input-container class="md-block">
+                        <label>Rules</label>
+                        <textarea ng-model="rules"></textarea>
+                    </md-input-container>
+                </form>
+                <formatting-help ng-show="showFormattingHelp"></formatting-help>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" ng-click="toggleFormattingHelp()">Formatting Help
+                    <md-icon ng-hide="showFormattingHelp">arrow_drop_down</md-icon>
+                    <md-icon ng-show="showFormattingHelp">arrow_drop_up</md-icon>
+                </md-button>
+                <span flex></span>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="updateRules()" ng-disabled="!rules">Update</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+    </div>
 </div>

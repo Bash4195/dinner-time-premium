@@ -7,5 +7,4 @@ var rulesSchema = mongoose.Schema({
     }
 );
 
-
 module.exports = mongoose.model('Rules', rulesSchema);
