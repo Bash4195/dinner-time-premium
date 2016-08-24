@@ -1092,7 +1092,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                     } else{
                         $mdDialog.hide();
                         Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/move', $scope.movingPost)
-                            .then(function(res) {
+                            .then(function() {
                                 $location.path($scope.movingPost.category.path + '/' + $scope.post._id);
                                 $scope.movingPost = {
                                     category: '',
