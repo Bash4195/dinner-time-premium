@@ -25,6 +25,9 @@ var userSchema = mongoose.Schema({
     rank: { type: String, default: 'User', required: true },
     roles: { type: Array, default: 'User', required: true },
     permissions: {
+        general: {
+            modifyRules: {type: Boolean, default: false}
+        },
         forum: {
             createCategories: {type: Boolean, default: false},
             updateCategories: {type: Boolean, default: false},
@@ -39,9 +42,6 @@ var userSchema = mongoose.Schema({
             createComments: {type: Boolean, default: true},
             updateComments: {type: Boolean, default: false},
             deleteComments: {type: Boolean, default: false}
-        },
-        rules: {
-            modifyRules: {type: Boolean, default: false}
         }
     }
 }, 
