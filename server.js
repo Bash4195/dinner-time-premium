@@ -10,6 +10,7 @@ var middleware = require('./middleware/index');
 
 // Route requires
 var authRoutes = require('./routes/auth');
+var newsRoutes = require('./routes/news');
 var forumRoutes = require('./routes/forum');
 var userRoutes = require('./routes/user');
 var rulesRoutes = require('./routes/rules');
@@ -82,6 +83,7 @@ User.update({onlineStatus: {$ne: 'Offline'}}, {onlineStatus: 'Offline'}, {multi:
 
 // Routes
 app.use(authRoutes);
+app.use(newsRoutes);
 app.use(forumRoutes);
 app.use(userRoutes);
 app.use(rulesRoutes);

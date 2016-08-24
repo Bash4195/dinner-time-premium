@@ -17,6 +17,12 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
             templateUrl: 'user/userShow.html',
             controller: 'userShowCtrl'
         })
+            
+        // News Routes
+        .when('/news', {
+            templateUrl: 'news/newsIndex.html',
+            controller: 'newsIndexCtrl'
+        })
 
         // Forum Routes
         .when('/forum', {
@@ -580,9 +586,28 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
         };
 }]);
 
+dtp.controller('newsCtrl', ['$scope', 'Title', 'User', 'Rest', function($scope, Title, User, Rest) {
+    Title.setTitle('DTP - News');
+    Title.setPageTitle('News');
+
+    if(User.currentUser !== '') {
+        $scope.user = User.currentUser;
+    }
+    
+    $scope.gotNews = false;
+    function getNews() {
+        $scope.gotNews = false;
+        Rest.getThings('/api/news')
+            .then(function(news) {
+                $scope.news = news;
+                $scope.gotNews = true;
+            })
+    }
+    getNews();
+}]);
+
 dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
 function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
-
     Title.setTitle('DTP - Forum');
     Title.setPageTitle('Forum');
 
