@@ -12,6 +12,7 @@ var middleware = require('./middleware/index');
 var authRoutes = require('./routes/auth');
 var forumRoutes = require('./routes/forum');
 var userRoutes = require('./routes/user');
+var rulesRoutes = require('./routes/rules');
 
 // Model requires
 var User = require('./models/user');
@@ -83,6 +84,7 @@ User.update({onlineStatus: {$ne: 'Offline'}}, {onlineStatus: 'Offline'}, {multi:
 app.use(authRoutes);
 app.use(forumRoutes);
 app.use(userRoutes);
+app.use(rulesRoutes);
 
 app.post('/api/status', middleware.isLoggedIn, function(req, res) {
     User.findByIdAndUpdate(req.body.id, {onlineStatus: req.body.onlineStatus}, function(err, user) {

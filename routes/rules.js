@@ -10,11 +10,11 @@ router.get('/api/rules', function(req, res) {
             middleware.handleError(res, err.message, 'Failed to retrieve rules');
         } else {
             if(!rules) {
-                Rules.create({rules: 'No rules yet!'}, function(err, rules) {
+                Rules.create({rules: 'No rules yet!'}, function(err, createdRules) {
                     if(err) {
                         middleware.handleError(res, err.message, 'Failed to retrieve rules');
                     } else {
-                        res.status(200).json(rules);
+                        res.status(200).json(createdRules);
                     }
                 })
             } else {
