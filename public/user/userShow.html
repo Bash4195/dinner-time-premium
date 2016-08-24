@@ -126,12 +126,13 @@
                             </md-select>
                         </md-input-container>
                     </md-list-item>
-                    <div ng-class="{'two-cols': $mdMedia('gt-sm')}" ng-repeat="(permissionGroup, permissions) in userProfile.permissions">
-                        <md-subheader class="md-no-sticky" style="background: transparent"><span class="md-title">{{permissionGroup}}</span></md-subheader>
+                    <div ng-repeat="(permissionGroup, permissions) in userProfile.permissions">
+                        <md-subheader class="md-no-sticky md-primary" style="background: transparent"><span class="md-title">{{permissionGroup}}</span></md-subheader>
                         <md-list-item ng-repeat="(permission, value) in permissions">
                             <p>{{permission}}</p>
                             <md-switch class="md-primary md-secondary" ng-model="permissions[permission]" ng-disabled="!editingPermissions"></md-switch>
                         </md-list-item>
+                        <md-divider></md-divider>
                     </div>
                 </md-list>
             </md-card-content>

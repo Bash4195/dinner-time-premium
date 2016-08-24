@@ -39,6 +39,9 @@ var userSchema = mongoose.Schema({
             createComments: {type: Boolean, default: true},
             updateComments: {type: Boolean, default: false},
             deleteComments: {type: Boolean, default: false}
+        },
+        rules: {
+            modifyRules: {type: Boolean, default: false}
         }
     }
 }, 

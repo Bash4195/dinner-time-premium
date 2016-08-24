@@ -30,6 +30,12 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
         .when('/forum/:categoryPath/:postId', {
             templateUrl: 'forum/post/forumPostShow.html',
             controller: 'forumPostShowCtrl'
+        })
+
+        // Rules
+        .when('/rules', {
+            templateUrl: 'rules/rules.html',
+            controller: 'rulesCtrl'
         });
 
     // Themes
@@ -1179,4 +1185,21 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
             }
         });
     };
+}]);
+
+dtp.controller('rulesCtrl', ['$scope', 'Title', 'User', 'Rest', function($scope, Title, User, Rest) {
+    Title.setTitle('DTP - Rules');
+    Title.setPageTitle('Rules');
+
+    if(User.currentUser !== '') {
+        $scope.user = User.currentUser;
+    }
+    
+    function getRules() {
+        Rest.getThing('/api/rules')
+            .then(function(rules) {
+                $scope.rules = rules
+            });
+    }
+    getRules();
 }]);

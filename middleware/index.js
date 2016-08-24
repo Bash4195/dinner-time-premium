@@ -1,5 +1,4 @@
 var middleware = {};
-var ranks = require('../ranks/ranks');
 
 middleware.handleError = function(res, reason, message, code) {
     console.log('ERROR: ' + reason);

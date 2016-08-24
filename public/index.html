@@ -19,7 +19,7 @@
 <!-- Sidenav -->
 
 <md-sidenav md-is-locked-open="$mdMedia('gt-md') && lockLeft" md-component-id="left"
-            class="md-sidenav-left" md-colors="{background: 'accent-800-0.95'}" md-whiteframe >
+            class="md-sidenav-left" md-colors="{background: 'DTPDark-accent-800-0.95'}" md-whiteframe >
     <md-toolbar layout="row" layout-align="center center" style="background-color: transparent">
         <a href="/" layout="row" layout-align="center center" style="height: 100%; width: 100%;">
             <img src="assets/img/logo.png" alt="DTP" class="no-select" flex="100">
@@ -61,6 +61,12 @@
             <md-button class="list-btn-no-radius" ng-href="/users" ng-class="{'md-primary active': activeNav('/users')}" layout="row" layout-fill>
                 <md-icon flex="40">people</md-icon>
                 <p class="left-align-text" flex="60">Users</p>
+            </md-button>
+        </md-list-item>
+        <md-list-item>
+            <md-button class="list-btn-no-radius" ng-href="/rules" ng-class="{'md-primary active': activeNav('/rules')}" layout="row" layout-fill>
+                <md-icon flex="40">assignment</md-icon>
+                <p class="left-align-text" flex="60">Rules</p>
             </md-button>
         </md-list-item>
         <md-list-item hide-gt-md>
