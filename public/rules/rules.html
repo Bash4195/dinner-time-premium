@@ -4,7 +4,9 @@
             <md-card-title-text>
                 <span class="md-headline">Rules</span>
             </md-card-title-text>
-            <md-button class="md-icon-button" ng-if="user.permissions.general.modifyRules" ng-click="editRulesDialog()"><md-icon>edit</md-icon></md-button>
+            <md-button class="md-icon-button" ng-if="user.roles.includes('Super Admin') && user.permissions.general.modifyRules" ng-click="editRulesDialog()">
+                <md-icon>edit</md-icon>
+            </md-button>
         </md-card-title>
         <md-card-content class="wrap-content" style="background-color: transparent" ng-bind-html="rules | htmlLinky"></md-card-content>
     </md-card>

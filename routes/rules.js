@@ -25,7 +25,7 @@ router.get('/api/rules', function(req, res) {
 });
 
 // EDIT
-router.put('/api/rules', function(req, res) {
+router.put('/api/rules', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
     if(middleware.hasPermission(req.user, 'general', 'modifyRules')) {
         var rules = req.body;
         if(!rules.rules || rules.rules === '') {
