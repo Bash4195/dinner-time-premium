@@ -12,7 +12,6 @@ var middleware = require('./middleware/index');
 var authRoutes = require('./routes/auth');
 var forumRoutes = require('./routes/forum');
 var userRoutes = require('./routes/user');
-var rulesRoutes = require('./routes/rules');
 
 // Model requires
 var User = require('./models/user');
@@ -54,15 +53,9 @@ passport.use(new SteamStrategy({
         };
         User.findOneAndUpdate({openIdIdentifier: identifier}, userData, {upsert: true, setDefaultsOnInsert: true}, function(err, foundOrNewUser) { // Upsert allows the object to be updated if it's found
             if(err) {
-                console.log('ERROR: Failed to find and update/upsert user while logging in.');
+                console.log('ERROR: Failed to find and update/upsert user.');
             }
-            User.findOne({openIdIdentifier: identifier}, function(err, user) {
-               if(err) {
-                   console.log('ERROR: Failed to find user logging in.')
-               } else {
-                   return done(err, user);
-               }
-            });
+            return done(err, foundOrNewUser);
         })
     }
 ));
@@ -90,7 +83,6 @@ User.update({onlineStatus: {$ne: 'Offline'}}, {onlineStatus: 'Offline'}, {multi:
 app.use(authRoutes);
 app.use(forumRoutes);
 app.use(userRoutes);
-app.use(rulesRoutes);
 
 app.post('/api/status', middleware.isLoggedIn, function(req, res) {
     User.findByIdAndUpdate(req.body.id, {onlineStatus: req.body.onlineStatus}, function(err, user) {
