@@ -5,7 +5,8 @@ var newsSchema = mongoose.Schema({
         content: { type: String, required: true, maxlength: 10000 },
         authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
         editedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        editedAt: { type: Date, default: Date.now }
+        editedAt: { type: Date, default: Date.now }, 
+        comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'News_Comment' }]
     },
     { timestamps: true }
 );

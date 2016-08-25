@@ -1,1 +1,68 @@
-News Index
+<div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-hide="gotNews">
+    <md-progress-circular class="md-accent"></md-progress-circular>
+</div>
+<div layout="row" hide show-gt-sm ng-repeat="rows in chunkedNews">
+    <md-card flex ng-repeat="event in rows">
+        <md-card-header>
+            <md-card-header-text>
+                <span class="md-headline"><a ng-href="/news/{{event._id}}" class="md-primary">{{event.title}}</a></span>
+                <p class="md-subhead">By <a ng-href="/user/{{event.authour._id}}">{{event.authour.name}}</a> <span am-time-ago="event.createdAt"></span></p>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content>
+            <p class="wrap-content" ng-bind-html="event.content | htmlLinky"></p>
+        </md-card-content>
+    </md-card>
+</div>
+<div layout="column" hide-gt-sm>
+    <md-card flex ng-repeat="event in news">
+        <md-card-header>
+            <md-card-header-text>
+                <span class="md-headline"><a ng-href="/news/{{event._id}}" class="md-primary">{{event.title}}</a></span>
+                <p class="md-subhead">By <a ng-href="/user/{{event.authour._id}}">{{event.authour.name}}</a> <span am-time-ago="event.createdAt"></span></p>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content>
+            <p class="wrap-content" ng-bind-html="event.content | htmlLinky"></p>
+        </md-card-content>
+    </md-card>
+</div>
+
+<md-button class="md-fab md-accent" ng-class="{'md-fab-top-right': $mdMedia('gt-sm'), 'md-fab-bottom-right': !$mdMedia('gt-sm')}"
+           layout="column" layout-align="center center" ng-if="user && user.permissions.news.createNews" ng-click="newNewsDialog()">
+    <md-icon>add</md-icon>
+    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Create News</md-tooltip>
+</md-button>
+
+<!-- Create News Dialog -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="createNews">
+        <md-dialog aria-label="Create News" flex-gt-sm="50" flex>
+            <md-toolbar class="md-toolbar-tools">
+                <span>Create News</span>
+            </md-toolbar>
+            <md-dialog-content class="md-dialog-content">
+                <form>
+                    <md-input-container class="md-block">
+                        <label>Title</label>
+                        <input ng-model="newNews.title" md-autofocus md-maxlength="100">
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Content</label>
+                        <textarea ng-model="newNews.content" md-maxlength="10000"></textarea>
+                    </md-input-container>
+                </form>
+                <formatting-help ng-show="showFormattingHelp"></formatting-help>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" ng-click="toggleFormattingHelp()">Formatting Help
+                    <md-icon ng-hide="showFormattingHelp">arrow_drop_down</md-icon>
+                    <md-icon ng-show="showFormattingHelp">arrow_drop_up</md-icon>
+                </md-button>
+                <span flex></span>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="createNews()" ng-disabled="!newNews.title || !newNews.content">Create</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+    </div>
+</div>

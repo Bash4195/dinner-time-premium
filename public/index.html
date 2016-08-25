@@ -38,7 +38,7 @@
     </div>
     <md-list>
         <md-list-item>
-            <md-button class="list-btn-no-radius" ng-href="/news" layout="row" layout-fill>
+            <md-button class="list-btn-no-radius" ng-href="/news" ng-class="{'md-primary active': activeNav('/news')}" layout="row" layout-fill>
                 <md-icon flex="40">announcement</md-icon>
                 <p class="left-align-text" flex="60">News</p>
             </md-button>

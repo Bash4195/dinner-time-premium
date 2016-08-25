@@ -587,12 +587,20 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
         };
 }]);
 
-dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', function($scope, Title, User, Rest) {
+dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog', '$location', function($scope, Title, User, Rest, $mdDialog, $location) {
     Title.setTitle('DTP - News');
     Title.setPageTitle('News');
 
     if(User.currentUser !== '') {
         $scope.user = User.currentUser;
+    }
+
+    function chunk(arr, size) {
+        var newArr = [];
+        for (var i=0; i<arr.length; i+=size) {
+            newArr.push(arr.slice(i, i+size));
+        }
+        return newArr;
     }
     
     $scope.gotNews = false;
@@ -602,9 +610,62 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', function($sc
             .then(function(news) {
                 $scope.news = news;
                 $scope.gotNews = true;
+                $scope.chunkedNews = chunk(news, 3);
             })
     }
     getNews();
+
+    $scope.newNews = {
+        title: '',
+        content: ''
+    };
+
+    $scope.newNewsDialog = function() {
+        $mdDialog.show({
+            clickOutsideToClose: true,
+            fullscreen: true,
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#createNews',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.showFormattingHelp = false;
+
+                $scope.toggleFormattingHelp = function() {
+                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
+                };
+
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+
+                $scope.createNews = function() {
+                    if(!$scope.user) {
+                        Notify.generic('You must be logged in to create a news event');
+                        $mdDialog.hide();
+                    } else if(!$scope.newNews.title) {
+                        Notify.generic('Your news event needs a title!');
+                    } else if(!$scope.newNews.content) {
+                        Notify.generic('Your news event needs some content');
+                    } else {
+                        $mdDialog.hide();
+                        var newNews = {
+                            title: $scope.newNews.title,
+                            content: $scope.newNews.content,
+                            authour: $scope.user
+                        };
+                        Rest.newThing('/api/news', newNews)
+                            .then(function(res) {
+                                $scope.newNews = {
+                                    title: '',
+                                    content: ''
+                                };
+                                $location.path('/news/' + res._id)
+                            });
+                    }
+                };
+            }
+        });
+    };
 }]);
 
 dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',

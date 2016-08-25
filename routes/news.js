@@ -5,7 +5,7 @@ var News = require('../models/news');
 
 // INDEX
 router.get('/api/news', function(req, res) {
-    News.find({}, function(err, news) {
+    News.find({}).populate('authour').exec(function(err, news) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve news');
         } else {
@@ -17,37 +17,28 @@ router.get('/api/news', function(req, res) {
 // NEW - In dialog
 
 // CREATE
-// router.post('/api/forum/:categoryPath', middleware.isLoggedIn, function(req, res) {
-//     if(middleware.hasPermission(req.user, 'forum', 'createPosts')) {
-//         var newPost = req.body;
-//         if(newPost.title === '' || newPost.title === 'undefined') {
-//             middleware.handleError(res, 'Post title is missing', 'Title is missing', 400);
-//         } else if(newPost.content === '' || newPost.content === 'undefined') {
-//             middleware.handleError(res, 'Post content is missing', 'Content is missing', 400);
-//         } else if(newPost.authour === '' || newPost.authour === 'undefined') {
-//             middleware.handleError(res, 'Post authour is missing', 'Authour is missing', 400);
-//         } else {
-//             Category.findOne({path: '/forum/' + req.params.categoryPath}, function(err, category) {
-//                 if(err) {
-//                     middleware.handleError(res, err.message, 'Failed to retrieve category to create post in');
-//                 } else {
-//                     newPost.category = category._id;
-//                     Post.create(newPost, function(err, post) {
-//                         if(err) {
-//                             middleware.handleError(res, err.message, 'Failed to create post in ' + category.title);
-//                         } else {
-//                             category.posts.push(post);
-//                             category.save();
-//                             res.status(201).json(post);
-//                         }
-//                     });
-//                 }
-//             });
-//         }
-//     } else {
-//         middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
-//     }
-// });
+router.post('/api/news', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
+    if(middleware.hasPermission(req.user, 'news', 'createNews')) {
+        var newNews = req.body;
+        if(newNews.title === '' || newNews.title === 'undefined') {
+            middleware.handleError(res, 'News title is missing', 'Title is missing', 400);
+        } else if(newNews.content === '' || newNews.content === 'undefined') {
+            middleware.handleError(res, 'News content is missing', 'Content is missing', 400);
+        } else if(newNews.authour === '' || newNews.authour === 'undefined') {
+            middleware.handleError(res, 'News authour is missing', 'Authour is missing', 400);
+        } else {
+            News.create(newNews, function(err, news) {
+                if(err) {
+                    middleware.handleError(res, err.message, 'Failed to create news event');
+                } else {
+                    res.status(201).json(news);
+                }
+            });
+        }
+    } else {
+        middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
+    }
+});
 
 // SHOW
 // router.get('/api/forum/:categoryPath/:postId', function(req, res) {
