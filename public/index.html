@@ -179,7 +179,6 @@
 
             <!-- Footer -->
 
-            <!-- TODO: Footer -->
             <footer md-colors="{background: 'primary-900'}" layout-gt-sm="row" layout="column" flex="none">
                 <div flex-gt-sm="20"></div>
                 <div layout="column" layout-align="center start" layout-padding layout-fill flex="25">
@@ -192,7 +191,6 @@
                 <div layout="row" layout-align="start start" layout-padding layout-fill flex="25">
                     <div flex-gt-md></div>
                     <div layout="column" flex>
-                        <br>
                         <span class="md-title">Links</span>
                         <br>
                         <a href="" class="md-body-2 md-accent no-underline">News</a>
@@ -200,7 +198,6 @@
                         <a href="" class="md-body-2 md-accent no-underline">Feedback</a>
                     </div>
                     <div layout="column" flex>
-                        <br>
                         <span class="md-title">Information</span>
                         <br>
                         <a href="" class="md-body-2 md-accent no-underline">About</a>
@@ -225,12 +222,12 @@
                 <div ng-hide="gotOnlineUsers" layout="column" layout-align="center center" layout-fill>
                     <md-progress-circular class="md-accent"></md-progress-circular>
                 </div>
-                <div layout="row" layout-padding ng-hide="onlineUsers[0]._id || !gotOnlineUsers">
+                <div layout="row" layout-padding ng-hide="onlineUsers[0]._id && onlineUsers[0]._id !== user._id || !gotOnlineUsers">
                     <div flex></div>
                     <span flex="60">Oh no! Looks like no one else is online right now.</span>
                     <div flex></div>
                 </div>
-                <md-list-item ng-repeat="onlineUser in onlineUsers">
+                <md-list-item ng-repeat="onlineUser in onlineUsers" ng-if="onlineUser._id !== user._id">
                     <md-button class="list-btn-no-radius" ng-href="/user/{{onlineUser._id}}" layout="row" layout-fill>
                         <div>
                             <md-icon md-colors="{color: 'green-500'}" ng-if="onlineUser.onlineStatus === 'Online'">check_circle</md-icon>
