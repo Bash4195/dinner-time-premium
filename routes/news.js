@@ -41,15 +41,15 @@ router.post('/api/news', middleware.isLoggedIn, middleware.isSuperAdmin, functio
 });
 
 // SHOW
-// router.get('/api/forum/:categoryPath/:postId', function(req, res) {
-//     Post.findById(req.params.postId).populate('authour category editedBy').exec(function(err, post) {
-//         if(err) {
-//             middleware.handleError(res, err.message, 'Failed to find post');
-//         } else {
-//             res.status(200).json(post);
-//         }
-//     })
-// });
+router.get('/api/news/:newsId', function(req, res) {
+    News.findById(req.params.newsId).populate('authour editedBy comments').exec(function(err, newsEvent) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to find news event');
+        } else {
+            res.status(200).json(newsEvent);
+        }
+    })
+});
 
 // EDIT - In dialog
 

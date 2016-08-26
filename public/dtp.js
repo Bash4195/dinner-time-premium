@@ -23,6 +23,10 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
             templateUrl: 'news/newsIndex.html',
             controller: 'newsIndexCtrl'
         })
+        .when('/news/:newsId', {
+            templateUrl: 'news/newsShow.html',
+            controller: 'newsShowCtrl'
+        })
 
         // Forum Routes
         .when('/forum', {
@@ -666,6 +670,81 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog',
             }
         });
     };
+}]);
+
+dtp.controller('newsShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams) {
+    var newsId = $routeParams.newsId;
+
+    if(User.currentUser !== '') {
+        $scope.user = User.currentUser;
+    }
+
+    $scope.gotNewsEvent = false;
+    function getNewsEvent() {
+        $scope.gotNewsEvent = false;
+        Rest.getThing('/api/news/')
+            .then(function(news) {
+                $scope.news = news;
+                $scope.gotNewsEvent = true;
+
+                Title.setTitle(news.title);
+                Title.setPageTitle(news.title);
+            })
+    }
+    getNewsEvent();
+
+    // $scope.newNews = {
+    //     title: '',
+    //     content: ''
+    // };
+    //
+    // $scope.newNewsDialog = function() {
+    //     $mdDialog.show({
+    //         clickOutsideToClose: true,
+    //         fullscreen: true,
+    //         scope: $scope,
+    //         preserveScope: true,
+    //         contentElement: '#createNews',
+    //         controller: function DialogController($scope, $mdDialog) {
+    //             $scope.showFormattingHelp = false;
+    //
+    //             $scope.toggleFormattingHelp = function() {
+    //                 $scope.showFormattingHelp = !$scope.showFormattingHelp;
+    //             };
+    //
+    //             $scope.closeDialog = function() {
+    //                 $mdDialog.hide();
+    //             };
+    //
+    //             $scope.createNews = function() {
+    //                 if(!$scope.user) {
+    //                     Notify.generic('You must be logged in to create a news event');
+    //                     $mdDialog.hide();
+    //                 } else if(!$scope.newNews.title) {
+    //                     Notify.generic('Your news event needs a title!');
+    //                 } else if(!$scope.newNews.content) {
+    //                     Notify.generic('Your news event needs some content');
+    //                 } else {
+    //                     $mdDialog.hide();
+    //                     var newNews = {
+    //                         title: $scope.newNews.title,
+    //                         content: $scope.newNews.content,
+    //                         authour: $scope.user
+    //                     };
+    //                     Rest.newThing('/api/news', newNews)
+    //                         .then(function(res) {
+    //                             $scope.newNews = {
+    //                                 title: '',
+    //                                 content: ''
+    //                             };
+    //                             $location.path('/news/' + res._id)
+    //                         });
+    //                 }
+    //             };
+    //         }
+    //     });
+    // };
 }]);
 
 dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
