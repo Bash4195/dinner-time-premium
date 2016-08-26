@@ -680,6 +680,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         $scope.user = User.currentUser;
     }
 
+    $scope.label = 1;
     $scope.gotNewsEvent = false;
     function getNewsEvent() {
         $scope.gotNewsEvent = false;
@@ -690,9 +691,30 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
 
                 Title.setTitle(news.title);
                 Title.setPageTitle(news.title);
+
+                $scope.commentLabels = [];
+                var tabs = $scope.news.comments.length / 20;
+
+                for(var i = 0; i < tabs; i++) {
+                    $scope.commentLabels.push(i + 1);
+                }
+                $scope.getComments($scope.label);
             })
     }
     getNewsEvent();
+
+    $scope.gotComments = false;
+
+    $scope.getComments = function(label) {
+        $scope.gotComments = false;
+        var skip = (label - 1) * 20;
+        Rest.getThings('/api/news/' + $scope.news._id + '/comments', {skip: skip})
+            .then(function(newsEvent) {
+                $scope.comments = newsEvent.comments;
+                $scope.label = label;
+                $scope.gotComments = true;
+            });
+    };
 
     $scope.editNewsDialog = function() {
         $mdDialog.show({
@@ -757,6 +779,77 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                         Rest.deleteThing('/api/news/' + $scope.news._id)
                             .then(function() {
                                 $location.path('/news');
+                            })
+                    }
+                };
+            }
+        });
+    };
+
+    $scope.newComment = {
+        comment: '',
+        authour: $scope.user
+    };
+
+    $scope.createComment = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to create a comment');
+        } else if(!$scope.newComment.comment) {
+            Notify.generic('Your comment needs to say something!');
+        } else {
+            Rest.newThing('/api/news/' + $scope.news._id, $scope.newComment)
+                .then(function() {
+                    $scope.newComment.comment = '';
+                    getNewsEvent();
+                });
+        }
+    };
+
+    $scope.editingComment = false;
+
+    $scope.toggleEditingComment = function(id) {
+        $scope.editingComment = !$scope.editingComment;
+        $scope.editingCommentId = id;
+    };
+
+    $scope.updateComment = function(comment) {
+        $scope.editingComment = false;
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to update a comment');
+        } else if(!comment.comment) {
+            Notify.generic('Your comment needs to say something!');
+        } else {
+            var updatedComment = {
+                comment: comment.comment,
+                editedBy: $scope.user,
+                editedAt: new Date()
+            };
+            Rest.updateThing('/api/news/' + $scope.news._id + '/' + comment._id, updatedComment)
+                .then(function() {
+                    getNewsEvent();
+                })
+        }
+    };
+
+    $scope.confirmDeleteComment = function(commentId) {
+        $mdDialog.show({
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#deleteComment',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+
+                $scope.deleteComment = function() {
+                    if(!$scope.user) {
+                        Notify.generic('You must be logged in to delete a comment');
+                        $mdDialog.hide();
+                    } else{
+                        $mdDialog.hide();
+                        Rest.deleteThing('/api/news/' + $scope.news._id + '/' + commentId)
+                            .then(function() {
+                                getNewsEvent();
                             })
                     }
                 };
@@ -1131,8 +1224,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                 $scope.commentLabels = [];
                 var tabs = $scope.post.comments.length / 20;
 
-                for(var i = 1; i < tabs; i++) {
-                    $scope.commentLabels.push(i);
+                for(var i = 0; i < tabs; i++) {
+                    $scope.commentLabels.push(i + 1);
                 }
                 $scope.getComments($scope.label);
             })

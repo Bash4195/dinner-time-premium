@@ -69,7 +69,7 @@
 
                 <!-- Comments -->
                 <div>
-                    <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>
+                    <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height ng-show="comments[0]._id">
                         <md-tab label="{{label}}" ng-click="getComments(label)" ng-repeat="label in commentLabels">
                             <md-subheader class="md-accent md-no-sticky">Comments</md-subheader>
                             <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-hide="gotComments">
