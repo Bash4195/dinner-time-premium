@@ -672,8 +672,8 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog',
     };
 }]);
 
-dtp.controller('newsShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams',
-function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams) {
+dtp.controller('newsShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
     var newsId = $routeParams.newsId;
 
     if(User.currentUser !== '') {
@@ -694,57 +694,75 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams) {
     }
     getNewsEvent();
 
-    // $scope.newNews = {
-    //     title: '',
-    //     content: ''
-    // };
-    //
-    // $scope.newNewsDialog = function() {
-    //     $mdDialog.show({
-    //         clickOutsideToClose: true,
-    //         fullscreen: true,
-    //         scope: $scope,
-    //         preserveScope: true,
-    //         contentElement: '#createNews',
-    //         controller: function DialogController($scope, $mdDialog) {
-    //             $scope.showFormattingHelp = false;
-    //
-    //             $scope.toggleFormattingHelp = function() {
-    //                 $scope.showFormattingHelp = !$scope.showFormattingHelp;
-    //             };
-    //
-    //             $scope.closeDialog = function() {
-    //                 $mdDialog.hide();
-    //             };
-    //
-    //             $scope.createNews = function() {
-    //                 if(!$scope.user) {
-    //                     Notify.generic('You must be logged in to create a news event');
-    //                     $mdDialog.hide();
-    //                 } else if(!$scope.newNews.title) {
-    //                     Notify.generic('Your news event needs a title!');
-    //                 } else if(!$scope.newNews.content) {
-    //                     Notify.generic('Your news event needs some content');
-    //                 } else {
-    //                     $mdDialog.hide();
-    //                     var newNews = {
-    //                         title: $scope.newNews.title,
-    //                         content: $scope.newNews.content,
-    //                         authour: $scope.user
-    //                     };
-    //                     Rest.newThing('/api/news', newNews)
-    //                         .then(function(res) {
-    //                             $scope.newNews = {
-    //                                 title: '',
-    //                                 content: ''
-    //                             };
-    //                             $location.path('/news/' + res._id)
-    //                         });
-    //                 }
-    //             };
-    //         }
-    //     });
-    // };
+    $scope.editNewsDialog = function() {
+        $mdDialog.show({
+            clickOutsideToClose: true,
+            fullscreen: true,
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#editNews',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.showFormattingHelp = false;
+
+                $scope.toggleFormattingHelp = function() {
+                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
+                };
+
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+
+                $scope.updateNews = function() {
+                    if(!$scope.user) {
+                        Notify.generic('You must be logged in to edit a news event');
+                        $mdDialog.hide();
+                    } else if($scope.news.title === '') {
+                        Notify.generic('A news event needs a title!');
+                    } else if($scope.news.content === '') {
+                        Notify.generic('A news event needs content!');
+                    } else {
+                        $mdDialog.hide();
+                        var updatedNews = {
+                            title: $scope.news.title,
+                            content: $scope.news.content,
+                            editedBy: $scope.user,
+                            editedAt: new Date()
+                        };
+                        Rest.updateThing('/api/news/' + $scope.news._id, updatedNews)
+                            .then(function() {
+                                getNewsEvent();
+                            });
+                    }
+                };
+            }
+        });
+    };
+
+    $scope.confirmDeleteNews = function() {
+        $mdDialog.show({
+            scope: $scope,
+            preserveScope: true,
+            contentElement: '#deleteNews',
+            controller: function DialogController($scope, $mdDialog) {
+                $scope.closeDialog = function() {
+                    $mdDialog.hide();
+                };
+
+                $scope.deleteNews = function() {
+                    if(!$scope.user) {
+                        Notify.generic('You must be logged in to delete a news event');
+                        $mdDialog.hide();
+                    } else{
+                        $mdDialog.hide();
+                        Rest.deleteThing('/api/news/' + $scope.news._id)
+                            .then(function() {
+                                $location.path('/news');
+                            })
+                    }
+                };
+            }
+        });
+    };
 }]);
 
 dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
