@@ -32,6 +32,7 @@ var userSchema = mongoose.Schema({
             createNews: {type: Boolean, default: false},
             updateNews: {type: Boolean, default: false},
             deleteNews: {type: Boolean, default: false},
+            
             createComments: {type: Boolean, default: true},
             updateComments: {type: Boolean, default: false},
             deleteComments: {type: Boolean, default: false}

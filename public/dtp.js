@@ -683,7 +683,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams) {
     $scope.gotNewsEvent = false;
     function getNewsEvent() {
         $scope.gotNewsEvent = false;
-        Rest.getThing('/api/news/')
+        Rest.getThing('/api/news/' + newsId)
             .then(function(news) {
                 $scope.news = news;
                 $scope.gotNewsEvent = true;

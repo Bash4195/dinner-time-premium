@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var middleware = require('../middleware/index');
 var News = require('../models/news');
+var NewsComment = require('../models/newsComment');
 
 // INDEX
 router.get('/api/news', function(req, res) {
