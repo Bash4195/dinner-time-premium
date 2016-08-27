@@ -206,6 +206,16 @@ a {
     word-break: keep-all;
 }
 
+.limit-3-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 21px;
+    max-height: 71px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
 .no-underline {
     text-decoration: none;
 }
