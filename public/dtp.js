@@ -46,6 +46,10 @@ dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
         .when('/rules', {
             templateUrl: 'rules/rules.html',
             controller: 'rulesCtrl'
+        })
+
+        .otherwise({
+            templateUrl: '404.html'
         });
 
     // Themes
