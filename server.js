@@ -28,11 +28,13 @@ mongoose.connect(process.env.MONGODB_URI);
 
 // Passport config
 passport.serializeUser(function(user, done) {
-    done(null, user);
+    done(null, user.id);
 });
 
-passport.deserializeUser(function(user, done) {
-    done(null, user);
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+        done(err, user);
+    });
 });
 
 passport.use(new SteamStrategy({
@@ -65,7 +67,7 @@ passport.use(new SteamStrategy({
 app.use(session({
     secret: 'Benji lives in Dinner Time Premium',
     name: 'DTP',
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     cookie: { maxAge: 86400000 } // Users have to login again after 24 hours
 }));
