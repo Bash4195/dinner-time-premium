@@ -6,11 +6,11 @@
         <md-card ng-show="gotNewsEvent">
             <md-card-title>
                 <md-card-title-text>
-                    <span class="md-headline wrap-title">{{news.title}}</span>
-            <span class="md-subhead">
-                By <a ng-href="/user/{{news.authour._id}}" class="md-accent no-underline">{{news.authour.name}}</a>
-                <span am-time-ago="news.createdAt"></span>
-            </span>
+                    <span class="md-headline wrap-title" md-colors="{color: 'primary'}">{{news.title}}</span>
+                    <span class="md-subhead">
+                        By <a ng-href="/user/{{news.authour._id}}" class="md-accent no-underline">{{news.authour.name}}</a>
+                        <span am-time-ago="news.createdAt"></span>
+                    </span>
                 </md-card-title-text>
             </md-card-title>
             <md-card-content>

@@ -8,7 +8,7 @@ var NewsComment = require('../models/newsComment');
 
 // INDEX
 router.get('/api/news', function(req, res) {
-    News.find({}).populate('authour').exec(function(err, news) {
+    News.find({}).populate('authour').sort('-createdAt').exec(function(err, news) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve news');
         } else {

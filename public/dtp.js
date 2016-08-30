@@ -634,14 +634,6 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
     Title.setPageTitle('News');
 
     $scope.user = user;
-
-    function chunk(arr, size) {
-        var newArr = [];
-        for (var i=0; i<arr.length; i+=size) {
-            newArr.push(arr.slice(i, i+size));
-        }
-        return newArr;
-    }
     
     $scope.gotNews = false;
     function getNews() {
@@ -650,7 +642,15 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
             .then(function(news) {
                 $scope.news = news;
                 $scope.gotNews = true;
-                $scope.chunkedNews = chunk(news, 3);
+
+                $scope.newsMonths = {};
+
+                angular.forEach($scope.news, function(event) {
+                    var month = moment(event.createdAt).format('MMMM YYYY');
+                    $scope.newsMonths[month] = $scope.newsMonths[month] || [];
+                    $scope.newsMonths[month].push(event);
+                });
+                console.log($scope.newsMonths);
             })
     }
     getNews();
