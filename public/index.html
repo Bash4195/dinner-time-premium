@@ -219,10 +219,7 @@
                 </md-button>
             </md-toolbar>
             <md-list style="height: 80%;">
-                <div ng-hide="gotOnlineUsers" layout="column" layout-align="center center" layout-fill>
-                    <md-progress-circular class="md-accent"></md-progress-circular>
-                </div>
-                <div layout="row" layout-padding ng-hide="onlineUsers[0]._id && onlineUsers[0]._id !== user._id || !gotOnlineUsers">
+                <div layout="row" layout-padding ng-show="onlineUsers.length === 0 && gotOnlineUsers">
                     <div flex></div>
                     <span flex="60">Oh no! Looks like no one else is online right now.</span>
                     <div flex></div>
@@ -241,6 +238,9 @@
                         <img ng-src="{{onlineUser.avatar}}" alt="" class="circle" flex="10">
                     </md-button>
                 </md-list-item>
+                <div ng-hide="gotOnlineUsers" layout="column" layout-align="center center" layout-fill>
+                    <md-progress-circular class="md-accent"></md-progress-circular>
+                </div>
             </md-list>
         </md-sidenav>
     </div>

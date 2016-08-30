@@ -339,6 +339,12 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
         Rest.getThings('/api/loggedInUsers')
             .then(function(users) {
+                for(let i = users.length - 1; i >= 0; i--) {
+                    if(users[i]._id == $scope.user._id) {
+                        users.splice(i, 1);
+                        break;
+                    }
+                }
                 $scope.gotOnlineUsers = true;
                 $scope.onlineUsers = users;
             })
