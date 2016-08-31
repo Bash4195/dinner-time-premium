@@ -58,21 +58,29 @@
 
         <md-divider></md-divider>
         <md-list-item>
-            <md-button class="list-btn-no-radius" ng-href="/users" ng-class="{'md-primary active': activeNav('/users')}" layout="row" layout-fill>
-                <md-icon flex="40">people</md-icon>
-                <p class="left-align-text" flex="60">Users</p>
-            </md-button>
-        </md-list-item>
-        <md-list-item>
             <md-button class="list-btn-no-radius" ng-href="/rules" ng-class="{'md-primary active': activeNav('/rules')}" layout="row" layout-fill>
                 <md-icon flex="40">assignment</md-icon>
                 <p class="left-align-text" flex="60">Rules</p>
             </md-button>
         </md-list-item>
+        <md-list-item>
+            <md-button class="list-btn-no-radius" ng-href="/users" ng-class="{'md-primary active': activeNav('/users')}" layout="row" layout-fill>
+                <md-icon flex="40">contacts</md-icon>
+                <p class="left-align-text" flex="60">Users</p>
+            </md-button>
+        </md-list-item>
+        <md-list-item>
+            <md-button class="list-btn-no-radius" layout="row" layout-fill ng-href="" ng-click="toggleLockOnlineUsers()">
+                <div layout="row" layout-align="center center" flex="40">
+                    <md-icon style="margin: 0">people</md-icon>
+                </div>
+                <p class="left-align-text" flex="60">Online Users</p>
+            </md-button>
+        </md-list-item>
         <md-list-item hide-gt-md>
             <md-button class="list-btn-no-radius" layout="row" layout-fill ng-href="" ng-click="toggleLeftAndOnlineUsers()">
                 <div layout="row" layout-align="center center" flex="40">
-                    <md-icon style="margin: 0">account_circle</md-icon>
+                    <md-icon style="margin: 0">people</md-icon>
                 </div>
                 <p class="left-align-text" flex="60">Online Users</p>
             </md-button>
@@ -97,20 +105,6 @@
         <div flex></div>
 
         <!-- User options -->
-
-        <md-button layout="row" class="md-icon-button" style="min-width: 40px;" ng-hide="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
-            <md-icon>account_circle</md-icon>
-            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
-                Show online users
-            </md-tooltip>
-        </md-button>
-
-        <md-button layout="row" class="md-icon-button" style="min-width: 40px;" ng-show="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
-            <md-icon>account_circle</md-icon>
-            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
-                Hide online users
-            </md-tooltip>
-        </md-button>
 
         <a href="/auth/steam" target="_self" aria-label="Sign in through Steam" ng-hide="user || !$mdMedia('gt-sm')">
             <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
