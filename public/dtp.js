@@ -553,11 +553,16 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'user', 'Rest', 'Ranks', '$ro
 
                     $scope.about = {
                         realName: $scope.userProfile.realName,
+                        gender: $scope.userProfile.gender,
                         age: $scope.userProfile.age,
                         birthday: new Date($scope.userProfile.birthday),
                         location: $scope.userProfile.location,
                         occupation: $scope.userProfile.occupation
                     };
+                    
+                    if(!$scope.userProfile.birthday) {
+                        $scope.about.birthday = new Date;
+                    }
 
                     $scope.permissions = {
                         rank: $scope.userProfile.rank,

@@ -63,6 +63,7 @@
                 <md-card-content flex ng-if="!editingAbout">
                     <p class="md-subhead wrap-content"><span md-colors="{color: 'grey-500'}">Joined: </span>{{userProfile.createdAt | date: 'medium'}}</p>
                     <p class="md-subhead wrap-content"><span md-colors="{color: 'grey-500'}">Name: </span>{{userProfile.realName}}</p>
+                    <p class="md-subhead wrap-content"><span md-colors="{color: 'grey-500'}">Gender: </span>{{userProfile.gender}}</p>
                     <p class="md-subhead wrap-content"><span md-colors="{color: 'grey-500'}">Age: </span>{{userProfile.age}}</p>
                     <p class="md-subhead wrap-content"><span md-colors="{color: 'grey-500'}">Birthday: </span>{{userProfile.birthday | date: 'longDate'}}</p>
                     <p class="md-subhead wrap-content"><span md-colors="{color: 'grey-500'}">Location: </span>{{userProfile.location}}</p>
@@ -74,6 +75,10 @@
                         <md-input-container class="md-block">
                             <label>Name</label>
                             <input ng-model="about.realName">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Gender</label>
+                            <input ng-model="about.gender">
                         </md-input-container>
                         <md-input-container class="md-block">
                             <label>Age</label>
