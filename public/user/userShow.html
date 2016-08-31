@@ -142,7 +142,7 @@
                 </md-list>
             </md-card-content>
             <md-card-actions layout="row">
-                <md-button class="md-primary" ng-click="togglePermissions()">
+                <md-button class="md-primary" ng-click="togglePermissions()" ng-hide="editingPermissions">
                     <span ng-hide="permissionsOpen">Show Permissions <md-icon>arrow_drop_down</md-icon></span>
                     <span ng-show="permissionsOpen">Hide Permissions <md-icon>arrow_drop_up</md-icon></span>
                 </md-button>
