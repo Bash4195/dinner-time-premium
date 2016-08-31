@@ -610,7 +610,11 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'user', 'Rest', 'Ranks', '$ro
         //     }
         //     return age;
         // }
-
+        
+        $scope.permissionsOpen = false;
+        
+        $scope.togglePermissions = function() { $scope.permissionsOpen = !$scope.permissionsOpen };
+        
         $scope.ranks = Ranks;
 
         $scope.editingPermissions = false;
