@@ -307,7 +307,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
     $scope.Title = Title;
 
     $scope.user = null;
-    $scope.$mdMedia = $mdMedia;
+    $scope.$mdMedia = $mdMedia; // For opening menus from html
 
     $scope.gotOnlineUsers = false;
 
@@ -387,6 +387,12 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
     $scope.activeNav = function (path) {
         return ($location.path().substr(0, path.length) === path) ? 'active' : '';
     };
+    
+    // $scope.newNotifications = false;
+    //
+    // $scope.getNotifications = function() {
+    //    
+    // };
 
     // Set user status to away after 10 minutes
     // This function can also log users out after 30 minutes.

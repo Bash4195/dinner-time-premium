@@ -119,6 +119,21 @@
         </a>
 
         <div layout="row" layout-align="center center" ng-show="user" layout-padding>
+            <!-- Notifications -->
+            <!--<md-menu md-position-mode="target-right target">-->
+                <!--<md-button layout="row" class="md-icon-button" style="min-width: 40px;" ng-click="$mdOpenMenu($event)">-->
+                    <!--<md-icon>notifications</md-icon>-->
+                    <!--<md-tooltip md-colors="{color: 'DTPDark-accent-900'}">-->
+                        <!--Notifications-->
+                    <!--</md-tooltip>-->
+                <!--</md-button>-->
+                <!--<md-menu-content>-->
+                    <!--<md-menu-item style="width: 250px; height: 250px;" layout="column" layout-align="center center" ng-hide="newNotifications">-->
+                        <!--<md-icon style="padding: 0; margin: 0;" class="material-icons md-48">notifications</md-icon>-->
+                        <!--<p style="margin: 20px 0;" class="center-align-text">Nothing new right now!</p>-->
+                    <!--</md-menu-item>-->
+                <!--</md-menu-content>-->
+            <!--</md-menu>-->
             <md-menu md-position-mode="target-right target">
                 <a href="" ng-click="$mdOpenMenu($event)">
                     <img ng-src="{{user.avatar}}" alt="" class="circle">
