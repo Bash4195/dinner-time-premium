@@ -1139,11 +1139,11 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 Title.setTitle($scope.category.title);
                 Title.setPageTitle($scope.category.title);
 
-                $scope.postLabels = [0];
+                $scope.postLabels = [];
                 var tabs = $scope.category.posts.length / 20;
 
-                for(var i = 1; i < tabs; i++) {
-                    $scope.postLabels.push(i);
+                for(var i = 0; i < tabs; i++) {
+                    $scope.postLabels.push(i + 1);
                 }
             })
     }

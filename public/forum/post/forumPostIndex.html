@@ -8,7 +8,7 @@
         </md-subheader>
         <div layout-gt-sm="row" layout="column">
             <div flex-gt-sm="75" flex="100" layout="column">
-                <md-card flex>
+                <md-card>
                     <md-toolbar>
                         <div class="md-toolbar-tools">
                             <h3>{{category.title}}</h3>
@@ -17,39 +17,37 @@
                     <section layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotPosts">
                         <md-progress-circular class="md-accent"></md-progress-circular>
                     </section>
-                    <section>
-                        <md-list>
-                            <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>
-                                <md-tab label="{{label}}" ng-click="getPosts(label)" ng-repeat="label in postLabels">
-                                    <md-list-item ng-hide="posts[0]" ng-if="user.permissions.forum.createPosts || !user" layout-padding>
-                                        <div class="md-list-item-text" flex>
-                                            <p>Looks like no one else has posted in this category yet. Why not start things off?</p>
-                                            <md-button class="md-raised md-primary" ng-click="newPostDialog()" ng-disabled="!user">
-                                                <span ng-show="user">New Post</span>
-                                                <span ng-hide="user">Sign in to Post</span>
-                                            </md-button>
+                    <md-list>
+                        <md-list-item ng-hide="posts[0]" ng-if="user.permissions.forum.createPosts || !user" layout-padding>
+                            <div class="md-list-item-text" flex>
+                                <p>Looks like no one else has posted in this category yet. Why not start things off?</p>
+                                <md-button class="md-raised md-primary" ng-click="newPostDialog()" ng-disabled="!user">
+                                    <span ng-show="user">New Post</span>
+                                    <span ng-hide="user">Sign in to Post</span>
+                                </md-button>
+                            </div>
+                        </md-list-item>
+                        <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>
+                            <md-tab label="{{label}}" ng-click="getPosts(label)" ng-repeat="label in postLabels">
+                                <md-list-item class="md-2-line" ng-repeat="post in posts | orderBy: '-updatedAt'" ng-click="$location.path(category.path + '/' + post._id)">
+                                    <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="">
+                                    <div class="md-list-item-text">
+                                        <h3 flex="90">{{post.title}}</h3>
+                                        <div layout="row">
+                                            <p flex>By {{post.authour.name}} <span am-time-ago="post.createdAt"></span></p>
+                                            <md-icon class="icon-left-of-text-far" ng-if="post.locked">lock</md-icon>
+                                            <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
+                                            <span class="md-subhead">
+                                                <span ng-show="post.comments[0]">{{post.comments.length}}</span>
+                                                <span ng-hide="post.comments[0]">0</span>
+                                            </span>
                                         </div>
-                                    </md-list-item>
-                                    <md-list-item class="md-2-line" ng-repeat="post in posts | orderBy: '-updatedAt'" ng-click="$location.path(category.path + '/' + post._id)">
-                                        <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="">
-                                        <div class="md-list-item-text">
-                                            <h3 flex="90">{{post.title}}</h3>
-                                            <div layout="row">
-                                                <p flex>By {{post.authour.name}} <span am-time-ago="post.createdAt"></span></p>
-                                                <md-icon class="icon-left-of-text-far" ng-if="post.locked">lock</md-icon>
-                                                <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
-                                                <span class="md-subhead">
-                                                    <span ng-show="post.comments[0]">{{post.comments.length}}</span>
-                                                    <span ng-hide="post.comments[0]">0</span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <md-divider md-inset></md-divider>
-                                    </md-list-item>
-                                </md-tab>
-                            </md-tabs>
-                        </md-list>
-                    </section>
+                                    </div>
+                                    <md-divider md-inset></md-divider>
+                                </md-list-item>
+                            </md-tab>
+                        </md-tabs>
+                    </md-list>
                 </md-card>
             </div>
             <div flex-gt-sm="25" flex="100" layout="column">
