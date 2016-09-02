@@ -15,7 +15,7 @@ var userSchema = mongoose.Schema({
     onlineStatus: String,
     realName: String,
     gender: String,
-    age: Number,
+    age: String,
     birthday: Date,
     location: String,
     occupation: String,
