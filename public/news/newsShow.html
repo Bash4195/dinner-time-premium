@@ -60,7 +60,7 @@
                         </md-card-title-text>
                     </md-card-title>
                     <md-card-content>
-                        <p class="wrap-content" ng-hide="editingComment && editingCommentId === comment._id">{{comment.comment}}</p>
+                        <p class="wrap-content" ng-hide="editingComment && editingCommentId === comment._id" ng-bind-html="comment.comment | htmlLinky"></p>
                         <md-input-container class="md-block" ng-if="editingComment && editingCommentId === comment._id">
                             <label>Comment</label>
                             <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user" md-maxlength="1000"></textarea>
