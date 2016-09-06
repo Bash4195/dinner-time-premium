@@ -1,6 +1,7 @@
 var dtp = angular.module('dtp', ['ngRoute', 'ngMaterial', 'angularMoment', 'ngSanitize']);
 
-dtp.config(function ($routeProvider, $locationProvider, $mdThemingProvider) {
+dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThemingProvider) {
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|steam):/);
     $locationProvider.html5Mode(true);
     $routeProvider
         .when('/', {
