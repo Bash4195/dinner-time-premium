@@ -153,6 +153,14 @@ a {
     width: 48px !important;
 }
 
+.material-icons.md-96 {
+    font-size: 96px;
+    min-height: 96px !important;
+    min-width: 96px !important;
+    height: 96px !important;
+    width: 96px !important;
+}
+
 /* Truncate text */
 .truncate {
     display: inline-block;
@@ -238,6 +246,19 @@ a {
 
 .icon-left-of-text-far {
     margin-right: 10px;
+}
+
+/* Big images ex. Home page */
+.cover-image {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+.big-image {
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
 }
 
 /* Datepicker fix */
