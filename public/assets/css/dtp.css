@@ -53,10 +53,6 @@ a {
     text-decoration: none;
 }
 
-a:hover {
-    opacity: 0.8;
-}
-
 /* Active navigation */
 .active {
     background-color: rgba(189, 189, 189, 0.2);
