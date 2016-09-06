@@ -50,6 +50,11 @@ font-family: Roboto, 'Helvetica Neue', sans-serif;
 /* Links */
 a {
     color: #F44336;
+    text-decoration: none;
+}
+
+a:hover {
+    opacity: 0.8;
 }
 
 /* Active navigation */
@@ -222,10 +227,6 @@ a {
     max-height: 71px;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
-}
-
-.no-underline {
-    text-decoration: none;
 }
 
 /* Disable text highlighting */

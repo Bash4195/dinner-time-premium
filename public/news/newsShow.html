@@ -8,7 +8,7 @@
                 <md-card-title-text>
                     <span class="md-headline wrap-title" md-colors="{color: 'primary'}">{{news.title}}</span>
                     <span class="md-subhead">
-                        By <a ng-href="/user/{{news.authour._id}}" class="md-accent no-underline">{{news.authour.name}}</a>
+                        By <a ng-href="/user/{{news.authour._id}}" class="md-accent">{{news.authour.name}}</a>
                         <span am-time-ago="news.createdAt"></span>
                     </span>
                 </md-card-title-text>
@@ -19,7 +19,7 @@
                 <div layout="row" layout-align="center center">
                     <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}" ng-if="news.editedBy">access_time</md-icon>
             <span class="md-subhead" ng-if="news.editedBy">Edited by
-                <a ng-href="/user/{{news.editedBy._id}}" class="md-accent no-underline">{{news.editedBy.name}}</a>
+                <a ng-href="/user/{{news.editedBy._id}}" class="md-accent">{{news.editedBy.name}}</a>
                 <span class="md-subhead" am-time-ago="news.editedAt"></span>
             </span>
                     <span flex></span>
@@ -55,7 +55,7 @@
                             <img ng-src="{{comment.authour.avatar}}" alt="" class="md-media card-media md-avatar circle" style="height: auto !important;">
                         </md-card-title-media>
                         <md-card-title-text>
-                            <a ng-href="/user/{{comment.authour._id}}" class="md-title wrap-content md-accent md-hue-1 no-underline">{{comment.authour.name}}</a>
+                            <a ng-href="/user/{{comment.authour._id}}" class="md-title wrap-content md-accent md-hue-1">{{comment.authour.name}}</a>
                             <span class="md-subhead" am-time-ago="comment.createdAt"></span>
                         </md-card-title-text>
                     </md-card-title>
@@ -70,7 +70,7 @@
                         <div layout="row" flex ng-if="comment.editedBy">
                             <md-icon class="icon-left-of-text" md-colors="{color: 'amber-500'}">access_time</md-icon>
                                     <span class="md-subhead">Edited by
-                                        <a ng-href="/user/{{comment.editedBy._id}}" class="md-accent no-underline">{{comment.editedBy.name}}</a>
+                                        <a ng-href="/user/{{comment.editedBy._id}}" class="md-accent">{{comment.editedBy.name}}</a>
                                         <span class="md-subhead" am-time-ago="comment.editedAt"></span>
                                     </span>
                             <span flex></span>

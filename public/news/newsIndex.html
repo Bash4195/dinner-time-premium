@@ -6,8 +6,8 @@
     <md-card flex-gt-sm="80" flex flex-offset-gt-sm="10" ng-repeat="event in news | orderBy: '-createdAt'">
         <md-card-header>
             <md-card-header-text>
-                <span class="md-headline"><a ng-href="/news/{{event._id}}" class="md-primary no-underline">{{event.title}}</a></span>
-                <p class="md-subhead">By <a ng-href="/user/{{event.authour._id}}" class="md-accent no-underline">{{event.authour.name}}</a> <span am-time-ago="event.createdAt"></span></p>
+                <span class="md-headline"><a ng-href="/news/{{event._id}}" class="md-primary">{{event.title}}</a></span>
+                <p class="md-subhead">By <a ng-href="/user/{{event.authour._id}}" class="md-accent">{{event.authour.name}}</a> <span am-time-ago="event.createdAt"></span></p>
             </md-card-header-text>
         </md-card-header>
         <md-card-content style="padding-top: 0;">
