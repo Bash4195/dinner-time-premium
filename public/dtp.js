@@ -1,4 +1,4 @@
-var dtp = angular.module('dtp', ['ngRoute', 'ngMaterial', 'angularMoment', 'ngSanitize']);
+var dtp = angular.module('dtp', ['ngRoute', 'ngMaterial', 'ngMessages', 'angularMoment', 'ngSanitize']);
 
 dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThemingProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|steam):/);
@@ -27,6 +27,27 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
         .when('/user/:userId', {
             templateUrl: 'user/userShow.html',
             controller: 'userShowCtrl',
+            resolve: {
+                user: function(User) {
+                    return User.getCurrentUser();
+                }
+            }
+        })
+            
+        // Mod Application Routes
+        .when('/apply', {
+            templateUrl: 'applications/moderatorApplicationRequirements.html',
+            controller: 'moderatorApplicationRequirementsCtrl',
+            resolve: {
+                user: function(User) {
+                    return User.getCurrentUser();
+                }
+            }
+        })
+            
+        .when('/apply/:userId', {
+            templateUrl: 'applications/moderatorApplicationCreate.html',
+            controller: 'moderatorApplicationCreateCtrl',
             resolve: {
                 user: function(User) {
                     return User.getCurrentUser();
@@ -540,8 +561,8 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     $scope.$location = $location;
 }]);
 
-dtp.controller('userShowCtrl', ['$scope', 'Title', 'user', 'Rest', 'Ranks', '$routeParams',
-    function($scope, Title, user, Rest, Ranks, $routeParams) {
+dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Ranks', '$routeParams',
+    function($scope, Title, User, user, Rest, Ranks, $routeParams) {
 
         var userId = $routeParams.userId;
         
@@ -645,83 +666,129 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'user', 'Rest', 'Ranks', '$ro
         };
 }]);
 
-dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', '$location', function($scope, Title, user, Rest, $mdDialog, $location) {
-    Title.setTitle('DTP - News');
-    Title.setPageTitle('News');
+dtp.controller('moderatorApplicationRequirementsCtrl', ['$scope', 'Title', 'user', 'Notify', '$location', function($scope, Title, user, Notify, $location) {
+    Title.setTitle('Moderator Application Requirements');
+    Title.setPageTitle('Moderator Application Requirements');
 
     $scope.user = user;
-    
-    $scope.gotNews = false;
-    function getNews() {
-        $scope.gotNews = false;
-        Rest.getThings('/api/news')
-            .then(function(news) {
-                $scope.news = news;
-                $scope.gotNews = true;
 
-                $scope.newsMonths = {};
+    $scope.terms = {accepted: false};
 
-                angular.forEach($scope.news, function(event) {
-                    var month = moment(event.createdAt).format('MMMM YYYY');
-                    $scope.newsMonths[month] = $scope.newsMonths[month] || [];
-                    $scope.newsMonths[month].push(event);
-                });
-                console.log($scope.newsMonths);
-            })
+    $scope.createApplication = function() {
+        console.log($scope.terms.accepted);
+        if($scope.terms.accepted) {
+            $location.path('/apply/' + user._id)
+        } else {
+            Notify.generic('You must accept the terms first!');
+        }
     }
-    getNews();
+}]);
 
-    $scope.newNews = {
-        title: '',
-        content: ''
+dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'Rest', function($scope, Title, user, Rest) {
+    $scope.user = user;
+
+    Title.setTitle(user.name + '\'s Moderator Application');
+    Title.setPageTitle(user.name + '\'s Moderator Application');
+
+    $scope.application = {
+        name: '',
+        gender: '',
+        age: '',
+        location: '',
+        occupation: '',
+        timePlayedGmod: '',
+        howYouFoundUs: '',
+        ulxExperience: '',
+        leadershipExperience: '',
+        gmodLeadershipExperience: '',
+        willingToAddUsOnSteam: '',
+        whyWeShouldAccept: '',
+        additionalInfo: ''
     };
 
-    $scope.newNewsDialog = function() {
-        $mdDialog.show({
-            clickOutsideToClose: true,
-            fullscreen: true,
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#createNews',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.showFormattingHelp = false;
-
-                $scope.toggleFormattingHelp = function() {
-                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
-                };
-
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.createNews = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to create a news event');
-                        $mdDialog.hide();
-                    } else if(!$scope.newNews.title) {
-                        Notify.generic('Your news event needs a title!');
-                    } else if(!$scope.newNews.content) {
-                        Notify.generic('Your news event needs some content');
-                    } else {
-                        $mdDialog.hide();
-                        var newNews = {
-                            title: $scope.newNews.title,
-                            content: $scope.newNews.content,
-                            authour: $scope.user
-                        };
-                        Rest.newThing('/api/news', newNews)
-                            .then(function(res) {
-                                $scope.newNews = {
-                                    title: '',
-                                    content: ''
-                                };
-                                $location.path('/news/' + res._id)
-                            });
-                    }
-                };
-            }
-        });
+    $scope.submitApplication = function() {
+        
     };
+}]);
+
+dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', '$location', 
+    function($scope, Title, user, Rest, $mdDialog, $location) {
+        Title.setTitle('DTP - News');
+        Title.setPageTitle('News');
+    
+        $scope.user = user;
+        
+        $scope.gotNews = false;
+        function getNews() {
+            $scope.gotNews = false;
+            Rest.getThings('/api/news')
+                .then(function(news) {
+                    $scope.news = news;
+                    $scope.gotNews = true;
+    
+                    $scope.newsMonths = {};
+    
+                    angular.forEach($scope.news, function(event) {
+                        var month = moment(event.createdAt).format('MMMM YYYY');
+                        $scope.newsMonths[month] = $scope.newsMonths[month] || [];
+                        $scope.newsMonths[month].push(event);
+                    });
+                    console.log($scope.newsMonths);
+                })
+        }
+        getNews();
+    
+        $scope.newNews = {
+            title: '',
+            content: ''
+        };
+    
+        $scope.newNewsDialog = function() {
+            $mdDialog.show({
+                clickOutsideToClose: true,
+                fullscreen: true,
+                scope: $scope,
+                preserveScope: true,
+                contentElement: '#createNews',
+                controller: function DialogController($scope, $mdDialog) {
+                    $scope.showFormattingHelp = false;
+    
+                    $scope.toggleFormattingHelp = function() {
+                        $scope.showFormattingHelp = !$scope.showFormattingHelp;
+                    };
+    
+                    $scope.closeDialog = function() {
+                        $mdDialog.hide();
+                    };
+    
+                    $scope.createNews = function() {
+                        if(!$scope.user) {
+                            Notify.generic('You must be logged in to create a news event');
+                            $mdDialog.hide();
+                        } else if(!$scope.newNews.title) {
+                            Notify.generic('Your news event needs a title!');
+                        } else if(!$scope.newNews.content) {
+                            Notify.generic('Your news event needs some content');
+                        } else {
+                            $mdDialog.hide();
+                            var newNews = {
+                                title: $scope.newNews.title,
+                                content: $scope.newNews.content,
+                                authour: $scope.user
+                            };
+                            Rest.newThing('/api/news', newNews)
+                                .then(function(res) {
+                                    $scope.newNews = {
+                                        title: '',
+                                        content: ''
+                                    };
+                                    $location.path('/news/' + res._id)
+                                });
+                        }
+                    };
+                }
+            });
+        };
 }]);
 
 dtp.controller('newsShowCtrl', ['$scope', 'Title', 'user', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',

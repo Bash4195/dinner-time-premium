@@ -1,0 +1,47 @@
+<div layout="row">
+    <div flex-gt-sm></div>
+    <div ng-if="!user" flex-gt-sm="80" flex>
+        <h1 class="md-display-2 center-align-text">You Must Login to View This Page</h1>
+        <div layout="row">
+            <div flex></div>
+            <a href="/auth/steam" target="_self" aria-label="Sign in through Steam">
+                <img src="assets/img/steam.png" alt="Sign in through Steam">
+            </a>
+            <div flex></div>
+        </div>
+    </div>
+    <div ng-if="user" layout-padding flex-gt-sm="80" flex>
+        <h1 class="md-display-2 center-align-text">Moderator Eligibility Requirements</h1>
+        <p class="md-title">There are a few requirements you must meet in order to have your application considered</p>
+        <ul layout-margin>
+            <li>
+                <strong>Minimum 20 hours of time spent in the server</strong>
+                <p>This is to ensure you are relatively dedicated to our server and not just some random person trying to get staff.</p>
+                <p>You can check how much time you've spent on the server <a href="https://www.gametracker.com/server_info/dtpremium.game.nfoservers.com:27015/top_players/">here</a>.</p>
+            </li>
+            <li>
+                <strong>No one else can use your Steam account</strong>
+                <p>This is for obvious reasons, if you get a staff position, we're giving it to YOU, not your friends, family, etc. Please change your password to keep others out if necessary.</p>
+            </li>
+            <li>
+                <strong>Positive reputation</strong>
+                <p>If you have warnings on the server for breaking rules, had arguments with a staff member or anything like that, your application will most likely be denied.</p>
+            </li>
+            <li>
+                <strong>Willing to add us on Steam (Skype and Discord strongly recommended)</strong>
+                <p>We need a way to contact you! If you cannot add us on Steam then we apologize, but you can't be accepted.</p>
+                <p>Skype and Discord are currently our primary methods of communication. We use them to keep the staff informed on what's going on. Highly recommended but not required.</p>
+            </li>
+        </ul>
+        <h1 class="md-display-4 center-align-text">You Can Only Apply Once</h1>
+        <p class="md-subhead">Let's be perfectly clear about this. Once you apply, there is no going back! You get one shot and if you're denied, that's it, you don't get another chance.
+        So make this one count! Make sure you have the requirements listed above and feel free to ask any of the staff if we think you should apply or not.</p>
+
+        <div layout-gt-sm="row" layout="column">
+            <md-checkbox class="md-primary" ng-model="terms.accepted">I understand the terms listed above and I am ready to create an application...</md-checkbox>
+            <div flex-gt-sm></div>
+            <md-button class="md-raised md-primary" ng-click="createApplication()" ng-disabled="!terms.accepted">Create an Application</md-button>
+        </div>
+    </div>
+    <div flex-gt-sm></div>
+</div>

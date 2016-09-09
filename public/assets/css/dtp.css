@@ -258,26 +258,29 @@ a {
     background-position: 50% 50%;
 }
 
-/* Datepicker fix */
-.md-datepicker-calendar, .md-datepicker-input-mask-opaque {
-    background: rgb(255, 255, 255);
-}
+/* Input hints */
 
-.md-calendar-date.md-calendar-selected-date .md-calendar-date-selection-indicator, .md-calendar-date.md-focus.md-calendar-selected-date .md-calendar-date-selection-indicator {
-    background: rgb(33, 150, 243);
-    color: rgb(255, 255, 255);
-    border-color: transparent;
-}
-.md-calendar-date-selection-indicator:hover {
-    background: rgb(224, 224, 224);
-}
-.md-calendar-day-header {
-    background: rgb(224, 224, 224);
-    color: rgba(0, 0, 0, 0.87);
-}
-.md-calendar-date-disabled, .md-calendar-month-label-disabled {
-    color: rgba(0, 0, 0, 0.26);
-}
+md-input-container .hint {
+    /* Position the hint */
+    position: absolute;
+    left: 2px;
+    right: auto;
+    bottom: 7px;
+    /* Copy styles from ng-messages */
+    font-size: 12px;
+    line-height: 14px;
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+    /* Set our own color */
+    color: grey; }
+md-input-container .hint.ng-hide,
+md-input-container .hint.ng-enter,
+md-input-container .hint.ng-leave.ng-leave-active {
+    bottom: 26px;
+    opacity: 0; }
+md-input-container .hint.ng-leave,
+md-input-container .hint.ng-enter.ng-enter-active {
+    bottom: 7px;
+    opacity: 1; }
 
 /* Columns */
 .two-cols {
