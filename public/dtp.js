@@ -1182,20 +1182,22 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
         });
     };
 
-    if(!$scope.user) {
-        Notify.generic('You must be logged in to delete a category');
-        $mdDialog.hide();
-    } else {
-        $scope.deleteCategory = function() {
+    $scope.deleteCategory = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to delete a category');
             $mdDialog.hide();
-            Rest.deleteThing('/api/forum/' + $scope.editingCategory._id)
-                .then(function() {
-                    $scope.editingCategory = '';
-                    getCategories();
-                    getRecentPosts();
-                    getCategoryPosts();
-                })
-        };
+        } else {
+            $scope.deleteCategory = function() {
+                $mdDialog.hide();
+                Rest.deleteThing('/api/forum/' + $scope.editingCategory._id)
+                    .then(function() {
+                        $scope.editingCategory = '';
+                        getCategories();
+                        getRecentPosts();
+                        getCategoryPosts();
+                    })
+            };
+        }
     }
 }]);
 
