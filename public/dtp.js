@@ -1576,7 +1576,7 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', fun
         $mdDialog.show({
             clickOutsideToClose: true,
             fullscreen: true,
-            contentElement: '#editRules',
+            contentElement: '#editRules'
         });
     };
 
