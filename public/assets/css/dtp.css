@@ -288,3 +288,11 @@ md-input-container .hint.ng-enter.ng-enter-active {
     -webkit-column-count: 2;
     -moz-column-count: 2;
 }
+
+/* For cases when there are two cards in a row, this causes margin issues which make things look off.
+ This rule is to fix these cases (ex. user profile page) */
+@media screen and (min-width: 960px) {
+    #double-card-div {
+        margin: 0 8px;
+    }
+}
