@@ -293,6 +293,6 @@ md-input-container .hint.ng-enter.ng-enter-active {
  This rule is to fix these cases (ex. user profile page) */
 @media screen and (min-width: 960px) {
     #double-card-div {
-        margin: 0 8px;
+        margin: 0 10px;
     }
 }
