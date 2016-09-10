@@ -14,7 +14,7 @@
                     <md-icon md-colors="{color: 'yellow-500'}" ng-if="userProfile.onlineStatus === 'Away'">access_time</md-icon>
                     <md-icon md-colors="{color: 'red-A700'}"  ng-if="userProfile.onlineStatus === 'Busy'">do_not_disturb_on</md-icon>
                     <md-icon md-colors="{color: 'grey-A700'}"  ng-if="userProfile.onlineStatus === 'Offline'">offline_pin</md-icon>
-                    <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{userProfile.onlineStatus}}</md-tooltip>
+                    <md-tooltip>{{userProfile.onlineStatus}}</md-tooltip>
                 </div>
             </div>
             <span class="md-headline">{{userProfile.rank}}</span>
