@@ -101,17 +101,13 @@
         <md-button layout="row" class="md-icon-button" style="min-width: 60px;" ng-hide="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
             <md-icon>chevron_left</md-icon>
             <md-icon>people</md-icon>
-            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
-                Show online users
-            </md-tooltip>
+            <md-tooltip>Show online users</md-tooltip>
         </md-button>
 
         <md-button layout="row" class="md-icon-button" style="min-width: 60px;" ng-show="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
             <md-icon>chevron_right</md-icon>
             <md-icon>people</md-icon>
-            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">
-                Hide online users
-            </md-tooltip>
+            <md-tooltip>Hide online users</md-tooltip>
         </md-button>
 
         <a href="/auth/steam" target="_self" aria-label="Sign in through Steam" ng-hide="user || !$mdMedia('gt-sm')">
@@ -123,9 +119,7 @@
             <!--<md-menu md-position-mode="target-right target">-->
                 <!--<md-button layout="row" class="md-icon-button" style="min-width: 40px;" ng-click="$mdOpenMenu($event)">-->
                     <!--<md-icon>notifications</md-icon>-->
-                    <!--<md-tooltip md-colors="{color: 'DTPDark-accent-900'}">-->
-                        <!--Notifications-->
-                    <!--</md-tooltip>-->
+                    <!--<md-tooltip>Notifications</md-tooltip>-->
                 <!--</md-button>-->
                 <!--<md-menu-content>-->
                     <!--<md-menu-item style="width: 250px; height: 250px;" layout="column" layout-align="center center" ng-hide="newNotifications">-->
@@ -240,6 +234,7 @@
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="getOnlineUsers()">
                     <md-icon>refresh</md-icon>
+                    <md-tooltip>Refresh</md-tooltip>
                 </md-button>
             </md-toolbar>
             <md-list style="height: 80%;">
@@ -254,7 +249,7 @@
                             <md-icon md-colors="{color: 'green-500'}" ng-if="onlineUser.onlineStatus === 'Online'">check_circle</md-icon>
                             <md-icon md-colors="{color: 'yellow-500'}" ng-if="onlineUser.onlineStatus === 'Away'">access_time</md-icon>
                             <md-icon md-colors="{color: 'red-A700'}"  ng-if="onlineUser.onlineStatus === 'Busy'">do_not_disturb_on</md-icon>
-                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">{{onlineUser.onlineStatus}}</md-tooltip>
+                            <md-tooltip>{{onlineUser.onlineStatus}}</md-tooltip>
                         </div>
                         <div flex></div>
                         <span flex="60">{{onlineUser.name}}</span>

@@ -57,12 +57,12 @@
                         <md-button class="md-icon-button md-accent" ng-if="!post.locked && user._id === post.authour._id ||
                         !post.locked && user.permissions.forum.updatePosts" ng-click="editPostDialog()">
                             <md-icon>edit</md-icon>
-                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit post</md-tooltip>
+                            <md-tooltip>Edit post</md-tooltip>
                         </md-button>
                         <md-button class="md-icon-button md-accent" ng-if="!post.locked && user._id === post.authour._id ||
                         !post.locked && user.permissions.forum.deletePosts" ng-click="confirmDeletePost()">
                             <md-icon>delete</md-icon>
-                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete post</md-tooltip>
+                            <md-tooltip>Delete post</md-tooltip>
                         </md-button>
                     </md-card-actions>
                 </md-card>
@@ -105,12 +105,12 @@
                                         <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id"
                                                    ng-if="user._id === comment.authour._id || user.permissions.forum.updateComments" ng-click="toggleEditingComment(comment._id)">
                                             <md-icon>edit</md-icon>
-                                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Edit comment</md-tooltip>
+                                            <md-tooltip>Edit comment</md-tooltip>
                                         </md-button>
                                         <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id"
                                                    ng-if="user._id === comment.authour._id || user.permissions.forum.deleteComments" ng-click="confirmDeleteComment(comment._id)">
                                             <md-icon>delete</md-icon>
-                                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Delete comment</md-tooltip>
+                                            <md-tooltip>Delete comment</md-tooltip>
                                         </md-button>
                                         <md-button class="md-accent" ng-show="editingComment && editingCommentId === comment._id"
                                                    ng-click="toggleEditingComment(comment._id)">Cancel</md-button>
@@ -134,7 +134,7 @@
                         </div>
                         <md-button class="md-fab md-mini md-primary" ng-if="user && !post.locked" ng-disabled="!newComment.comment" ng-click="createComment()">
                             <md-icon>send</md-icon>
-                            <md-tooltip md-colors="{color: 'DTPDark-accent-900'}">Post Comment</md-tooltip>
+                            <md-tooltip>Post Comment</md-tooltip>
                         </md-button>
                     </md-input-container>
                 </form>
