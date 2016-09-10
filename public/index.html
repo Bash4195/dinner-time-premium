@@ -98,9 +98,11 @@
 
         <!-- User options -->
 
-        <md-button layout="row" class="md-icon-button" style="min-width: 60px;" ng-hide="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
-            <md-icon>chevron_left</md-icon>
-            <md-icon>people</md-icon>
+        <md-button class="md-icon-button" style="min-width: 60px;" ng-hide="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
+            <div layout="row">
+                <md-icon>chevron_left</md-icon>
+                <md-icon>people</md-icon>
+            </div>
             <md-tooltip>Show online users</md-tooltip>
         </md-button>
 
