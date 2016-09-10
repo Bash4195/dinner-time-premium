@@ -138,9 +138,8 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
 
     $mdThemingProvider.setDefaultTheme('DTPDark');
 
-        // Toast themes
+    // Toast themes
     $mdThemingProvider.theme('success-toast');
-
     $mdThemingProvider.theme('error-toast');
 });
 
@@ -191,6 +190,7 @@ dtp.factory('Title', function() {
     };
 });
 
+// Factory just in case this is needed in multiple places of the application
 dtp.factory('Ranks', function() {
     return [
         'GOD',
@@ -463,11 +463,11 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         //     $mdDialog.show({
         //         clickOutsideToClose: true,
         //         fullscreen: true,
-        //         scope: $scope,
-        //         preserveScope: true,
-        //         contentElement: '#logoutWarning',
-        //         controller: function DialogController($scope, $mdDialog) {
-        //             $scope.timeLeft = timeBetween + 1000; // Extra second because tick runs immediately
+        //         contentElement: '#logoutWarning'
+        //     });
+        // }
+
+        // $scope.timeLeft = timeBetween + 1000; // Extra second because tick runs immediately
         //             $scope.reset = false;
         //             var tick = function() {
         //                 if($scope.timeLeft > 0) {
@@ -487,9 +487,6 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         //             $scope.closeDialog = function() {
         //                 $mdDialog.cancel();
         //             }
-        //         }
-        //     });
-        // }
 
         // function logoutUser() {
         //     $http.get('/auth/logout')
@@ -797,47 +794,44 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
             $mdDialog.show({
                 clickOutsideToClose: true,
                 fullscreen: true,
-                scope: $scope,
-                preserveScope: true,
-                contentElement: '#createNews',
-                controller: function DialogController($scope, $mdDialog) {
-                    $scope.showFormattingHelp = false;
-    
-                    $scope.toggleFormattingHelp = function() {
-                        $scope.showFormattingHelp = !$scope.showFormattingHelp;
-                    };
-    
-                    $scope.closeDialog = function() {
-                        $mdDialog.hide();
-                    };
-    
-                    $scope.createNews = function() {
-                        if(!$scope.user) {
-                            Notify.generic('You must be logged in to create a news event');
-                            $mdDialog.hide();
-                        } else if(!$scope.newNews.title) {
-                            Notify.generic('Your news event needs a title!');
-                        } else if(!$scope.newNews.content) {
-                            Notify.generic('Your news event needs some content');
-                        } else {
-                            $mdDialog.hide();
-                            var newNews = {
-                                title: $scope.newNews.title,
-                                content: $scope.newNews.content,
-                                authour: $scope.user
-                            };
-                            Rest.newThing('/api/news', newNews)
-                                .then(function(res) {
-                                    $scope.newNews = {
-                                        title: '',
-                                        content: ''
-                                    };
-                                    $location.path('/news/' + res._id)
-                                });
-                        }
-                    };
-                }
+                contentElement: '#createNews'
             });
+        };
+
+        $scope.showFormattingHelp = false;
+
+        $scope.toggleFormattingHelp = function() {
+            $scope.showFormattingHelp = !$scope.showFormattingHelp;
+        };
+
+        $scope.closeDialog = function() {
+            $mdDialog.hide();
+        };
+
+        $scope.createNews = function() {
+            if(!$scope.user) {
+                Notify.generic('You must be logged in to create a news event');
+                $mdDialog.hide();
+            } else if(!$scope.newNews.title) {
+                Notify.generic('Your news event needs a title!');
+            } else if(!$scope.newNews.content) {
+                Notify.generic('Your news event needs some content');
+            } else {
+                $mdDialog.hide();
+                var newNews = {
+                    title: $scope.newNews.title,
+                    content: $scope.newNews.content,
+                    authour: $scope.user
+                };
+                Rest.newThing('/api/news', newNews)
+                    .then(function(res) {
+                        $scope.newNews = {
+                            title: '',
+                            content: ''
+                        };
+                        $location.path('/news/' + res._id)
+                    });
+            }
         };
 }]);
 
@@ -887,70 +881,60 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
         $mdDialog.show({
             clickOutsideToClose: true,
             fullscreen: true,
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#editNews',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.showFormattingHelp = false;
-
-                $scope.toggleFormattingHelp = function() {
-                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
-                };
-
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.updateNews = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to edit a news event');
-                        $mdDialog.hide();
-                    } else if($scope.news.title === '') {
-                        Notify.generic('A news event needs a title!');
-                    } else if($scope.news.content === '') {
-                        Notify.generic('A news event needs content!');
-                    } else {
-                        $mdDialog.hide();
-                        var updatedNews = {
-                            title: $scope.news.title,
-                            content: $scope.news.content,
-                            editedBy: $scope.user,
-                            editedAt: new Date()
-                        };
-                        Rest.updateThing('/api/news/' + $scope.news._id, updatedNews)
-                            .then(function() {
-                                getNewsEvent();
-                            });
-                    }
-                };
-            }
+            contentElement: '#editNews'
         });
+    };
+
+    $scope.showFormattingHelp = false;
+
+    $scope.toggleFormattingHelp = function() {
+        $scope.showFormattingHelp = !$scope.showFormattingHelp;
+    };
+
+    $scope.closeDialog = function() {
+        $mdDialog.hide();
+    };
+
+    $scope.updateNews = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to edit a news event');
+            $mdDialog.hide();
+        } else if($scope.news.title === '') {
+            Notify.generic('A news event needs a title!');
+        } else if($scope.news.content === '') {
+            Notify.generic('A news event needs content!');
+        } else {
+            $mdDialog.hide();
+            var updatedNews = {
+                title: $scope.news.title,
+                content: $scope.news.content,
+                editedBy: $scope.user,
+                editedAt: new Date()
+            };
+            Rest.updateThing('/api/news/' + $scope.news._id, updatedNews)
+                .then(function() {
+                    getNewsEvent();
+                });
+        }
     };
 
     $scope.confirmDeleteNews = function() {
         $mdDialog.show({
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#deleteNews',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.deleteNews = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to delete a news event');
-                        $mdDialog.hide();
-                    } else{
-                        $mdDialog.hide();
-                        Rest.deleteThing('/api/news/' + $scope.news._id)
-                            .then(function() {
-                                $location.path('/news');
-                            })
-                    }
-                };
-            }
+            contentElement: '#deleteNews'
         });
+    };
+
+    $scope.deleteNews = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to delete a news event');
+            $mdDialog.hide();
+        } else{
+            $mdDialog.hide();
+            Rest.deleteThing('/api/news/' + $scope.news._id)
+                .then(function() {
+                    $location.path('/news');
+                })
+        }
     };
 
     $scope.newComment = {
@@ -998,30 +982,27 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
         }
     };
 
-    $scope.confirmDeleteComment = function(commentId) {
-        $mdDialog.show({
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#deleteComment',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
+    var commentId = '';
 
-                $scope.deleteComment = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to delete a comment');
-                        $mdDialog.hide();
-                    } else{
-                        $mdDialog.hide();
-                        Rest.deleteThing('/api/news/' + $scope.news._id + '/' + commentId)
-                            .then(function() {
-                                getNewsEvent();
-                            })
-                    }
-                };
-            }
+    $scope.confirmDeleteComment = function(id) {
+        commentId = id;
+        $mdDialog.show({
+            contentElement: '#deleteComment'
         });
+    };
+
+    $scope.deleteComment = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to delete a comment');
+            $mdDialog.hide();
+        } else{
+            $mdDialog.hide();
+            Rest.deleteThing('/api/news/' + $scope.news._id + '/' + commentId)
+                .then(function() {
+                    commentId = '';
+                    getNewsEvent();
+                })
+        }
     };
 }]);
 
@@ -1084,51 +1065,48 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
         $mdDialog.show({
             clickOutsideToClose: true,
             fullscreen: true,
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#createPost',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.showFormattingHelp = false;
-
-                $scope.toggleFormattingHelp = function() {
-                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
-                };
-
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.createPost = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to create a post');
-                        $mdDialog.hide();
-                    } else if(!$scope.newPost.category) {
-                        Notify.generic('Select a category for your post to go in')
-                    } else if(!$scope.newPost.title) {
-                        Notify.generic('Your post needs a title!');
-                    } else if(!$scope.newPost.content) {
-                        Notify.generic('Your post needs some content');
-                    } else {
-                        $mdDialog.hide();
-                        var catPath = $scope.newPost.category.path;
-                        var newPost = {
-                            title: $scope.newPost.title,
-                            content: $scope.newPost.content,
-                            authour: $scope.user
-                        };
-                        Rest.newThing('/api' + catPath, newPost)
-                            .then(function(res) {
-                                $scope.newPost = {
-                                    category: '',
-                                    title: '',
-                                    content: ''
-                                };
-                                $location.path(catPath + '/' + res._id)
-                            });
-                    }
-                };
-            }
+            contentElement: '#createPost'
         });
+    };
+
+    $scope.showFormattingHelp = false;
+
+    $scope.toggleFormattingHelp = function() {
+        $scope.showFormattingHelp = !$scope.showFormattingHelp;
+    };
+
+    $scope.closeDialog = function() {
+        $mdDialog.hide();
+    };
+
+    $scope.createPost = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to create a post');
+            $mdDialog.hide();
+        } else if(!$scope.newPost.category) {
+            Notify.generic('Select a category for your post to go in')
+        } else if(!$scope.newPost.title) {
+            Notify.generic('Your post needs a title!');
+        } else if(!$scope.newPost.content) {
+            Notify.generic('Your post needs some content');
+        } else {
+            $mdDialog.hide();
+            var catPath = $scope.newPost.category.path;
+            var newPost = {
+                title: $scope.newPost.title,
+                content: $scope.newPost.content,
+                authour: $scope.user
+            };
+            Rest.newThing('/api' + catPath, newPost)
+                .then(function(res) {
+                    $scope.newPost = {
+                        category: '',
+                        title: '',
+                        content: ''
+                    };
+                    $location.path(catPath + '/' + res._id)
+                });
+        }
     };
 
     $scope.newCategory = '';
@@ -1137,39 +1115,32 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
         $mdDialog.show({
             clickOutsideToClose: true,
             fullscreen: true,
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#createCategory',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.createCategory = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to create a category');
-                        $mdDialog.hide();
-                    } else if($scope.newCategory === '') {
-                        Notify.generic('A category needs a title!');
-                    } else {
-                        $mdDialog.hide();
-                        var catPath = '/forum/' + $scope.newCategory.toLowerCase();
-                        var newCategory = {
-                            title: $scope.newCategory,
-                            path: catPath,
-                            createdBy: $scope.user
-                        };
-                        Rest.newThing('/api/forum', newCategory)
-                            .then(function() {
-                                $scope.newCategory = '';
-                                getCategories();
-                                getRecentPosts();
-                                getCategoryPosts();
-                            });
-                    }
-                };
-            }
+            contentElement: '#createCategory'
         });
+    };
+
+    $scope.createCategory = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to create a category');
+            $mdDialog.hide();
+        } else if($scope.newCategory === '') {
+            Notify.generic('A category needs a title!');
+        } else {
+            $mdDialog.hide();
+            var catPath = '/forum/' + $scope.newCategory.toLowerCase();
+            var newCategory = {
+                title: $scope.newCategory,
+                path: catPath,
+                createdBy: $scope.user
+            };
+            Rest.newThing('/api/forum', newCategory)
+                .then(function() {
+                    $scope.newCategory = '';
+                    getCategories();
+                    getRecentPosts();
+                    getCategoryPosts();
+                });
+        }
     };
 
     $scope.editingCategory = '';
@@ -1178,68 +1149,54 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
         $mdDialog.show({
             clickOutsideToClose: true,
             fullscreen: true,
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#editCategory',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.updateCategory = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to edit a category');
-                        $mdDialog.hide();
-                    } else if($scope.editingCategory === '') {
-                        Notify.generic('A category needs a title!');
-                    } else {
-                        $mdDialog.hide();
-                        var updatedCategory = {
-                            title: $scope.editingCategory.title,
-                            editedBy: $scope.user,
-                            editedAt: new Date()
-                        };
-                        Rest.updateThing('/api/forum/' + $scope.editingCategory._id, updatedCategory)
-                            .then(function() {
-                                $scope.editingCategory = '';
-                                getCategories();
-                                getRecentPosts();
-                                getCategoryPosts();
-                            });
-                    }
-                };
-            }
+            contentElement: '#editCategory'
         });
+    };
+
+    $scope.updateCategory = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to edit a category');
+            $mdDialog.hide();
+        } else if($scope.editingCategory === '') {
+            Notify.generic('A category needs a title!');
+        } else {
+            $mdDialog.hide();
+            var updatedCategory = {
+                title: $scope.editingCategory.title,
+                editedBy: $scope.user,
+                editedAt: new Date()
+            };
+            Rest.updateThing('/api/forum/' + $scope.editingCategory._id, updatedCategory)
+                .then(function() {
+                    $scope.editingCategory = '';
+                    getCategories();
+                    getRecentPosts();
+                    getCategoryPosts();
+                });
+        }
     };
 
     $scope.confirmDeleteCategory = function() {
         $mdDialog.show({
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#deleteCategory',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                if(!$scope.user) {
-                    Notify.generic('You must be logged in to delete a category');
-                    $mdDialog.hide();
-                } else {
-                    $scope.deleteCategory = function() {
-                        $mdDialog.hide();
-                        Rest.deleteThing('/api/forum/' + $scope.editingCategory._id)
-                            .then(function() {
-                                $scope.editingCategory = '';
-                                getCategories();
-                                getRecentPosts();
-                                getCategoryPosts();
-                            })
-                    };
-                }
-            }
+            contentElement: '#deleteCategory'
         });
     };
+
+    if(!$scope.user) {
+        Notify.generic('You must be logged in to delete a category');
+        $mdDialog.hide();
+    } else {
+        $scope.deleteCategory = function() {
+            $mdDialog.hide();
+            Rest.deleteThing('/api/forum/' + $scope.editingCategory._id)
+                .then(function() {
+                    $scope.editingCategory = '';
+                    getCategories();
+                    getRecentPosts();
+                    getCategoryPosts();
+                })
+        };
+    }
 }]);
 
 dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', 'user', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
@@ -1315,47 +1272,44 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
         $mdDialog.show({
             clickOutsideToClose: true,
             fullscreen: true,
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#createPost',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.showFormattingHelp = false;
-
-                $scope.toggleFormattingHelp = function() {
-                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
-                };
-                
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.createPost = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to create a post');
-                        $mdDialog.hide();
-                    } else if(!$scope.newPost.title) {
-                        Notify.generic('Your post needs a title!');
-                    } else if(!$scope.newPost.content) {
-                        Notify.generic('Your post needs some content');
-                    } else {
-                        $mdDialog.hide();
-                        var newPost = {
-                            title: $scope.newPost.title,
-                            content: $scope.newPost.content,
-                            authour: $scope.user
-                        };
-                        Rest.newThing('/api/forum/' + categoryPath, newPost)
-                            .then(function(post) {
-                                $scope.newPost = {
-                                    title: '',
-                                    content: ''
-                                };
-                                $location.path($scope.category.path + '/' + post._id)
-                            });
-                    }
-                };
-            }
+            contentElement: '#createPost'
         });
+    };
+
+    $scope.showFormattingHelp = false;
+
+    $scope.toggleFormattingHelp = function() {
+        $scope.showFormattingHelp = !$scope.showFormattingHelp;
+    };
+
+    $scope.closeDialog = function() {
+        $mdDialog.hide();
+    };
+
+    $scope.createPost = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to create a post');
+            $mdDialog.hide();
+        } else if(!$scope.newPost.title) {
+            Notify.generic('Your post needs a title!');
+        } else if(!$scope.newPost.content) {
+            Notify.generic('Your post needs some content');
+        } else {
+            $mdDialog.hide();
+            var newPost = {
+                title: $scope.newPost.title,
+                content: $scope.newPost.content,
+                authour: $scope.user
+            };
+            Rest.newThing('/api/forum/' + categoryPath, newPost)
+                .then(function(post) {
+                    $scope.newPost = {
+                        title: '',
+                        content: ''
+                    };
+                    $location.path($scope.category.path + '/' + post._id)
+                });
+        }
     };
 
     $scope.$location = $location;
@@ -1438,70 +1392,60 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
         $mdDialog.show({
             clickOutsideToClose: true,
             fullscreen: true,
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#editPost',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.showFormattingHelp = false;
-
-                $scope.toggleFormattingHelp = function() {
-                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
-                };
-
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.updatePost = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to edit a post');
-                        $mdDialog.hide();
-                    } else if($scope.post.title === '') {
-                        Notify.generic('A post needs a title!');
-                    } else if($scope.post.content === '') {
-                        Notify.generic('A post needs content!');
-                    } else {
-                        $mdDialog.hide();
-                        var updatedPost = {
-                            title: $scope.post.title,
-                            content: $scope.post.content,
-                            editedBy: $scope.user,
-                            editedAt: new Date()
-                        };
-                        Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id, updatedPost)
-                            .then(function() {
-                                getPost();
-                            });
-                    }
-                };
-            }
+            contentElement: '#editPost'
         });
+    };
+
+    $scope.showFormattingHelp = false;
+
+    $scope.toggleFormattingHelp = function() {
+        $scope.showFormattingHelp = !$scope.showFormattingHelp;
+    };
+
+    $scope.closeDialog = function() {
+        $mdDialog.hide();
+    };
+
+    $scope.updatePost = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to edit a post');
+            $mdDialog.hide();
+        } else if($scope.post.title === '') {
+            Notify.generic('A post needs a title!');
+        } else if($scope.post.content === '') {
+            Notify.generic('A post needs content!');
+        } else {
+            $mdDialog.hide();
+            var updatedPost = {
+                title: $scope.post.title,
+                content: $scope.post.content,
+                editedBy: $scope.user,
+                editedAt: new Date()
+            };
+            Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id, updatedPost)
+                .then(function() {
+                    getPost();
+                });
+        }
     };
 
     $scope.confirmDeletePost = function() {
         $mdDialog.show({
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#deletePost',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.deletePost = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to delete a post');
-                        $mdDialog.hide();
-                    } else{
-                        $mdDialog.hide();
-                        Rest.deleteThing('/api/forum/' + categoryPath + '/' + $scope.post._id)
-                            .then(function() {
-                                $location.path('/forum/' + categoryPath);
-                            })
-                    }
-                };
-            }
+            contentElement: '#deletePost'
         });
+    };
+
+    $scope.deletePost = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to delete a post');
+            $mdDialog.hide();
+        } else{
+            $mdDialog.hide();
+            Rest.deleteThing('/api/forum/' + categoryPath + '/' + $scope.post._id)
+                .then(function() {
+                    $location.path('/forum/' + categoryPath);
+                })
+        }
     };
     
     $scope.lockPost = function(val) {
@@ -1521,33 +1465,26 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     $scope.movePostDialog = function() {
         $mdDialog.show({
             clickOutsideToClose: true,
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#movePost',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.movePost = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to move a post');
-                        $mdDialog.hide();
-                    } else{
-                        $mdDialog.hide();
-                        Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/move', $scope.movingPost)
-                            .then(function() {
-                                $location.path($scope.movingPost.category.path + '/' + $scope.post._id);
-                                $scope.movingPost = {
-                                    category: '',
-                                    editedBy: $scope.user,
-                                    editedAt: new Date()
-                                };
-                            })
-                    }
-                };
-            }
+            contentElement: '#movePost'
         });
+    };
+
+    $scope.movePost = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to move a post');
+            $mdDialog.hide();
+        } else{
+            $mdDialog.hide();
+            Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/move', $scope.movingPost)
+                .then(function() {
+                    $location.path($scope.movingPost.category.path + '/' + $scope.post._id);
+                    $scope.movingPost = {
+                        category: '',
+                        editedBy: $scope.user,
+                        editedAt: new Date()
+                    };
+                })
+        }
     };
 
     $scope.newComment = {
@@ -1596,32 +1533,28 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 })
         }
     };
-    
-    $scope.confirmDeleteComment = function(commentId) {
-        $mdDialog.show({
-            scope: $scope,
-            preserveScope: true,
-            contentElement: '#deleteComment',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
 
-                $scope.deleteComment = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to delete a comment');
-                        $mdDialog.hide();
-                    } else{
-                        $mdDialog.hide();
-                        Rest.deleteThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + commentId)
-                            .then(function() {
-                                getPost();
-                                getRecentPosts();
-                            })
-                    }
-                };
-            }
+    var commentId = '';
+    $scope.confirmDeleteComment = function(id) {
+        commentId = id;
+        $mdDialog.show({
+            contentElement: '#deleteComment'
         });
+    };
+
+    $scope.deleteComment = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to delete a comment');
+            $mdDialog.hide();
+        } else{
+            $mdDialog.hide();
+            Rest.deleteThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + commentId)
+                .then(function() {
+                    commentId = '';
+                    getPost();
+                    getRecentPosts();
+                })
+        }
     };
 }]);
 
@@ -1643,40 +1576,37 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', fun
         $mdDialog.show({
             clickOutsideToClose: true,
             fullscreen: true,
-            scope: $scope,
-            preserveScope: true,
             contentElement: '#editRules',
-            controller: function DialogController($scope, $mdDialog) {
-                $scope.showFormattingHelp = false;
-
-                $scope.toggleFormattingHelp = function() {
-                    $scope.showFormattingHelp = !$scope.showFormattingHelp;
-                };
-
-                $scope.closeDialog = function() {
-                    $mdDialog.hide();
-                };
-
-                $scope.updateRules = function() {
-                    if(!$scope.user) {
-                        Notify.generic('You must be logged in to do that');
-                        $mdDialog.hide();
-                    } else if($scope.rules === '') {
-                        Notify.generic('The server must have rules! That\'s a rule');
-                    } else {
-                        $mdDialog.hide();
-                        var updatedRules = {
-                            rules: $scope.rules,
-                            editedBy: $scope.user,
-                            editedAt: new Date()
-                        };
-                        Rest.updateThing('/api/rules', updatedRules)
-                            .then(function() {
-                                getRules();
-                            });
-                    }
-                };
-            }
         });
+    };
+
+    $scope.showFormattingHelp = false;
+
+    $scope.toggleFormattingHelp = function() {
+        $scope.showFormattingHelp = !$scope.showFormattingHelp;
+    };
+
+    $scope.closeDialog = function() {
+        $mdDialog.hide();
+    };
+
+    $scope.updateRules = function() {
+        if(!$scope.user) {
+            Notify.generic('You must be logged in to do that');
+            $mdDialog.hide();
+        } else if($scope.rules === '') {
+            Notify.generic('The server must have rules! That\'s a rule');
+        } else {
+            $mdDialog.hide();
+            var updatedRules = {
+                rules: $scope.rules,
+                editedBy: $scope.user,
+                editedAt: new Date()
+            };
+            Rest.updateThing('/api/rules', updatedRules)
+                .then(function() {
+                    getRules();
+                });
+        }
     };
 }]);
