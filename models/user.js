@@ -21,6 +21,9 @@ var userSchema = mongoose.Schema({
     occupation: String,
     status: String,
     bio: String,
+    
+    // Mod Application
+    canApplyToMod: { type: Boolean, default: true, required: true },
 
     // Permissions
     rank: { type: String, default: 'User', required: true },

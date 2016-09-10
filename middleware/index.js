@@ -75,6 +75,14 @@ middleware.saveSessionPath = function(req, res, next) {
     next();
 };
 
+middleware.canApplyToMod = function(req, res, next) {
+    if(req.user.canApplyToMod) {
+        return next();
+    } else {
+        middleware.handleError(res, 'User does not have permission to create a moderator application', 'You do not have permission to do that', 401);
+    }
+};
+
 middleware.checkIfMissing = function(param) {
     if(param === '' || param === 'undefined') { return true; } else { return false; }
 };

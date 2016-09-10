@@ -14,6 +14,7 @@ var newsRoutes = require('./routes/news');
 var forumRoutes = require('./routes/forum');
 var userRoutes = require('./routes/user');
 var rulesRoutes = require('./routes/rules');
+var modAppRoutes = require('./routes/moderatorApplication');
 
 // Model requires
 var User = require('./models/user');
@@ -89,6 +90,7 @@ app.use(newsRoutes);
 app.use(forumRoutes);
 app.use(userRoutes);
 app.use(rulesRoutes);
+app.use(modAppRoutes);
 
 app.post('/api/status', middleware.isLoggedIn, function(req, res) {
     User.findByIdAndUpdate(req.body.id, {onlineStatus: req.body.onlineStatus}, function(err, user) {

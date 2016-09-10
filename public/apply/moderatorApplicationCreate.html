@@ -114,8 +114,8 @@
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">Skype and Discord is also strongly recommended.</p>
                 <md-input-container style="margin-top: 0;">
                     <md-radio-group ng-model="application.willingToAddUsOnSteam" required>
-                        <md-radio-button class="md-primary" value="Yes">Yes</md-radio-button>
-                        <md-radio-button class="md-primary" value="No">No</md-radio-button>
+                        <md-radio-button class="md-primary" value="true">Yes</md-radio-button>
+                        <md-radio-button class="md-primary" value="false">No</md-radio-button>
                     </md-radio-group>
                 </md-input-container>
             </div>
@@ -139,11 +139,30 @@
                 </md-input-container>
             </div>
             <div layout="row" layout-align="end center">
-                <md-button class="md-raised md-primary" ng-click="submitApplication()" type="submit"
-                ng-disabled="!application.ulxExperience || !application.leadershipExperience || !application.gmodLeadershipExperience ||
-                !application.willingToAddUsOnSteam || !application.whyWeShouldAccept">Submit Application</md-button>
+                <md-button class="md-raised md-primary" ng-click="confirmSubmission()" ng-disabled="!application.ulxExperience || !application.leadershipExperience ||
+                !application.gmodLeadershipExperience || !application.willingToAddUsOnSteam || !application.whyWeShouldAccept">Submit Application</md-button>
             </div>
         </form>
     </div>
     <div flex-gt-sm></div>
+</div>
+
+<!-- Confirm mod application submission -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="confirmSubmission">
+        <md-dialog aria-label="Are you sure you want to submit this application?" flex-gt-sm="50" flex>
+            <md-toolbar class="md-toolbar-tools">
+                <span class="truncate">Are you sure you want to submit this application?</span>
+            </md-toolbar>
+            <md-dialog-content class="md-dialog-content">
+                <h1 class="md-headline">You Can Only Do This Once</h1>
+                <p class="md-subhead">You cannot edit this application or delete it once it has been submitted. You will not be able to re-apply.
+                This is your only chance; Only submit this if you are absolutely certain that it's what you want to do!</p>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="submitApplication()">Submit</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+    </div>
 </div>

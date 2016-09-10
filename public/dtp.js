@@ -36,7 +36,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             
         // Mod Application Routes
         .when('/apply', {
-            templateUrl: 'applications/moderatorApplicationRequirements.html',
+            templateUrl: 'apply/moderatorApplicationRequirements.html',
             controller: 'moderatorApplicationRequirementsCtrl',
             resolve: {
                 user: function(User) {
@@ -46,8 +46,18 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
         })
             
         .when('/apply/:userId', {
-            templateUrl: 'applications/moderatorApplicationCreate.html',
+            templateUrl: 'apply/moderatorApplicationCreate.html',
             controller: 'moderatorApplicationCreateCtrl',
+            resolve: {
+                user: function(User) {
+                    return User.getCurrentUser();
+                }
+            }
+        })
+        
+        .when('/application/:appId', {
+            templateUrl: 'applications/moderatorApplicationShow.html',
+            controller: 'moderatorApplicationShowCtrl',
             resolve: {
                 user: function(User) {
                     return User.getCurrentUser();
@@ -675,40 +685,81 @@ dtp.controller('moderatorApplicationRequirementsCtrl', ['$scope', 'Title', 'user
     $scope.terms = {accepted: false};
 
     $scope.createApplication = function() {
-        console.log($scope.terms.accepted);
         if($scope.terms.accepted) {
-            $location.path('/apply/' + user._id)
+            $location.path('/application/' + user._id)
         } else {
             Notify.generic('You must accept the terms first!');
         }
     }
 }]);
 
-dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'Rest', function($scope, Title, user, Rest) {
+dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'Notify', 'Rest', '$mdDialog', '$location',
+    function($scope, Title, user, Notify, Rest, $mdDialog, $location) {
+        $scope.user = user;
+
+        Title.setTitle(user.name + '\'s Moderator Application');
+        Title.setPageTitle(user.name + '\'s Moderator Application');
+
+        $scope.application = {
+            name: '',
+            gender: '',
+            age: '',
+            location: '',
+            occupation: '',
+            timePlayedGmod: '',
+            howYouFoundUs: '',
+            ulxExperience: '',
+            leadershipExperience: '',
+            gmodLeadershipExperience: '',
+            willingToAddUsOnSteam: false,
+            whyWeShouldAccept: '',
+            additionalInfo: '',
+
+            authour: $scope.user
+        };
+
+        $scope.closeDialog = function() {
+            $mdDialog.cancel();
+        };
+
+        $scope.submitApplication = function() {
+            // Submit without checking as it should be done before the dialog was opened
+            Rest.newThing('/api/application/' + $scope.user._id, $scope.application)
+                .then(function(app) {
+                    $location.path('/application/' + app._id);
+                })
+        };
+
+        $scope.confirmSubmission = function() {
+            // Do checking here so we don't unnecessarily show the dialog
+            if(!$scope.user) {
+                Notify.generic('You must be logged in to do that');
+            } else if(!$scope.application.ulxExperience) {
+                Notify.generic('You need to answer the "ULX Experience" field');
+            } else if(!$scope.application.leadershipExperience) {
+                Notify.generic('You need to answer the "Leadership Experience" field');
+            } else if(!$scope.application.gmodLeadershipExperience) {
+                Notify.generic('You need to answer the "Garry\'s Mod Leadership Experience" field');
+            } else if(!$scope.application.willingToAddUsOnSteam) {
+                Notify.generic('You need to answer the "Willing to add us on Steam" field');
+            } else if(!$scope.application.whyWeShouldAccept) {
+                Notify.generic('You need to answer the "Why We Should Accept You" field');
+            } else {
+                $mdDialog.show({
+                    clickOutsideToClose: true,
+                    contentElement: '#confirmSubmission'
+                });
+            }
+        };
+}]);
+
+dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest', function($scope, Title, user, Rest) {
     $scope.user = user;
 
-    Title.setTitle(user.name + '\'s Moderator Application');
-    Title.setPageTitle(user.name + '\'s Moderator Application');
-
-    $scope.application = {
-        name: '',
-        gender: '',
-        age: '',
-        location: '',
-        occupation: '',
-        timePlayedGmod: '',
-        howYouFoundUs: '',
-        ulxExperience: '',
-        leadershipExperience: '',
-        gmodLeadershipExperience: '',
-        willingToAddUsOnSteam: '',
-        whyWeShouldAccept: '',
-        additionalInfo: ''
-    };
-
-    $scope.submitApplication = function() {
-        
-    };
+    // Get application
+    // Set these to the authours name
+    Title.setTitle(app.authour.name + '\'s Moderator Application');
+    Title.setPageTitle(app.authour.name + '\'s Moderator Application');
 }]);
 
 dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', '$location', 
@@ -733,7 +784,6 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
                         $scope.newsMonths[month] = $scope.newsMonths[month] || [];
                         $scope.newsMonths[month].push(event);
                     });
-                    console.log($scope.newsMonths);
                 })
         }
         getNews();
