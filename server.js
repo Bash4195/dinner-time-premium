@@ -59,8 +59,16 @@ passport.use(new SteamStrategy({
         User.findOneAndUpdate({openIdIdentifier: identifier}, userData, {upsert: true, setDefaultsOnInsert: true}, function(err, foundOrNewUser) { // Upsert allows the object to be updated if it's found
             if(err) {
                 console.log('ERROR: Failed to find and update/upsert user.');
+                console.log(err);
             }
-            return done(err, foundOrNewUser);
+            User.findOne({openIdIdentifier: identifier}, function(err, user) {
+                if(err) {
+                    console.log('ERROR: Failed to find user logging in.');
+                    console.log(err);
+                } else {
+                    return done(err, user);
+                }
+            });
         })
     }
 ));
