@@ -19,14 +19,20 @@
                 <h1 class="md-headline">Name</h1>
                 <md-input-container>
                     <label>Name</label>
-                    <input ng-model="application.name">
+                    <input name="name" ng-model="application.name" md-maxlength="50">
+                    <div ng-messages="moderatorApplication.name.$error">
+                        <div ng-message="md-maxlength">This must be less than 50 characters long.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div>
                 <h1 class="md-headline">Gender</h1>
                 <md-input-container>
                     <label>Gender</label>
-                    <input ng-model="application.gender">
+                    <input name="gender" ng-model="application.gender" md-maxlength="20">
+                    <div ng-messages="moderatorApplication.gender.$error">
+                        <div ng-message="md-maxlength">This must be less than 20 characters long.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div>
@@ -43,7 +49,10 @@
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">Where are you from?</p>
                 <md-input-container>
                     <label>Location</label>
-                    <input ng-model="application.location">
+                    <input name="location" ng-model="application.location" md-maxlength="100">
+                    <div ng-messages="moderatorApplication.location.$error">
+                        <div ng-message="md-maxlength">This must be less than 100 characters long.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div>
@@ -51,7 +60,10 @@
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">Do you have a job, go to school, or both?</p>
                 <md-input-container>
                     <label>Occupation</label>
-                    <input ng-model="application.occupation">
+                    <input name="occupation" ng-model="application.occupation" md-maxlength="100">
+                    <div ng-messages="moderatorApplication.occupation.$error">
+                        <div ng-message="md-maxlength">This must be less than 100 characters long.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div>
@@ -59,8 +71,11 @@
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">This can be found in your Steam library.</p>
                 <md-input-container>
                     <label># Hours</label>
-                    <input ng-model="application.timePlayedGmod">
+                    <input name="timePlayedGmod" ng-model="application.timePlayedGmod" md-maxlength="50">
                     <div class="hint">Ex. 50 Hours</div>
+                    <div ng-messages="moderatorApplication.timePlayedGmod.$error">
+                        <div ng-message="md-maxlength">This must be less than 50 characters long.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div>
@@ -68,14 +83,17 @@
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">We're always interested in hearing how people found our server! :D</p>
                 <md-input-container class="md-block" flex="50">
                     <label>How You Found Us</label>
-                    <textarea ng-model="application.howYouFoundUs"></textarea>
+                    <textarea name="howYouFoundUs" ng-model="application.howYouFoundUs" md-maxlength="1000"></textarea>
+                    <div ng-messages="moderatorApplication.howYouFoundUs.$error">
+                        <div ng-message="md-maxlength">This must be less than 1000 characters long.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div>
                 <h1 class="md-headline">ULX Experience <span md-colors="{color: 'red-600'}">*</span></h1>
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">It's okay if don't know what ULX is, you won't be denied because of this, we just want to know.</p>
                 <md-input-container style="margin-top: 0;">
-                    <md-radio-group ng-model="application.ulxExperience">
+                    <md-radio-group ng-model="application.ulxExperience" required>
                         <md-radio-button class="md-primary" value="A lot">A lot</md-radio-button>
                         <md-radio-button class="md-primary" value="Some">Some</md-radio-button>
                         <md-radio-button class="md-primary" value="A little">A little</md-radio-button>
@@ -90,9 +108,10 @@
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">If you can't think of anything, that's okay, just put "None".</p>
                 <md-input-container class="md-block">
                     <label>Leadership Experience</label>
-                    <textarea name="leadershipExperience" ng-model="application.leadershipExperience" required></textarea>
+                    <textarea name="leadershipExperience" ng-model="application.leadershipExperience" md-maxlength="10000" required></textarea>
                     <div ng-messages="moderatorApplication.leadershipExperience.$error">
                         <div ng-message="required">This is required.</div>
+                        <div ng-message="md-maxlength">This must be less than 10000 characters long.</div>
                     </div>
                 </md-input-container>
             </div>
@@ -103,9 +122,10 @@
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">Again, if you can't think of anything, it's okay, just put "None".</p>
                 <md-input-container class="md-block">
                     <label>Garry's Mod Leadership Experience</label>
-                    <textarea name="gmodLeadershipExperience" ng-model="application.gmodLeadershipExperience" required></textarea>
+                    <textarea name="gmodLeadershipExperience" ng-model="application.gmodLeadershipExperience" md-maxlength="10000" required></textarea>
                     <div ng-messages="moderatorApplication.gmodLeadershipExperience.$error">
                         <div ng-message="required">This is required.</div>
+                        <div ng-message="md-maxlength">This must be less than 10000 characters long.</div>
                     </div>
                 </md-input-container>
             </div>
@@ -124,9 +144,10 @@
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">This is the big one! <strong>Sell</strong> yourself; Don't skimp out here, this is the most important field!</p>
                 <md-input-container class="md-block">
                     <label>Why We Should Accept You</label>
-                    <textarea name="whyWeShouldAccept" ng-model="application.whyWeShouldAccept" required></textarea>
+                    <textarea name="whyWeShouldAccept" ng-model="application.whyWeShouldAccept" md-maxlength="10000" required></textarea>
                     <div ng-messages="moderatorApplication.whyWeShouldAccept.$error">
                         <div ng-message="required">This is required.</div>
+                        <div ng-message="md-maxlength">This must be less than 10000 characters long.</div>
                     </div>
                 </md-input-container>
             </div>
@@ -135,7 +156,10 @@
                 <p class="md-subhead" md-colors="{color: 'grey-500'}">Anything else we should know?</p>
                 <md-input-container class="md-block">
                     <label>Additional Information</label>
-                    <textarea ng-model="application.additionalInfo"></textarea>
+                    <textarea name="additionalInfo" ng-model="application.additionalInfo" md-maxlength="10000"></textarea>
+                    <div ng-messages="moderatorApplication.additionalInfo.$error">
+                        <div ng-message="md-maxlength">This must be less than 10000 characters long.</div>
+                    </div>
                 </md-input-container>
             </div>
             <div layout="row" layout-align="end center">
