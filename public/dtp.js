@@ -683,7 +683,7 @@ dtp.controller('moderatorApplicationRequirementsCtrl', ['$scope', 'Title', 'user
 
     $scope.createApplication = function() {
         if($scope.terms.accepted) {
-            $location.path('/application/' + user._id)
+            $location.path('/apply/' + user._id)
         } else {
             Notify.generic('You must accept the terms first!');
         }
@@ -721,7 +721,7 @@ dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'No
 
         $scope.submitApplication = function() {
             // Submit without checking as it should be done before the dialog was opened
-            Rest.newThing('/api/application/' + $scope.user._id, $scope.application)
+            Rest.newThing('/api/apply/' + $scope.user._id, $scope.application)
                 .then(function(app) {
                     $location.path('/application/' + app._id);
                 })
@@ -750,13 +750,25 @@ dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'No
         };
 }]);
 
-dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest', function($scope, Title, user, Rest) {
+dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest', '$routeParams', function($scope, Title, user, Rest, $routeParams) {
+    var appId = $routeParams.appId;
+
     $scope.user = user;
 
-    // Get application
-    // Set these to the authours name
-    Title.setTitle(app.authour.name + '\'s Moderator Application');
-    Title.setPageTitle(app.authour.name + '\'s Moderator Application');
+    $scope.unauthorized = true;
+
+    Rest.getThing('/api/application/' + appId)
+        .then(function(app) {
+            if(app) {
+                $scope.unauthorized = false;
+                $scope.application = app;
+
+                Title.setTitle(app.authour.name + '\'s Moderator Application');
+                Title.setPageTitle(app.authour.name + '\'s Moderator Application');
+            } else {
+                $scope.unauthorized = true;
+            }
+        });
 }]);
 
 dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', '$location', 

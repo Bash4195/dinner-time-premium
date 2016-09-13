@@ -1,1 +1,67 @@
-<h1>Hi</h1>
+<div layout="row">
+    <div flex-gt-sm></div>
+    <div layout-padding flex-gt-sm="60" flex>
+        <div ng-if="unauthorized">
+            <h1 class="md-display-2 center-align-text">You Don't Have Permission To View This Page</h1>
+        </div>
+        <div ng-if="!unauthorized">
+            <h1 class="md-display-2">{{application.authour.name}}'s Moderator Application</h1>
+            <p md-colors="{color: 'red-600'}">* Required</p>
+            <br>
+
+            <h1 class="md-headline">Name</h1>
+            <p class="md-subhead" ng-hide="!application.name">{{application.name}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.name">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Gender</h1>
+            <p class="md-subhead" ng-hide="!application.gender">{{application.gender}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.gender">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Age</h1>
+            <p class="md-subhead" ng-hide="!application.age">{{application.age}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.age">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Location</h1>
+            <p class="md-subhead" ng-hide="!application.location">{{application.location}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.location">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Occupation</h1>
+            <p class="md-subhead" ng-hide="!application.occupation">{{application.occupation}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.occupation">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Time Spent Playing Garry's Mod</h1>
+            <p class="md-subhead" ng-hide="!application.timePlayedGmod">{{application.timePlayedGmod}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.timePlayedGmod">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">How You Found Us</h1>
+            <p class="md-subhead" ng-hide="!application.howYouFoundUs">{{application.howYouFoundUs}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.howYouFoundUs">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">ULX Experience <span md-colors="{color: 'red-600'}">*</span></h1>
+            <p class="md-subhead" ng-hide="!application.ulxExperience">{{application.ulxExperience}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.ulxExperience">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Leadership Experience <span md-colors="{color: 'red-600'}">*</span></h1>
+            <p class="md-subhead" ng-hide="!application.leadershipExperience">{{application.leadershipExperience}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.leadershipExperience">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Garry's Mod Leadership Experience <span md-colors="{color: 'red-600'}">*</span></h1>
+            <p class="md-subhead" ng-hide="!application.gmodLeadershipExperience">{{application.gmodLeadershipExperience}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.gmodLeadershipExperience">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Willing to add us on Steam <span md-colors="{color: 'red-600'}">*</span></h1>
+            <p class="md-subhead" ng-hide="!application.willingToAddUsOnSteam">{{application.willingToAddUsOnSteam}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.willingToAddUsOnSteam">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Why We Should Accept You <span md-colors="{color: 'red-600'}">*</span></h1>
+            <p class="md-subhead" ng-hide="!application.whyWeShouldAccept">{{application.whyWeShouldAccept}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.whyWeShouldAccept">No information given</p>
+            <md-divider></md-divider>
+            <h1 class="md-headline">Additional Information</h1>
+            <p class="md-subhead" ng-hide="!application.additionalInfo">{{application.additionalInfo}}</p>
+            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.additionalInfo">No information given</p>
+            <md-divider ng-show="user.roles.includes('Staff')"></md-divider>
+        </div>
+    </div>
+    <div flex-gt-sm></div>
+</div>

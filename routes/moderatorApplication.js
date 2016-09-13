@@ -32,12 +32,21 @@ router.post('/api/apply/:userId', middleware.isLoggedIn, middleware.canApplyToMo
 });
 
 // SHOW
-router.get('/api/application/:appId', function(req, res) {
+router.get('/api/application/:appId', middleware.isLoggedIn, function(req, res) {
     ModApp.findById(req.params.appId).populate('authour').exec(function(err, app) {
         if(err) {
-            middleware.handleError(res, err.message, 'Failed to find moderator application');
+            middleware.handleError(res, err.message, 'Failed to retrieve moderator application');
         } else {
-            res.status(200).json(app);
+            if(app) {
+                // Have to stringify this as it's looking at these two values as objects for whatever reason
+                if(JSON.stringify(app.authour._id) == JSON.stringify(req.user._id) || req.user.roles.includes('Staff')) {
+                    res.status(200).json(app);
+                } else {
+                    middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
+                }
+            } else {
+                middleware.handleError(res, 'Failed to retrieve moderator application', 'Something went wrong while processing your request');
+            }
         }
     })
 });
