@@ -169,7 +169,7 @@
                             </md-menu-content>
                         </md-menu>
                     </md-menu-item>
-                    <md-menu-item>
+                    <md-menu-item ng-if="user.permissions.general.canApplyToMod">
                         <md-button ng-href="/apply">
                             <md-icon>assignment_ind</md-icon>
                             Apply

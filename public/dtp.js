@@ -731,6 +731,8 @@ dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'No
             // Do checking here so we don't unnecessarily show the dialog
             if(!$scope.user) {
                 Notify.generic('You must be logged in to do that');
+            } else if(!$scope.user.permissions.general.canApplyToMod) {
+                Notify.generic('You don\'t have permission to make an application');
             } else if(!$scope.application.ulxExperience) {
                 Notify.generic('You need to answer the "ULX Experience" field');
             } else if(!$scope.application.leadershipExperience) {

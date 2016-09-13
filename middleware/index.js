@@ -76,7 +76,7 @@ middleware.saveSessionPath = function(req, res, next) {
 };
 
 middleware.canApplyToMod = function(req, res, next) {
-    if(req.user.canApplyToMod) {
+    if(req.user.permissions.general.canApplyToMod) {
         return next();
     } else {
         middleware.handleError(res, 'User does not have permission to create a moderator application', 'You do not have permission to do that', 401);

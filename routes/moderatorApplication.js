@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var middleware = require('../middleware/index');
+var User = require('../models/user');
 var ModApp = require('../models/moderatorApplication');
 
 // Client routes
@@ -21,11 +22,18 @@ router.post('/api/apply/:userId', middleware.isLoggedIn, middleware.canApplyToMo
     } else if(newApp.authour === '' || newApp.authour === 'undefined' || newApp.authour._id != req.params.userId) {
         middleware.handleError(res, 'Mod application authour is missing', 'Authour is missing', 400);
     } else {
-        ModApp.create(newApp, function(err, app) {
+        User.findByIdAndUpdate(req.params.userId, {canApplyToMod: false}, function(err, user) {
             if(err) {
                 middleware.handleError(res, err.message, 'Failed to create moderator application');
             } else {
-                res.status(201).json(app);
+                ModApp.create(newApp, function(err, app) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to create moderator application');
+                    } else {
+
+                        res.status(201).json(app);
+                    }
+                });
             }
         });
     }

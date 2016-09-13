@@ -21,16 +21,15 @@ var userSchema = mongoose.Schema({
     occupation: String,
     status: String,
     bio: String,
-    
-    // Mod Application
-    canApplyToMod: { type: Boolean, default: true, required: true },
 
     // Permissions
     rank: { type: String, default: 'User', required: true },
     roles: { type: Array, default: 'User', required: true },
     permissions: {
         general: {
-            modifyRules: {type: Boolean, default: false}
+            modifyRules: {type: Boolean, default: false},
+            // Mod Application
+            canApplyToMod: { type: Boolean, default: true, required: true }
         },
         news: {
             createNews: {type: Boolean, default: false},
