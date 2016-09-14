@@ -33,7 +33,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
                 }
             }
         })
-            
+
         // Mod Application Routes
         .when('/apply', {
             templateUrl: 'apply/moderatorApplicationRequirements.html',
@@ -44,7 +44,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
                 }
             }
         })
-            
+
         .when('/apply/:userId', {
             templateUrl: 'apply/moderatorApplicationCreate.html',
             controller: 'moderatorApplicationCreateCtrl',
@@ -54,7 +54,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
                 }
             }
         })
-        
+
         .when('/application/:appId', {
             templateUrl: 'applications/moderatorApplicationShow.html',
             controller: 'moderatorApplicationShowCtrl',
@@ -64,7 +64,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
                 }
             }
         })
-            
+
         // News Routes
         .when('/news', {
             templateUrl: 'news/newsIndex.html',
@@ -358,7 +358,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
                 });
             }
         });
-    
+
     var noUpdateStatus = false; // Tells everything else not to change the status if it was forcibly set by the user
 
     $scope.setUserStatus = function(status) {
@@ -419,11 +419,11 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
     $scope.activeNav = function (path) {
         return ($location.path().substr(0, path.length) === path) ? 'active' : '';
     };
-    
+
     // $scope.newNotifications = false;
     //
     // $scope.getNotifications = function() {
-    //    
+    //
     // };
 
     // Set user status to away after 10 minutes
@@ -572,9 +572,9 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
     function($scope, Title, User, user, Rest, Ranks, $routeParams) {
 
         var userId = $routeParams.userId;
-        
+
         $scope.user = user;
-        
+
         $scope.getUserProfile = function() {
             Rest.getThing('/api/user/' + userId)
                 .then(function(user) {
@@ -594,7 +594,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
                         location: $scope.userProfile.location,
                         occupation: $scope.userProfile.occupation
                     };
-                    
+
                     if(!$scope.userProfile.birthday) {
                         $scope.about.birthday = new Date;
                     }
@@ -645,11 +645,11 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
         //     }
         //     return age;
         // }
-        
+
         $scope.permissionsOpen = false;
-        
+
         $scope.togglePermissions = function() { $scope.permissionsOpen = !$scope.permissionsOpen };
-        
+
         $scope.ranks = Ranks;
 
         $scope.editingPermissions = false;
@@ -773,13 +773,13 @@ dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest
         });
 }]);
 
-dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', '$location', 
+dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', '$location',
     function($scope, Title, user, Rest, $mdDialog, $location) {
         Title.setTitle('DTP - News');
         Title.setPageTitle('News');
-    
+
         $scope.user = user;
-        
+
         $scope.gotNews = false;
         function getNews() {
             $scope.gotNews = false;
@@ -787,9 +787,9 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
                 .then(function(news) {
                     $scope.news = news;
                     $scope.gotNews = true;
-    
+
                     $scope.newsMonths = {};
-    
+
                     angular.forEach($scope.news, function(event) {
                         var month = moment(event.createdAt).format('MMMM YYYY');
                         $scope.newsMonths[month] = $scope.newsMonths[month] || [];
@@ -798,12 +798,12 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
                 })
         }
         getNews();
-    
+
         $scope.newNews = {
             title: '',
             content: ''
         };
-    
+
         $scope.newNewsDialog = function() {
             $mdDialog.show({
                 clickOutsideToClose: true,
@@ -1241,7 +1241,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     getCategory();
 
     $scope.gotPosts = false;
-    
+
     $scope.getPosts = function(label) {
         $scope.gotPosts = false;
         var skip = (label - 1) * 20;
@@ -1278,7 +1278,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
             })
     }
     getRecentPosts();
-    
+
     $scope.newPost = {
         title: '',
         content: ''
@@ -1375,7 +1375,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 $scope.gotComments = true;
             });
     };
-    
+
     $scope.gotCategories = false;
 
     function getCategories() {
@@ -1389,7 +1389,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
             })
     }
     getCategories();
-    
+
     $scope.gotRecentPosts = false;
 
     function getRecentPosts() {
@@ -1463,7 +1463,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 })
         }
     };
-    
+
     $scope.lockPost = function(val) {
         Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id, {locked: val})
             .then(function() {
@@ -1522,14 +1522,14 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 });
         }
     };
-    
+
     $scope.editingComment = false;
-    
+
     $scope.toggleEditingComment = function(id) {
         $scope.editingComment = !$scope.editingComment;
         $scope.editingCommentId = id;
     };
-    
+
     $scope.updateComment = function(comment) {
         $scope.editingComment = false;
         if(!$scope.user) {
