@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 var passport = require('passport');
 var SteamStrategy = require('passport-steam').Strategy;
 var middleware = require('./middleware/index');
