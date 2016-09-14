@@ -22,7 +22,7 @@ router.post('/api/apply/:userId', middleware.isLoggedIn, middleware.canApplyToMo
     } else if(newApp.authour === '' || newApp.authour === 'undefined' || newApp.authour._id != req.params.userId) {
         middleware.handleError(res, 'Mod application authour is missing', 'Authour is missing', 400);
     } else {
-        User.findByIdAndUpdate(req.params.userId, {canApplyToMod: false}, function(err, user) {
+        User.findByIdAndUpdate(req.params.userId, {'permissions.general.canApplyToMod': false}, function(err, user) {
             if(err) {
                 middleware.handleError(res, err.message, 'Failed to create moderator application');
             } else {
@@ -30,7 +30,6 @@ router.post('/api/apply/:userId', middleware.isLoggedIn, middleware.canApplyToMo
                     if(err) {
                         middleware.handleError(res, err.message, 'Failed to create moderator application');
                     } else {
-
                         res.status(201).json(app);
                     }
                 });
