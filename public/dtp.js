@@ -331,6 +331,15 @@ dtp.directive('formattingHelp', function() {
     }
 });
 
+dtp.directive('loginPrompt', function() {
+    return {
+        templateUrl: '../directives/loginPrompt.html',
+        scope: {},
+        replace: true,
+        transclude: true
+    }
+});
+
 // Runs anytime any page loads up for the first time.
 // Ex. refresh or from external link. Not Angular routing
 // Used for the nav and anything on all pages

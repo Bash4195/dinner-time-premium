@@ -1,16 +1,7 @@
 <div layout="row">
     <div flex-gt-sm></div>
     <div layout-padding flex-gt-sm="60" flex>
-        <div ng-if="!user" flex>
-            <h1 class="md-display-2 center-align-text">You Must Login to View This Page</h1>
-            <div layout="row">
-                <div flex></div>
-                <a href="/auth/steam" target="_self" aria-label="Sign in through Steam">
-                    <img src="assets/img/steam.png" alt="Sign in through Steam">
-                </a>
-                <div flex></div>
-            </div>
-        </div>
+        <login-prompt></login-prompt>
         <div ng-if="unauthorized">
             <h1 class="md-display-2 center-align-text">You Don't Have Permission To View This Page</h1>
         </div>

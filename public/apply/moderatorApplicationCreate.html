@@ -1,15 +1,6 @@
 <div layout="row">
     <div flex-gt-sm></div>
-    <div ng-if="!user" flex-gt-sm="80" flex>
-        <h1 class="md-display-2 center-align-text">You Must Login to View This Page</h1>
-        <div layout="row">
-            <div flex></div>
-            <a href="/auth/steam" target="_self" aria-label="Sign in through Steam">
-                <img src="assets/img/steam.png" alt="Sign in through Steam">
-            </a>
-            <div flex></div>
-        </div>
-    </div>
+    <login-prompt flex-gt-sm="80" flex></login-prompt>
     <div ng-if="user" layout-padding flex-gt-sm="60" flex>
         <h1 class="md-display-2">{{user.name}}'s Moderator Application</h1>
         <p class="md-subhead">Fill out the required fields and optionally, the optional fields. The more information you give us, the better. Don't be lazy about it!</p>
