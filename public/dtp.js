@@ -757,20 +757,24 @@ dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest
 
     $scope.user = user;
 
-    $scope.unauthorized = true;
+    if(user) {
+        $scope.unauthorized = true;
+    }
 
-    Rest.getThing('/api/application/' + appId)
-        .then(function(app) {
-            if(app) {
-                $scope.unauthorized = false;
-                $scope.application = app;
+    if($scope.user) {
+        Rest.getThing('/api/application/' + appId)
+            .then(function(app) {
+                if(app) {
+                    $scope.unauthorized = false;
+                    $scope.application = app;
 
-                Title.setTitle(app.authour.name + '\'s Moderator Application');
-                Title.setPageTitle(app.authour.name + '\'s Moderator Application');
-            } else {
-                $scope.unauthorized = true;
-            }
-        });
+                    Title.setTitle(app.authour.name + '\'s Moderator Application');
+                    Title.setPageTitle(app.authour.name + '\'s Moderator Application');
+                } else {
+                    $scope.unauthorized = true;
+                }
+            });
+    }
 }]);
 
 dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', '$location',
