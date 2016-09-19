@@ -39,8 +39,8 @@ router.post('/api/apply/:userId', middleware.isLoggedIn, middleware.canApplyToMo
 });
 
 // SHOW
-router.get('/api/application/:appId', middleware.isLoggedIn, function(req, res) {
-    ModApp.findById(req.params.appId).populate('authour').exec(function(err, app) {
+router.get('/api/application/:userId', middleware.isLoggedIn, function(req, res) {
+    ModApp.findOne({authour: req.params.userId}).populate('authour').exec(function(err, app) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve moderator application');
         } else {

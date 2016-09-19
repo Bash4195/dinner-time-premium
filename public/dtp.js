@@ -722,8 +722,8 @@ dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'No
         $scope.submitApplication = function() {
             // Submit without checking as it should be done before the dialog was opened
             Rest.newThing('/api/apply/' + $scope.user._id, $scope.application)
-                .then(function(app) {
-                    $location.path('/application/' + app._id);
+                .then(function() {
+                    $location.path('/application/' + $scope.user._id);
                 })
         };
 
