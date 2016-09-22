@@ -7,34 +7,38 @@ var ModApp = require('../models/moderatorApplication');
 // Client routes
 
 // CREATE
-router.post('/api/apply/:userId', middleware.isLoggedIn, middleware.hasPermission(req.user, 'general', 'canApplyToMod'), function(req, res) {
-    var newApp = req.body;
-    if(newApp.ulxExperience === '' || newApp.ulxExperience === 'undefined') {
-        middleware.handleError(res, 'Mod application field "ULX Experience" is missing', 'ULX Experience field is missing', 400);
-    } else if(newApp.leadershipExperience === '' || newApp.leadershipExperience === 'undefined') {
-        middleware.handleError(res, 'Mod application field "Leadership Experience" is missing', 'Leadership Experience field is missing', 400);
-    } else if(newApp.gmodLeadershipExperience === '' || newApp.gmodLeadershipExperience === 'undefined') {
-        middleware.handleError(res, 'Mod application field "Garry\'s Mod Leadership Experience" is missing', 'Garry\'s Mod Leadership Experience field is missing', 400);
-    } else if(newApp.willingToAddUsOnSteam === '' || newApp.willingToAddUsOnSteam === 'undefined') {
-        middleware.handleError(res, 'Mod application field "Willing to add us on Steam" is missing', 'Willing to add us on Steam field is missing', 400);
-    } else if(newApp.whyWeShouldAccept === '' || newApp.whyWeShouldAccept === 'undefined') {
-        middleware.handleError(res, 'Mod application field "Why We Should Accept You" is missing', 'Why We Should Accept You field is missing', 400);
-    } else if(newApp.authour === '' || newApp.authour === 'undefined' || newApp.authour._id != req.params.userId) {
-        middleware.handleError(res, 'Mod application authour is missing', 'Authour is missing', 400);
+router.post('/api/apply/:userId', middleware.isLoggedIn, function(req, res) {
+    if(middleware.hasPermission(req.user, 'general', 'canApplyToMod')) {
+        var newApp = req.body;
+        if(newApp.ulxExperience === '' || newApp.ulxExperience === 'undefined') {
+            middleware.handleError(res, 'Mod application field "ULX Experience" is missing', 'ULX Experience field is missing', 400);
+        } else if(newApp.leadershipExperience === '' || newApp.leadershipExperience === 'undefined') {
+            middleware.handleError(res, 'Mod application field "Leadership Experience" is missing', 'Leadership Experience field is missing', 400);
+        } else if(newApp.gmodLeadershipExperience === '' || newApp.gmodLeadershipExperience === 'undefined') {
+            middleware.handleError(res, 'Mod application field "Garry\'s Mod Leadership Experience" is missing', 'Garry\'s Mod Leadership Experience field is missing', 400);
+        } else if(newApp.willingToAddUsOnSteam === '' || newApp.willingToAddUsOnSteam === 'undefined') {
+            middleware.handleError(res, 'Mod application field "Willing to add us on Steam" is missing', 'Willing to add us on Steam field is missing', 400);
+        } else if(newApp.whyWeShouldAccept === '' || newApp.whyWeShouldAccept === 'undefined') {
+            middleware.handleError(res, 'Mod application field "Why We Should Accept You" is missing', 'Why We Should Accept You field is missing', 400);
+        } else if(newApp.authour === '' || newApp.authour === 'undefined' || newApp.authour._id != req.params.userId) {
+            middleware.handleError(res, 'Mod application authour is missing', 'Authour is missing', 400);
+        } else {
+            User.findByIdAndUpdate(req.params.userId, {'permissions.general.canApplyToMod': false}, function(err, user) {
+                if(err) {
+                    middleware.handleError(res, err.message, 'Failed to create moderator application');
+                } else {
+                    ModApp.create(newApp, function(err, app) {
+                        if(err) {
+                            middleware.handleError(res, err.message, 'Failed to create moderator application');
+                        } else {
+                            res.status(201).json(app);
+                        }
+                    });
+                }
+            });
+        }
     } else {
-        User.findByIdAndUpdate(req.params.userId, {'permissions.general.canApplyToMod': false}, function(err, user) {
-            if(err) {
-                middleware.handleError(res, err.message, 'Failed to create moderator application');
-            } else {
-                ModApp.create(newApp, function(err, app) {
-                    if(err) {
-                        middleware.handleError(res, err.message, 'Failed to create moderator application');
-                    } else {
-                        res.status(201).json(app);
-                    }
-                });
-            }
-        });
+        middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
     }
 });
 
