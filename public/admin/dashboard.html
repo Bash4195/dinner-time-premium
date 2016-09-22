@@ -1,0 +1,14 @@
+<div layout="row">
+    <div flex-gt-sm></div>
+    <div layout-padding flex-gt-sm="60" flex>
+        <login-prompt user="user"></login-prompt>
+        <unauthorized user="user" authorized="authorized"></unauthorized>
+
+        <div ng-if="user && authorized">
+            <h1 class="md-display-2 center-align-text">Admin Dashboard</h1>
+            <p class="md-subhead">There's nothing here yet... This will likely be the last feature added to the site. For now, you can view
+                <a href="/admin/applications">mod applications</a>.</p>
+        </div>
+    </div>
+    <div flex-gt-sm></div>
+</div>

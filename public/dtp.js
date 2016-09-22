@@ -14,6 +14,17 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             }
         })
 
+        // Admin routes
+        .when('/admin', {
+            templateUrl: 'admin/dashboard.html',
+            controller: 'adminDashboardCtrl',
+            resolve: {
+                user: function(User) {
+                    return User.getCurrentUser();
+                }
+            }
+        })
+
         //User Routes
         .when('/users', {
             templateUrl: 'user/userIndex.html',
@@ -334,7 +345,21 @@ dtp.directive('formattingHelp', function() {
 dtp.directive('loginPrompt', function() {
     return {
         templateUrl: '../directives/loginPrompt.html',
-        scope: {},
+        scope: {
+            user: '='
+        },
+        replace: true,
+        transclude: true
+    }
+});
+
+dtp.directive('unauthorized', function() {
+    return {
+        templateUrl: '../directives/unauthorized.html',
+        scope: {
+            user: '=',
+            authorized: '='
+        },
         replace: true,
         transclude: true
     }
@@ -527,6 +552,18 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
             // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
             awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
         }
+    }
+}]);
+
+dtp.controller('adminDashboardCtrl', ['$scope', 'Title', 'user', function($scope, Title, user) {
+    $scope.authorized = false;
+    if(user && user.roles.includes('Staff')) {
+        $scope.authorized = true;
+        $scope.user = user;
+        console.log($scope.user);
+        
+    } else {
+        $scope.authorized = false;
     }
 }]);
 
@@ -767,20 +804,20 @@ dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest
     $scope.user = user;
 
     if(user) {
-        $scope.unauthorized = true;
+        $scope.authorized = false;
     }
 
     if($scope.user) {
         Rest.getThing('/api/application/' + appId)
             .then(function(app) {
                 if(app) {
-                    $scope.unauthorized = false;
+                    $scope.authorized = true;
                     $scope.application = app;
 
                     Title.setTitle(app.authour.name + '\'s Moderator Application');
                     Title.setPageTitle(app.authour.name + '\'s Moderator Application');
                 } else {
-                    $scope.unauthorized = true;
+                    $scope.authorized = false;
                 }
             });
     }

@@ -1,11 +1,10 @@
 <div layout="row">
     <div flex-gt-sm></div>
     <div layout-padding flex-gt-sm="60" flex>
-        <login-prompt></login-prompt>
-        <div ng-if="unauthorized">
-            <h1 class="md-display-2 center-align-text">You Don't Have Permission To View This Page</h1>
-        </div>
-        <div ng-if="user && !unauthorized">
+        <login-prompt user="user"></login-prompt>
+        <unauthorized user="user" authorized="authorized"></unauthorized>
+
+        <div ng-if="user && authorized">
             <h1 class="md-display-2">{{application.authour.name}}'s Moderator Application</h1>
             <p md-colors="{color: 'red-600'}">* Required</p>
             <br>

@@ -37,6 +37,15 @@
         </md-list>
     </div>
     <md-list>
+        <div ng-if="user && user.roles.includes('Staff')">
+            <md-list-item>
+                <md-button class="list-btn-no-radius" ng-href="/admin" ng-class="{'md-primary active': activeNav('/admin')}" layout="row" layout-fill>
+                    <md-icon flex="40">dashboard</md-icon>
+                    <p class="left-align-text" flex="60">Admin</p>
+                </md-button>
+            </md-list-item>
+            <md-divider></md-divider>
+        </div>
         <md-list-item>
             <md-button class="list-btn-no-radius" ng-href="/news" ng-class="{'md-primary active': activeNav('/news')}" layout="row" layout-fill>
                 <md-icon flex="40">announcement</md-icon>
