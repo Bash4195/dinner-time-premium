@@ -7,7 +7,7 @@ var ModApp = require('../models/moderatorApplication');
 // Client routes
 
 // CREATE
-router.post('/api/apply/:userId', middleware.isLoggedIn, middleware.canApplyToMod, function(req, res) {
+router.post('/api/apply/:userId', middleware.isLoggedIn, middleware.hasPermission(req.user, 'general', 'canApplyToMod'), function(req, res) {
     var newApp = req.body;
     if(newApp.ulxExperience === '' || newApp.ulxExperience === 'undefined') {
         middleware.handleError(res, 'Mod application field "ULX Experience" is missing', 'ULX Experience field is missing', 400);
@@ -60,15 +60,35 @@ router.get('/api/application/:userId', middleware.isLoggedIn, function(req, res)
 
 // Admin routes
 
-// // INDEX
-// router.get('/api/admin/apply', function(req, res) {
-//     ModApp.find({}).populate('authour').skip(req.query.skip).limit(20).sort({createdAt: -1}).exec(function(err, apps) {
+// INDEX
+router.get('/api/admin/applications', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
+    ModApp.find({}).populate('authour').skip(req.query.skip).limit(20).sort({createdAt: -1}).exec(function(err, apps) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve application');
+        } else {
+            res.status(200).json(apps);
+        }
+    });
+});
+
+// // SHOW
+// router.get('/api/application/:userId', middleware.isLoggedIn, function(req, res) {
+//     ModApp.findOne({authour: req.params.userId}).populate('authour').exec(function(err, app) {
 //         if(err) {
-//             middleware.handleError(res, err.message, 'Failed to retrieve apply');
+//             middleware.handleError(res, err.message, 'Failed to retrieve moderator application');
 //         } else {
-//             res.status(200).json(apps);
+//             if(app) {
+//                 // Have to stringify this as it's looking at these two values as objects for whatever reason
+//                 if(JSON.stringify(app.authour._id) == JSON.stringify(req.user._id) || req.user.roles.includes('Staff')) {
+//                     res.status(200).json(app);
+//                 } else {
+//                     middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
+//                 }
+//             } else {
+//                 middleware.handleError(res, 'Failed to retrieve moderator application', 'Something went wrong while processing your request');
+//             }
 //         }
-//     });
+//     })
 // });
 //
 // // UPDATE
