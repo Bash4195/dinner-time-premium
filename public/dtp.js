@@ -24,6 +24,16 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
                 }
             }
         })
+        
+        .when('/admin/applications', {
+            templateUrl: 'admin/applications/applicationsIndex.html',
+            controller: 'adminApplicationsIndexCtrl',
+            resolve: {
+                user: function(User) {
+                    return User.getCurrentUser();
+                }
+            }
+        })
 
         //User Routes
         .when('/users', {
@@ -556,12 +566,31 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
 }]);
 
 dtp.controller('adminDashboardCtrl', ['$scope', 'Title', 'user', function($scope, Title, user) {
+    Title.setTitle('DTP');
+    Title.setPageTitle('Dinner Time Premium');
+
     $scope.authorized = false;
     if(user && user.roles.includes('Staff')) {
         $scope.authorized = true;
         $scope.user = user;
-        console.log($scope.user);
+        Title.setTitle('Admin Dashboard - DTP');
+        Title.setPageTitle('Admin Dashboard');
         
+    } else {
+        $scope.authorized = false;
+    }
+}]);
+
+dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', function($scope, Title, user) {
+    Title.setTitle('DTP');
+    Title.setPageTitle('Dinner Time Premium');
+
+    $scope.authorized = false;
+    if(user && user.roles.includes('Staff')) {
+        $scope.authorized = true;
+        $scope.user = user;
+        Title.setTitle('Moderator Applications - DTP');
+        Title.setPageTitle('Moderator Applications');
     } else {
         $scope.authorized = false;
     }
@@ -573,8 +602,8 @@ dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
 }]);
 
 dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', function($scope, Title, Rest, $location) {
-    Title.setTitle('DTP - Users');
-    Title.setPageTitle('Search Users');
+    Title.setTitle('Users - DTP');
+    Title.setPageTitle('Users');
 
     $scope.search = '';
 
@@ -616,6 +645,8 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
 
 dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Ranks', '$routeParams',
     function($scope, Title, User, user, Rest, Ranks, $routeParams) {
+        Title.setTitle('DTP');
+        Title.setPageTitle('Dinner Time Premium');
 
         var userId = $routeParams.userId;
 
@@ -625,7 +656,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
             Rest.getThing('/api/user/' + userId)
                 .then(function(user) {
                     $scope.userProfile = user;
-                    Title.setTitle(user.name + '\'s Profile');
+                    Title.setTitle(user.name + '\'s Profile - DTP');
                     Title.setPageTitle(user.name + '\'s Profile');
 
                     $scope.bio = {
@@ -720,7 +751,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
 }]);
 
 dtp.controller('moderatorApplicationRequirementsCtrl', ['$scope', 'Title', 'user', 'Notify', '$location', function($scope, Title, user, Notify, $location) {
-    Title.setTitle('Moderator Application Requirements');
+    Title.setTitle('Moderator Application Requirements - DTP');
     Title.setPageTitle('Moderator Application Requirements');
 
     $scope.user = user;
@@ -740,7 +771,7 @@ dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'No
     function($scope, Title, user, Notify, Rest, $mdDialog, $location) {
         $scope.user = user;
 
-        Title.setTitle(user.name + '\'s Moderator Application');
+        Title.setTitle(user.name + '\'s Moderator Application - DTP');
         Title.setPageTitle(user.name + '\'s Moderator Application');
 
         $scope.application = {
@@ -814,7 +845,7 @@ dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest
                     $scope.authorized = true;
                     $scope.application = app;
 
-                    Title.setTitle(app.authour.name + '\'s Moderator Application');
+                    Title.setTitle(app.authour.name + '\'s Moderator Application - DTP');
                     Title.setPageTitle(app.authour.name + '\'s Moderator Application');
                 } else {
                     $scope.authorized = false;
@@ -825,7 +856,7 @@ dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest
 
 dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', '$location',
     function($scope, Title, user, Rest, $mdDialog, $location) {
-        Title.setTitle('DTP - News');
+        Title.setTitle('News - DTP');
         Title.setPageTitle('News');
 
         $scope.user = user;
@@ -914,7 +945,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 $scope.news = news;
                 $scope.gotNewsEvent = true;
 
-                Title.setTitle(news.title);
+                Title.setTitle(news.title + ' - DTP');
                 Title.setPageTitle(news.title);
 
                 $scope.commentLabels = [];
@@ -1072,7 +1103,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
 
 dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'user', 'Rest', 'Notify', '$mdDialog', '$location',
 function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
-    Title.setTitle('DTP - Forum');
+    Title.setTitle('Forum - DTP');
     Title.setPageTitle('Forum');
 
     $scope.user = user;
@@ -1267,6 +1298,8 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
 
 dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', 'user', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
 function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) {
+    Title.setTitle('DTP');
+    Title.setPageTitle('Dinner Time Premium');
 
     var categoryPath = $routeParams.categoryPath;
 
@@ -1277,7 +1310,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
             .then(function(res) {
                 $scope.category = res;
 
-                Title.setTitle($scope.category.title);
+                Title.setTitle($scope.category.title + ' - DTP');
                 Title.setPageTitle($scope.category.title);
 
                 $scope.postLabels = [];
@@ -1383,6 +1416,8 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
 
 dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'user', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
 function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) {
+    Title.setTitle('DTP');
+    Title.setPageTitle('Dinner Time Premium');
 
     var categoryPath = $routeParams.categoryPath;
     var postId = $routeParams.postId;
@@ -1399,7 +1434,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 $scope.post = res;
                 $scope.gotPost = true;
 
-                Title.setTitle($scope.post.title);
+                Title.setTitle($scope.post.title - ' - DTP');
                 Title.setPageTitle($scope.post.title);
 
                 $scope.commentLabels = [];
@@ -1625,7 +1660,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
 }]);
 
 dtp.controller('rulesCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', function($scope, Title, user, Rest, $mdDialog) {
-    Title.setTitle('DTP - Rules');
+    Title.setTitle('Rules - DTP');
     Title.setPageTitle('Rules');
 
     $scope.user = user;
