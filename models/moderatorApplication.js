@@ -15,7 +15,22 @@ var moderatorApplicationSchema = mongoose.Schema({
         whyWeShouldAccept: { type: String, required: true, maxlength: 10000 },
         additionalInfo: { type: String, maxlength: 10000 },
 
-        authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+        authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+
+        status: String,
+        review: {
+                accepted: Boolean,
+                reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+        },
+        votes: [{
+                vote: Boolean,
+                voter: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+        }],
+
+        comments: [{
+                comment: { type: String, maxlength: 10000 },
+                authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+        }]
     },
     { timestamps: true }
 );
