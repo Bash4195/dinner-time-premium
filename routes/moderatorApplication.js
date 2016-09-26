@@ -66,12 +66,18 @@ router.get('/api/application/:userId', middleware.isLoggedIn, function(req, res)
 
 // INDEX
 router.get('/api/admin/applications', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
-    ModApp.find({}).populate('authour').skip(req.query.skip).limit(20).sort({createdAt: -1}).exec(function(err, apps) {
-        if(err) {
-            middleware.handleError(res, err.message, 'Failed to retrieve application');
-        } else {
-            res.status(200).json(apps);
-        }
+    ModApp.find({}).count().exec(function(err, numApps) {
+        ModApp.find({}).populate('authour').skip(req.query.skip).limit(20).sort({createdAt: -1}).exec(function(err, apps) {
+            if(err) {
+                middleware.handleError(res, err.message, 'Failed to retrieve application');
+            } else {
+                var data = {
+                    count: numApps,
+                    apps: apps
+                };
+                res.status(200).json(data);
+            }
+        });
     });
 });
 

@@ -1,1 +1,42 @@
-<h1>Mod apps</h1>
+<div layout="row">
+    <div flex-gt-sm></div>
+    <div layout-padding flex-gt-sm="80" flex>
+        <login-prompt user="user"></login-prompt>
+        <unauthorized user="user" authorized="authorized"></unauthorized>
+
+        <div ng-if="user && authorized">
+            <md-card>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-display-2 center-align-text">Moderator Applications</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                    <div layout="row" layout-align="center center">
+                        <span flex></span>
+                        <h3 flex>Authour</h3><span flex></span>
+                        <h4 flex>Status</h4><span flex></span>
+                        <p flex>Hi</p><span flex></span>
+                    </div>
+                    <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="null">
+                        <div class="md-list-item-text" layout="row" layout-align="center center">
+                            <img ng-src="{{app.authour.avatar}}" alt="" class="md-avatar">
+                            <h3 flex>{{app.authour.name}}</h3><span flex></span>
+                            <h4 flex-gt-sm="10">Hello</h4><span flex></span>
+                            <p flex-gt-sm="10">Hi</p><span flex></span>
+                        </div>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                    <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotApps">
+                        <md-progress-circular class="md-accent"></md-progress-circular>
+                    </div>
+                    <div style="padding-top: 8px" layout="row">
+                        <div flex></div>
+                        <md-button ng-click="getModApps()" ng-if="apps.length !== numApps">Load More</md-button>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+    <div flex-gt-sm></div>
+</div>

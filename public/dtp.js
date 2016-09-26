@@ -568,7 +568,7 @@ dtp.controller('adminDashboardCtrl', ['$scope', 'Title', 'user', function($scope
     }
 }]);
 
-dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', function($scope, Title, user) {
+dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', function($scope, Title, user, Rest) {
     Title.setTitle('DTP');
     Title.setPageTitle('Dinner Time Premium');
 
@@ -578,6 +578,24 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', functio
         $scope.user = user;
         Title.setTitle('Moderator Applications - DTP');
         Title.setPageTitle('Moderator Applications');
+
+        var skip = 0;
+        $scope.getModApps = function() {
+            $scope.gotApps = false;
+        
+            Rest.getThing('/api/admin/applications', {skip: skip})
+                .then(function(apps) {
+                    if($scope.apps) {
+                        $scope.apps = $scope.apps.concat(apps.apps);
+                    } else {
+                        $scope.apps = apps.apps;
+                    }
+                    $scope.numApps = apps.count;
+                    $scope.gotApps = true;
+                    skip += 20;
+                });
+        };
+        $scope.getModApps();
     } else {
         $scope.authorized = false;
     }
