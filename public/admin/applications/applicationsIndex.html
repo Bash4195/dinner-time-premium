@@ -6,24 +6,20 @@
 
         <div ng-if="user && authorized">
             <md-card>
-                <md-card-header>
-                    <md-card-header-text>
-                        <span class="md-display-2 center-align-text">Moderator Applications</span>
-                    </md-card-header-text>
-                </md-card-header>
+                <md-toolbar class="md-toolbar-tools"><span>Moderator Applications</span></md-toolbar>
+                <div layout="row" layout-align="center center">
+                    <span flex></span>
+                    <h4 flex>Authour</h4><span flex></span>
+                    <h4 flex>Votes</h4><span flex></span>
+                    <h4 flex>Status</h4><span flex></span>
+                </div>
                 <md-card-content>
-                    <div layout="row" layout-align="center center">
-                        <span flex></span>
-                        <h3 flex>Authour</h3><span flex></span>
-                        <h4 flex>Status</h4><span flex></span>
-                        <p flex>Hi</p><span flex></span>
-                    </div>
-                    <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="null">
+                    <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="$location.path('/admin/application/' + app.authour._id)">
                         <div class="md-list-item-text" layout="row" layout-align="center center">
                             <img ng-src="{{app.authour.avatar}}" alt="" class="md-avatar">
                             <h3 flex>{{app.authour.name}}</h3><span flex></span>
-                            <h4 flex-gt-sm="10">Hello</h4><span flex></span>
-                            <p flex-gt-sm="10">Hi</p><span flex></span>
+                            <h4 flex-gt-sm="10">{{app.votes.length}}/3</h4><span flex></span>
+                            <p flex-gt-sm="10">{{app.status}}</p><span flex></span>
                         </div>
                         <md-divider></md-divider>
                     </md-list-item>

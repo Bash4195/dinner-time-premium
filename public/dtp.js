@@ -568,7 +568,7 @@ dtp.controller('adminDashboardCtrl', ['$scope', 'Title', 'user', function($scope
     }
 }]);
 
-dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', function($scope, Title, user, Rest) {
+dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$location', function($scope, Title, user, Rest, $location) {
     Title.setTitle('DTP');
     Title.setPageTitle('Dinner Time Premium');
 
@@ -596,6 +596,8 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest',
                 });
         };
         $scope.getModApps();
+
+        $scope.$location = $location;
     } else {
         $scope.authorized = false;
     }
