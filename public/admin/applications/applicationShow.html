@@ -49,8 +49,8 @@
             <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.gmodLeadershipExperience">No information given</p>
             <md-divider></md-divider>
             <h1 class="md-headline">Willing to add us on Steam <span md-colors="{color: 'red-600'}">*</span></h1>
-            <p class="md-subhead" ng-hide="!application.willingToAddUsOnSteam">{{application.willingToAddUsOnSteam}}</p>
-            <p class="md-subhead" md-colors="{color: 'grey-500'}" ng-show="!application.willingToAddUsOnSteam">No information given</p>
+            <p class="md-subhead" ng-if="application.willingToAddUsOnSteam">Yes</p>
+            <p class="md-subhead" md-colors="{color: 'warn-500'}" ng-if="!application.willingToAddUsOnSteam">No</p>
             <md-divider></md-divider>
             <h1 class="md-headline">Why We Should Accept You <span md-colors="{color: 'red-600'}">*</span></h1>
             <p class="md-subhead" ng-hide="!application.whyWeShouldAccept">{{application.whyWeShouldAccept}}</p>
