@@ -192,6 +192,23 @@ a {
     color: #9E9E9E !important;
 }
 
+/* Mod application status colours */
+.mod-app-under-review {
+    color: #FFEB3B !important;
+}
+
+.mod-app-awaiting-votes {
+    color: #FF9800 !important;
+}
+
+.mod-app-accepted {
+    color: #4CAF50 !important;
+}
+
+.mod-app-rejected {
+    color: #F44336 !important;
+}
+
 /* Word wrap */
 .wrap-title{
     white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */

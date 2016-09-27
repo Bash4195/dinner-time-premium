@@ -10,6 +10,7 @@ var ModApp = require('../models/moderatorApplication');
 router.post('/api/apply/:userId', middleware.isLoggedIn, function(req, res) {
     if(middleware.hasPermission(req.user, 'general', 'canApplyToMod')) {
         var newApp = req.body;
+        newApp.status = 'Under Review';
         if(newApp.ulxExperience === '' || newApp.ulxExperience === 'undefined') {
             middleware.handleError(res, 'Mod application field "ULX Experience" is missing', 'ULX Experience field is missing', 400);
         } else if(newApp.leadershipExperience === '' || newApp.leadershipExperience === 'undefined') {

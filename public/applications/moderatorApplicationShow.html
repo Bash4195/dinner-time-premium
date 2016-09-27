@@ -5,6 +5,17 @@
         <unauthorized user="user" authorized="authorized"></unauthorized>
 
         <div ng-if="user && authorized">
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text layout="column" layout-align="center center">
+                        <span class="md-headline wrap-title">Status</span>
+                        <br>
+                        <span class="md-headline wrap-title" ng-class="{'mod-app-under-review': application.status === 'Under Review',
+                            'mod-app-awaiting-votes': application.status === 'Awaiting Votes', 'mod-app-accepted': application.status === 'Accepted',
+                            'mod-app-rejected': application.status === 'Rejected'}">{{application.status}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
             <h1 class="md-display-2">{{application.authour.name}}'s Moderator Application</h1>
             <p md-colors="{color: 'red-600'}">* Required</p>
             <br>

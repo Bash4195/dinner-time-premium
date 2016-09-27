@@ -627,7 +627,7 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
 
             Rest.get('/api/admin/application/' + userId)
                 .then(function(app) {
-                    $scope.application = app;
+                    $scope.app = app;
                     $scope.gotApp = true;
                 });
         };
