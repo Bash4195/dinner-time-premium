@@ -20,16 +20,16 @@ var moderatorApplicationSchema = mongoose.Schema({
         status: String,
         review: {
                 accepted: Boolean,
-                reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+                reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
         },
         votes: [{
                 vote: Boolean,
-                voter: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+                voter: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
         }],
 
         comments: [{
                 comment: { type: String, maxlength: 10000 },
-                authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+                authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
         }]
     },
     { timestamps: true }
