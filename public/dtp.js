@@ -283,7 +283,7 @@ dtp.service('User', ['$http', 'Notify', function($http, Notify) {
 
 dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
     // INDEX + SHOW
-    this.getThing = function(path, params) {
+    this.get = function(path, params) {
         return $http.get(path, {params: params})
             .then(function(res) {
                 return res.data;
@@ -296,7 +296,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // CREATE
-    this.newThing = function(path, newThing, params) {
+    this.new = function(path, newThing, params) {
         return $http.post(path, newThing, {params: params})
             .then(function(res) {
                 return res.data;
@@ -309,7 +309,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // UPDATE
-    this.updateThing = function(path, updatedThing, params) {
+    this.update = function(path, updatedThing, params) {
         return $http.put(path, updatedThing, {params: params})
             .then(function(res) {
                 return res.data;
@@ -322,7 +322,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // DELETE
-    this.deleteThing = function(path, params) {
+    this.delete = function(path, params) {
         return $http.delete(path, {params: params})
             .then(function(res) {
                 return res.data;
@@ -406,7 +406,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
 
     $scope.getOnlineUsers = function() {
         $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
-        Rest.getThing('/api/loggedInUsers')
+        Rest.get('/api/loggedInUsers')
             .then(function(users) {
                 for(let i = users.length - 1; i >= 0; i--) {
                     if(users[i]._id == $scope.user._id) {
@@ -589,7 +589,7 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest',
         $scope.getModApps = function() {
             $scope.gotApps = false;
         
-            Rest.getThing('/api/admin/applications', {skip: skip})
+            Rest.get('/api/admin/applications', {skip: skip})
                 .then(function(apps) {
                     if($scope.apps) {
                         $scope.apps = $scope.apps.concat(apps.apps);
@@ -625,10 +625,9 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
         $scope.getModApp = function() {
             $scope.gotApp = false;
 
-            Rest.getThing('/api/admin/application/' + userId)
+            Rest.get('/api/admin/application/' + userId)
                 .then(function(app) {
                     $scope.app = app;
-                    console.log(app);
                 });
         };
         $scope.getModApp();
@@ -654,7 +653,7 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     // $scope.retrieveUsers = function() {
     //     $scope.gotUsers = false;
     //
-    //     Rest.getThing('/api/users/count', {search: $scope.search})
+    //     Rest.get('/api/users/count', {search: $scope.search})
     //         .then(function(numUsers) {
     //             $scope.userLabels = [];
     //             var tabs = numUsers / 20;
@@ -669,7 +668,7 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     function getUsers() {
         $scope.gotUsers = false;
         // var skip = (label - 1) * 20; // For pagination
-        Rest.getThing('/api/users', {search: $scope.search})//, skip: skip}) // Pagination
+        Rest.get('/api/users', {search: $scope.search})//, skip: skip}) // Pagination
             .then(function(users) {
                 $scope.users = users;
                 $scope.gotUsers = true;
@@ -694,7 +693,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
         $scope.user = user;
 
         $scope.getUserProfile = function() {
-            Rest.getThing('/api/user/' + userId)
+            Rest.get('/api/user/' + userId)
                 .then(function(user) {
                     $scope.userProfile = user;
                     Title.setTitle(user.name + '\'s Profile - DTP');
@@ -736,7 +735,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
         $scope.editingBioToggle = function() { $scope.editingBio = !$scope.editingBio; };
 
         $scope.saveProfile = function(userData) {
-            Rest.updateThing('/api/user/' + userId, userData)
+            Rest.update('/api/user/' + userId, userData)
                 .then(function() {
                     if(userData === $scope.bio) {
                         $scope.editingBio = false;
@@ -779,7 +778,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
         };
 
         $scope.savePermissions = function() {
-            Rest.updateThing('/api/user/' + userId + '/updatePermissions', $scope.permissions)
+            Rest.update('/api/user/' + userId + '/updatePermissions', $scope.permissions)
                 .then(function() {
                     $scope.editingPermissions = false;
                     $scope.getUserProfile();
@@ -839,7 +838,7 @@ dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'No
 
         $scope.submitApplication = function() {
             // Submit without checking as it should be done before the dialog was opened
-            Rest.newThing('/api/apply/' + $scope.user._id, $scope.application)
+            Rest.new('/api/apply/' + $scope.user._id, $scope.application)
                 .then(function() {
                     $location.path('/application/' + $scope.user._id);
                 })
@@ -880,7 +879,7 @@ dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest
     }
 
     if($scope.user) {
-        Rest.getThing('/api/application/' + appId)
+        Rest.get('/api/application/' + appId)
             .then(function(app) {
                 if(app) {
                     $scope.authorized = true;
@@ -905,7 +904,7 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
         $scope.gotNews = false;
         function getNews() {
             $scope.gotNews = false;
-            Rest.getThing('/api/news')
+            Rest.get('/api/news')
                 .then(function(news) {
                     $scope.news = news;
                     $scope.gotNews = true;
@@ -959,7 +958,7 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
                     content: $scope.newNews.content,
                     authour: $scope.user
                 };
-                Rest.newThing('/api/news', newNews)
+                Rest.new('/api/news', newNews)
                     .then(function(res) {
                         $scope.newNews = {
                             title: '',
@@ -981,7 +980,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     $scope.gotNewsEvent = false;
     function getNewsEvent() {
         $scope.gotNewsEvent = false;
-        Rest.getThing('/api/news/' + newsId)
+        Rest.get('/api/news/' + newsId)
             .then(function(news) {
                 $scope.news = news;
                 $scope.gotNewsEvent = true;
@@ -1005,7 +1004,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     $scope.getComments = function(label) {
         $scope.gotComments = false;
         var skip = (label - 1) * 20;
-        Rest.getThing('/api/news/' + $scope.news._id + '/comments', {skip: skip})
+        Rest.get('/api/news/' + $scope.news._id + '/comments', {skip: skip})
             .then(function(newsEvent) {
                 $scope.comments = newsEvent.comments;
                 $scope.label = label;
@@ -1047,7 +1046,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.updateThing('/api/news/' + $scope.news._id, updatedNews)
+            Rest.update('/api/news/' + $scope.news._id, updatedNews)
                 .then(function() {
                     getNewsEvent();
                 });
@@ -1066,7 +1065,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
             $mdDialog.hide();
         } else{
             $mdDialog.hide();
-            Rest.deleteThing('/api/news/' + $scope.news._id)
+            Rest.delete('/api/news/' + $scope.news._id)
                 .then(function() {
                     $location.path('/news');
                 })
@@ -1084,7 +1083,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
         } else if(!$scope.newComment.comment) {
             Notify.generic('Your comment needs to say something!');
         } else {
-            Rest.newThing('/api/news/' + $scope.news._id, $scope.newComment)
+            Rest.new('/api/news/' + $scope.news._id, $scope.newComment)
                 .then(function() {
                     $scope.newComment.comment = '';
                     getNewsEvent();
@@ -1111,7 +1110,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.updateThing('/api/news/' + $scope.news._id + '/' + comment._id, updatedComment)
+            Rest.update('/api/news/' + $scope.news._id + '/' + comment._id, updatedComment)
                 .then(function() {
                     getNewsEvent();
                 })
@@ -1133,7 +1132,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
             $mdDialog.hide();
         } else{
             $mdDialog.hide();
-            Rest.deleteThing('/api/news/' + $scope.news._id + '/' + commentId)
+            Rest.delete('/api/news/' + $scope.news._id + '/' + commentId)
                 .then(function() {
                     commentId = '';
                     getNewsEvent();
@@ -1153,7 +1152,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
 
     function getCategories() {
         $scope.gotCategories = false;
-        Rest.getThing('/api/forum')
+        Rest.get('/api/forum')
             .then(function(categories) {
                 if(categories) {
                     $scope.categories = categories;
@@ -1167,7 +1166,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
 
     function getCategoryPosts() {
         $scope.gotCategoryPosts = false;
-        Rest.getThing('/api/forum/allCategories')
+        Rest.get('/api/forum/allCategories')
             .then(function(categoryPosts) {
                 if(categoryPosts) {
                     $scope.categoryPosts = categoryPosts;
@@ -1181,7 +1180,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
 
     function getRecentPosts() {
         $scope.gotRecentPosts = false;
-        Rest.getThing('/api/forum/recentPosts')
+        Rest.get('/api/forum/recentPosts')
             .then(function(res) {
                 $scope.recentPosts = res;
                 $scope.gotRecentPosts = true;
@@ -1233,7 +1232,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
                 content: $scope.newPost.content,
                 authour: $scope.user
             };
-            Rest.newThing('/api' + catPath, newPost)
+            Rest.new('/api' + catPath, newPost)
                 .then(function(res) {
                     $scope.newPost = {
                         category: '',
@@ -1269,7 +1268,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
                 path: catPath,
                 createdBy: $scope.user
             };
-            Rest.newThing('/api/forum', newCategory)
+            Rest.new('/api/forum', newCategory)
                 .then(function() {
                     $scope.newCategory = '';
                     getCategories();
@@ -1302,7 +1301,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.updateThing('/api/forum/' + $scope.editingCategory._id, updatedCategory)
+            Rest.update('/api/forum/' + $scope.editingCategory._id, updatedCategory)
                 .then(function() {
                     $scope.editingCategory = '';
                     getCategories();
@@ -1325,7 +1324,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
         } else {
             $scope.deleteCategory = function() {
                 $mdDialog.hide();
-                Rest.deleteThing('/api/forum/' + $scope.editingCategory._id)
+                Rest.delete('/api/forum/' + $scope.editingCategory._id)
                     .then(function() {
                         $scope.editingCategory = '';
                         getCategories();
@@ -1347,7 +1346,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     $scope.user = user;
 
     function getCategory() {
-        Rest.getThing('/api/forum/singleCategory/' + categoryPath)
+        Rest.get('/api/forum/singleCategory/' + categoryPath)
             .then(function(res) {
                 $scope.category = res;
 
@@ -1369,7 +1368,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     $scope.getPosts = function(label) {
         $scope.gotPosts = false;
         var skip = (label - 1) * 20;
-        Rest.getThing('/api/forum/' + categoryPath, {skip: skip})
+        Rest.get('/api/forum/' + categoryPath, {skip: skip})
             .then(function(category) {
                 $scope.posts = category.posts;
                 $scope.gotPosts = true;
@@ -1381,7 +1380,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
 
     function getCategories() {
         $scope.gotCategories = false;
-        Rest.getThing('/api/forum/allCategories')
+        Rest.get('/api/forum/allCategories')
             .then(function(categories) {
                 if(categories) {
                     $scope.categories = categories;
@@ -1395,7 +1394,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
 
     function getRecentPosts() {
         $scope.gotRecentPosts = false;
-        Rest.getThing('/api/forum/recentPosts')
+        Rest.get('/api/forum/recentPosts')
             .then(function(res) {
                 $scope.recentPosts = res;
                 $scope.gotRecentPosts = true;
@@ -1441,7 +1440,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 content: $scope.newPost.content,
                 authour: $scope.user
             };
-            Rest.newThing('/api/forum/' + categoryPath, newPost)
+            Rest.new('/api/forum/' + categoryPath, newPost)
                 .then(function(post) {
                     $scope.newPost = {
                         title: '',
@@ -1470,7 +1469,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
 
     function getPost() {
         $scope.gotPost = false;
-        Rest.getThing('/api/forum/' + categoryPath + '/' + postId)
+        Rest.get('/api/forum/' + categoryPath + '/' + postId)
             .then(function(res) {
                 $scope.post = res;
                 $scope.gotPost = true;
@@ -1494,7 +1493,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     $scope.getComments = function(label) {
         $scope.gotComments = false;
         var skip = (label - 1) * 20;
-        Rest.getThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/comments', {skip: skip})
+        Rest.get('/api/forum/' + categoryPath + '/' + $scope.post._id + '/comments', {skip: skip})
             .then(function(post) {
                 $scope.comments = post.comments;
                 $scope.label = label;
@@ -1506,7 +1505,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
 
     function getCategories() {
         $scope.gotCategories = false;
-        Rest.getThing('/api/forum/allCategories')
+        Rest.get('/api/forum/allCategories')
             .then(function(categories) {
                 if(categories) {
                     $scope.categories = categories;
@@ -1520,7 +1519,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
 
     function getRecentPosts() {
         $scope.gotRecentPosts = false;
-        Rest.getThing('/api/forum/recentPosts')
+        Rest.get('/api/forum/recentPosts')
             .then(function(res) {
                 $scope.recentPosts = res;
                 $scope.gotRecentPosts = true;
@@ -1564,7 +1563,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id, updatedPost)
+            Rest.update('/api/forum/' + categoryPath + '/' + $scope.post._id, updatedPost)
                 .then(function() {
                     getPost();
                 });
@@ -1583,7 +1582,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
             $mdDialog.hide();
         } else{
             $mdDialog.hide();
-            Rest.deleteThing('/api/forum/' + categoryPath + '/' + $scope.post._id)
+            Rest.delete('/api/forum/' + categoryPath + '/' + $scope.post._id)
                 .then(function() {
                     $location.path('/forum/' + categoryPath);
                 })
@@ -1591,7 +1590,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 
     $scope.lockPost = function(val) {
-        Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id, {locked: val})
+        Rest.update('/api/forum/' + categoryPath + '/' + $scope.post._id, {locked: val})
             .then(function() {
                 getPost();
                 getCategories();
@@ -1617,7 +1616,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
             $mdDialog.hide();
         } else{
             $mdDialog.hide();
-            Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/move', $scope.movingPost)
+            Rest.update('/api/forum/' + categoryPath + '/' + $scope.post._id + '/move', $scope.movingPost)
                 .then(function() {
                     $location.path($scope.movingPost.category.path + '/' + $scope.post._id);
                     $scope.movingPost = {
@@ -1640,7 +1639,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
         } else if(!$scope.newComment.comment) {
             Notify.generic('Your comment needs to say something!');
         } else {
-            Rest.newThing('/api/forum/' + categoryPath + '/' + $scope.post._id, $scope.newComment)
+            Rest.new('/api/forum/' + categoryPath + '/' + $scope.post._id, $scope.newComment)
                 .then(function() {
                     $scope.newComment.comment = '';
                     getPost();
@@ -1668,7 +1667,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.updateThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + comment._id, updatedComment)
+            Rest.update('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + comment._id, updatedComment)
                 .then(function() {
                     getPost();
                     getRecentPosts();
@@ -1690,7 +1689,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
             $mdDialog.hide();
         } else{
             $mdDialog.hide();
-            Rest.deleteThing('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + commentId)
+            Rest.delete('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + commentId)
                 .then(function() {
                     commentId = '';
                     getPost();
@@ -1707,7 +1706,7 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', fun
     $scope.user = user;
     
     function getRules() {
-        Rest.getThing('/api/rules')
+        Rest.get('/api/rules')
             .then(function(rules) {
                 $scope.rules = rules.rules;
             });
@@ -1745,7 +1744,7 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', fun
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.updateThing('/api/rules', updatedRules)
+            Rest.update('/api/rules', updatedRules)
                 .then(function() {
                     getRules();
                 });
