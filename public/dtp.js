@@ -24,10 +24,18 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
                 }
             }
         })
-        
         .when('/admin/applications', {
             templateUrl: 'admin/applications/applicationsIndex.html',
             controller: 'adminApplicationsIndexCtrl',
+            resolve: {
+                user: function(User) {
+                    return User.getCurrentUser();
+                }
+            }
+        })
+        .when('/admin/application/:userId', {
+            templateUrl: 'admin/applications/applicationShow.html',
+            controller: 'adminApplicationsShowCtrl',
             resolve: {
                 user: function(User) {
                     return User.getCurrentUser();
@@ -65,7 +73,6 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
                 }
             }
         })
-
         .when('/apply/:userId', {
             templateUrl: 'apply/moderatorApplicationCreate.html',
             controller: 'moderatorApplicationCreateCtrl',
@@ -75,7 +82,6 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
                 }
             }
         })
-
         .when('/application/:appId', {
             templateUrl: 'applications/moderatorApplicationShow.html',
             controller: 'moderatorApplicationShowCtrl',
@@ -598,6 +604,34 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest',
         $scope.getModApps();
 
         $scope.$location = $location;
+    } else {
+        $scope.authorized = false;
+    }
+}]);
+
+dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 'user', 'Rest', function($scope, $routeParams, Title, user, Rest) {
+    var userId = $routeParams.userId;
+
+    Title.setTitle('DTP');
+    Title.setPageTitle('Dinner Time Premium');
+
+    $scope.authorized = false;
+    if(user && user.roles.includes('Staff')) {
+        $scope.authorized = true;
+        $scope.user = user;
+        Title.setTitle('Moderator Application - DTP');
+        Title.setPageTitle('Moderator Application');
+
+        $scope.getModApp = function() {
+            $scope.gotApp = false;
+
+            Rest.getThing('/api/admin/application/' + userId)
+                .then(function(app) {
+                    $scope.app = app;
+                    console.log(app);
+                });
+        };
+        $scope.getModApp();
     } else {
         $scope.authorized = false;
     }

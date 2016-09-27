@@ -81,26 +81,17 @@ router.get('/api/admin/applications', middleware.isLoggedIn, middleware.isStaff,
     });
 });
 
-// // SHOW
-// router.get('/api/application/:userId', middleware.isLoggedIn, function(req, res) {
-//     ModApp.findOne({authour: req.params.userId}).populate('authour').exec(function(err, app) {
-//         if(err) {
-//             middleware.handleError(res, err.message, 'Failed to retrieve moderator application');
-//         } else {
-//             if(app) {
-//                 // Have to stringify this as it's looking at these two values as objects for whatever reason
-//                 if(JSON.stringify(app.authour._id) == JSON.stringify(req.user._id) || req.user.roles.includes('Staff')) {
-//                     res.status(200).json(app);
-//                 } else {
-//                     middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
-//                 }
-//             } else {
-//                 middleware.handleError(res, 'Failed to retrieve moderator application', 'Something went wrong while processing your request');
-//             }
-//         }
-//     })
-// });
-//
+// SHOW
+router.get('/api/admin/application/:userId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
+    ModApp.findOne({authour: req.params.userId}).populate('authour review votes comments').exec(function(err, app) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve moderator application');
+        } else {
+            res.status(200).json(app);
+        }
+    })
+});
+
 // // UPDATE
 // router.put('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(req, res) {
 //     Post.findById(req.params.postId, function(err, post) {
