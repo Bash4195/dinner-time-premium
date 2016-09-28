@@ -55,7 +55,7 @@ a {
 
 /* Active navigation */
 .active {
-    background-color: rgba(189, 189, 189, 0.2);
+    background-color: #616161;
 }
 
 /* Fixed FAB buttons for staying put while scrolling */
