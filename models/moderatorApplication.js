@@ -9,11 +9,11 @@ var moderatorApplicationSchema = mongoose.Schema({
         timePlayedGmod: { type: String, maxlength: 50 },
         howYouFoundUs: { type: String, maxlength: 1000 },
         ulxExperience: { type: String, required: true, maxlength: 11 },
-        leadershipExperience: { type: String, required: true, maxlength: 10000 },
-        gmodLeadershipExperience: { type: String, required: true, maxlength: 10000 },
+        leadershipExperience: { type: String, required: true, maxlength: 5000 },
+        gmodLeadershipExperience: { type: String, required: true, maxlength: 5000 },
         willingToAddUsOnSteam: { type: Boolean, required: true },
-        whyWeShouldAccept: { type: String, required: true, maxlength: 10000 },
-        additionalInfo: { type: String, maxlength: 10000 },
+        whyWeShouldAccept: { type: String, required: true, maxlength: 5000 },
+        additionalInfo: { type: String, maxlength: 5000 },
 
         authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 
@@ -27,10 +27,7 @@ var moderatorApplicationSchema = mongoose.Schema({
                 voter: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
         }],
 
-        comments: [{
-                comment: { type: String, maxlength: 10000 },
-                authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-        }]
+        comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Mod_App_Comment' }]
     },
     { timestamps: true }
 );

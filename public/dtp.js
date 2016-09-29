@@ -296,7 +296,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // CREATE
-    this.new = function(path, newThing, params) {
+    this.post = function(path, newThing, params) {
         return $http.post(path, newThing, {params: params})
             .then(function(res) {
                 return res.data;
@@ -309,7 +309,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             })
     };
     // UPDATE
-    this.update = function(path, updatedThing, params) {
+    this.put = function(path, updatedThing, params) {
         return $http.put(path, updatedThing, {params: params})
             .then(function(res) {
                 return res.data;
@@ -609,7 +609,7 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest',
     }
 }]);
 
-dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 'user', 'Rest', function($scope, $routeParams, Title, user, Rest) {
+dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 'user', 'Rest', '$mdDialog', function($scope, $routeParams, Title, user, Rest, $mdDialog) {
     var userId = $routeParams.userId;
 
     Title.setTitle('DTP');
@@ -622,16 +622,114 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
         Title.setTitle('Moderator Application - DTP');
         Title.setPageTitle('Moderator Application');
 
-        $scope.getModApp = function() {
+        function getModApp() {
             $scope.gotApp = false;
 
             Rest.get('/api/admin/application/' + userId)
                 .then(function(app) {
                     $scope.app = app;
                     $scope.gotApp = true;
+
+                    Title.setTitle(app.authour.name + '\'s Moderator Application - DTP');
+                    Title.setPageTitle(app.authour.name + '\'s Moderator Application');
+
+                    $scope.commentLabels = [];
+                    var tabs = $scope.app.comments.length / 20;
+
+                    for(var i = 0; i < tabs; i++) {
+                        $scope.commentLabels.push(i + 1);
+                    }
+                    getComments($scope.label);
                 });
+        }
+        getModApp();
+        
+        $scope.gotComments = false;
+        
+        function getComments(label) {
+            $scope.gotComments = false;
+
+            var skip = (label - 1) * 20;
+            
+            Rest.get('/api/admin/application/' + $scope.app._id + '/comments', {skip: skip})
+                .then(function(appWithComments) {
+                    $scope.comments = appWithComments.comments;
+                    $scope.label = label;
+                    $scope.gotComments = true;
+                })
+        }
+        
+        $scope.newComment = {
+            comment: '',
+            authour: $scope.user
         };
-        $scope.getModApp();
+        
+        $scope.createComment = function() {
+            if(!$scope.user) {
+                Notify.generic('You must be logged in to create a comment');
+            } else if(!$scope.newComment.comment) {
+                Notify.generic('Your comment needs to say something!');
+            } else {
+                Rest.post('/api/admin/application/' + $scope.app._id, $scope.newComment)
+                    .then(function() {
+                        $scope.newComment.comment = '';
+                        getModApp();
+                    });
+            }
+        };
+
+        $scope.editingComment = false;
+        
+        $scope.toggleEditingComment = function(id) {
+            $scope.editingComment = !$scope.editingComment;
+            $scope.editingCommentId = id;
+        };
+        
+        $scope.updateComment = function(comment) {
+            $scope.editingComment = false;
+            if(!$scope.user) {
+                Notify.generic('You must be logged in to update a comment');
+            } else if(!comment.comment) {
+                Notify.generic('Your comment needs to say something!');
+            } else {
+                var updatedComment = {
+                    comment: comment.comment,
+                    editedBy: $scope.user,
+                    editedAt: new Date()
+                };
+                Rest.put('/api/admin/application/' + $scope.app._id + '/' + comment._id, updatedComment)
+                    .then(function() {
+                        getModApp()
+                    })
+            }
+        };
+
+        var commentId = '';
+
+        $scope.confirmDeleteComment = function(id) {
+            commentId = id;
+            $mdDialog.show({
+                contentElement: '#deleteComment'
+            });
+        };
+
+        $scope.closeDialog = function() {
+            $mdDialog.cancel();
+        };
+
+        $scope.deleteComment = function() {
+            if(!$scope.user) {
+                Notify.generic('You must be logged in to delete a comment');
+                $mdDialog.hide();
+            } else{
+                $mdDialog.hide();
+                Rest.delete('/api/admin/application/' + $scope.app._id + '/' + commentId)
+                    .then(function() {
+                        commentId = '';
+                        getModApp();
+                    })
+            }
+        };
     } else {
         $scope.authorized = false;
     }
@@ -736,7 +834,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
         $scope.editingBioToggle = function() { $scope.editingBio = !$scope.editingBio; };
 
         $scope.saveProfile = function(userData) {
-            Rest.update('/api/user/' + userId, userData)
+            Rest.put('/api/user/' + userId, userData)
                 .then(function() {
                     if(userData === $scope.bio) {
                         $scope.editingBio = false;
@@ -779,7 +877,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
         };
 
         $scope.savePermissions = function() {
-            Rest.update('/api/user/' + userId + '/updatePermissions', $scope.permissions)
+            Rest.put('/api/user/' + userId + '/updatePermissions', $scope.permissions)
                 .then(function() {
                     $scope.editingPermissions = false;
                     $scope.getUserProfile();
@@ -839,7 +937,7 @@ dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'No
 
         $scope.submitApplication = function() {
             // Submit without checking as it should be done before the dialog was opened
-            Rest.new('/api/apply/' + $scope.user._id, $scope.application)
+            Rest.post('/api/apply/' + $scope.user._id, $scope.application)
                 .then(function() {
                     $location.path('/application/' + $scope.user._id);
                 })
@@ -959,7 +1057,7 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
                     content: $scope.newNews.content,
                     authour: $scope.user
                 };
-                Rest.new('/api/news', newNews)
+                Rest.post('/api/news', newNews)
                     .then(function(res) {
                         $scope.newNews = {
                             title: '',
@@ -1047,7 +1145,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.update('/api/news/' + $scope.news._id, updatedNews)
+            Rest.put('/api/news/' + $scope.news._id, updatedNews)
                 .then(function() {
                     getNewsEvent();
                 });
@@ -1084,7 +1182,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
         } else if(!$scope.newComment.comment) {
             Notify.generic('Your comment needs to say something!');
         } else {
-            Rest.new('/api/news/' + $scope.news._id, $scope.newComment)
+            Rest.post('/api/news/' + $scope.news._id, $scope.newComment)
                 .then(function() {
                     $scope.newComment.comment = '';
                     getNewsEvent();
@@ -1111,7 +1209,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.update('/api/news/' + $scope.news._id + '/' + comment._id, updatedComment)
+            Rest.put('/api/news/' + $scope.news._id + '/' + comment._id, updatedComment)
                 .then(function() {
                     getNewsEvent();
                 })
@@ -1233,7 +1331,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
                 content: $scope.newPost.content,
                 authour: $scope.user
             };
-            Rest.new('/api' + catPath, newPost)
+            Rest.post('/api' + catPath, newPost)
                 .then(function(res) {
                     $scope.newPost = {
                         category: '',
@@ -1269,7 +1367,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
                 path: catPath,
                 createdBy: $scope.user
             };
-            Rest.new('/api/forum', newCategory)
+            Rest.post('/api/forum', newCategory)
                 .then(function() {
                     $scope.newCategory = '';
                     getCategories();
@@ -1302,7 +1400,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.update('/api/forum/' + $scope.editingCategory._id, updatedCategory)
+            Rest.put('/api/forum/' + $scope.editingCategory._id, updatedCategory)
                 .then(function() {
                     $scope.editingCategory = '';
                     getCategories();
@@ -1441,7 +1539,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 content: $scope.newPost.content,
                 authour: $scope.user
             };
-            Rest.new('/api/forum/' + categoryPath, newPost)
+            Rest.post('/api/forum/' + categoryPath, newPost)
                 .then(function(post) {
                     $scope.newPost = {
                         title: '',
@@ -1475,7 +1573,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 $scope.post = res;
                 $scope.gotPost = true;
 
-                Title.setTitle($scope.post.title - ' - DTP');
+                Title.setTitle($scope.post.title + ' - DTP');
                 Title.setPageTitle($scope.post.title);
 
                 $scope.commentLabels = [];
@@ -1564,7 +1662,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.update('/api/forum/' + categoryPath + '/' + $scope.post._id, updatedPost)
+            Rest.put('/api/forum/' + categoryPath + '/' + $scope.post._id, updatedPost)
                 .then(function() {
                     getPost();
                 });
@@ -1591,7 +1689,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 
     $scope.lockPost = function(val) {
-        Rest.update('/api/forum/' + categoryPath + '/' + $scope.post._id, {locked: val})
+        Rest.put('/api/forum/' + categoryPath + '/' + $scope.post._id, {locked: val})
             .then(function() {
                 getPost();
                 getCategories();
@@ -1617,7 +1715,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
             $mdDialog.hide();
         } else{
             $mdDialog.hide();
-            Rest.update('/api/forum/' + categoryPath + '/' + $scope.post._id + '/move', $scope.movingPost)
+            Rest.put('/api/forum/' + categoryPath + '/' + $scope.post._id + '/move', $scope.movingPost)
                 .then(function() {
                     $location.path($scope.movingPost.category.path + '/' + $scope.post._id);
                     $scope.movingPost = {
@@ -1640,7 +1738,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
         } else if(!$scope.newComment.comment) {
             Notify.generic('Your comment needs to say something!');
         } else {
-            Rest.new('/api/forum/' + categoryPath + '/' + $scope.post._id, $scope.newComment)
+            Rest.post('/api/forum/' + categoryPath + '/' + $scope.post._id, $scope.newComment)
                 .then(function() {
                     $scope.newComment.comment = '';
                     getPost();
@@ -1668,7 +1766,7 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.update('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + comment._id, updatedComment)
+            Rest.put('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + comment._id, updatedComment)
                 .then(function() {
                     getPost();
                     getRecentPosts();
@@ -1745,7 +1843,7 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', fun
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
-            Rest.update('/api/rules', updatedRules)
+            Rest.put('/api/rules', updatedRules)
                 .then(function() {
                     getRules();
                 });

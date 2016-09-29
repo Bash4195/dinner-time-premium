@@ -3,6 +3,7 @@ var router = express.Router();
 var middleware = require('../middleware/index');
 var User = require('../models/user');
 var ModApp = require('../models/moderatorApplication');
+var ModAppComment = require('../models/moderatorApplicationComment');
 
 // Client routes
 
@@ -84,7 +85,7 @@ router.get('/api/admin/applications', middleware.isLoggedIn, middleware.isStaff,
 
 // SHOW
 router.get('/api/admin/application/:userId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
-    ModApp.findOne({authour: req.params.userId}).populate('authour review votes comments').exec(function(err, app) {
+    ModApp.findOne({authour: req.params.userId}).populate('authour review votes').exec(function(err, app) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve moderator application');
         } else {
@@ -94,34 +95,30 @@ router.get('/api/admin/application/:userId', middleware.isLoggedIn, middleware.i
 });
 
 // // UPDATE
-// router.put('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(req, res) {
-//     Post.findById(req.params.postId, function(err, post) {
+// // This route uses the app id instead of the user id. Why? Just to be confusing...
+// router.put('/api/admin/application/:appId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
+//     ModApp.findById(req.params.appId, function(err, app) {
 //         if(err) {
-//             middleware.handleError(res, err.message, 'Failed to update post');
+//             middleware.handleError(res, err.message, 'Something went wrong while processing your request');
 //         } else {
-//             if(req.user._id == post.authour || middleware.hasPermission(req.user, 'forum', 'updatePosts'
-//                     || req.body.locked && req.user._id == post.authour || req.body.locked && middleware.hasPermission(req.user, 'forum', 'lockPosts'))) {
-//                 var editedPost = req.body;
-//                 if(middleware.checkIfMissing(editedPost.title)) {
-//                     middleware.handleError(res, 'Post title is missing', 'Title is missing', 400);
-//                 } else if(middleware.checkIfMissing(editedPost.content)) {
-//                     middleware.handleError(res, 'Post content is missing', 'Content is missing', 400);
-//                 } else {
-//                     Post.findByIdAndUpdate(req.params.postId, editedPost, function(err, post) {
-//                         if(err) {
-//                             middleware.handleError(res, err.message, 'Failed to update post');
-//                         } else {
-//                             res.status(204).end('Updated post')
-//                         }
-//                     })
-//                 }
+//             var editedPost = req.body;
+//             if(middleware.checkIfMissing(editedPost.title)) {
+//                 middleware.handleError(res, 'Post title is missing', 'Title is missing', 400);
+//             } else if(middleware.checkIfMissing(editedPost.content)) {
+//                 middleware.handleError(res, 'Post content is missing', 'Content is missing', 400);
 //             } else {
-//                 middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
+//                 Post.findByIdAndUpdate(req.params.postId, editedPost, function(err, post) {
+//                     if(err) {
+//                         middleware.handleError(res, err.message, 'Failed to update post');
+//                     } else {
+//                         res.status(204).end('Updated post')
+//                     }
+//                 })
 //             }
 //         }
 //     });
 // });
-//
+
 // // DELETE
 // router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(req, res) {
 //     Post.findById(req.params.postId, function(err, post) {
@@ -158,5 +155,84 @@ router.get('/api/admin/application/:userId', middleware.isLoggedIn, middleware.i
 //         }
 //     })
 // });
+
+// Comments
+
+// INDEX
+router.get('/api/admin/application/:appId/comments', function(req, res) {
+    ModApp.findById(req.params.appId)
+        .populate({path: 'comments', populate: {path: 'authour editedBy'}, options: {skip: req.query.skip, limit: 20, sort: {createdAt: 1}}}).exec(function(err, appWithComments) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to retrieve comments');
+        } else {
+            res.status(200).json(appWithComments);
+        }
+    });
+});
+
+// CREATE
+router.post('/api/admin/application/:appId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
+    var newComment = req.body;
+    if(newComment.comment === '' || newComment.comment === 'undefined') {
+        middleware.handleError(res, 'Mod application comment missing comment text', 'Comment text is missing or sent improperly', 400);
+    } else if(newComment.authour === '' || newComment.authour === 'undefined' || newComment.authour._id != req.user._id) {
+        middleware.handleError(res, 'Comment authour is missing', 'Authour is missing', 400);
+    } else {
+        ModApp.findById(req.params.appId, function(err, app) {
+            if(err) {
+                middleware.handleError(res, err.message, 'Failed to create comment');
+            } else {
+                newComment.mod_app = app._id;
+                ModAppComment.create(newComment, function(err, comment) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to create comment');
+                    } else {
+                        app.comments.push(comment);
+                        app.save();
+                        res.status(201).json(comment);
+                    }
+                });
+            }
+        });
+    }
+});
+
+// UPDATE
+router.put('/api/admin/application/:appId/:commentId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
+    var editedComment = req.body;
+    if(editedComment.comment === '' || editedComment.comment === 'undefined') {
+        middleware.handleError(res, 'Comment content is missing', 'Comment content is missing', 400);
+    } else if(editedComment.comment === '' || editedComment.comment === 'undefined') {
+        middleware.handleError(res, 'Comment editor is missing', 'Comment editor is missing', 400);
+    } else {
+        ModAppComment.findByIdAndUpdate(req.params.commentId, editedComment, function(err, comment) {
+            if(err) {
+                middleware.handleError(res, err.message, 'Failed to update comment');
+            } else {
+                res.status(204).end('Updated comment')
+            }
+        });
+    }
+});
+
+// DELETE
+router.delete('/api/admin/application/:appId/:commentId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
+    ModApp.findById(req.params.appId, function(err, app) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to delete comment');
+        } else {
+            var commentToRemove = app.comments.indexOf(req.params.commentId);
+            app.comments.splice(commentToRemove, 1);
+            app.save();
+        }
+    });
+    ModAppComment.findByIdAndRemove(req.params.commentId, function(err) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to delete comment');
+        } else {
+            res.status(204).end('Deleted comment');
+        }
+    });
+});
 
 module.exports = router;

@@ -13,26 +13,24 @@
                     <h4 flex>Votes</h4><span flex></span>
                     <h4 flex>Status</h4><span flex></span>
                 </div>
-                <md-card-content style="padding-bottom: 0">
-                    <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="$location.path('/admin/application/' + app.authour._id)">
-                        <div class="md-list-item-text" layout="row" layout-align="center center">
-                            <img ng-src="{{app.authour.avatar}}" alt="" class="md-avatar">
-                            <h3 flex>{{app.authour.name}}</h3><span flex></span>
-                            <h4 flex-gt-sm="10">{{app.votes.length}}/3</h4><span flex></span>
-                            <p flex-gt-sm="10" ng-class="{'mod-app-under-review': app.status === 'Under Review',
-                            'mod-app-awaiting-votes': app.status === 'Awaiting Votes', 'mod-app-accepted': app.status === 'Accepted',
-                            'mod-app-rejected': app.status === 'Rejected'}">{{app.status}}</p><span flex></span>
-                        </div>
-                        <md-divider></md-divider>
-                    </md-list-item>
-                    <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotApps">
-                        <md-progress-circular class="md-accent"></md-progress-circular>
+                <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="$location.path('/admin/application/' + app.authour._id)">
+                    <div class="md-list-item-text" layout="row" layout-align="center center">
+                        <img ng-src="{{app.authour.avatar}}" alt="" class="md-avatar">
+                        <h3 flex>{{app.authour.name}}</h3><span flex></span>
+                        <h4 flex-gt-sm="10">{{app.votes.length}}/3</h4><span flex></span>
+                        <p flex-gt-sm="10" ng-class="{'mod-app-under-review': app.status === 'Under Review',
+                        'mod-app-awaiting-votes': app.status === 'Awaiting Votes', 'mod-app-accepted': app.status === 'Accepted',
+                        'mod-app-rejected': app.status === 'Rejected'}">{{app.status}}</p><span flex></span>
                     </div>
-                    <div style="padding-top: 8px" layout="row" ng-if="apps.length !== numApps">
-                        <div flex></div>
-                        <md-button ng-click="getModApps()">Load More</md-button>
-                    </div>
-                </md-card-content>
+                    <md-divider></md-divider>
+                </md-list-item>
+                <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotApps">
+                    <md-progress-circular class="md-accent"></md-progress-circular>
+                </div>
+                <div style="padding-top: 8px" layout="row" ng-if="apps.length !== numApps">
+                    <div flex></div>
+                    <md-button ng-click="getModApps()">Load More</md-button>
+                </div>
             </md-card>
         </div>
     </div>
