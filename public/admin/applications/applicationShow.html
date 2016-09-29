@@ -128,17 +128,20 @@
             </md-tabs>
 
             <!-- Comment Form -->
-            <form>
+            <form name="commentForm">
+                <h4 class="md-subhead center-align-text">Post your opinion of this application!</h4>
                 <md-input-container layout="row">
                     <div flex>
                         <label>Comment</label>
-                        <textarea ng-model="newComment.comment" md-maxlength="1000"></textarea>
+                        <textarea name="comment" ng-model="newComment.comment" md-maxlength="1000"></textarea>
+                        <div ng-messages="commentForm.comment.$error">
+                            <div ng-message="md-maxlength">This must be less than 1000 characters long.</div>
+                        </div>
                     </div>
                     <md-button class="md-fab md-mini md-primary" ng-disabled="!newComment.comment" ng-click="createComment()">
                         <md-icon>send</md-icon>
                         <md-tooltip>Post Comment</md-tooltip>
                     </md-button>
-                    <div class="hint">Post your opinion of this application</div>
                 </md-input-container>
             </form>
         </div>
