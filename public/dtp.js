@@ -33,7 +33,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
                 }
             }
         })
-        .when('/admin/application/:userId', {
+        .when('/admin/application/:appId', {
             templateUrl: 'admin/applications/applicationShow.html',
             controller: 'adminApplicationsShowCtrl',
             resolve: {
@@ -610,7 +610,7 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest',
 }]);
 
 dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 'user', 'Rest', '$mdDialog', function($scope, $routeParams, Title, user, Rest, $mdDialog) {
-    var userId = $routeParams.userId;
+    var appId = $routeParams.appId;
 
     Title.setTitle('DTP');
     Title.setPageTitle('Dinner Time Premium');
@@ -625,7 +625,7 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
         function getModApp() {
             $scope.gotApp = false;
 
-            Rest.get('/api/admin/application/' + userId)
+            Rest.get('/api/admin/application/' + appId)
                 .then(function(app) {
                     $scope.app = app;
                     $scope.gotApp = true;

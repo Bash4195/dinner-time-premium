@@ -13,7 +13,7 @@
                     <h4 flex>Votes</h4><span flex></span>
                     <h4 flex>Status</h4><span flex></span>
                 </div>
-                <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="$location.path('/admin/application/' + app.authour._id)">
+                <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="$location.path('/admin/application/' + app._id)">
                     <div class="md-list-item-text" layout="row" layout-align="center center">
                         <img ng-src="{{app.authour.avatar}}" alt="" class="md-avatar">
                         <h3 flex>{{app.authour.name}}</h3><span flex></span>

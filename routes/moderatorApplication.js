@@ -6,6 +6,7 @@ var ModApp = require('../models/moderatorApplication');
 var ModAppComment = require('../models/moderatorApplicationComment');
 
 // Client routes
+// Using User ID as parameter to add links easier
 
 // CREATE
 router.post('/api/apply/:userId', middleware.isLoggedIn, function(req, res) {
@@ -65,6 +66,7 @@ router.get('/api/application/:userId', middleware.isLoggedIn, function(req, res)
 });
 
 // Admin routes
+// Using app ID like a proper application should!
 
 // INDEX
 router.get('/api/admin/applications', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
@@ -84,8 +86,8 @@ router.get('/api/admin/applications', middleware.isLoggedIn, middleware.isStaff,
 });
 
 // SHOW
-router.get('/api/admin/application/:userId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
-    ModApp.findOne({authour: req.params.userId}).populate('authour review votes').exec(function(err, app) {
+router.get('/api/admin/application/:appId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
+    ModApp.findById(req.params.appId).populate('authour review votes').exec(function(err, app) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve moderator application');
         } else {
