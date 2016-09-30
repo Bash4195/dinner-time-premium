@@ -95,7 +95,6 @@ router.get('/api/admin/application/:userId', middleware.isLoggedIn, middleware.i
 });
 
 // // UPDATE
-// // This route uses the app id instead of the user id. Why? Just to be confusing...
 // router.put('/api/admin/application/:appId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
 //     ModApp.findById(req.params.appId, function(err, app) {
 //         if(err) {

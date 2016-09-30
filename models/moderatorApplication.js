@@ -19,6 +19,9 @@ var moderatorApplicationSchema = mongoose.Schema({
 
         status: String,
         review: {
+                warnings: Number,
+                vacBans: Number,
+                hours: Number,
                 accepted: Boolean,
                 reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
         },

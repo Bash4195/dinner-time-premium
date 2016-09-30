@@ -643,6 +643,20 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
                 });
         }
         getModApp();
+
+        $scope.appReview = {
+            warnings: null,
+            vacBans: null,
+            hours: null
+        };
+
+        $scope.rejectReview = function() {
+
+        };
+
+        $scope.acceptReview = function() {
+            
+        };
         
         $scope.gotComments = false;
         

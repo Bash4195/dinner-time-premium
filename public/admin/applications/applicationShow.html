@@ -75,10 +75,115 @@
                 <md-progress-circular class="md-accent"></md-progress-circular>
             </div>
 
+            <md-card ng-if="!app.willingToAddUsOnSteam">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline center-align-text" md-colors="{color: 'warn-500'}">WARNING</span>
+                        <br>
+                        <span class="md-title center-align-text">{{app.authour.name}} is not willing to add us on Steam! :O
+                            <br><br>
+                            <md-button class="md-warn">Reject</md-button>
+                        </span>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+
+            <!-- Review -->
+            <md-subheader class="md-accent md-no-sticky">Review</md-subheader>
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text layout="column" layout-align="center center">
+                        <span class="md-headline">Review Status</span>
+                        <br>
+                        <span class="md-headline" ng-class="{'mod-app-accepted': app.review.accepted,
+                            'mod-app-rejected': !app.review.accepted}" ng-if="app.review.accepted">{{app.review.accepted}}</span>
+                        <span class="md-headline" md-colors="{color: 'yellow-500'}" ng-if="!app.review.accepted">Incomplete</span>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+            <div ng-if="!app.review.accepted">
+                <p class="md-subhead center-align-text">A review of the user must be completed before voting can occur.</p>
+                <p class="md-subhead center-align-text">This is to check if the user has been warned, VAC banned, etc.</p>
+                <md-divider></md-divider>
+            </div>
+
+            <md-card ng-if="!app.review.accepted && user.roles.includes('Owner') || user.rank === 'Seraph'">
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-headline center-align-text">Complete the review</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                    <form name="modAppReview">
+                        <p class="md-subhead">Sorry! I might automate this some day...</p>
+                        <h1 class="md-headline">Warnings</h1>
+                        <p class="md-subhead">Go to the <a href="http://dtpremium.site.nfoservers.com/phpmyadmin" target="_blank">database</a> and login with the credentials found
+                            <a href="https://www.nfoservers.com/control/databases.pl?name=DTPremium&typeofserver=website" target="_blank">here</a>.
+                        On the left, click the plus next to "dtpremium". Click "dtpremium_awarn", then click "awarn_warnings".
+                        Above all the rows on information there is a search box that says "Filter rows" next to it, click in there and paste "{{app.authour.steamId}}"
+                        without the quotes. Now just count how many rows of data that's shown up (if any) and put the amount you've counted into the selection box below.</p>
+                        <md-input-container class="md-block" flex-gt-md="25">
+                            <label>Warnings</label>
+                            <md-select ng-model="appReview.warnings">
+                                <md-option ng-repeat="n in [].constructor(101) track by $index" ng-value="$index">{{$index}}</md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <h1 class="md-headline">VAC Bans</h1>
+                        <p class="md-subhead">Go to <a ng-href="http://steamid.co/player.php?input={{app.authour.steamId}}" target="_blank">SteamID.co</a> and see how many VAC bans
+                        {{app.authour.name}} has.</p>
+                        <md-input-container class="md-block" flex-gt-md="25">
+                            <label>VAC Bans</label>
+                            <md-select ng-model="appReview.vacBans">
+                                <md-option ng-repeat="n in [].constructor(101) track by $index" ng-value="$index">{{$index}}</md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <h1 class="md-headline">Hours On DTP</h1>
+                        <p class="md-subhead">Go to <a href="http://dtpremium.site.nfoservers.com/admin/index.php?page=players" target="_blank">Neutron</a>,
+                        under players - all players, and search "{{app.authour.steamId}}" without the quotes. It's a good idea to double check with
+                        <a ng-href="https://www.gametracker.com/server_info/dtpremium.game.nfoservers.com:27015/top_players/?query={{app.authour.name}}" target="_blank">Gametracker</a>
+                        to make sure the time is correct, especially if they played before we had Neutron.</p>
+                        <p class="md-subhead" md-colors="{color: 'warn-500'}">The hours must be more than 20! If not, you can still accept the review.
+                        If it's more than 250 hours, just put 250...</p>
+                        <md-input-container class="md-block" flex-gt-md="25">
+                            <label>Hours On DTP</label>
+                            <md-select ng-model="appReview.hours">
+                                <md-option ng-repeat="n in [].constructor(251) track by $index" ng-value="$index">{{$index}}</md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <div ng-show="appReview.warnings !== null && appReview.vacBans !== null && appReview.hours !== null">
+                            <p class="md-title" md-colors="{color: 'warn-500'}" ng-if="appReview.warnings >= 3 || appReview.vacBans > 0 || appReview.hours < 20">
+                                This user has failed the review, but you can still accept it and move on to the voting stage if you wish...
+                            </p>
+
+                            <div layout="row">
+                                <md-button class="md-warn" ng-if="appReview.warnings >= 3 || appReview.vacBans > 0 || appReview.hours < 20">
+                                    Reject
+                                    <md-tooltip>Reject {{app.authour.name}}'s application and skip the voting process because they have failed the review</md-tooltip>
+                                </md-button>
+                                <span flex></span>
+                                <md-button class="md-primary">
+                                    Accept
+                                    <md-tooltip ng-if="appReview.warnings >= 3 || appReview.vacBans > 0 || appReview.hours < 20">
+                                        Accept the review even though {{app.authour.name}} failed the review and move on to the voting stage
+                                    </md-tooltip>
+                                    <md-tooltip ng-if="appReview.warnings < 3 && appReview.vacBans <= 0 && appReview.hours >= 20">
+                                        Accept this review
+                                    </md-tooltip>
+                                </md-button>
+                            </div>
+                        </div>
+                    </form>
+                </md-card-content>
+            </md-card>
+
+
             <!-- Comments -->
+            <md-subheader class="md-accent md-no-sticky">Staff Opinions</md-subheader>
             <md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height ng-show="comments[0]._id">
                 <md-tab label="{{label}}" ng-click="getComments(label)" ng-repeat="label in commentLabels">
-                    <md-subheader class="md-accent md-no-sticky">Staff Opinions</md-subheader>
                     <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-hide="gotComments">
                         <md-progress-circular class="md-accent"></md-progress-circular>
                     </div>
