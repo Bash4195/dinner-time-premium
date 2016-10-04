@@ -309,7 +309,7 @@
                             </tbody>
                         </table>
                     </md-card-content>
-                    <md-card-actions layout="row" layout-align="end center" ng-if="!app.closed && user.roles.includes('Owner') ||!app.closed && user.rank === 'Seraph'">
+                    <md-card-actions layout="row" layout-align="end center" ng-if="!app.closed && user.roles.includes('Owner') || !app.closed && user.rank === 'Seraph'">
                         <div layout="row" layout-align="end center" layout-fill ng-if="!hasVoted || editingVote">
                             <md-button md-colors="{color: 'warn-500'}" ng-click="submitVote(false)">
                                 No
