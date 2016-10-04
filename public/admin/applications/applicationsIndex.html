@@ -7,32 +7,28 @@
         <div ng-if="user && authorized">
             <md-card>
                 <md-toolbar class="md-toolbar-tools"><span>Moderator Applications</span></md-toolbar>
-                <table layout-fill>
-                    <tr layout="row" layout-align="space-around center" layout-fill>
-                        <td><h4>Authour</h4></td>
-                        <td hide show-gt-xs><h4>Votes</h4></td>
-                        <td hide show-gt-xs><h4>Status</h4></td>
-                        <td><h4>Open/Closed</h4></td>
-                    </tr>
-                </table>
+                <md-list-item class="md-3-line">
+                    <div style="width: 56px;"></div>
+                    <div class="md-list-item-text" layout="row" layout-align="space-around center">
+                        <h2 class="md-title">Authour</h2>
+                        <h2 hide show-gt-xs class="md-title">Votes</h2>
+                        <h2 hide show-gt-xs class="md-title">Status</h2>
+                        <h2 class="md-title">Open/Closed</h2>
+                    </div>
+                </md-list-item>
                 <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="$location.path('/admin/application/' + app._id)">
-                    <table layout-fill>
-                        <tr layout="row" layout-align="space-around center" layout-fill>
-                            <td layout="row" layout-align="start center">
-                                <p>{{app.authour.name}}</p>
-                            </td>
-                            <td hide show-gt-xs><p>{{app.votes.length}}/3</p></td>
-                            <td hide show-gt-xs><p ng-class="{'mod-app-under-review': app.status === 'Under Review',
-                        'mod-app-awaiting-votes': app.status === 'Awaiting Votes', 'mod-app-accepted': app.status === 'Accepted',
-                        'mod-app-rejected': app.status === 'Rejected'}">{{app.status}}</p></td>
-                            <td>
-                                <p>
-                                    <span ng-show="app.closed" md-colors="{color: 'warn-500'}">Closed</span>
-                                    <span ng-hide="app.closed" md-colors="{color: 'green-500'}">Open</span>
-                                </p>
-                            </td>
-                        </tr>
-                    </table>
+                    <img ng-src="{{app.authour.avatar}}" class="md-avatar">
+                    <div class="md-list-item-text" layout="row" layout-align="space-around center">
+                        <h3>{{app.authour.name}}</h3>
+                        <h4 hide show-gt-xs>{{app.votes.length}}/3</h4>
+                        <p hide show-gt-xs ng-class="{'mod-app-under-review': app.status === 'Under Review',
+                                'mod-app-awaiting-votes': app.status === 'Awaiting Votes', 'mod-app-accepted': app.status === 'Accepted',
+                                'mod-app-rejected': app.status === 'Rejected'}">{{app.status}}</p>
+                        <p>
+                            <span ng-show="app.closed" md-colors="{color: 'warn-500'}">Closed</span>
+                            <span ng-hide="app.closed" md-colors="{color: 'green-500'}">Open</span>
+                        </p>
+                    </div>
                     <md-divider></md-divider>
                 </md-list-item>
                 <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotApps">
