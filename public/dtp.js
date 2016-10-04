@@ -609,144 +609,251 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest',
     }
 }]);
 
-dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 'user', 'Rest', '$mdDialog', function($scope, $routeParams, Title, user, Rest, $mdDialog) {
-    var appId = $routeParams.appId;
+dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 'user', 'Rest', 'Notify', '$mdDialog',
+    function($scope, $routeParams, Title, user, Rest, Notify, $mdDialog) {
+        var appId = $routeParams.appId;
 
-    Title.setTitle('DTP');
-    Title.setPageTitle('Dinner Time Premium');
+        Title.setTitle('DTP');
+        Title.setPageTitle('Dinner Time Premium');
 
-    $scope.authorized = false;
-    if(user && user.roles.includes('Staff')) {
-        $scope.authorized = true;
-        $scope.user = user;
-        Title.setTitle('Moderator Application - DTP');
-        Title.setPageTitle('Moderator Application');
+        $scope.authorized = false;
+        if(user && user.roles.includes('Staff')) {
+            $scope.authorized = true;
+            $scope.user = user;
+            Title.setTitle('Moderator Application - DTP');
+            Title.setPageTitle('Moderator Application');
 
-        function getModApp() {
-            $scope.gotApp = false;
+            $scope.hasVoted = false;
 
-            Rest.get('/api/admin/application/' + appId)
-                .then(function(app) {
-                    $scope.app = app;
-                    $scope.gotApp = true;
+            function getModApp() {
+                $scope.gotApp = false;
 
-                    Title.setTitle(app.authour.name + '\'s Moderator Application - DTP');
-                    Title.setPageTitle(app.authour.name + '\'s Moderator Application');
+                Rest.get('/api/admin/application/' + appId)
+                    .then(function(app) {
+                        $scope.app = app;
+                        $scope.gotApp = true;
 
-                    $scope.commentLabels = [];
-                    var tabs = $scope.app.comments.length / 20;
+                        if(app.status === 'Under Review') {
+                            $scope.appStatus = 33;
+                        } else if(app.status === 'Awaiting Votes') {
+                            $scope.appStatus = 66;
+                        } else if(app.status === 'Accepted' || app.status === 'Rejected') {
+                            $scope.appStatus = 100;
+                        } else {
+                            $scope.appStatus = 0;
+                        }
 
-                    for(var i = 0; i < tabs; i++) {
-                        $scope.commentLabels.push(i + 1);
-                    }
-                    getComments($scope.label);
-                });
-        }
-        getModApp();
+                        if($scope.app.votes.length >= 1) {
+                            for(let i = 0; i <= $scope.app.votes.length; i++) {
+                                if($scope.app.votes[i].voter._id != $scope.user._id) {
+                                    $scope.hasVoted = false;
+                                } else {
+                                    $scope.hasVoted = true;
+                                    break;
+                                }
+                            }
+                        }
 
-        $scope.appReview = {
-            warnings: null,
-            vacBans: null,
-            hours: null
-        };
+                        Title.setTitle(app.authour.name + '\'s Moderator Application - DTP');
+                        Title.setPageTitle(app.authour.name + '\'s Moderator Application');
 
-        $scope.rejectReview = function() {
+                        $scope.commentLabels = [];
+                        var tabs = $scope.app.comments.length / 20;
 
-        };
-
-        $scope.acceptReview = function() {
-            
-        };
-        
-        $scope.gotComments = false;
-        
-        function getComments(label) {
-            $scope.gotComments = false;
-
-            var skip = (label - 1) * 20;
-            
-            Rest.get('/api/admin/application/' + $scope.app._id + '/comments', {skip: skip})
-                .then(function(appWithComments) {
-                    $scope.comments = appWithComments.comments;
-                    $scope.label = label;
-                    $scope.gotComments = true;
-                })
-        }
-        
-        $scope.newComment = {
-            comment: '',
-            authour: $scope.user
-        };
-        
-        $scope.createComment = function() {
-            if(!$scope.user) {
-                Notify.generic('You must be logged in to create a comment');
-            } else if(!$scope.newComment.comment) {
-                Notify.generic('Your comment needs to say something!');
-            } else {
-                Rest.post('/api/admin/application/' + $scope.app._id, $scope.newComment)
-                    .then(function() {
-                        $scope.newComment.comment = '';
-                        getModApp();
+                        for(var i = 0; i < tabs; i++) {
+                            $scope.commentLabels.push(i + 1);
+                        }
+                        getComments($scope.label);
                     });
             }
-        };
+            getModApp();
 
-        $scope.editingComment = false;
-        
-        $scope.toggleEditingComment = function(id) {
-            $scope.editingComment = !$scope.editingComment;
-            $scope.editingCommentId = id;
-        };
-        
-        $scope.updateComment = function(comment) {
-            $scope.editingComment = false;
-            if(!$scope.user) {
-                Notify.generic('You must be logged in to update a comment');
-            } else if(!comment.comment) {
-                Notify.generic('Your comment needs to say something!');
-            } else {
-                var updatedComment = {
-                    comment: comment.comment,
-                    editedBy: $scope.user,
-                    editedAt: new Date()
-                };
-                Rest.put('/api/admin/application/' + $scope.app._id + '/' + comment._id, updatedComment)
+            $scope.openApplication = function() {
+                Rest.put('/api/admin/application/' + $scope.app._id, {closed: false})
                     .then(function() {
-                        getModApp()
-                    })
-            }
-        };
-
-        var commentId = '';
-
-        $scope.confirmDeleteComment = function(id) {
-            commentId = id;
-            $mdDialog.show({
-                contentElement: '#deleteComment'
-            });
-        };
-
-        $scope.closeDialog = function() {
-            $mdDialog.cancel();
-        };
-
-        $scope.deleteComment = function() {
-            if(!$scope.user) {
-                Notify.generic('You must be logged in to delete a comment');
-                $mdDialog.hide();
-            } else{
-                $mdDialog.hide();
-                Rest.delete('/api/admin/application/' + $scope.app._id + '/' + commentId)
-                    .then(function() {
-                        commentId = '';
                         getModApp();
+                    });
+            };
+
+            $scope.closeApplication = function() {
+                Rest.put('/api/admin/application/' + $scope.app._id, {closed: true})
+                    .then(function() {
+                        getModApp();
+                    });
+            };
+
+            // For the "No" answer to "Willing to add us on Steam"
+            $scope.rejectApplication = function() {
+                Rest.put('/api/admin/application/' + $scope.app._id, {status: 'Rejected', closed: true})
+                    .then(function() {
+                        getModApp();
+                    });
+            };
+
+            $scope.appReview = {
+                warnings: null,
+                vacBans: null,
+                hours: null
+            };
+
+            $scope.submitReview = function(status) {
+                if(!$scope.user) {
+                    Notify.generic('You must be logged in to do that');
+                } else if($scope.appReview.warnings === null || $scope.appReview.vacBans === null || $scope.appReview.hours === null) {
+                    Notify.generic('You need to fill out all fields in the review!');
+                } else {
+                    var reviewedApp = {
+                        status: 'Rejected',
+                        closed: true,
+                        review: {
+                            warnings: $scope.appReview.warnings,
+                            vacBans: $scope.appReview.vacBans,
+                            hours: $scope.appReview.hours,
+                            accepted: false,
+                            reviewedBy: $scope.user
+                        }
+                    };
+
+                    if(status === 'Accepted') {
+                        reviewedApp.status = 'Awaiting Votes';
+                        reviewedApp.closed = false;
+                        reviewedApp.review.accepted = true;
+                    }
+
+                    Rest.put('/api/admin/application/' + $scope.app._id, reviewedApp)
+                        .then(function() {
+                            $scope.editingReview = false;
+                            getModApp();
+                        })
+                }
+            };
+            
+            $scope.editingReview = false;
+            
+            $scope.toggleEditingReview = function() {
+                $scope.editingReview = !$scope.editingReview;
+
+                $scope.appReview = {
+                    warnings: $scope.app.review.warnings,
+                    vacBans: $scope.app.review.vacBans,
+                    hours: $scope.app.review.hours
+                };
+            };
+            
+            $scope.submitVote = function(vote) {
+                if(!$scope.user) {
+                    Notify.generic('You must be logged in to do that');
+                } else if(vote === null) {
+                    Notify.generic('Something went wrong while voting, please refresh the page');
+                } else {
+                    var appVote = {
+                        vote: vote,
+                        voter: $scope.user
+                    };
+                    
+                    Rest.put('/api/admin/application/' + $scope.app._id + '/vote', appVote)
+                        .then(function() {
+                            $scope.editingVote = false;
+                            getModApp();
+                        })
+                }
+            };
+            
+            $scope.editingVote = false;
+            
+            $scope.toggleEditingVote = function() {
+                $scope.editingVote = !$scope.editingVote;
+            };
+            
+            $scope.gotComments = false;
+
+            function getComments(label) {
+                $scope.gotComments = false;
+
+                var skip = (label - 1) * 20;
+
+                Rest.get('/api/admin/application/' + $scope.app._id + '/comments', {skip: skip})
+                    .then(function(appWithComments) {
+                        $scope.comments = appWithComments.comments;
+                        $scope.label = label;
+                        $scope.gotComments = true;
                     })
             }
-        };
-    } else {
-        $scope.authorized = false;
-    }
+
+            $scope.newComment = {
+                comment: '',
+                authour: $scope.user
+            };
+
+            $scope.createComment = function() {
+                if(!$scope.user) {
+                    Notify.generic('You must be logged in to create a comment');
+                } else if(!$scope.newComment.comment) {
+                    Notify.generic('Your comment needs to say something!');
+                } else {
+                    Rest.post('/api/admin/application/' + $scope.app._id, $scope.newComment)
+                        .then(function() {
+                            $scope.newComment.comment = '';
+                            getModApp();
+                        });
+                }
+            };
+
+            $scope.editingComment = false;
+
+            $scope.toggleEditingComment = function(id) {
+                $scope.editingComment = !$scope.editingComment;
+                $scope.editingCommentId = id;
+            };
+
+            $scope.updateComment = function(comment) {
+                $scope.editingComment = false;
+                if(!$scope.user) {
+                    Notify.generic('You must be logged in to update a comment');
+                } else if(!comment.comment) {
+                    Notify.generic('Your comment needs to say something!');
+                } else {
+                    var updatedComment = {
+                        comment: comment.comment,
+                        editedBy: $scope.user,
+                        editedAt: new Date()
+                    };
+                    Rest.put('/api/admin/application/' + $scope.app._id + '/' + comment._id, updatedComment)
+                        .then(function() {
+                            getModApp()
+                        })
+                }
+            };
+
+            var commentId = '';
+
+            $scope.confirmDeleteComment = function(id) {
+                commentId = id;
+                $mdDialog.show({
+                    contentElement: '#deleteComment'
+                });
+            };
+
+            $scope.closeDialog = function() {
+                $mdDialog.cancel();
+            };
+
+            $scope.deleteComment = function() {
+                if(!$scope.user) {
+                    Notify.generic('You must be logged in to delete a comment');
+                    $mdDialog.hide();
+                } else{
+                    $mdDialog.hide();
+                    Rest.delete('/api/admin/application/' + $scope.app._id + '/' + commentId)
+                        .then(function() {
+                            commentId = '';
+                            getModApp();
+                        })
+                }
+            };
+        } else {
+            $scope.authorized = false;
+        }
 }]);
 
 dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
@@ -997,6 +1104,16 @@ dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest
                 if(app) {
                     $scope.authorized = true;
                     $scope.application = app;
+
+                    if(app.status === 'Under Review') {
+                        $scope.appStatus = 33;
+                    } else if(app.status === 'Awaiting Votes') {
+                        $scope.appStatus = 66;
+                    } else if(app.status === 'Accepted' || app.status === 'Rejected') {
+                        $scope.appStatus = 100;
+                    } else {
+                        $scope.appStatus = 0;
+                    }
 
                     Title.setTitle(app.authour.name + '\'s Moderator Application - DTP');
                     Title.setPageTitle(app.authour.name + '\'s Moderator Application');

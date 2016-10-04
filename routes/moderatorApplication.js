@@ -87,7 +87,7 @@ router.get('/api/admin/applications', middleware.isLoggedIn, middleware.isStaff,
 
 // SHOW
 router.get('/api/admin/application/:appId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
-    ModApp.findById(req.params.appId).populate('authour review votes').exec(function(err, app) {
+    ModApp.findById(req.params.appId).populate('authour review.reviewedBy votes.voter').exec(function(err, app) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve moderator application');
         } else {
@@ -96,29 +96,17 @@ router.get('/api/admin/application/:appId', middleware.isLoggedIn, middleware.is
     })
 });
 
-// // UPDATE
-// router.put('/api/admin/application/:appId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
-//     ModApp.findById(req.params.appId, function(err, app) {
-//         if(err) {
-//             middleware.handleError(res, err.message, 'Something went wrong while processing your request');
-//         } else {
-//             var editedPost = req.body;
-//             if(middleware.checkIfMissing(editedPost.title)) {
-//                 middleware.handleError(res, 'Post title is missing', 'Title is missing', 400);
-//             } else if(middleware.checkIfMissing(editedPost.content)) {
-//                 middleware.handleError(res, 'Post content is missing', 'Content is missing', 400);
-//             } else {
-//                 Post.findByIdAndUpdate(req.params.postId, editedPost, function(err, post) {
-//                     if(err) {
-//                         middleware.handleError(res, err.message, 'Failed to update post');
-//                     } else {
-//                         res.status(204).end('Updated post')
-//                     }
-//                 })
-//             }
-//         }
-//     });
-// });
+// UPDATE
+router.put('/api/admin/application/:appId', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
+    var editedApp = req.body;
+    ModApp.findByIdAndUpdate(req.params.appId, editedApp, function(err, app) {
+        if(err) {
+            middleware.handleError(res, err.message, 'Failed to update application');
+        } else {
+            res.status(204).end('Updated application')
+        }
+    });
+});
 
 // // DELETE
 // router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(req, res) {
@@ -156,6 +144,55 @@ router.get('/api/admin/application/:appId', middleware.isLoggedIn, middleware.is
 //         }
 //     })
 // });
+
+// Vote
+router.put('/api/admin/application/:appId/vote', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
+    if(req.user.rank === 'GOD' || req.user.rank === 'GODDESS' || req.user.rank === 'Seraph') {
+        var vote = req.body;
+        ModApp.findById(req.params.appId, function(err, app) {
+            if(err) {
+                middleware.handleError(res, err.message, 'Failed to update application');
+            } else {
+                if(app.votes.length < 3) {
+                    // If they have voted, they are changing their vote so lets remove their previous vote.
+                    app.votes.forEach(function(val, i) {
+                        if(JSON.stringify(val.voter) == JSON.stringify(req.user._id)) {
+                            app.votes.splice(i, 1);
+                        }
+                    });
+
+                    // Push vote (new or updated)
+                    app.votes.push(vote);
+                    
+                    // Check if all 3 votes have been placed. If so, update status to say if they have been accepted or rejected
+                    if(app.votes.length >= 2) {
+                        var yesVotes = 0;
+                        app.votes.forEach(function(val, i) {
+                            if(val.vote) {
+                                yesVotes++;
+                            }
+                        });
+                        
+                        if(yesVotes >= 2) {
+                            app.status = 'Accepted';
+                            app.closed = true;
+                        } else if(app.votes.length == 3 && yesVotes < 2) {
+                            app.status = 'Rejected';
+                            app.closed = true;
+                        }
+                    }
+                    
+                    app.save();
+                    res.status(204).end('Vote successfully placed');
+                } else {
+                    middleware.handleError(res, 'Max votes reached (3)', 'There are already 3 votes on this application', 400);
+                }
+            }
+        });
+    } else {
+        middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
+    }
+});
 
 // Comments
 

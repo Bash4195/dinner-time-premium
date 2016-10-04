@@ -5,17 +5,41 @@
         <unauthorized user="user" authorized="authorized"></unauthorized>
 
         <div ng-if="user && authorized && gotApp">
-            <md-card>
-                <md-card-title>
-                    <md-card-title-text layout="column" layout-align="center center">
-                        <span class="md-headline wrap-title">Status</span>
-                        <br>
-                        <span class="md-headline wrap-title" ng-class="{'mod-app-under-review': app.status === 'Under Review',
+            <h1 class="md-headline center-align-text">Status</h1>
+            <md-progress-linear md-mode="determinate" value="{{appStatus}}"
+                                ng-class="{'mod-app-under-review': app.status === 'Under Review',
                             'mod-app-awaiting-votes': app.status === 'Awaiting Votes', 'mod-app-accepted': app.status === 'Accepted',
-                            'mod-app-rejected': app.status === 'Rejected'}">{{app.status}}</span>
-                    </md-card-title-text>
-                </md-card-title>
+            'mod-app-rejected': app.status === 'Rejected'}"></md-progress-linear>
+            <h1 class="md-headline center-align-text" ng-class="{'mod-app-under-review': app.status === 'Under Review',
+            'mod-app-awaiting-votes': app.status === 'Awaiting Votes', 'mod-app-accepted': app.status === 'Accepted',
+            'mod-app-rejected': app.status === 'Rejected'}">{{app.status}}</h1>
+
+            <md-card ng-if="app.closed">
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-headline center-align-text">Application <span md-colors="{color: 'warn-500'}">Closed</span></span>
+                        <br>
+                        <span layout="row" layout-align="center center" ng-if="user.roles.includes('Owner') || user.rank === 'Seraph'">
+                            <md-button md-colors="{color: 'green-500'}" ng-click="openApplication()">Re-open</md-button>
+                        </span>
+                    </md-card-header-text>
+                </md-card-header>
             </md-card>
+
+            <md-card ng-if="!app.closed && app.status === 'Accepted' || !app.closed && app.status === 'Rejected'">
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-headline center-align-text">
+                            Application <span md-colors="{color: 'green-500'}">Open</span> but has a complete status
+                        </span>
+                        <br>
+                        <span layout="row" layout-align="center center" ng-if="user.roles.includes('Owner') || user.rank === 'Seraph'">
+                            <md-button md-colors="{color: 'warn-500'}" ng-click="closeApplication()">Close</md-button>
+                        </span>
+                    </md-card-header-text>
+                </md-card-header>
+            </md-card>
+
             <h1 class="md-display-2">{{app.authour.name}}'s Moderator Application</h1>
             <p md-colors="{color: 'red-600'}">* Required</p>
             <br>
@@ -75,14 +99,14 @@
                 <md-progress-circular class="md-accent"></md-progress-circular>
             </div>
 
-            <md-card ng-if="!app.willingToAddUsOnSteam">
+            <md-card ng-if="!app.willingToAddUsOnSteam && app.closed === false">
                 <md-card-title>
                     <md-card-title-text>
                         <span class="md-headline center-align-text" md-colors="{color: 'warn-500'}">WARNING</span>
                         <br>
                         <span class="md-title center-align-text">{{app.authour.name}} is not willing to add us on Steam! :O
                             <br><br>
-                            <md-button class="md-warn">Reject</md-button>
+                            <md-button class="md-warn" ng-click="rejectApplication()">Reject</md-button>
                         </span>
                     </md-card-title-text>
                 </md-card-title>
@@ -96,18 +120,21 @@
                         <span class="md-headline">Review Status</span>
                         <br>
                         <span class="md-headline" ng-class="{'mod-app-accepted': app.review.accepted,
-                            'mod-app-rejected': !app.review.accepted}" ng-if="app.review.accepted">{{app.review.accepted}}</span>
-                        <span class="md-headline" md-colors="{color: 'yellow-500'}" ng-if="!app.review.accepted">Incomplete</span>
+                            'mod-app-rejected': app.review.accepted === false}" ng-if="app.review.accepted || app.review.accepted === false">
+                            <span ng-if="app.review.accepted">Accepted</span>
+                            <span ng-if="app.review.accepted === false">Rejected</span>
+                        </span>
+                        <span class="md-headline" md-colors="{color: 'yellow-500'}" ng-if="!app.review">Incomplete</span>
                     </md-card-title-text>
                 </md-card-title>
             </md-card>
-            <div ng-if="!app.review.accepted">
-                <p class="md-subhead center-align-text">A review of the user must be completed before voting can occur.</p>
+            <div ng-if="!app.review && !app.closed">
+                <p class="md-subhead center-align-text">A review of the user must be completed by a voter before voting can occur.</p>
                 <p class="md-subhead center-align-text">This is to check if the user has been warned, VAC banned, etc.</p>
                 <md-divider></md-divider>
             </div>
 
-            <md-card ng-if="!app.review.accepted && user.roles.includes('Owner') || user.rank === 'Seraph'">
+            <md-card ng-if="editingReview || !app.review && !app.closed && user.roles.includes('Owner') || !app.review.accepted && !app.closed && user.rank === 'Seraph'">
                 <md-card-header>
                     <md-card-header-text>
                         <span class="md-headline center-align-text">Complete the review</span>
@@ -115,7 +142,6 @@
                 </md-card-header>
                 <md-card-content>
                     <form name="modAppReview">
-                        <p class="md-subhead">Sorry! I might automate this some day...</p>
                         <h1 class="md-headline">Warnings</h1>
                         <p class="md-subhead">Go to the <a href="http://dtpremium.site.nfoservers.com/phpmyadmin" target="_blank">database</a> and login with the credentials found
                             <a href="https://www.nfoservers.com/control/databases.pl?name=DTPremium&typeofserver=website" target="_blank">here</a>.
@@ -155,16 +181,16 @@
 
                         <div ng-show="appReview.warnings !== null && appReview.vacBans !== null && appReview.hours !== null">
                             <p class="md-title" md-colors="{color: 'warn-500'}" ng-if="appReview.warnings >= 3 || appReview.vacBans > 0 || appReview.hours < 20">
-                                This user has failed the review, but you can still accept it and move on to the voting stage if you wish...
+                                {{app.authour.name}} has failed the review, but you can still accept it and move on to the voting stage if you wish...
                             </p>
 
                             <div layout="row">
-                                <md-button class="md-warn" ng-if="appReview.warnings >= 3 || appReview.vacBans > 0 || appReview.hours < 20">
+                                <md-button class="md-warn" ng-if="appReview.warnings >= 3 || appReview.vacBans > 0 || appReview.hours < 20" ng-click="submitReview('Rejected')">
                                     Reject
                                     <md-tooltip>Reject {{app.authour.name}}'s application and skip the voting process because they have failed the review</md-tooltip>
                                 </md-button>
                                 <span flex></span>
-                                <md-button class="md-primary">
+                                <md-button md-colors="{color: 'green-500'}" ng-click="submitReview('Accepted')">
                                     Accept
                                     <md-tooltip ng-if="appReview.warnings >= 3 || appReview.vacBans > 0 || appReview.hours < 20">
                                         Accept the review even though {{app.authour.name}} failed the review and move on to the voting stage
@@ -179,6 +205,129 @@
                 </md-card-content>
             </md-card>
 
+            <md-card ng-if="!editingReview && app.review.accepted || !editingReview && app.review.accepted === false">
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-headline center-align-text">Review</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                    <table layout="column" layout-align="center center">
+                        <tr>
+                            <td>
+                                <h1 class="md-headline" ng-if="app.review.warnings < 3">Warnings</h1>
+                                <h1 class="md-headline" md-colors="{color: 'warn-500'}" ng-if="app.review.warnings >= 3">Warnings</h1>
+                            </td>
+                            <td style="padding-left: 48px;">
+                                <p class="md-subhead" ng-if="app.review.warnings < 3">{{app.review.warnings}}</p>
+                                <p class="md-subhead" md-colors="{color: 'warn-500'}" ng-if="app.review.warnings >= 3">{{app.review.warnings}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h1 class="md-headline" ng-if="app.review.vacBans <= 0">VAC Bans</h1>
+                                <h1 class="md-headline" md-colors="{color: 'warn-500'}" ng-if="app.review.vacBans > 0">VAC Bans</h1>
+                            </td>
+                            <td style="padding-left: 48px;">
+                                <p class="md-subhead" ng-if="app.review.vacBans <= 0">{{app.review.vacBans}}</p>
+                                <p class="md-subhead" md-colors="{color: 'warn-500'}" ng-if="app.review.vacBans > 0">{{app.review.vacBans}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h1 class="md-headline" ng-if="app.review.hours >= 20">Hours On DTP</h1>
+                                <h1 class="md-headline" md-colors="{color: 'warn-500'}" ng-if="app.review.hours < 20">Hours On DTP</h1>
+                            </td>
+                            <td style="padding-left: 48px;">
+                                <p class="md-subhead" ng-if="app.review.hours >= 20">{{app.review.hours}}</p>
+                                <p class="md-subhead" md-colors="{color: 'warn-500'}" ng-if="app.review.hours < 20">{{app.review.hours}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <md-divider></md-divider>
+                    <div layout="column" layout-align="center center">
+                        <h1 class="md-headline">Review Mark</h1>
+                        <h1 class="md-headline" md-colors="{color: 'green-500'}"
+                           ng-if="app.review.warnings < 3 && app.review.vacBans <= 0 && app.review.hours >= 20">Pass</h1>
+                        <h1 class="md-headline" md-colors="{color: 'warn-500'}"
+                           ng-if="app.review.warnings >= 3 || app.review.vacBans > 0 || app.review.hours < 20">Fail</h1>
+                    </div>
+                    <md-divider></md-divider>
+                    <p class="md-subhead center-align-text" ng-if="app.review.accepted">
+                        {{app.review.reviewedBy.name}} <span md-colors="{color: 'green-500'}">accepted</span> the review.
+                    </p>
+                    <p class="md-subhead center-align-text" ng-if="app.review.accepted === false">
+                        {{app.review.reviewedBy.name}} <span md-colors="{color: 'warn-500'}">rejected</span> the review.
+                    </p>
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-icon class="icon-left-of-text" md-colors="{color: 'grey-500'}">rate_review</md-icon>
+                    <span class="md-subhead">Reviewed by
+                        <a ng-href="/user/{{app.review.reviewedBy._id}}" class="md-accent">{{app.review.reviewedBy.name}}</a>
+                    </span>
+                    <span flex></span>
+                    <md-button class="md-icon-button md-accent" ng-if="!editingReview && !app.closed && user.roles.includes('Owner') ||
+                     !editingReview && !app.closed && !editingReview && user.rank === 'Seraph'"
+                               ng-click="toggleEditingReview()">
+                        <md-icon>edit</md-icon>
+                        <md-tooltip>Edit Review</md-tooltip>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+
+            <!-- Voting -->
+            <div ng-if="app.status !== 'Under Review' && app.review.accepted">
+                <md-subheader class="md-accent md-no-sticky">Votes</md-subheader>
+                <md-card>
+                    <md-card-header>
+                        <md-card-header-text>
+                            <span class="md-headline center-align-text" ng-if="!app.closed && user.roles.includes('Owner') ||
+                            !app.closed && user.rank === 'Seraph'">Place your vote</span>
+                            <span class="md-headline center-align-text" ng-if="app.closed && user.roles.includes('Owner') || app.closed && user.rank === 'Seraph'">Votes</span>
+                            <span class="md-headline center-align-text" ng-if="!user.roles.includes('Owner') && user.rank !== 'Seraph'">Votes</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <md-card-content>
+                        <p class="md-title center-align-text">{{app.votes.length}}/3 votes cast</p>
+                        <table layout-fill ng-if="app.votes.length > 0">
+                            <tbody layout="row" layout-align="space-around center" layout-fill>
+                                <tr layout="column" layout-align="center center" ng-repeat="vote in app.votes">
+                                    <td>
+                                        <h1 class="md-headline">{{vote.voter.name}}</h1>
+                                    </td>
+                                    <td>
+                                        <md-icon md-colors="{color: 'green-500'}" ng-if="vote.vote">
+                                            check
+                                            <md-tooltip>Yes</md-tooltip>
+                                        </md-icon>
+                                        <md-icon md-colors="{color: 'warn-500'}" ng-if="vote.vote === false">
+                                            close
+                                            <md-tooltip>No</md-tooltip>
+                                        </md-icon>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center" ng-if="!app.closed && user.roles.includes('Owner') ||!app.closed && user.rank === 'Seraph'">
+                        <div layout="row" layout-align="end center" layout-fill ng-if="!hasVoted || editingVote">
+                            <md-button md-colors="{color: 'warn-500'}" ng-click="submitVote(false)">
+                                No
+                                <md-tooltip>Vote to deny {{app.authour.name}} from becoming a moderator</md-tooltip>
+                            </md-button>
+                            <span flex></span>
+                            <md-button md-colors="{color: 'green-500'}" ng-click="submitVote(true)">
+                                Yes
+                                <md-tooltip>Vote to accept {{app.authour.name}} as a moderator</md-tooltip>
+                            </md-button>
+                        </div>
+                        <md-button class="md-icon-button md-accent" ng-if="hasVoted && !editingVote" ng-click="toggleEditingVote()">
+                            <md-icon>edit</md-icon>
+                            <md-tooltip>Edit Vote</md-tooltip>
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
+            </div>
 
             <!-- Comments -->
             <md-subheader class="md-accent md-no-sticky">Staff Opinions</md-subheader>

@@ -5,17 +5,25 @@
         <unauthorized user="user" authorized="authorized"></unauthorized>
 
         <div ng-if="user && authorized">
-            <md-card>
-                <md-card-title>
-                    <md-card-title-text layout="column" layout-align="center center">
-                        <span class="md-headline wrap-title">Status</span>
-                        <br>
-                        <span class="md-headline wrap-title" ng-class="{'mod-app-under-review': application.status === 'Under Review',
+            <h1 class="md-headline center-align-text">Status</h1>
+            <md-progress-linear md-mode="determinate" value="{{appStatus}}"
+                                ng-class="{'mod-app-under-review': application.status === 'Under Review',
                             'mod-app-awaiting-votes': application.status === 'Awaiting Votes', 'mod-app-accepted': application.status === 'Accepted',
-                            'mod-app-rejected': application.status === 'Rejected'}">{{application.status}}</span>
-                    </md-card-title-text>
-                </md-card-title>
-            </md-card>
+            'mod-app-rejected': application.status === 'Rejected'}"></md-progress-linear>
+            <h1 class="md-headline center-align-text" ng-class="{'mod-app-under-review': application.status === 'Under Review',
+            'mod-app-awaiting-votes': application.status === 'Awaiting Votes', 'mod-app-accepted': application.status === 'Accepted',
+            'mod-app-rejected': application.status === 'Rejected'}">{{application.status}}</h1>
+
+            <p class="md-subhead" ng-if="application.status === 'Accepted'">
+                Thank you for your moderator application. We are pleased to inform you that your application has been accepted!
+                A staff member will be in touch with you to begin your training. Welcome to the team :)
+            </p>
+
+            <p class="md-subhead" ng-if="application.status === 'Rejected'">
+                Thank you for your moderator application. We regret to inform you that your application has been declined.
+                If you would like to know the reason, please contact a staff member.
+            </p>
+
             <h1 class="md-display-2">{{application.authour.name}}'s Moderator Application</h1>
             <p md-colors="{color: 'red-600'}">* Required</p>
             <br>

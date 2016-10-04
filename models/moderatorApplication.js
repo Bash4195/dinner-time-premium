@@ -17,7 +17,8 @@ var moderatorApplicationSchema = mongoose.Schema({
 
         authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 
-        status: String,
+        status: { type: String, default: 'Under Review' },
+        closed: { type: Boolean, default: false },
         review: {
                 warnings: Number,
                 vacBans: Number,

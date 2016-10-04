@@ -196,17 +196,41 @@ a {
 .mod-app-under-review {
     color: #FFEB3B !important;
 }
+md-progress-linear.mod-app-under-review .md-bar {
+    background-color: #FFEB3B !important;
+}
+md-progress-linear.mod-app-under-review .md-container {
+    background-color: #FFF9C4 !important;
+}
 
 .mod-app-awaiting-votes {
     color: #FF9800 !important;
+}
+md-progress-linear.mod-app-awaiting-votes .md-bar {
+    background-color: #FF9800 !important;
+}
+md-progress-linear.mod-app-awaiting-votes .md-container {
+    background-color: #FFE0B2 !important;
 }
 
 .mod-app-accepted {
     color: #4CAF50 !important;
 }
+md-progress-linear.mod-app-accepted .md-bar {
+    background-color: #4CAF50 !important;
+}
+md-progress-linear.mod-app-accepted .md-container {
+    background-color: #C8E6C9 !important;
+}
 
 .mod-app-rejected {
     color: #F44336 !important;
+}
+md-progress-linear.mod-app-rejected .md-bar {
+    background-color: #F44336 !important;
+}
+md-progress-linear.mod-app-rejected .md-container {
+    background-color: #FFCDD2 !important;
 }
 
 /* Word wrap */
