@@ -101,16 +101,6 @@ app.use(userRoutes);
 app.use(rulesRoutes);
 app.use(modAppRoutes);
 
-app.post('/api/status', middleware.isLoggedIn, function(req, res) {
-    User.findByIdAndUpdate(req.body.id, {onlineStatus: req.body.onlineStatus}, function(err, user) {
-        if(err) {
-            middleware.handleError(res, err.message, 'Failed to update status');
-        } else {
-            res.status(204).end('Status updated');
-        }
-    })
-});
-
 app.get('*', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });

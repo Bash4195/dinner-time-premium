@@ -9,7 +9,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'homeCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -20,7 +20,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'adminDashboardCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -29,7 +29,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'adminApplicationsIndexCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -38,7 +38,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'adminApplicationsShowCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -49,7 +49,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'userIndexCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -58,7 +58,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'userShowCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -69,7 +69,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'moderatorApplicationRequirementsCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -78,7 +78,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'moderatorApplicationCreateCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -87,7 +87,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'moderatorApplicationShowCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -98,7 +98,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'newsIndexCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -107,7 +107,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'newsShowCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -118,7 +118,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'forumCategoryIndexCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -127,7 +127,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'forumPostIndexCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -136,7 +136,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'forumPostShowCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -147,7 +147,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
             controller: 'rulesCtrl',
             resolve: {
                 user: function(User) {
-                    return User.getCurrentUser();
+                    User.getCurrentUser();
                 }
             }
         })
@@ -254,30 +254,32 @@ dtp.service('Notify', ['$mdToast', function($mdToast) {
 }]);
 
 dtp.service('User', ['$http', 'Notify', function($http, Notify) {
-    // This is called on every page the user loads up to keep the user as up to date as possible! Mainly due to permission updates
+    var self = this;
+
+    this.currentUser = null;
+
+    this.getUser = function() {
+        return self.currentUser;
+    };
+
     this.getCurrentUser = function() {
         return $http.get('/auth/getCurrentUser')
-            .then(function(res) {
-                return res.data;
-            }, function(res) {
+        .success(function(user) {
+            self.currentUser = user;
+            return self.currentUser;
+        })
+        .error(function(res) {
+            self.currentUser = null;
+            if(res) {
                 if(res.data.error) {
                     Notify.error(res.data.error);
                 } else {
                     Notify.error('Failed to retrieve your user information');
                 }
-            })
-    };
-    this.updateOnlineStatus = function(id, status) {
-        return $http.post('/api/status', {id: id, onlineStatus: status})
-            .then(function(res) {
-                return res.data;
-            }, function(res) {
-                if(res.data.error) {
-                    Notify.error(res.data.error);
-                } else {
-                    Notify.error('Something went wrong while processing your request');
-                }
-            })
+            } else {
+                Notify.error('Something went wrong, please login again');
+            }
+        })
     }
 }]);
 
@@ -288,8 +290,13 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                if(res.data.error) {
-                    Notify.error(res.data.error);
+                // Check this as it won't exist if the server is offline
+                if(res) {
+                    if(res.data.error) {
+                        Notify.error(res.data.error);
+                    } else {
+                        Notify.error('Something went wrong while processing your request');
+                    }
                 } else {
                     Notify.error('Something went wrong while processing your request');
                 }
@@ -301,8 +308,13 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                if(res.data.error) {
-                    Notify.error(res.data.error);
+                // Check this as it won't exist if the server is offline
+                if(res) {
+                    if(res.data.error) {
+                        Notify.error(res.data.error);
+                    } else {
+                        Notify.error('Something went wrong while processing your request');
+                    }
                 } else {
                     Notify.error('Something went wrong while processing your request');
                 }
@@ -314,8 +326,13 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                if(res.data.error) {
-                    Notify.error(res.data.error);
+                // Check this as it won't exist if the server is offline
+                if(res) {
+                    if(res.data.error) {
+                        Notify.error(res.data.error);
+                    } else {
+                        Notify.error('Something went wrong while processing your request');
+                    }
                 } else {
                     Notify.error('Something went wrong while processing your request');
                 }
@@ -327,8 +344,13 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
             .then(function(res) {
                 return res.data;
             }, function(res) {
-                if(res.data.error) {
-                    Notify.error(res.data.error);
+                // Check this as it won't exist if the server is offline
+                if(res) {
+                    if(res.data.error) {
+                        Notify.error(res.data.error);
+                    } else {
+                        Notify.error('Something went wrong while processing your request');
+                    }
                 } else {
                     Notify.error('Something went wrong while processing your request');
                 }
@@ -375,32 +397,53 @@ dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$docume
 function($scope, Title, $timeout, $interval, $document, $window, $http, $location, User, Rest, $mdSidenav, $mdMedia) {
     $scope.Title = Title;
 
-    $scope.user = null;
     $scope.$mdMedia = $mdMedia; // For opening menus from html
 
     $scope.gotOnlineUsers = false;
 
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
+
     User.getCurrentUser()
         .then(function(user) {
-            if(user) { // Check for user first because it could be empty! No one HAS to login
-                $scope.user = user;
-                // When user logs in start checking for inactivity
-                onInactive();
-                User.updateOnlineStatus($scope.user._id, 'Online');
-                $scope.user.onlineStatus = 'Online';
+            if(user.data) { // Check for user first because it could be empty! No one HAS to login
+
+                $scope.user = User.getUser(); // Set to a reference to the object
+                // If we set it to User.current user, it will just COPY the current properties
+
+                onInactive();// When user logs in start checking for inactivity
+
+                if($scope.user.onlineStatus !== 'Online') {
+                    Rest.put('/api/user/' + $scope.user._id, {onlineStatus: 'Online'})
+                        .then(function() {
+                            User.currentUser.onlineStatus = 'Online';
+                        })
+                }
+
                 // On refresh or browser close, set user status to away
                 angular.element($window).bind("beforeunload", function() {
-                    User.updateOnlineStatus($scope.user._id, 'Away');
-                    $scope.user.onlineStatus = 'Away';
+                    Rest.put('/api/user/' + $scope.user._id, {onlineStatus: 'Away'})
                 });
             }
         });
 
+    // Update user every 5 minutes
+    $interval(function() {
+        User.getCurrentUser();
+    }, 300000);
+
     var noUpdateStatus = false; // Tells everything else not to change the status if it was forcibly set by the user
 
     $scope.setUserStatus = function(status) {
-        User.updateOnlineStatus($scope.user._id, status);
-        $scope.user.onlineStatus = 'Away';
+        Rest.put('/api/user/' + $scope.user._id, {onlineStatus: status})
+            .then(function(res) {
+                if(!res) {
+                    User.getCurrentUser();
+                }
+                User.currentUser.onlineStatus = status; // Update front-end
+            }); // Update server
         noUpdateStatus = true;
     };
 
@@ -408,6 +451,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         $scope.gotOnlineUsers = false; // Used to show loading circle until function completes
         Rest.get('/api/loggedInUsers')
             .then(function(users) {
+                // Remove current user from this list as we are not interested in seeing that
                 for(let i = users.length - 1; i >= 0; i--) {
                     if(users[i]._id == $scope.user._id) {
                         users.splice(i, 1);
@@ -477,7 +521,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         // Start a timeout
         // var logoutTimer = $timeout(function(){ logoutUser() }, timeout);
         // var warningTimer = $timeout(function() { warnUser() }, warningTimeout);
-        var awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
+        var awayStatusTimer = $timeout(function() { $scope.setUserStatus('Away'); }, awayStatusTimeout);
 
         var bodyElement = angular.element($document);
         angular.forEach(['keydown', 'keyup', 'click', 'mousemove', 'DOMMouseScroll', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'scroll', 'focus'],
@@ -490,11 +534,6 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
                     // }
                 });
             });
-
-        function setUserAway() {
-            User.updateOnlineStatus($scope.user._id, 'Away');
-            $scope.user.onlineStatus = 'Away';
-        }
 
         // function warnUser() {
         //     $mdDialog.show({
@@ -546,26 +585,29 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
             $timeout.cancel(awayStatusTimeout);
 
             if($scope.user.onlineStatus === 'Away' && !noUpdateStatus) {
-                User.updateOnlineStatus($scope.user._id, 'Online');
-                $scope.user.onlineStatus = 'Online';
+                $scope.setUserStatus('Online');
             }
 
             /// Reset the timers
             // logoutTimer = $timeout(function(){ logoutUser() }, timeout);
             // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
-            awayStatusTimer = $timeout(function() { setUserAway() }, awayStatusTimeout);
+            awayStatusTimer = $timeout(function() { $scope.setUserStatus('Away'); }, awayStatusTimeout);
         }
     }
 }]);
 
-dtp.controller('adminDashboardCtrl', ['$scope', 'Title', 'user', function($scope, Title, user) {
+dtp.controller('adminDashboardCtrl', ['$scope', 'Title', 'User', function($scope, Title, User) {
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
+
     Title.setTitle('DTP');
     Title.setPageTitle('Dinner Time Premium');
 
     $scope.authorized = false;
-    if(user && user.roles.includes('Staff')) {
+    if($scope.user && $scope.user.roles.includes('Staff')) {
         $scope.authorized = true;
-        $scope.user = user;
         Title.setTitle('Admin Dashboard - DTP');
         Title.setPageTitle('Admin Dashboard');
         
@@ -574,14 +616,18 @@ dtp.controller('adminDashboardCtrl', ['$scope', 'Title', 'user', function($scope
     }
 }]);
 
-dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$location', function($scope, Title, user, Rest, $location) {
+dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', '$location', function($scope, Title, User, Rest, $location) {
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
+
     Title.setTitle('DTP');
     Title.setPageTitle('Dinner Time Premium');
 
     $scope.authorized = false;
-    if(user && user.roles.includes('Staff')) {
+    if($scope.user && $scope.user.roles.includes('Staff')) {
         $scope.authorized = true;
-        $scope.user = user;
         Title.setTitle('Moderator Applications - DTP');
         Title.setPageTitle('Moderator Applications');
 
@@ -609,17 +655,21 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'user', 'Rest',
     }
 }]);
 
-dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 'user', 'Rest', 'Notify', '$mdDialog',
-    function($scope, $routeParams, Title, user, Rest, Notify, $mdDialog) {
+dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 'User', 'Rest', 'Notify', '$mdDialog',
+    function($scope, $routeParams, Title, User, Rest, Notify, $mdDialog) {
         var appId = $routeParams.appId;
+
+        // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+        $scope.$watch(User.getUser, function() {
+            $scope.user = User.getUser();
+        }, true);
 
         Title.setTitle('DTP');
         Title.setPageTitle('Dinner Time Premium');
 
         $scope.authorized = false;
-        if(user && user.roles.includes('Staff')) {
+        if($scope.user && $scope.user.roles.includes('Staff')) {
             $scope.authorized = true;
-            $scope.user = user;
             Title.setTitle('Moderator Application - DTP');
             Title.setPageTitle('Moderator Application');
 
@@ -856,7 +906,7 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
         }
 }]);
 
-dtp.controller('homeCtrl', ['$scope', 'Title', function($scope, Title) {
+dtp.controller('homeCtrl', ['$scope', 'Title', 'User', function($scope, Title, User) {
     Title.setTitle('DTP');
     Title.setPageTitle('Dinner Time Premium');
 }]);
@@ -903,14 +953,17 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     $scope.$location = $location;
 }]);
 
-dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Ranks', '$routeParams',
-    function($scope, Title, User, user, Rest, Ranks, $routeParams) {
+dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$routeParams',
+    function($scope, Title, User, Rest, Ranks, $routeParams) {
+        // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+        $scope.$watch(User.getUser, function() {
+            $scope.user = User.getUser();
+        }, true);
+
         Title.setTitle('DTP');
         Title.setPageTitle('Dinner Time Premium');
 
         var userId = $routeParams.userId;
-
-        $scope.user = user;
 
         $scope.getUserProfile = function() {
             Rest.get('/api/user/' + userId)
@@ -943,15 +996,12 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
                     }
                 })
         };
-
         $scope.getUserProfile();
 
         $scope.editingAbout = false;
-
         $scope.editingAboutToggle = function() { $scope.editingAbout = !$scope.editingAbout; };
 
         $scope.editingBio = false;
-
         $scope.editingBioToggle = function() { $scope.editingBio = !$scope.editingBio; };
 
         $scope.saveProfile = function(userData) {
@@ -964,10 +1014,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
                     }
                     $scope.getUserProfile();
 
-                    User.getCurrentUser() // Using this instead of a returned user to keep the front end updated with the latest permissions
-                        .then(function(user) {
-                            $scope.user = user;
-                        })
+                    User.getCurrentUser(); // Using this instead of a returned user to keep the front end updated with the latest permissions
                 })
         };
 
@@ -984,13 +1031,11 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
         // }
 
         $scope.permissionsOpen = false;
-
         $scope.togglePermissions = function() { $scope.permissionsOpen = !$scope.permissionsOpen };
 
         $scope.ranks = Ranks;
 
         $scope.editingPermissions = false;
-
         $scope.editingPermissionsToggle = function() {
             if($scope.user.roles.includes('Super Admin')) {
                 $scope.editingPermissions = !$scope.editingPermissions;
@@ -1010,29 +1055,40 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'user', 'Rest', 'Rank
         };
 }]);
 
-dtp.controller('moderatorApplicationRequirementsCtrl', ['$scope', 'Title', 'user', 'Notify', '$location', function($scope, Title, user, Notify, $location) {
+dtp.controller('moderatorApplicationRequirementsCtrl', ['$scope', 'Title', 'User', 'Notify', '$location', function($scope, Title, User, Notify, $location) {
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
+
     Title.setTitle('Moderator Application Requirements - DTP');
     Title.setPageTitle('Moderator Application Requirements');
-
-    $scope.user = user;
 
     $scope.terms = {accepted: false};
 
     $scope.createApplication = function() {
         if($scope.terms.accepted) {
-            $location.path('/apply/' + user._id)
+            $location.path('/apply/' + $scope.user._id)
         } else {
             Notify.generic('You must accept the terms first!');
         }
     }
 }]);
 
-dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'Notify', 'Rest', '$mdDialog', '$location',
-    function($scope, Title, user, Notify, Rest, $mdDialog, $location) {
-        $scope.user = user;
+dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'User', 'Notify', 'Rest', '$mdDialog', '$location',
+    function($scope, Title, User, Notify, Rest, $mdDialog, $location) {
+        // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+        $scope.$watch(User.getUser, function() {
+            $scope.user = User.getUser();
+        }, true);
 
-        Title.setTitle(user.name + '\'s Moderator Application - DTP');
-        Title.setPageTitle(user.name + '\'s Moderator Application');
+        if($scope.user) {
+            Title.setTitle($scope.user.name + '\'s Moderator Application - DTP');
+            Title.setPageTitle($scope.user.name + '\'s Moderator Application');
+        } else {
+            Title.setTitle('DTP');
+            Title.setPageTitle('Dinner Time Premium');
+        }
 
         $scope.application = {
             name: '',
@@ -1089,19 +1145,22 @@ dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'user', 'No
         };
 }]);
 
-dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest', '$routeParams', function($scope, Title, user, Rest, $routeParams) {
+dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'User', 'Rest', '$routeParams', function($scope, Title, User, Rest, $routeParams) {
     var appId = $routeParams.appId;
 
-    $scope.user = user;
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
 
-    if(user) {
-        $scope.authorized = false;
-    }
+    Title.setTitle('DTP');
+    Title.setPageTitle('Dinner Time Premium');
 
     if($scope.user) {
+        $scope.authourized = false;
         Rest.get('/api/application/' + appId)
             .then(function(app) {
-                if(app) {
+                if(app.authour._id == $scope.user._id) {
                     $scope.authorized = true;
                     $scope.application = app;
 
@@ -1124,12 +1183,15 @@ dtp.controller('moderatorApplicationShowCtrl', ['$scope', 'Title', 'user', 'Rest
     }
 }]);
 
-dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', '$location',
-    function($scope, Title, user, Rest, $mdDialog, $location) {
+dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog', '$location',
+    function($scope, Title, User, Rest, $mdDialog, $location) {
+        // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+        $scope.$watch(User.getUser, function() {
+            $scope.user = User.getUser();
+        }, true);
+
         Title.setTitle('News - DTP');
         Title.setPageTitle('News');
-
-        $scope.user = user;
 
         $scope.gotNews = false;
         function getNews() {
@@ -1200,11 +1262,14 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog',
         };
 }]);
 
-dtp.controller('newsShowCtrl', ['$scope', 'Title', 'user', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
-function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) {
+dtp.controller('newsShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
     var newsId = $routeParams.newsId;
 
-    $scope.user = user;
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
 
     $scope.label = 1;
     $scope.gotNewsEvent = false;
@@ -1251,7 +1316,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 
     $scope.showFormattingHelp = false;
-
     $scope.toggleFormattingHelp = function() {
         $scope.showFormattingHelp = !$scope.showFormattingHelp;
     };
@@ -1322,7 +1386,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 
     $scope.editingComment = false;
-
     $scope.toggleEditingComment = function(id) {
         $scope.editingComment = !$scope.editingComment;
         $scope.editingCommentId = id;
@@ -1371,12 +1434,15 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 }]);
 
-dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'user', 'Rest', 'Notify', '$mdDialog', '$location',
-function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
+dtp.controller('forumCategoryIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
+function($scope, Title, User, Rest, Notify, $mdDialog, $location) {
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
+
     Title.setTitle('Forum - DTP');
     Title.setPageTitle('Forum');
-
-    $scope.user = user;
 
     $scope.gotCategories = false;
 
@@ -1435,7 +1501,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
     };
 
     $scope.showFormattingHelp = false;
-
     $scope.toggleFormattingHelp = function() {
         $scope.showFormattingHelp = !$scope.showFormattingHelp;
     };
@@ -1475,7 +1540,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
     };
 
     $scope.newCategory = '';
-
     $scope.newCategoryDialog = function() {
         $mdDialog.show({
             clickOutsideToClose: true,
@@ -1509,7 +1573,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
     };
 
     $scope.editingCategory = '';
-
     $scope.editCategoryDialog = function() {
         $mdDialog.show({
             clickOutsideToClose: true,
@@ -1566,14 +1629,17 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $location) {
     }
 }]);
 
-dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', 'user', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
-function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) {
+dtp.controller('forumPostIndexCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
+
     Title.setTitle('DTP');
     Title.setPageTitle('Dinner Time Premium');
 
     var categoryPath = $routeParams.categoryPath;
-
-    $scope.user = user;
 
     function getCategory() {
         Rest.get('/api/forum/singleCategory/' + categoryPath)
@@ -1594,7 +1660,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     getCategory();
 
     $scope.gotPosts = false;
-
     $scope.getPosts = function(label) {
         $scope.gotPosts = false;
         var skip = (label - 1) * 20;
@@ -1646,7 +1711,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 
     $scope.showFormattingHelp = false;
-
     $scope.toggleFormattingHelp = function() {
         $scope.showFormattingHelp = !$scope.showFormattingHelp;
     };
@@ -1684,15 +1748,18 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     $scope.$location = $location;
 }]);
 
-dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'user', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
-function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) {
+dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
+
     Title.setTitle('DTP');
     Title.setPageTitle('Dinner Time Premium');
 
     var categoryPath = $routeParams.categoryPath;
     var postId = $routeParams.postId;
-
-    $scope.user = user;
 
     $scope.label = 1;
     $scope.gotPost = false;
@@ -1719,7 +1786,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     getPost();
 
     $scope.gotComments = false;
-
     $scope.getComments = function(label) {
         $scope.gotComments = false;
         var skip = (label - 1) * 20;
@@ -1732,7 +1798,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 
     $scope.gotCategories = false;
-
     function getCategories() {
         $scope.gotCategories = false;
         Rest.get('/api/forum/allCategories')
@@ -1746,7 +1811,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     getCategories();
 
     $scope.gotRecentPosts = false;
-
     function getRecentPosts() {
         $scope.gotRecentPosts = false;
         Rest.get('/api/forum/recentPosts')
@@ -1768,7 +1832,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 
     $scope.showFormattingHelp = false;
-
     $scope.toggleFormattingHelp = function() {
         $scope.showFormattingHelp = !$scope.showFormattingHelp;
     };
@@ -1879,7 +1942,6 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 
     $scope.editingComment = false;
-
     $scope.toggleEditingComment = function(id) {
         $scope.editingComment = !$scope.editingComment;
         $scope.editingCommentId = id;
@@ -1929,12 +1991,15 @@ function($scope, Title, user, Rest, Notify, $mdDialog, $routeParams, $location) 
     };
 }]);
 
-dtp.controller('rulesCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', function($scope, Title, user, Rest, $mdDialog) {
+dtp.controller('rulesCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog', function($scope, Title, User, Rest, $mdDialog) {
+    // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
+    $scope.$watch(User.getUser, function() {
+        $scope.user = User.getUser();
+    }, true);
+
     Title.setTitle('Rules - DTP');
     Title.setPageTitle('Rules');
 
-    $scope.user = user;
-    
     function getRules() {
         Rest.get('/api/rules')
             .then(function(rules) {
@@ -1952,7 +2017,6 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'user', 'Rest', '$mdDialog', fun
     };
 
     $scope.showFormattingHelp = false;
-
     $scope.toggleFormattingHelp = function() {
         $scope.showFormattingHelp = !$scope.showFormattingHelp;
     };
