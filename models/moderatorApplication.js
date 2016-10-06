@@ -8,16 +8,16 @@ var moderatorApplicationSchema = mongoose.Schema({
         occupation: { type: String, maxlength: 100 },
         timePlayedGmod: { type: String, maxlength: 50 },
         howYouFoundUs: { type: String, maxlength: 1000 },
-        ulxExperience: { type: String, required: true, maxlength: 11 },
-        leadershipExperience: { type: String, required: true, maxlength: 5000 },
-        gmodLeadershipExperience: { type: String, required: true, maxlength: 5000 },
+        ulxExperience: { type: String, maxlength: 11, required: true },
+        leadershipExperience: { type: String, maxlength: 5000, required: true },
+        gmodLeadershipExperience: { type: String, maxlength: 5000, required: true },
         willingToAddUsOnSteam: { type: Boolean, required: true },
-        whyWeShouldAccept: { type: String, required: true, maxlength: 5000 },
+        whyWeShouldAccept: { type: String, maxlength: 5000, required: true },
         additionalInfo: { type: String, maxlength: 5000 },
 
         authour: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 
-        status: { type: String, default: 'Under Review' },
+        status: { type: String, default: 'Under Review', required: true },
         closed: { type: Boolean, default: false },
         review: {
                 warnings: Number,

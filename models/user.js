@@ -12,15 +12,14 @@ var userSchema = mongoose.Schema({
     countryCode: String,
 
     // Profile info
-    onlineStatus: String,
-    realName: String,
-    gender: String,
-    age: String,
+    onlineStatus: { type: String, maxlength: 7 },
+    realName: { type: String, maxlength: 50 },
+    gender: { type: String, maxlength: 20 },
+    age: { type: Number, maxlength: 3 },
     birthday: Date,
-    location: String,
-    occupation: String,
-    status: String,
-    bio: String,
+    location: { type: String, maxlength: 100 },
+    occupation: { type: String, maxlength: 100 },
+    bio: { type: String, maxlength: 1000 },
 
     // Permissions
     rank: { type: String, default: 'User', required: true },

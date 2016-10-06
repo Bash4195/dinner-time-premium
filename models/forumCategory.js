@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var forumCategorySchema = mongoose.Schema({
-    title: { type: String, required: true, maxlength: 50 },
+    title: { type: String, maxlength: 50, required: true },
     path: { type: String, required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     editedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
