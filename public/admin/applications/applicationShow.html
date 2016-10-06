@@ -3,8 +3,9 @@
     <div layout-padding flex-gt-sm="60" flex>
         <login-prompt user="user"></login-prompt>
         <unauthorized user="user" authorized="authorized"></unauthorized>
+        <page-not-found ng-if="!app"></page-not-found>
 
-        <div ng-if="user && authorized && gotApp">
+        <div ng-if="user && authorized && gotApp && app">
             <h1 class="md-headline center-align-text">Status</h1>
             <md-progress-linear md-mode="determinate" value="{{appStatus}}"
                                 ng-class="{'mod-app-under-review': app.status === 'Under Review',

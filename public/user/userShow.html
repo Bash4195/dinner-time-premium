@@ -1,4 +1,5 @@
-<div layout="column">
+<page-not-found ng-if="gotUser && !userProfile"></page-not-found>
+<div layout="column" ng-if="gotUser && userProfile">
     <div style="background: url({{userProfile.backgroundImage || 'http://orig11.deviantart.net/20eb/f/2015/030/6/f/_minflat__dark_material_design_wallpaper__4k__by_dakoder-d8fjqzu.jpg'}});
     background-size: cover; height: 400px; width: 100%;"></div>
     <div layout="row" layout-align="center center">

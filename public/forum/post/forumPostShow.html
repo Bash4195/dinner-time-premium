@@ -1,6 +1,7 @@
 <div layout="row">
     <div flex></div>
-    <div flex-gt-sm="70" flex="90">
+    <page-not-found ng-if="gotPost && !post"></page-not-found>
+    <div flex-gt-sm="70" flex="90" ng-if="gotPost && post">
         <md-subheader class="md-no-sticky">
             <a href="/forum" class="md-accent">Forum</a>
             <md-icon class="material-icons md-18 md-accent">keyboard_arrow_right</md-icon>

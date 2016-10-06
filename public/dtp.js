@@ -358,6 +358,15 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
     };
 }]);
 
+dtp.directive('pageNotFound', function() {
+    return {
+        templateUrl: '../directives/pageNotFound.html',
+        scope: {},
+        replace: true,
+        transclude: true
+    }
+});
+
 dtp.directive('formattingHelp', function() {
     return {
         templateUrl: '../directives/formattingHelp.html',
@@ -965,10 +974,14 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
 
         var userId = $routeParams.userId;
 
+        $scope.gotUser = false;
         $scope.getUserProfile = function() {
+            $scope.gotUser = false;
             Rest.get('/api/user/' + userId)
                 .then(function(user) {
                     $scope.userProfile = user;
+                    $scope.gotUser = true;
+                    
                     Title.setTitle(user.name + '\'s Profile - DTP');
                     Title.setPageTitle(user.name + '\'s Profile');
 
@@ -1640,11 +1653,14 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
     Title.setPageTitle('Dinner Time Premium');
 
     var categoryPath = $routeParams.categoryPath;
-
+    
+    $scope.gotCategory = false;
     function getCategory() {
+        $scope.gotCategory = false;
         Rest.get('/api/forum/singleCategory/' + categoryPath)
             .then(function(res) {
                 $scope.category = res;
+                $scope.gotCategory = true;
 
                 Title.setTitle($scope.category.title + ' - DTP');
                 Title.setPageTitle($scope.category.title);

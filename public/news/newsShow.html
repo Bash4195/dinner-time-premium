@@ -1,9 +1,10 @@
 <div layout="row" layout-align="center center">
-    <div layout="column" flex-gt-sm="80" flex>
-        <md-card layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotNewsEvent">
-            <md-progress-circular class="md-accent"></md-progress-circular>
-        </md-card>
-        <md-card ng-show="gotNewsEvent">
+    <page-not-found ng-if="gotNewsEvent && !news"></page-not-found>
+    <md-card layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotNewsEvent">
+        <md-progress-circular class="md-accent"></md-progress-circular>
+    </md-card>
+    <div layout="column" flex-gt-sm="80" flex ng-if="gotNewsEvent && news">
+        <md-card>
             <md-card-title>
                 <md-card-title-text>
                     <span class="md-headline wrap-title" md-colors="{color: 'primary'}">{{news.title}}</span>
