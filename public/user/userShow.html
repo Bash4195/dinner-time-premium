@@ -62,6 +62,7 @@
                     <md-input-container class="md-block">
                         <label>Age</label>
                         <md-select ng-model="about.age">
+                            <md-option> </md-option>
                             <md-option ng-repeat="n in [].constructor(100) track by $index" ng-value="$index + 1">{{$index + 1}}</md-option>
                         </md-select>
                     </md-input-container>
