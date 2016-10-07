@@ -43,32 +43,51 @@
                 <p class="md-subhead wrap-content"><span md-colors="{color: 'grey-500'}">Occupation: </span>{{userProfile.occupation}}</p>
             </md-card-content>
             <md-card-content flex ng-if="editingAbout">
-                <form>
+                <form name="profileAbout">
                     <p class="md-subhead wrap-content">Joined: {{userProfile.createdAt | date: 'medium'}}</p>
                     <md-input-container class="md-block">
                         <label>Name</label>
-                        <input ng-model="about.realName">
+                        <input name="realName" ng-model="about.realName" md-maxlength="50">
+                        <div ng-messages="profileAbout.realName.$error">
+                            <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
+                        </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Gender</label>
-                        <input ng-model="about.gender">
+                        <input name="gender" ng-model="about.gender" md-maxlength="20">
+                        <div ng-messages="profileAbout.gender.$error">
+                            <div ng-message="md-maxlength">This must be 20 characters long or less.</div>
+                        </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Age</label>
-                        <input ng-model="about.age">
+                        <md-select ng-model="about.age">
+                            <md-option ng-repeat="n in [].constructor(100) track by $index" ng-value="$index + 1">{{$index + 1}}</md-option>
+                        </md-select>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Birthday</label>
+                        <br><br>
+                        <md-radio-group layout="row" ng-model="about.setBday">
+                            <md-radio-button value="true" class="md-primary">Set birthday</md-radio-button>
+                            <md-radio-button value="false" class="md-primary">Don't set birthday</md-radio-button>
+                        </md-radio-group>
                     </md-input-container>
                     <br>
-                    <md-calendar ng-model="about.birthday"></md-calendar>
+                    <md-calendar ng-model="about.birthday" ng-if="about.setBday === 'true'"></md-calendar>
                     <md-input-container class="md-block">
                         <label>Location</label>
-                        <input ng-model="about.location">
+                        <input name="location" ng-model="about.location" md-maxlength="100">
+                        <div ng-messages="profileAbout.location.$error">
+                            <div ng-message="md-maxlength">This must be 100 characters long or less.</div>
+                        </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Occupation</label>
-                        <input ng-model="about.occupation">
+                        <input name="occupation" ng-model="about.occupation" md-maxlength="100">
+                        <div ng-messages="profileAbout.occupation.$error">
+                            <div ng-message="md-maxlength">This must be 100 characters long or less.</div>
+                        </div>
                     </md-input-container>
                 </form>
             </md-card-content>
@@ -90,10 +109,13 @@
                 <p class="md-subhead wrap-content">{{userProfile.bio || 'No information given'}}</p>
             </md-card-content>
             <md-card-content flex ng-if="editingBio">
-                <form>
+                <form name="profileBio">
                     <md-input-container class="md-block">
                         <label>Summary</label>
-                        <textarea ng-model="bio.bio"></textarea>
+                        <textarea name="bio" ng-model="bio.bio" md-maxlength="1000"></textarea>
+                        <div ng-messages="profileBio.bio.$error">
+                            <div ng-message="md-maxlength">This must be 1000 characters long or less.</div>
+                        </div>
                     </md-input-container>
                 </form>
             </md-card-content>
@@ -112,7 +134,8 @@
                     <span class="md-headline">Permissions</span>
                 </md-card-header-text>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-if="user.roles.includes('Super Admin') && !editingPermissions && permissionsOpen" ng-click="editingPermissionsToggle()"><md-icon>edit</md-icon></md-button>
+                <md-button class="md-icon-button" ng-if="user.roles.includes('Super Admin') && !editingPermissions && permissionsOpen"
+                           ng-click="editingPermissionsToggle()"><md-icon>edit</md-icon></md-button>
             </md-card-header>
             <md-card-content ng-if="permissionsOpen">
                 <md-list>

@@ -124,22 +124,33 @@
                 <span>Create Post</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form>
+                <form name="createPost">
                     <md-input-container>
                         <label>Category</label>
-                        <md-select ng-model="newPost.category" md-auto-focus="newPost.category === ''">
+                        <md-select name="category" ng-model="newPost.category" md-auto-focus="newPost.category === ''" required md-no-asterisk>
                             <md-option ng-repeat="category in categories" ng-value="category">
                                 {{category.title}}
                             </md-option>
                         </md-select>
+                        <div ng-messages="createPost.category.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="newPost.title" md-auto-focus="newPost.category !== ''" md-maxlength="50">
+                        <input name="title" ng-model="newPost.title" md-auto-focus="newPost.category !== ''" md-maxlength="50" required md-no-asterisk>
+                        <div ng-messages="createPost.title.$error">
+                            <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Content</label>
-                        <textarea ng-model="newPost.content" md-maxlength="10000"></textarea>
+                        <textarea name="content" ng-model="newPost.content" md-maxlength="10000" required md-no-asterisk></textarea>
+                        <div ng-messages="createPost.content.$error">
+                            <div ng-message="md-maxlength">This must be 10,000 characters long or less.</div>
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                 </form>
                 <formatting-help ng-show="showFormattingHelp"></formatting-help>
@@ -165,10 +176,14 @@
                 <span>Create Category</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form>
+                <form name="createCategory">
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="newCategory" md-autofocus md-maxlength="50">
+                        <input name="title" ng-model="newCategory" md-autofocus md-maxlength="50" required md-no-asterisk>
+                        <div ng-messages="createCategory.title.$error">
+                            <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                 </form>
             </md-dialog-content>
@@ -188,18 +203,25 @@
                 <span>Edit Category</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form>
+                <form name="editCategory">
                     <md-input-container>
                         <label>Category</label>
-                        <md-select ng-model="editingCategory" md-auto-focus>
+                        <md-select name="category" ng-model="editingCategory" md-auto-focus required md-no-asterisk>
                             <md-option ng-repeat="category in categories" ng-value="category">
                                 {{category.title}}
                             </md-option>
                         </md-select>
+                        <div ng-messages="editCategory.category.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="editingCategory.title" ng-disabled="!editingCategory" md-maxlength="50">
+                        <input name="title" ng-model="editingCategory.title" ng-disabled="!editingCategory" md-maxlength="50" required md-no-asterisk>
+                        <div ng-messages="editCategory.title.$error">
+                            <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                 </form>
             </md-dialog-content>

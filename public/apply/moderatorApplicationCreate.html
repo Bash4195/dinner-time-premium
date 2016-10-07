@@ -14,7 +14,7 @@
                         <label>Name</label>
                         <input name="name" ng-model="application.name" md-maxlength="50">
                         <div ng-messages="moderatorApplication.name.$error">
-                            <div ng-message="md-maxlength">This must be less than 50 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -24,7 +24,7 @@
                         <label>Gender</label>
                         <input name="gender" ng-model="application.gender" md-maxlength="20">
                         <div ng-messages="moderatorApplication.gender.$error">
-                            <div ng-message="md-maxlength">This must be less than 20 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 20 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -44,7 +44,7 @@
                         <label>Location</label>
                         <input name="location" ng-model="application.location" md-maxlength="100">
                         <div ng-messages="moderatorApplication.location.$error">
-                            <div ng-message="md-maxlength">This must be less than 100 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 100 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -55,7 +55,7 @@
                         <label>Occupation</label>
                         <input name="occupation" ng-model="application.occupation" md-maxlength="100">
                         <div ng-messages="moderatorApplication.occupation.$error">
-                            <div ng-message="md-maxlength">This must be less than 100 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 100 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -67,7 +67,7 @@
                         <input name="timePlayedGmod" ng-model="application.timePlayedGmod" md-maxlength="50">
                         <div class="hint">Ex. 50 Hours</div>
                         <div ng-messages="moderatorApplication.timePlayedGmod.$error">
-                            <div ng-message="md-maxlength">This must be less than 50 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -78,7 +78,7 @@
                         <label>How You Found Us</label>
                         <textarea name="howYouFoundUs" ng-model="application.howYouFoundUs" md-maxlength="1000"></textarea>
                         <div ng-messages="moderatorApplication.howYouFoundUs.$error">
-                            <div ng-message="md-maxlength">This must be less than 1000 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 1000 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -104,7 +104,7 @@
                         <textarea name="leadershipExperience" ng-model="application.leadershipExperience" md-maxlength="5000" required></textarea>
                         <div ng-messages="moderatorApplication.leadershipExperience.$error">
                             <div ng-message="required">This is required.</div>
-                            <div ng-message="md-maxlength">This must be less than 5000 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 5000 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -118,7 +118,7 @@
                         <textarea name="gmodLeadershipExperience" ng-model="application.gmodLeadershipExperience" md-maxlength="5000" required></textarea>
                         <div ng-messages="moderatorApplication.gmodLeadershipExperience.$error">
                             <div ng-message="required">This is required.</div>
-                            <div ng-message="md-maxlength">This must be less than 5000 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 5000 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -140,7 +140,7 @@
                         <textarea name="whyWeShouldAccept" ng-model="application.whyWeShouldAccept" md-maxlength="5000" required></textarea>
                         <div ng-messages="moderatorApplication.whyWeShouldAccept.$error">
                             <div ng-message="required">This is required.</div>
-                            <div ng-message="md-maxlength">This must be less than 5000 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 5000 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>
@@ -151,7 +151,7 @@
                         <label>Additional Information</label>
                         <textarea name="additionalInfo" ng-model="application.additionalInfo" md-maxlength="5000"></textarea>
                         <div ng-messages="moderatorApplication.additionalInfo.$error">
-                            <div ng-message="md-maxlength">This must be less than 5000 characters long.</div>
+                            <div ng-message="md-maxlength">This must be 5000 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </div>

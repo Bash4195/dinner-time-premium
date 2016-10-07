@@ -445,15 +445,17 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
 
     var noUpdateStatus = false; // Tells everything else not to change the status if it was forcibly set by the user
 
-    $scope.setUserStatus = function(status) {
-        Rest.put('/api/user/' + $scope.user._id, {onlineStatus: status})
-            .then(function(res) {
-                if(!res) {
-                    User.getCurrentUser();
-                }
-                User.currentUser.onlineStatus = status; // Update front-end
-            }); // Update server
-        noUpdateStatus = true;
+    // For MANUALLY setting status only!
+    $scope.setUserStatus = function(status, noUpdate) {
+        if(status != User.currentUser.onlineStatus || noUpdate) {
+            Rest.put('/api/user/' + $scope.user._id, {onlineStatus: status})
+                .then(function() {
+                    User.currentUser.onlineStatus = status; // Update front-end
+                });
+            if(noUpdate) {
+                noUpdateStatus = true;
+            }
+        }
     };
 
     $scope.getOnlineUsers = function() {
@@ -523,14 +525,14 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         // Timeout timer value in milliseconds
         // var timeout = 1800000;
         // var warningTimeout = 1200000;
-        var awayStatusTimeout = 600000;
+        var awayStatusTimeout = 600000; // 10 mins
         // var timeBetween = timeout - warningTimeout;
         // var loggedOut = false;
 
         // Start a timeout
         // var logoutTimer = $timeout(function(){ logoutUser() }, timeout);
         // var warningTimer = $timeout(function() { warnUser() }, warningTimeout);
-        var awayStatusTimer = $timeout(function() { $scope.setUserStatus('Away'); }, awayStatusTimeout);
+        var awayStatusTimer = $timeout(function() { $scope.setUserStatus('Away', false); }, awayStatusTimeout);
 
         var bodyElement = angular.element($document);
         angular.forEach(['keydown', 'keyup', 'click', 'mousemove', 'DOMMouseScroll', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'scroll', 'focus'],
@@ -542,7 +544,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
                     resetTimers();
                     // }
                 });
-            });
+            }, {passive: true});
 
         // function warnUser() {
         //     $mdDialog.show({
@@ -593,14 +595,14 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
             // $timeout.cancel(warningTimer);
             $timeout.cancel(awayStatusTimeout);
 
-            if($scope.user.onlineStatus === 'Away' && !noUpdateStatus) {
-                $scope.setUserStatus('Online');
+            if(User.currentUser.onlineStatus === 'Away' && !noUpdateStatus) {
+                $scope.setUserStatus('Online', false);
             }
 
             /// Reset the timers
             // logoutTimer = $timeout(function(){ logoutUser() }, timeout);
             // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
-            awayStatusTimer = $timeout(function() { $scope.setUserStatus('Away'); }, awayStatusTimeout);
+            awayStatusTimer = $timeout(function() { $scope.setUserStatus('Away', false); }, awayStatusTimeout);
         }
     }
 }]);
@@ -619,7 +621,7 @@ dtp.controller('adminDashboardCtrl', ['$scope', 'Title', 'User', function($scope
         $scope.authorized = true;
         Title.setTitle('Admin Dashboard - DTP');
         Title.setPageTitle('Admin Dashboard');
-        
+
     } else {
         $scope.authorized = false;
     }
@@ -962,8 +964,8 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     $scope.$location = $location;
 }]);
 
-dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$routeParams',
-    function($scope, Title, User, Rest, Ranks, $routeParams) {
+dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$routeParams', 'Notify',
+    function($scope, Title, User, Rest, Ranks, $routeParams, Notify) {
         // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
         $scope.$watch(User.getUser, function() {
             $scope.user = User.getUser();
@@ -993,13 +995,19 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
                         realName: $scope.userProfile.realName,
                         gender: $scope.userProfile.gender,
                         age: $scope.userProfile.age,
+                        setBday: 'false',
                         birthday: new Date($scope.userProfile.birthday),
                         location: $scope.userProfile.location,
                         occupation: $scope.userProfile.occupation
                     };
 
+                    // Set the date to 18 years before today by default
                     if(!$scope.userProfile.birthday) {
-                        $scope.about.birthday = new Date;
+                        var date = new Date();
+                        date.setFullYear( date.getFullYear() - 18 );
+                        $scope.about.birthday = date;
+                    } else {
+                        $scope.about.setBday = 'true';
                     }
 
                     $scope.permissions = {
@@ -1017,18 +1025,34 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
         $scope.editingBio = false;
         $scope.editingBioToggle = function() { $scope.editingBio = !$scope.editingBio; };
 
+        var canSubmit = false;
         $scope.saveProfile = function(userData) {
-            Rest.put('/api/user/' + userId, userData)
-                .then(function() {
-                    if(userData === $scope.bio) {
-                        $scope.editingBio = false;
-                    } else {
-                        $scope.editingAbout = false;
+            if(userData === $scope.bio) {
+                if(!$scope.user) {
+                    Notify.generic('You must be logged in to do that');
+                } else {
+                    $scope.editingBio = false;
+                    canSubmit = true;
+                }
+            } else if(userData === $scope.about) {
+                if(!$scope.user) {
+                    Notify.generic('You must be logged in to do that');
+                } else {
+                    if($scope.about.setBday === 'false') {
+                        $scope.about.birthday = null;
                     }
-                    $scope.getUserProfile();
-
-                    User.getCurrentUser(); // Using this instead of a returned user to keep the front end updated with the latest permissions
-                })
+                    $scope.editingAbout = false;
+                    canSubmit = true;
+                }
+            }
+            if(canSubmit) {
+                Rest.put('/api/user/' + userId, userData)
+                    .then(function() {
+                        $scope.getUserProfile();
+                        User.getCurrentUser(); // Using this instead of a returned user to keep the front end updated with the latest permissions
+                    });
+                canSubmit = false;
+            }
         };
 
         // Function to calculate age based on birthday
@@ -1060,10 +1084,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
                 .then(function() {
                     $scope.editingPermissions = false;
                     $scope.getUserProfile();
-                    User.getCurrentUser()
-                        .then(function(user) {
-                            $scope.user = user;
-                        })
+                    User.getCurrentUser();
                 })
         };
 }]);

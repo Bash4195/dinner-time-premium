@@ -30,14 +30,22 @@
                 <span>Create News</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form>
+                <form name="newNewsEvent">
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="newNews.title" md-autofocus md-maxlength="100">
+                        <input name="title" ng-model="newNews.title" md-autofocus md-maxlength="100" required md-no-asterisk>
+                        <div ng-messages="newNewsEvent.title.$error">
+                            <div ng-message="md-maxlength">This must be 100 characters long or less.</div>
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Content</label>
-                        <textarea ng-model="newNews.content" md-maxlength="10000"></textarea>
+                        <textarea name="content" ng-model="newNews.content" md-maxlength="10000" required md-no-asterisk></textarea>
+                        <div ng-messages="newNewsEvent.content.$error">
+                            <div ng-message="md-maxlength">This must be 10,000 characters long or less.</div>
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                 </form>
                 <formatting-help ng-show="showFormattingHelp"></formatting-help>

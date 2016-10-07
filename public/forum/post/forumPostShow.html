@@ -87,10 +87,17 @@
                             </md-card-title>
                             <md-card-content>
                                 <p class="wrap-content" ng-hide="editingComment && editingCommentId === comment._id" ng-bind-html="comment.comment | htmlLinky"></p>
-                                <md-input-container class="md-block" ng-if="editingComment && editingCommentId === comment._id">
-                                    <label>Comment</label>
-                                    <textarea class="md-accent" ng-model="comment.comment" ng-disabled="!user" md-maxlength="1000"></textarea>
-                                </md-input-container>
+                                <form name="editComment">
+                                    <md-input-container class="md-block" ng-if="editingComment && editingCommentId === comment._id">
+                                        <label>Comment</label>
+                                        <textarea name="comment" class="md-accent" ng-model="comment.comment" ng-disabled="!user" md-maxlength="1000" required md-no-asterisk>
+                                        </textarea>
+                                        <div ng-messages="editComment.comment.$error">
+                                            <div ng-message="md-maxlength">This must be 1,000 characters long or less.</div>
+                                            <div ng-message="required">This is required.</div>
+                                        </div>
+                                    </md-input-container>
+                                </form>
                             </md-card-content>
                             <md-card-actions layout="row" layout-align="end center">
                                 <div layout="row" flex ng-if="comment.editedBy">
@@ -123,13 +130,16 @@
                 </md-tabs>
 
                 <!-- Comment Form -->
-                <form style="margin: 8px" ng-if="!user || user.permissions.forum.createComments">
+                <form name="comment" style="margin: 8px" ng-if="!user || user.permissions.forum.createComments">
                     <md-input-container layout="row">
                         <div flex>
                             <label ng-show="user && !post.locked">Comment</label>
                             <label ng-hide="user || post.locked">Sign in to comment</label>
                             <label ng-show="post.locked">Commenting is disabled on locked posts</label>
-                            <textarea ng-model="newComment.comment" ng-disabled="!user || post.locked" md-maxlength="1000"></textarea>
+                            <textarea name="comment" ng-model="newComment.comment" ng-disabled="!user || post.locked" md-maxlength="1000"></textarea>
+                            <div ng-messages="comment.comment.$error">
+                                <div ng-message="md-maxlength">This must be 1,000 characters long or less.</div>
+                            </div>
                         </div>
                         <md-button class="md-fab md-mini md-primary" ng-if="user && !post.locked" ng-disabled="!newComment.comment" ng-click="createComment()">
                             <md-icon>send</md-icon>
@@ -222,14 +232,22 @@
                 <span class="truncate">Edit {{post.title}}</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form>
+                <form name="editPost">
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input ng-model="post.title" md-auto-focus md-maxlength="50">
+                        <input name="title" ng-model="post.title" md-auto-focus md-maxlength="50" required md-no-asterisk>
+                        <div ng-messages="editPost.title.$error">
+                            <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Content</label>
-                        <textarea ng-model="post.content" md-maxlength="10000"></textarea>
+                        <textarea name="content" ng-model="post.content" md-maxlength="10000" required md-no-asterisk></textarea>
+                        <div ng-messages="editPost.content.$error">
+                            <div ng-message="md-maxlength">This must be 10,000 characters long or less.</div>
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                 </form>
                 <formatting-help ng-show="showFormattingHelp"></formatting-help>
@@ -287,14 +305,17 @@
                 <span class="truncate">Move {{post.title}}</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form>
+                <form name="movePost">
                     <md-input-container>
                         <label>Category</label>
-                        <md-select ng-model="movingPost.category" md-auto-focus>
+                        <md-select name="post" ng-model="movingPost.category" md-auto-focus required md-no-asterisk>
                             <md-option ng-if="category._id !== post.category._id" ng-repeat="category in categories" ng-value="category">
                                 {{category.title}}
                             </md-option>
                         </md-select>
+                        <div ng-messages="movePost.post.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
                     </md-input-container>
                 </form>
             </md-dialog-content>
