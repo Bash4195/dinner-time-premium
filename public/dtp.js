@@ -291,7 +291,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
                 return res.data;
             }, function(res) {
                 // Check this as it won't exist if the server is offline
-                if(res) {
+                if(res.data) {
                     if(res.data.error) {
                         Notify.error(res.data.error);
                     } else {
@@ -309,7 +309,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
                 return res.data;
             }, function(res) {
                 // Check this as it won't exist if the server is offline
-                if(res) {
+                if(res.data) {
                     if(res.data.error) {
                         Notify.error(res.data.error);
                     } else {
@@ -327,7 +327,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
                 return res.data;
             }, function(res) {
                 // Check this as it won't exist if the server is offline
-                if(res) {
+                if(res.data) {
                     if(res.data.error) {
                         Notify.error(res.data.error);
                     } else {
@@ -345,7 +345,7 @@ dtp.service('Rest', ['$http', 'Notify', function($http, Notify) {
                 return res.data;
             }, function(res) {
                 // Check this as it won't exist if the server is offline
-                if(res) {
+                if(res.data) {
                     if(res.data.error) {
                         Notify.error(res.data.error);
                     } else {
@@ -402,8 +402,8 @@ dtp.directive('unauthorized', function() {
 // Runs anytime any page loads up for the first time.
 // Ex. refresh or from external link. Not Angular routing
 // Used for the nav and anything on all pages
-dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$document', '$window', '$http', '$location', 'User', 'Rest', '$mdSidenav', '$mdMedia',
-function($scope, Title, $timeout, $interval, $document, $window, $http, $location, User, Rest, $mdSidenav, $mdMedia) {
+dtp.controller('mainCtrl', ['$scope', 'Title', '$timeout', '$interval', '$document', '$window', '$http', '$location', 'User', 'Rest', 'Notify', '$mdSidenav', '$mdMedia',
+function($scope, Title, $timeout, $interval, $document, $window, $http, $location, User, Rest, Notify, $mdSidenav, $mdMedia) {
     $scope.Title = Title;
 
     $scope.$mdMedia = $mdMedia; // For opening menus from html
@@ -447,14 +447,16 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
 
     // For MANUALLY setting status only!
     $scope.setUserStatus = function(status, noUpdate) {
-        if(status != User.currentUser.onlineStatus || noUpdate) {
+        if(User.currentUser && status != User.currentUser.onlineStatus || User.currentUser && noUpdate) {
             Rest.put('/api/user/' + $scope.user._id, {onlineStatus: status})
                 .then(function() {
-                    User.currentUser.onlineStatus = status; // Update front-end
+                    User.getCurrentUser();
                 });
             if(noUpdate) {
                 noUpdateStatus = true;
             }
+        } else if(!User.currentUser) {
+            Notify.error('Something went wrong, please login again.');
         }
     };
 
@@ -590,19 +592,26 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         // }
 
         function resetTimers() {
-            /// Stop the pending timers
+            // Stop the pending timers
             // $timeout.cancel(logoutTimer);
             // $timeout.cancel(warningTimer);
             $timeout.cancel(awayStatusTimeout);
 
-            if(User.currentUser.onlineStatus === 'Away' && !noUpdateStatus) {
-                $scope.setUserStatus('Online', false);
-            }
+            if(User.currentUser) {
+                if (User.currentUser.onlineStatus === 'Away' && !noUpdateStatus) {
+                    $scope.setUserStatus('Online', false);
+                }
 
-            /// Reset the timers
-            // logoutTimer = $timeout(function(){ logoutUser() }, timeout);
-            // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
-            awayStatusTimer = $timeout(function() { $scope.setUserStatus('Away', false); }, awayStatusTimeout);
+                // After 5 minutes, start this again
+                $timeout(function () {
+                    // Reset the timers
+                    // logoutTimer = $timeout(function(){ logoutUser() }, timeout);
+                    // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+                    awayStatusTimer = $timeout(function () {
+                        $scope.setUserStatus('Away', false);
+                    }, awayStatusTimeout);
+                }, 300000);
+            }
         }
     }
 }]);
