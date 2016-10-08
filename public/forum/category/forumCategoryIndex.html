@@ -53,10 +53,6 @@
                     <span ng-hide="user">Sign in to Post</span>
                 </md-button>
 
-                <a ng-href="/auth/steam" target="_self" aria-label="Sign in through Steam" layout="row" layout-align="center center" ng-hide="user">
-                    <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
-                </a>
-
                 <div layout="column" ng-if="user.permissions.forum.createCategories || user.permissions.forum.updateCategories || user.permissions.forum.deleteCategories">
                     <md-subheader class="md-no-sticky">Category Options</md-subheader>
                     <md-button class="md-raised md-primary" ng-if="user.permissions.forum.createCategories" ng-click="newCategoryDialog()">New Category</md-button>
@@ -124,7 +120,7 @@
                 <span>Create Post</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form name="createPost">
+                <form name="createPostForm">
                     <md-input-container>
                         <label>Category</label>
                         <md-select name="category" ng-model="newPost.category" md-auto-focus="newPost.category === ''" required md-no-asterisk>
@@ -132,14 +128,14 @@
                                 {{category.title}}
                             </md-option>
                         </md-select>
-                        <div ng-messages="createPost.category.$error">
+                        <div ng-messages="createPostForm.category.$error">
                             <div ng-message="required">This is required.</div>
                         </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Title</label>
                         <input name="title" ng-model="newPost.title" md-auto-focus="newPost.category !== ''" md-maxlength="50" required md-no-asterisk>
-                        <div ng-messages="createPost.title.$error">
+                        <div ng-messages="createPostForm.title.$error">
                             <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
                             <div ng-message="required">This is required.</div>
                         </div>
@@ -147,7 +143,7 @@
                     <md-input-container class="md-block">
                         <label>Content</label>
                         <textarea name="content" ng-model="newPost.content" md-maxlength="10000" required md-no-asterisk></textarea>
-                        <div ng-messages="createPost.content.$error">
+                        <div ng-messages="createPostForm.content.$error">
                             <div ng-message="md-maxlength">This must be 10,000 characters long or less.</div>
                             <div ng-message="required">This is required.</div>
                         </div>
@@ -176,11 +172,11 @@
                 <span>Create Category</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form name="createCategory">
+                <form name="createCategoryForm">
                     <md-input-container class="md-block">
                         <label>Title</label>
                         <input name="title" ng-model="newCategory" md-autofocus md-maxlength="50" required md-no-asterisk>
-                        <div ng-messages="createCategory.title.$error">
+                        <div ng-messages="createCategoryForm.title.$error">
                             <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
                             <div ng-message="required">This is required.</div>
                         </div>
@@ -203,7 +199,7 @@
                 <span>Edit Category</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form name="editCategory">
+                <form name="editCategoryForm">
                     <md-input-container>
                         <label>Category</label>
                         <md-select name="category" ng-model="editingCategory" md-auto-focus required md-no-asterisk>
@@ -211,14 +207,14 @@
                                 {{category.title}}
                             </md-option>
                         </md-select>
-                        <div ng-messages="editCategory.category.$error">
+                        <div ng-messages="editCategoryForm.category.$error">
                             <div ng-message="required">This is required.</div>
                         </div>
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Title</label>
                         <input name="title" ng-model="editingCategory.title" ng-disabled="!editingCategory" md-maxlength="50" required md-no-asterisk>
-                        <div ng-messages="editCategory.title.$error">
+                        <div ng-messages="editCategoryForm.title.$error">
                             <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
                             <div ng-message="required">This is required.</div>
                         </div>

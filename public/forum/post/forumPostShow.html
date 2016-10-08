@@ -305,7 +305,7 @@
                 <span class="truncate">Move {{post.title}}</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form name="movePost">
+                <form name="movePostForm">
                     <md-input-container>
                         <label>Category</label>
                         <md-select name="post" ng-model="movingPost.category" md-auto-focus required md-no-asterisk>
@@ -313,7 +313,7 @@
                                 {{category.title}}
                             </md-option>
                         </md-select>
-                        <div ng-messages="movePost.post.$error">
+                        <div ng-messages="movePostForm.post.$error">
                             <div ng-message="required">This is required.</div>
                         </div>
                     </md-input-container>

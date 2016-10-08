@@ -121,11 +121,11 @@
                 <span>Create Post</span>
             </md-toolbar>
             <md-dialog-content class="md-dialog-content">
-                <form name="createPost">
+                <form name="createPostForm">
                     <md-input-container class="md-block">
                         <label>Title</label>
                         <input name="title" ng-model="newPost.title" md-autofocus md-maxlength="50" required md-no-asterisk>
-                        <div ng-messages="createPost.title.$error">
+                        <div ng-messages="createPostForm.title.$error">
                             <div ng-message="md-maxlength">This must be 50 characters long or less.</div>
                             <div ng-message="required">This is required.</div>
                         </div>
@@ -133,7 +133,7 @@
                     <md-input-container class="md-block">
                         <label>Content</label>
                         <textarea name="content" ng-model="newPost.content" md-maxlength="10000" required md-no-asterisk></textarea>
-                        <div ng-messages="createPost.content.$error">
+                        <div ng-messages="createPostForm.content.$error">
                             <div ng-message="md-maxlength">This must be 10,000 characters long or less.</div>
                             <div ng-message="required">This is required.</div>
                         </div>
