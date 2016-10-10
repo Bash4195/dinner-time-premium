@@ -869,11 +869,19 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
                 }
             };
 
-            $scope.editingComment = false;
+            $scope.currentComment = {
+                comment: ''
+            };
+            var currentCommentSet = false;
 
-            $scope.toggleEditingComment = function(id) {
+            $scope.editingComment = false;
+            $scope.toggleEditingComment = function(comment) {
                 $scope.editingComment = !$scope.editingComment;
-                $scope.editingCommentId = id;
+                $scope.editingCommentId = comment._id;
+                if(!currentCommentSet) {
+                    $scope.currentComment.comment = comment.comment;
+                    currentCommentSet = true;
+                }
             };
 
             $scope.updateComment = function(comment) {
@@ -884,12 +892,13 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
                     Notify.generic('Your comment needs to say something!');
                 } else {
                     var updatedComment = {
-                        comment: comment.comment,
+                        comment: $scope.currentComment.comment,
                         editedBy: $scope.user,
                         editedAt: new Date()
                     };
                     Rest.put('/api/admin/application/' + $scope.app._id + '/' + comment._id, updatedComment)
                         .then(function() {
+                            currentCommentSet = false;
                             getModApp()
                         })
                 }
@@ -1333,6 +1342,11 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                     $scope.commentLabels.push(i + 1);
                 }
                 $scope.getComments($scope.label);
+                
+                $scope.currentEvent = {
+                    title: $scope.news.title,
+                    content: $scope.news.content
+                };
             })
     }
     getNewsEvent();
@@ -1378,8 +1392,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         } else {
             $mdDialog.hide();
             var updatedNews = {
-                title: $scope.news.title,
-                content: $scope.news.content,
+                title: $scope.currentEvent.title,
+                content: $scope.currentEvent.content,
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
@@ -1427,11 +1441,20 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                 });
         }
     };
+    
+    $scope.currentComment = {
+        comment: ''
+    };
+    var currentCommentSet = false;
 
     $scope.editingComment = false;
-    $scope.toggleEditingComment = function(id) {
+    $scope.toggleEditingComment = function(comment) {
         $scope.editingComment = !$scope.editingComment;
-        $scope.editingCommentId = id;
+        $scope.editingCommentId = comment._id;
+        if(!currentCommentSet) {
+            $scope.currentComment.comment = comment.comment;
+            currentCommentSet = true;
+        }
     };
 
     $scope.updateComment = function(comment) {
@@ -1442,12 +1465,13 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
             Notify.generic('Your comment needs to say something!');
         } else {
             var updatedComment = {
-                comment: comment.comment,
+                comment: $scope.currentComment.comment,
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
             Rest.put('/api/news/' + $scope.news._id + '/' + comment._id, updatedComment)
                 .then(function() {
+                    currentCommentSet = false;
                     getNewsEvent();
                 })
         }
@@ -1827,6 +1851,11 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                     $scope.commentLabels.push(i + 1);
                 }
                 $scope.getComments($scope.label);
+
+                $scope.editCurrentPost = {
+                    title: $scope.post.title,
+                    content: $scope.post.content
+                }
             })
     }
     getPost();
@@ -1897,8 +1926,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         } else {
             $mdDialog.hide();
             var updatedPost = {
-                title: $scope.post.title,
-                content: $scope.post.content,
+                title: $scope.editCurrentPost.title,
+                content: $scope.editCurrentPost.content,
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
@@ -1987,10 +2016,19 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
         }
     };
 
+    $scope.currentComment = {
+        comment: ''
+    };
+    var currentCommentSet = false;
+
     $scope.editingComment = false;
-    $scope.toggleEditingComment = function(id) {
+    $scope.toggleEditingComment = function(comment) {
         $scope.editingComment = !$scope.editingComment;
-        $scope.editingCommentId = id;
+        $scope.editingCommentId = comment._id;
+        if(!currentCommentSet) {
+            $scope.currentComment.comment = comment.comment;
+            currentCommentSet = true;
+        }
     };
 
     $scope.updateComment = function(comment) {
@@ -2001,12 +2039,13 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
             Notify.generic('Your comment needs to say something!');
         } else {
             var updatedComment = {
-                comment: comment.comment,
+                comment: $scope.currentComment.comment,
                 editedBy: $scope.user,
                 editedAt: new Date()
             };
             Rest.put('/api/forum/' + categoryPath + '/' + $scope.post._id + '/' + comment._id, updatedComment)
                 .then(function() {
+                    currentCommentSet = false;
                     getPost();
                     getRecentPosts();
                 })
@@ -2050,6 +2089,10 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog', fun
         Rest.get('/api/rules')
             .then(function(rules) {
                 $scope.rules = rules.rules;
+                
+                $scope.editRules = {
+                    rules: $scope.rules
+                };
             });
     }
     getRules();
@@ -2075,12 +2118,12 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog', fun
         if(!$scope.user) {
             Notify.generic('You must be logged in to do that');
             $mdDialog.hide();
-        } else if($scope.rules === '') {
+        } else if($scope.editRules.rules === '') {
             Notify.generic('The server must have rules! That\'s a rule');
         } else {
             $mdDialog.hide();
             var updatedRules = {
-                rules: $scope.rules,
+                rules: $scope.editRules.rules,
                 editedBy: $scope.user,
                 editedAt: new Date()
             };

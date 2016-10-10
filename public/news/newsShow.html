@@ -65,7 +65,7 @@
                         <form name="editNewsComment">
                             <md-input-container class="md-block" ng-if="editingComment && editingCommentId === comment._id">
                                 <label>Comment</label>
-                                <textarea name="comment" class="md-accent" ng-model="comment.comment" ng-disabled="!user" md-maxlength="1000" required md-no-asterisk></textarea>
+                                <textarea name="comment" class="md-accent" ng-model="currentComment.comment" ng-disabled="!user" md-maxlength="1000" required md-no-asterisk></textarea>
                                 <div ng-messages="editNewsComment.$error">
                                     <div ng-message="md-maxlength">This must be 1,000 characters long or less.</div>
                                     <div ng-message="required">This is required.</div>
@@ -84,7 +84,7 @@
                         </div>
                         <div ng-if="user._id === comment.authour._id">
                             <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id"
-                                       ng-if="user._id === comment.authour._id || user.permissions.news.updateComments" ng-click="toggleEditingComment(comment._id)">
+                                       ng-if="user._id === comment.authour._id || user.permissions.news.updateComments" ng-click="toggleEditingComment(comment)">
                                 <md-icon>edit</md-icon>
                                 <md-tooltip>Edit comment</md-tooltip>
                             </md-button>
@@ -94,9 +94,9 @@
                                 <md-tooltip>Delete comment</md-tooltip>
                             </md-button>
                             <md-button class="md-accent" ng-show="editingComment && editingCommentId === comment._id"
-                                       ng-click="toggleEditingComment(comment._id)">Cancel</md-button>
+                                       ng-click="toggleEditingComment(comment)">Cancel</md-button>
                             <md-button class="md-raised md-accent" ng-show="editingComment && editingCommentId === comment._id"
-                                       ng-click="updateComment(comment)" ng-disabled="!comment.comment">Update</md-button>
+                                       ng-click="updateComment(comment)" ng-disabled="!currentComment.comment">Update</md-button>
                         </div>
                     </md-card-actions>
                 </md-card>
@@ -135,7 +135,7 @@
                 <form name="editNewsEvent">
                     <md-input-container class="md-block">
                         <label>Title</label>
-                        <input name="title" ng-model="news.title" md-auto-focus md-maxlength="100" required md-no-asterisk>
+                        <input name="title" ng-model="currentEvent.title" md-auto-focus md-maxlength="100" required md-no-asterisk>
                         <div ng-messages="editNewsEvent.title.$error">
                             <div ng-message="md-maxlength">This must be 100 characters long or less.</div>
                             <div ng-message="required">This is required.</div>
@@ -143,7 +143,7 @@
                     </md-input-container>
                     <md-input-container class="md-block">
                         <label>Content</label>
-                        <textarea name="content" ng-model="news.content" md-maxlength="10000" required md-no-asterisk></textarea>
+                        <textarea name="content" ng-model="currentEvent.content" md-maxlength="10000" required md-no-asterisk></textarea>
                         <div ng-messages="editNewsEvent.content.$error">
                             <div ng-message="md-maxlength">This must be 10,000 characters long or less.</div>
                             <div ng-message="required">This is required.</div>
@@ -159,7 +159,7 @@
                 </md-button>
                 <span flex></span>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                <md-button class="md-primary md-raised" ng-click="updateNews()" ng-disabled="!news.title || !news.content">Update</md-button>
+                <md-button class="md-primary md-raised" ng-click="updateNews()" ng-disabled="!currentEvent.title || !currentEvent.content">Update</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>

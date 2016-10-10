@@ -23,7 +23,7 @@
                 <form name="rulesForm">
                     <md-input-container class="md-block">
                         <label>Rules</label>
-                        <textarea name="content" ng-model="rules" md-maxlength="10000" required="" md-no-asterisk></textarea>
+                        <textarea name="content" ng-model="editRules.rules" md-maxlength="10000" required="" md-no-asterisk></textarea>
                         <div ng-messages="rulesForm.content.$error">
                             <div ng-message="md-maxlength">This must be 10,000 characters long or less.</div>
                             <div ng-message="required">This is required.</div>
@@ -39,7 +39,7 @@
                 </md-button>
                 <span flex></span>
                 <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
-                <md-button class="md-primary md-raised" ng-click="updateRules()" ng-disabled="!rules">Update</md-button>
+                <md-button class="md-primary md-raised" ng-click="updateRules()" ng-disabled="!editRules.rules">Update</md-button>
             </md-dialog-actions>
         </md-dialog>
     </div>
