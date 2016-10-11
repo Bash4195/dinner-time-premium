@@ -78,7 +78,7 @@
                         <md-card ng-repeat="comment in comments">
                             <md-card-title>
                                 <md-card-title-media style="margin-right: 15px;" layout="row" layout-align="center center">
-                                    <img ng-src="{{comment.authour.avatarMedium}}" alt="" class="md-media card-media md-avatar circle" style="height: auto !important;">
+                                    <img ng-src="{{comment.authour.avatar}}" alt="" class="md-media card-media md-avatar circle" style="height: auto !important;">
                                 </md-card-title-media>
                                 <md-card-title-text>
                                     <a ng-href="/user/{{comment.authour._id}}" class="md-title wrap-content md-accent md-hue-1">{{comment.authour.name}}</a>
