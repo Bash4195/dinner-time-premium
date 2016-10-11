@@ -32,6 +32,11 @@ md-sidenav md-list-item > button {
     border-radius: 0 !important;
 }
 
+/* Toast Position */
+/* So it doesn't cover the user options/sign in through steam button */
+md-toast.md-top{
+    top: 5%;
+}
 
 /* Toast Themes */
 md-toast.md-success-toast-theme .md-toast-content {
