@@ -490,6 +490,13 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         $mdSidenav('left').toggle();
     };
 
+    // On mobile, the left side nav doesn't close when a nav link is clicked.
+    // This function closes it on mobile and changes the page to the link clicked
+    $scope.href = function(uri) {
+        $mdSidenav('left').close();
+        $location.path(uri);
+    };
+
     $scope.toggleOnlineUsers = function() {
         $mdSidenav('onlineUsers').toggle();
         if($mdSidenav('onlineUsers').isOpen()) {
