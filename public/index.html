@@ -39,48 +39,48 @@
     <md-list>
         <div ng-if="user && user.roles.includes('Staff')">
             <md-list-item>
-                <md-button class="list-btn-no-radius" ng-click="href('/admin')" ng-class="{'md-primary active': activeNav('/admin')}" layout="row" layout-fill>
-                    <md-icon flex="40" layout="row" layout-align="center center">dashboard</md-icon>
+                <md-button class="list-btn-no-radius" ng-click="href('/admin')" ng-href ng-class="{'md-primary active': activeNav('/admin')}" layout="row" layout-fill>
+                    <md-icon flex="40">dashboard</md-icon>
                     <p class="left-align-text" flex="60">Admin</p>
                 </md-button>
             </md-list-item>
             <md-divider></md-divider>
         </div>
         <md-list-item>
-            <md-button class="list-btn-no-radius" ng-click="href('/news')" ng-class="{'md-primary active': activeNav('/news')}" layout="row" layout-fill>
-                <md-icon flex="40" layout="row" layout-align="center center">announcement</md-icon>
+            <md-button class="list-btn-no-radius" ng-click="href('/news')" ng-href ng-class="{'md-primary active': activeNav('/news')}" layout="row" layout-fill>
+                <md-icon flex="40">announcement</md-icon>
                 <p class="left-align-text" flex="60">News</p>
             </md-button>
         </md-list-item>
         <md-list-item>
             <md-button class="list-btn-no-radius" ng-href="http://dtpremium.site.nfoservers.com/donate/" target="_blank" layout="row" layout-fill>
-                <md-icon flex="40" layout="row" layout-align="center center">monetization_on</md-icon>
+                <md-icon flex="40">monetization_on</md-icon>
                 <p class="left-align-text" layout="row" layout-align="center center " flex="60">Donate <md-icon class="material-icons md-18">open_in_new</md-icon></p>
             </md-button>
         </md-list-item>
         <md-list-item>
-            <md-button class="list-btn-no-radius" ng-click="href('/forum')" ng-class="{'md-primary active': activeNav('/forum')}" layout="row" layout-fill>
-                <md-icon flex="40" layout="row" layout-align="center center">forum</md-icon>
+            <md-button class="list-btn-no-radius" ng-click="href('/forum')" ng-href ng-class="{'md-primary active': activeNav('/forum')}" layout="row" layout-fill>
+                <md-icon flex="40">forum</md-icon>
                 <p class="left-align-text" flex="60">Forum</p>
             </md-button>
         </md-list-item>
 
         <md-divider></md-divider>
         <md-list-item>
-            <md-button class="list-btn-no-radius" ng-click="href('/users')" ng-class="{'md-primary active': activeNav('/users')}" layout="row" layout-fill>
-                <md-icon flex="40" layout="row" layout-align="center center">contacts</md-icon>
+            <md-button class="list-btn-no-radius" ng-click="href('/users')" ng-href ng-class="{'md-primary active': activeNav('/users')}" layout="row" layout-fill>
+                <md-icon flex="40">contacts</md-icon>
                 <p class="left-align-text" flex="60">Users</p>
             </md-button>
         </md-list-item>
         <md-list-item>
-            <md-button class="list-btn-no-radius" ng-click="href('/rules')" ng-class="{'md-primary active': activeNav('/rules')}" layout="row" layout-fill>
-                <md-icon flex="40" layout="row" layout-align="center center">assignment</md-icon>
+            <md-button class="list-btn-no-radius" ng-click="href('/rules')" ng-href ng-class="{'md-primary active': activeNav('/rules')}" layout="row" layout-fill>
+                <md-icon flex="40">assignment</md-icon>
                 <p class="left-align-text" flex="60">Rules</p>
             </md-button>
         </md-list-item>
         <md-list-item hide-gt-md>
-            <md-button class="list-btn-no-radius" layout="row" layout-fill ng-href="" ng-click="toggleLeftAndOnlineUsers()">
-                <md-icon flex="40" layout="row" layout-align="center center">people</md-icon>
+            <md-button class="list-btn-no-radius" layout="row" layout-fill ng-href ng-click="toggleLeftAndOnlineUsers()">
+                <md-icon flex="40">people</md-icon>
                 <p class="left-align-text" flex="60">Online Users</p>
             </md-button>
         </md-list-item>
@@ -114,8 +114,10 @@
         </md-button>
 
         <md-button layout="row" class="md-icon-button" style="min-width: 60px;" ng-show="lockOnlineUsers" ng-click="toggleLockOnlineUsers()" hide show-gt-md>
-            <md-icon>chevron_right</md-icon>
-            <md-icon>people</md-icon>
+            <div layout="row">
+                <md-icon>chevron_right</md-icon>
+                <md-icon>people</md-icon>
+            </div>
             <md-tooltip>Hide online users</md-tooltip>
         </md-button>
 
@@ -258,7 +260,7 @@
             </md-toolbar>
             <md-list style="height: 80%;">
                 <md-list-item ng-if="user">
-                    <md-button class="list-btn-no-radius" ng-href="/user/{{user._id}}" layout="row" layout-fill>
+                    <md-button class="list-btn-no-radius" ng-click="onlineUsersHref('/user/' + user._id)" ng-href layout="row" layout-fill>
                         <div>
                             <md-icon md-colors="{color: 'green-500'}" ng-if="user.onlineStatus === 'Online'">check_circle</md-icon>
                             <md-icon md-colors="{color: 'yellow-500'}" ng-if="user.onlineStatus === 'Away'">access_time</md-icon>
@@ -278,7 +280,7 @@
                     <div flex></div>
                 </div>
                 <md-list-item ng-repeat="onlineUser in onlineUsers" ng-if="onlineUser._id !== user._id">
-                    <md-button class="list-btn-no-radius" ng-href="/user/{{onlineUser._id}}" layout="row" layout-fill>
+                    <md-button class="list-btn-no-radius" ng-click="onlineUsersHref('/user/' + onlineUser._id)" ng-href layout="row" layout-fill>
                         <div>
                             <md-icon md-colors="{color: 'green-500'}" ng-if="onlineUser.onlineStatus === 'Online'">check_circle</md-icon>
                             <md-icon md-colors="{color: 'yellow-500'}" ng-if="onlineUser.onlineStatus === 'Away'">access_time</md-icon>

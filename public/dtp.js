@@ -497,6 +497,11 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         $location.path(uri);
     };
 
+    $scope.onlineUsersHref = function(uri) {
+        $mdSidenav('onlineUsers').close();
+        $location.path(uri);
+    };
+
     $scope.toggleOnlineUsers = function() {
         $mdSidenav('onlineUsers').toggle();
         if($mdSidenav('onlineUsers').isOpen()) {
