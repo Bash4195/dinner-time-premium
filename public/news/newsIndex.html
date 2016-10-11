@@ -1,22 +1,28 @@
 <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-hide="gotNews">
     <md-progress-circular class="md-accent"></md-progress-circular>
 </div>
+
 <div ng-repeat="(date, news) in newsMonths">
-    <md-subheader class="md-accent"><span flex-offset-gt-sm="10">{{date}}</span></md-subheader>
+    <md-subheader class="md-accent">
+        <span flex-offset-gt-sm="10"
+        ng-class="{january: date.includes('January'), february: date.includes('February'), march: date.includes('March'), april: date.includes('April'),
+        may: date.includes('May'), june: date.includes('June'), july: date.includes('July'), august: date.includes('August'), september: date.includes('September'),
+        october: date.includes('October'), november: date.includes('November'), december: date.includes('Decemer')}">{{date}}</span>
+    </md-subheader>
     <md-card flex-gt-sm="80" flex flex-offset-gt-sm="10" ng-repeat="event in news | orderBy: '-createdAt'">
         <md-card-header>
             <md-card-header-text>
-                <span class="md-headline"><a ng-href="/news/{{event._id}}" class="md-primary">{{event.title}}</a></span>
+                <span class="md-headline wrap-title"><a ng-href="/news/{{event._id}}" class="md-primary">{{event.title}}</a></span>
                 <p class="md-subhead">By <a ng-href="/user/{{event.authour._id}}" class="md-accent">{{event.authour.name}}</a> <span am-time-ago="event.createdAt"></span></p>
             </md-card-header-text>
         </md-card-header>
         <md-card-content style="padding-top: 0;">
-            <p class="wrap-content limit-3-lines" ng-bind-html="event.content | htmlLinky"></p>
+            <p class="truncate" flex="100" ng-bind-html="event.content | htmlLinky"></p>
         </md-card-content>
     </md-card>
 </div>
 
-<md-button class="md-fab md-accent" ng-class="{'md-fab-top-right': $mdMedia('gt-sm'), 'md-fab-bottom-right': !$mdMedia('gt-sm')}"
+<md-button style="z-index: 1;" class="md-fab md-accent" ng-class="{'md-fab-top-right': $mdMedia('gt-sm'), 'md-fab-bottom-right': !$mdMedia('gt-sm')}"
            layout="column" layout-align="center center" ng-if="user && user.permissions.news.createNews" ng-click="newNewsDialog()">
     <md-icon>add</md-icon>
     <md-tooltip>Create News</md-tooltip>

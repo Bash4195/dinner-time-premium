@@ -233,6 +233,20 @@ md-progress-linear.mod-app-rejected .md-container {
     background-color: #FFCDD2 !important;
 }
 
+/* Month Colours */
+.january { color: #F44336 }
+.february { color: #FF9800 }
+.march { color: #FFEB3B }
+.april { color: #4CAF50 }
+.may { color: #2196F3 }
+.june { color: #3F51B5 }
+.july { color: #9C27B0 }
+.august { color: #E91E63 }
+.september { color: #FFC107 }
+.october { color: #FF5722 }
+.november { color: #795548 }
+.december { color: #9E9E9E }
+
 /* Word wrap */
 .wrap-title{
     white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
@@ -254,16 +268,6 @@ md-progress-linear.mod-app-rejected .md-container {
     white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
     white-space: pre-line;
     word-break: keep-all;
-}
-
-.limit-3-lines {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    line-height: 21px;
-    max-height: 71px;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
 }
 
 /* Disable text highlighting */

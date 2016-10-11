@@ -1,5 +1,5 @@
 <div layout="row" layout-align="center center">
-    <page-not-found ng-if="!gotNewsEvent && !news"></page-not-found>
+    <page-not-found ng-if="gotNewsEvent && !news"></page-not-found>
     <div layout="column" flex-gt-sm="80" flex>
         <md-card layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotNewsEvent">
             <md-progress-circular class="md-accent"></md-progress-circular>
