@@ -22,7 +22,7 @@
     </md-card>
 </div>
 
-<md-button style="z-index: 1;" class="md-fab md-accent" ng-class="{'md-fab-top-right': $mdMedia('gt-sm'), 'md-fab-bottom-right': !$mdMedia('gt-sm')}"
+<md-button class="md-fab md-accent" ng-class="{'md-fab-top-right': $mdMedia('gt-sm'), 'md-fab-bottom-right': !$mdMedia('gt-sm')}"
            layout="column" layout-align="center center" ng-if="user && user.permissions.news.createNews" ng-click="newNewsDialog()">
     <md-icon>add</md-icon>
     <md-tooltip>Create News</md-tooltip>
