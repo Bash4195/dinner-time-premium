@@ -1,9 +1,9 @@
 <page-not-found ng-if="gotUser && !userProfile"></page-not-found>
 <div layout="column" ng-if="gotUser && userProfile">
-    <div style="background: url({{userProfile.backgroundImage || 'http://orig11.deviantart.net/20eb/f/2015/030/6/f/_minflat__dark_material_design_wallpaper__4k__by_dakoder-d8fjqzu.jpg'}});
-    background-size: cover; height: 400px; width: 100%;"></div>
+    <div style="background: url({{userProfile.backgroundImg || wallpaper}});
+    background-size: cover; background-repeat: no-repeat; background-position: center center; height: 400px; width: 100%;"></div>
     <div layout="row" layout-align="center center">
-        <img ng-src="{{userProfile.avatarFull}}" alt="" class="md-avatar circle" style="margin-top: -92px; border: 2px solid #FFF;">
+        <img ng-src="{{userProfile.avatarFull}}" alt="" class="md-avatar circle" style="margin-top: -92px;">
     </div>
     <div layout="row">
         <div flex></div>
@@ -88,6 +88,14 @@
                         <input name="occupation" ng-model="about.occupation" md-maxlength="100">
                         <div ng-messages="profileAbout.occupation.$error">
                             <div ng-message="md-maxlength">This must be 100 characters long or less.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Background Image</label>
+                        <input name="backgroundImg" ng-model="about.backgroundImg" md-maxlength="1000">
+                        <div class="hint">Link to image</div>
+                        <div ng-messages="profileAbout.backgroundImg.$error">
+                            <div ng-message="md-maxlength">This must be 1,000 characters long or less.</div>
                         </div>
                     </md-input-container>
                 </form>

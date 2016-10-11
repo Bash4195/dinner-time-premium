@@ -20,6 +20,7 @@ var userSchema = mongoose.Schema({
     location: { type: String, maxlength: 100 },
     occupation: { type: String, maxlength: 100 },
     bio: { type: String, maxlength: 1000 },
+    backgroundImg: { type: String, maxlength: 1000 },
 
     // Permissions
     rank: { type: String, default: 'User', required: true },

@@ -1017,6 +1017,30 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
                     Title.setTitle(user.name + '\'s Profile - DTP');
                     Title.setPageTitle(user.name + '\'s Profile');
 
+                    if(!$scope.userProfile.backgroundImg) {
+                        switch(Math.floor((Math.random() * 5) + 1)) {
+                            case 1:
+                                $scope.wallpaper = '../assets/img/bg/blue.png';
+                                break;
+                            case 2:
+                                $scope.wallpaper = '../assets/img/bg/dots.jpg';
+                                break;
+                            case 3:
+                                $scope.wallpaper = '../assets/img/bg/forest.jpg';
+                                break;
+                            case 4:
+                                $scope.wallpaper = '../assets/img/bg/grey-orange.jpg';
+                                break;
+                            case 5:
+                                $scope.wallpaper = '../assets/img/bg/wood.jpg';
+                                break;
+                        }
+
+                        if($scope.userProfile._id === $scope.user._id) {
+                            Notify.generic('Change your background in "About" settings');
+                        }
+                    }
+
                     $scope.bio = {
                         bio: $scope.userProfile.bio
                     };
@@ -1028,7 +1052,8 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
                         setBday: 'false',
                         birthday: new Date($scope.userProfile.birthday),
                         location: $scope.userProfile.location,
-                        occupation: $scope.userProfile.occupation
+                        occupation: $scope.userProfile.occupation,
+                        backgroundImg: $scope.userProfile.backgroundImg
                     };
 
                     // Set the date to 18 years before today by default
