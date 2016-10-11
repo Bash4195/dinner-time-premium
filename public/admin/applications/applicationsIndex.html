@@ -9,22 +9,22 @@
                 <md-toolbar class="md-toolbar-tools"><span>Moderator Applications</span></md-toolbar>
                 <md-list-item class="md-3-line">
                     <div style="width: 56px;"></div>
-                    <div class="md-list-item-text" layout="row" layout-align="space-around center">
-                        <h2 class="md-title">Authour</h2>
-                        <h2 hide show-gt-xs class="md-title">Votes</h2>
-                        <h2 hide show-gt-xs class="md-title">Status</h2>
-                        <h2 class="md-title">Open/Closed</h2>
+                    <div class="md-list-item-text" layout="row" layout-align="center center">
+                        <h2 class="md-title center-align-text" flex="25">Authour</h2>
+                        <h2 hide show-gt-xs class="md-title center-align-text" flex="25">Votes</h2>
+                        <h2 hide show-gt-xs class="md-title center-align-text" flex="25">Status</h2>
+                        <h2 class="md-title center-align-text" flex="25">Open/Closed</h2>
                     </div>
                 </md-list-item>
                 <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="$location.path('/admin/application/' + app._id)">
-                    <img ng-src="{{app.authour.avatar}}" class="md-avatar">
-                    <div class="md-list-item-text" layout="row" layout-align="space-around center">
-                        <h3>{{app.authour.name}}</h3>
-                        <h4 hide show-gt-xs>{{app.votes.length}}/3</h4>
-                        <p hide show-gt-xs ng-class="{'mod-app-under-review': app.status === 'Under Review',
+                    <img ng-src="{{app.authour.avatar}}" class="md-avatar" flex="10">
+                    <div class="md-list-item-text" layout="row" layout-align="center center">
+                        <h3 class="center-align-text" flex="25">{{app.authour.name}}</h3>
+                        <h4 class="center-align-text" flex="25" hide show-gt-xs>{{app.votes.length}}/3</h4>
+                        <p class="center-align-text" flex="25" hide show-gt-xs ng-class="{'mod-app-under-review': app.status === 'Under Review',
                                 'mod-app-awaiting-votes': app.status === 'Awaiting Votes', 'mod-app-accepted': app.status === 'Accepted',
                                 'mod-app-rejected': app.status === 'Rejected'}">{{app.status}}</p>
-                        <p>
+                        <p class="center-align-text" flex="25">
                             <span ng-show="app.closed" md-colors="{color: 'warn-500'}">Closed</span>
                             <span ng-hide="app.closed" md-colors="{color: 'green-500'}">Open</span>
                         </p>

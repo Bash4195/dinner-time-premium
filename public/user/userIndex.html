@@ -13,10 +13,10 @@
         </md-card-header>
         <md-list-item class="md-3-line">
             <div style="width: 56px;"></div>
-            <div class="md-list-item-text" layout="row" layout-align="space-around center">
-                <h2 class="md-title">Name</h2>
-                <h2 class="md-title">Rank</h2>
-                <h2 class="md-title">Status</h2>
+            <div class="md-list-item-text" layout="row" layout-align="center center">
+                <h2 class="md-title center-align-text" flex="30">Name</h2>
+                <h2 class="md-title center-align-text" flex="30">Rank</h2>
+                <h2 class="md-title center-align-text" flex="30">Status</h2>
             </div>
         </md-list-item>
         <md-card-content style="padding: 0;">
@@ -27,14 +27,14 @@
                 <!--<md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>-->
                     <!--<md-tab label="{{label}}" ng-click="getUsers(label)" ng-repeat="label in userLabels">-->
                         <md-list-item class="md-3-line" ng-repeat="user in users" ng-click="$location.path('/user/' + user._id)">
-                            <img ng-src="{{user.avatar}}" class="md-avatar">
-                            <div class="md-list-item-text" layout="row" layout-align="space-around center">
-                                <h3>{{user.name}}</h3>
-                                <h4>{{user.rank}}</h4>
-                                <p ng-class="{'status-online': user.onlineStatus === 'Online',
+                            <img ng-src="{{user.avatar}}" class="md-avatar" flex="10">
+                            <div class="md-list-item-text" layout="row" layout-align="center center">
+                                <h3 class="center-align-text" flex="30">{{user.name}}</h3>
+                                <h4 class="center-align-text" flex="30">{{user.rank}}</h4>
+                                <p class="center-align-text" ng-class="{'status-online': user.onlineStatus === 'Online',
                                         'status-away': user.onlineStatus === 'Away',
                                         'status-busy': user.onlineStatus === 'Busy',
-                                        'status-offline': user.onlineStatus === 'Offline'}">{{user.onlineStatus}}</p>
+                                        'status-offline': user.onlineStatus === 'Offline'}" flex="30">{{user.onlineStatus}}</p>
                             </div>
                             <md-divider></md-divider>
                         </md-list-item>
