@@ -15,7 +15,9 @@
                 <div layout="column" layout-fill>
                     <h1 style="margin-bottom: 4px;" class="md-headline truncate" flex="100"><a ng-href="/news/{{event._id}}" class="md-primary">{{event.title}}</a></h1>
                     <span>By <a ng-href="/user/{{event.authour._id}}" class="md-accent">{{event.authour.name}}</a> <span am-time-ago="event.createdAt"></span></span>
-                    <p class="three-line wrap-content" flex="100" ng-bind-html="event.content | htmlLinky"></p>
+                    <div style="overflow: hidden; text-overflow: ellipsis;">
+                        <p class="three-line" flex="100" ng-bind-html="event.content | htmlLinky"></p>
+                    </div>
                 </div>
             </md-list-item>
         </md-list>

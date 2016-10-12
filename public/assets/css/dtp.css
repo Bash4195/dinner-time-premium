@@ -133,10 +133,17 @@ a {
 .three-line {
     line-height: 1.5em;
     height: 4.5em;
-    overflow: hidden;
-    white-space: nowrap;
+    overflow: hidden !important;
     text-overflow: ellipsis;
-    width: 100%;
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap; /* ancient Opera */
+    white-space: -o-pre-wrap; /* newer Opera */
+    white-space: pre-wrap; /* Chrome; W3C standard */
+    word-wrap: break-word; /* IE */
+    /*width: 100%;*/
+    /*display: -webkit-box;*/
+    /*-webkit-box-orient: vertical;*/
+    /*-webkit-line-clamp: 3;*/
 }
 
 /* Icon font sizes */
