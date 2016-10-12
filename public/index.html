@@ -181,7 +181,7 @@
                         </md-menu>
                     </md-menu-item>
                     <md-menu-divider></md-menu-divider>
-                    <md-menu-item ng-if="user.permissions.general.canApplyToMod">
+                    <md-menu-item ng-if="user.permissions.general.canApplyToMod && !user.roles.includes('Staff')">
                         <md-button ng-href="/apply">
                             <md-icon>assignment_ind</md-icon>
                             Apply
