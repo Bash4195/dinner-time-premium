@@ -31,8 +31,8 @@
     </md-card>
 </div>
 
-<div ng-if="canLoadMore" layout-fill layout="row" layout-align="center center">
-    <md-button ng-click="getNews()" flex-offset-gt-sm="55" flex-offset="80">Load More</md-button>
+<div ng-if="canLoadMore" layout="row" layout-align="end center" flex-gt-sm="60" flex flex-offset-gt-sm="20">
+    <md-button ng-click="getNews()">Load More</md-button>
 </div>
 
 <md-button class="md-fab md-accent" ng-class="{'md-fab-top-right': $mdMedia('gt-sm'), 'md-fab-bottom-right': !$mdMedia('gt-sm')}"

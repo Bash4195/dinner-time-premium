@@ -976,19 +976,29 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     //         });
     // };
 
-    function getUsers() {
+    var skip = 0;
+    $scope.getUsers = function() {
         $scope.gotUsers = false;
         // var skip = (label - 1) * 20; // For pagination
-        Rest.get('/api/users', {search: $scope.search})//, skip: skip}) // Pagination
+        Rest.get('/api/users', {search: $scope.search, skip: skip})
             .then(function(users) {
-                $scope.users = users;
+                if(!$scope.users) {
+                    $scope.users = users.users;
+                } else {
+                    angular.forEach(users.users, function(user) {
+                        $scope.users.push(user);
+                    });
+                }
+                $scope.canLoadMore = users.canLoadMore;
                 $scope.gotUsers = true;
+                
+                skip += 100;
             })
-    }
-    getUsers();
+    };
+    $scope.getUsers();
 
     $scope.submitSearch = function() {
-        getUsers();
+        $scope.getUsers();
     };
 
     $scope.$location = $location;
@@ -1291,7 +1301,7 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog',
                     if(!$scope.news) {
                         $scope.news = news.news;
                     } else {
-                        angular.forEach(news.news, function(event, key) {
+                        angular.forEach(news.news, function(event) {
                             $scope.news.push(event);
                         });
                     }

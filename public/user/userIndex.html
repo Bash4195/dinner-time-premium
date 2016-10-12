@@ -1,49 +1,49 @@
-<div layout="row" layout-align="center center">
-    <md-card flex-gt-sm="80" flex>
-        <md-card-header layout="row" layout-align="center center">
-            <form ng-submit="submitSearch()" autocomplete="off" flex-gt-sm="50" flex>
-            <md-input-container md-no-float class="md-block">
-                <md-icon>search</md-icon>
-                <input ng-model="search" type="text" placeholder="Search by name or Steam 64 ID">
-            </md-input-container>
-            <input type="submit"
-                   style="position: absolute; left: -9999px; width: 1px; height: 1px;"
-                   tabindex="-1" />
-            </form>
-        </md-card-header>
-        <md-list-item class="md-3-line">
-            <div style="width: 56px;"></div>
-            <div class="md-list-item-text" layout="row" layout-align="center center">
-                <h2 class="md-title center-align-text" flex="30">Name</h2>
-                <h2 class="md-title center-align-text" flex="30">Rank</h2>
-                <h2 class="md-title center-align-text" flex="30">Status</h2>
-            </div>
-        </md-list-item>
-        <md-card-content style="padding: 0;">
-            <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotUsers">
-                <md-progress-circular class="md-accent"></md-progress-circular>
-            </div>
-            <md-list flex>
-                <!--<md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>-->
-                    <!--<md-tab label="{{label}}" ng-click="getUsers(label)" ng-repeat="label in userLabels">-->
-                        <md-list-item class="md-3-line" ng-repeat="user in users" ng-click="$location.path('/user/' + user._id)">
-                            <img ng-src="{{user.avatar}}" class="md-avatar" flex="10">
-                            <div class="md-list-item-text" layout="row" layout-align="center center">
-                                <h3 class="center-align-text" flex="30">{{user.name}}</h3>
-                                <h4 class="center-align-text" flex="30">{{user.rank}}</h4>
-                                <p class="center-align-text" ng-class="{'status-online': user.onlineStatus === 'Online',
-                                        'status-away': user.onlineStatus === 'Away',
-                                        'status-busy': user.onlineStatus === 'Busy',
-                                        'status-offline': user.onlineStatus === 'Offline'}" flex="30">{{user.onlineStatus}}</p>
-                            </div>
-                            <md-divider ng-hide="$last"></md-divider>
-                        </md-list-item>
-                    <!--</md-tab>-->
-                <!--</md-tabs>-->
-            </md-list>
-        </md-card-content>
-    </md-card>
-</div>
-<div layout="row" layout-align="center center">
-    <md-subheader flex-gt-sm="80" flex>Results are limited to 100</md-subheader>
+<md-card flex-gt-sm="80" flex flex-offset-gt-sm="10">
+    <md-card-header layout="row" layout-align="center center">
+        <form ng-submit="submitSearch()" autocomplete="off" flex-gt-sm="50" flex>
+        <md-input-container md-no-float class="md-block">
+            <md-icon>search</md-icon>
+            <input ng-model="search" type="text" placeholder="Search by name or Steam 64 ID">
+        </md-input-container>
+        <input type="submit"
+               style="position: absolute; left: -9999px; width: 1px; height: 1px;"
+               tabindex="-1" />
+        </form>
+    </md-card-header>
+    <md-list-item class="md-3-line">
+        <div style="width: 56px;"></div>
+        <div class="md-list-item-text" layout="row" layout-align="center center">
+            <h2 class="md-title center-align-text" flex="30">Name</h2>
+            <h2 class="md-title center-align-text" flex="30">Rank</h2>
+            <h2 class="md-title center-align-text" flex="30">Status</h2>
+        </div>
+    </md-list-item>
+    <md-card-content style="padding: 0;">
+        <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotUsers">
+            <md-progress-circular class="md-accent"></md-progress-circular>
+        </div>
+        <md-list flex>
+            <!--<md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>-->
+                <!--<md-tab label="{{label}}" ng-click="getUsers(label)" ng-repeat="label in userLabels">-->
+                    <md-list-item class="md-3-line" ng-repeat="user in users" ng-click="$location.path('/user/' + user._id)">
+                        <img ng-src="{{user.avatar}}" class="md-avatar" flex="10">
+                        <div class="md-list-item-text" layout="row" layout-align="center center">
+                            <h3 class="center-align-text" flex="30">{{user.name}}</h3>
+                            <h4 class="center-align-text" flex="30">{{user.rank}}</h4>
+                            <p class="center-align-text" ng-class="{'status-online': user.onlineStatus === 'Online',
+                                    'status-away': user.onlineStatus === 'Away',
+                                    'status-busy': user.onlineStatus === 'Busy',
+                                    'status-offline': user.onlineStatus === 'Offline'}" flex="30">{{user.onlineStatus}}</p>
+                        </div>
+                        <md-divider ng-hide="$last"></md-divider>
+                    </md-list-item>
+                <!--</md-tab>-->
+            <!--</md-tabs>-->
+        </md-list>
+    </md-card-content>
+</md-card>
+<div layout="row" flex-gt-sm="80" flex flex-offset-gt-sm="10">
+    <md-subheader class="md-no-sticky">Showing {{users.length}} users</md-subheader>
+    <div flex></div>
+    <md-button ng-if="canLoadMore" ng-click="getUsers()">Load More</md-button>
 </div>

@@ -17,7 +17,7 @@ router.get('/api/news', function(req, res) {
                 news: news
             };
             if(news.length > 20) {
-                news.pop();
+                response.news.pop();
                 response.canLoadMore = true;
                 res.status(200).json(response);
                 

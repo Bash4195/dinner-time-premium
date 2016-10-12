@@ -5,20 +5,37 @@ var User = require('../models/user');
 
 // INDEX
 router.get('/api/users', function(req, res) {
-    User.find({name: {$regex: req.query.search, $options: 'i'}}).limit(100).exec(function(err, namedUsers) {// .skip(req.query.skip).limit(100).exec(function(err, namedUsers) { // Pagination
+    User.find({name: {$regex: req.query.search, $options: 'i'}}).limit(101).skip(req.query.skip).exec(function(err, namedUsers) {// .skip(req.query.skip).limit(100).exec(function(err, namedUsers) { // Pagination
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve users');
         } else {
+            var response = {
+                canLoadMore: false,
+                users: namedUsers
+            };
             if(namedUsers.length <= 0) {
-                User.find({steamId: req.query.search}).limit(100).exec(function(err, steamIdUsers) {// .skip(req.query.skip).limit(100).exec(function(err, steamIdUsers) { // Pagination
+                User.find({steamId: req.query.search}).limit(101).skip(req.query.skip).exec(function(err, steamIdUsers) {// .skip(req.query.skip).limit(100).exec(function(err, steamIdUsers) { // Pagination
                     if(err) {
                         middleware.handleError(res, err.message, 'Failed to retrieve users');
                     } else {
-                        res.status(200).json(steamIdUsers);
+                        response.users = steamIdUsers;
+                        if(steamIdUsers.length > 100) {
+                            response.users.pop();
+                            response.canLoadMore = true;
+                            res.status(200).json(response);
+                        } else {
+                            res.status(200).json(response);
+                        }
                     }
                 });
             } else {
-                res.status(200).json(namedUsers);
+                if(namedUsers.length > 100) {
+                    response.users.pop();
+                    response.canLoadMore = true;
+                    res.status(200).json(response);
+                } else {
+                    res.status(200).json(response);
+                }
             }
         }
     });
@@ -69,25 +86,26 @@ router.get('/api/loggedInUsers', function(req, res) {
     });
 });
 
+// Pagination
 // Count Users
-router.get('/api/users/count', function(req, res) {
-    User.find({name: {$regex: req.query.search}}).count().exec(function(err, numNamedUsers) {
-        if(err) {
-            middleware.handleError(res, err.message, 'Failed to retrieve users');
-        } else {
-            if(numNamedUsers <= 0) {
-                User.find({steamId: req.query.search}).count().exec(function(err, numSteamIdUsers) {
-                    if(err) {
-                        middleware.handleError(res, err.message, 'Failed to retrieve users');
-                    } else {
-                        res.status(200).json(numSteamIdUsers);
-                    }
-                });
-            } else {
-                res.status(200).json(numNamedUsers);
-            }
-        }
-    });
-});
+// router.get('/api/users/count', function(req, res) {
+//     User.find({name: {$regex: req.query.search}}).count().exec(function(err, numNamedUsers) {
+//         if(err) {
+//             middleware.handleError(res, err.message, 'Failed to retrieve users');
+//         } else {
+//             if(numNamedUsers <= 0) {
+//                 User.find({steamId: req.query.search}).count().exec(function(err, numSteamIdUsers) {
+//                     if(err) {
+//                         middleware.handleError(res, err.message, 'Failed to retrieve users');
+//                     } else {
+//                         res.status(200).json(numSteamIdUsers);
+//                     }
+//                 });
+//             } else {
+//                 res.status(200).json(numNamedUsers);
+//             }
+//         }
+//     });
+// });
 
 module.exports = router;
