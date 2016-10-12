@@ -21,6 +21,8 @@ var userSchema = mongoose.Schema({
     occupation: { type: String, maxlength: 100 },
     bio: { type: String, maxlength: 1000 },
     backgroundImg: { type: String, maxlength: 1000 },
+    
+    modApplication: { type: mongoose.Schema.Types.ObjectId, ref: 'Mod_App' },
 
     // Permissions
     rank: { type: String, default: 'User', required: true },

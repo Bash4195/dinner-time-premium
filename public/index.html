@@ -180,15 +180,14 @@
                             </md-menu-content>
                         </md-menu>
                     </md-menu-item>
-                    <md-menu-divider></md-menu-divider>
-                    <md-menu-item ng-if="user.permissions.general.canApplyToMod && !user.roles.includes('Staff')">
+                    <md-menu-item ng-if="user.permissions.general.canApplyToMod && !user.modApplication">
                         <md-button ng-href="/apply">
                             <md-icon>assignment_ind</md-icon>
                             Apply
                         </md-button>
                     </md-menu-item>
-                    <md-menu-item ng-if="!user.permissions.general.canApplyToMod">
-                        <md-button ng-href="/application/{{user._id}}">
+                    <md-menu-item ng-if="user.modApplication">
+                        <md-button ng-href="/application/{{user.modApplication}}">
                             <md-icon>assignment_ind</md-icon>
                             Your Application
                         </md-button>

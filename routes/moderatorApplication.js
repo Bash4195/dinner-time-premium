@@ -9,9 +9,10 @@ var ModAppComment = require('../models/moderatorApplicationComment');
 // Using User ID as parameter to add links easier
 
 // CREATE
-router.post('/api/apply/:userId', middleware.isLoggedIn, function(req, res) {
+router.post('/api/apply', middleware.isLoggedIn, function(req, res) {
     if(middleware.hasPermission(req.user, 'general', 'canApplyToMod')) {
         var newApp = req.body;
+        newApp.authour = req.user;
         newApp.status = 'Under Review';
         if(newApp.ulxExperience === '' || newApp.ulxExperience === 'undefined') {
             middleware.handleError(res, 'Mod application field "ULX Experience" is missing', 'ULX Experience field is missing', 400);
@@ -23,10 +24,8 @@ router.post('/api/apply/:userId', middleware.isLoggedIn, function(req, res) {
             middleware.handleError(res, 'Mod application field "Willing to add us on Steam" is missing', 'Willing to add us on Steam field is missing', 400);
         } else if(newApp.whyWeShouldAccept === '' || newApp.whyWeShouldAccept === 'undefined') {
             middleware.handleError(res, 'Mod application field "Why We Should Accept You" is missing', 'Why We Should Accept You field is missing', 400);
-        } else if(newApp.authour === '' || newApp.authour === 'undefined' || newApp.authour._id != req.params.userId) {
-            middleware.handleError(res, 'Mod application authour is missing', 'Authour is missing', 400);
         } else {
-            User.findByIdAndUpdate(req.params.userId, {'permissions.general.canApplyToMod': false}, function(err, user) {
+            User.findByIdAndUpdate(req.user._id, {'permissions.general.canApplyToMod': false}, function(err, user) {
                 if(err) {
                     middleware.handleError(res, err.message, 'Failed to create moderator application');
                 } else {
@@ -34,6 +33,8 @@ router.post('/api/apply/:userId', middleware.isLoggedIn, function(req, res) {
                         if(err) {
                             middleware.handleError(res, err.message, 'Failed to create moderator application');
                         } else {
+                            user.modApplication = app._id;
+                            user.save();
                             res.status(201).json(app);
                         }
                     });
@@ -46,8 +47,8 @@ router.post('/api/apply/:userId', middleware.isLoggedIn, function(req, res) {
 });
 
 // SHOW
-router.get('/api/application/:userId', middleware.isLoggedIn, function(req, res) {
-    ModApp.findOne({authour: req.params.userId}).populate('authour').exec(function(err, app) {
+router.get('/api/application/:appId', middleware.isLoggedIn, function(req, res) {
+    ModApp.findById(req.params.appId).populate('authour').exec(function(err, app) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve moderator application');
         } else {
@@ -122,13 +123,19 @@ router.delete('/api/admin/application/:appId', middleware.isLoggedIn, middleware
                         }
                     })
                 });
-                ModApp.findByIdAndRemove(app._id, function(err) {
+                User.findByIdAndUpdate(app.authour, {$unset: {modApplication: 1 }}, function(err, user) {
                     if(err) {
                         middleware.handleError(res, err.message, 'Failed to delete moderator application');
                     } else {
-                        res.status(204).end('Deleted moderator application');
+                        ModApp.findByIdAndRemove(app._id, function(err) {
+                            if(err) {
+                                middleware.handleError(res, err.message, 'Failed to delete moderator application');
+                            } else {
+                                res.status(204).end('Deleted moderator application');
+                            }
+                        });
                     }
-                })
+                });
             }
         })
     } else {
