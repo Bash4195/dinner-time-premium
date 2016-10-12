@@ -984,10 +984,12 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
             .then(function(users) {
                 if(!$scope.users) {
                     $scope.users = users.users;
-                } else {
+                } else if(users.users.length > 0) {
                     angular.forEach(users.users, function(user) {
                         $scope.users.push(user);
                     });
+                } else {
+                    $scope.users = users.users;
                 }
                 $scope.canLoadMore = users.canLoadMore;
                 $scope.gotUsers = true;
@@ -998,6 +1000,8 @@ dtp.controller('userIndexCtrl', ['$scope', 'Title', 'Rest', '$location', functio
     $scope.getUsers();
 
     $scope.submitSearch = function() {
+        $scope.users = null;
+        skip = 0;
         $scope.getUsers();
     };
 

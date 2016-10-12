@@ -22,6 +22,7 @@
         <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotUsers">
             <md-progress-circular class="md-accent"></md-progress-circular>
         </div>
+        <p layout="row" layout-align="center center" layout-fill ng-show="gotUsers && !users">No users matched your search!</p>
         <md-list flex>
             <!--<md-tabs md-align-tabs="bottom" md-stretch-tabs="always" md-dynamic-height>-->
                 <!--<md-tab label="{{label}}" ng-click="getUsers(label)" ng-repeat="label in userLabels">-->
@@ -43,7 +44,7 @@
     </md-card-content>
 </md-card>
 <div layout="row" flex-gt-sm="80" flex flex-offset-gt-sm="10">
-    <md-subheader class="md-no-sticky">Showing {{users.length}} users</md-subheader>
+    <md-subheader class="md-no-sticky">Showing {{users.length || 0}} users</md-subheader>
     <div flex></div>
     <md-button ng-if="canLoadMore" ng-click="getUsers()">Load More</md-button>
 </div>
