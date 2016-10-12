@@ -4,21 +4,28 @@
 
 <div ng-repeat="(date, news) in newsMonths">
     <md-subheader class="md-accent">
-        <span flex-offset-gt-sm="10"
+        <span flex-offset-gt-sm="20"
         ng-class="{january: date.includes('January'), february: date.includes('February'), march: date.includes('March'), april: date.includes('April'),
         may: date.includes('May'), june: date.includes('June'), july: date.includes('July'), august: date.includes('August'), september: date.includes('September'),
         october: date.includes('October'), november: date.includes('November'), december: date.includes('Decemer')}">{{date}}</span>
     </md-subheader>
-    <md-card flex-gt-sm="80" flex flex-offset-gt-sm="10" ng-repeat="event in news | orderBy: '-createdAt'">
-        <md-card-header>
-            <md-card-header-text>
-                <span class="md-headline wrap-title"><a ng-href="/news/{{event._id}}" class="md-primary">{{event.title}}</a></span>
-                <p class="md-subhead">By <a ng-href="/user/{{event.authour._id}}" class="md-accent">{{event.authour.name}}</a> <span am-time-ago="event.createdAt"></span></p>
-            </md-card-header-text>
-        </md-card-header>
-        <md-card-content style="padding-top: 0;">
-            <p class="truncate" flex="100" ng-bind-html="event.content | htmlLinky"></p>
-        </md-card-content>
+    <md-card flex-gt-sm="60" flex flex-offset-gt-sm="20" ng-repeat="event in news | orderBy: '-createdAt'">
+        <md-list>
+            <md-list-item>
+                <div layout="column" layout-fill>
+                    <h1 style="margin-bottom: 4px;" class="md-headline truncate" flex="100"><a ng-href="/news/{{event._id}}" class="md-primary">{{event.title}}</a></h1>
+                    <span>By <a ng-href="/user/{{event.authour._id}}" class="md-accent">{{event.authour.name}}</a> <span am-time-ago="event.createdAt"></span></span>
+                    <p class="three-line wrap-content" flex="100" ng-bind-html="event.content | htmlLinky"></p>
+                </div>
+            </md-list-item>
+        </md-list>
+        <md-card-actions layout="row">
+            <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
+            <span class="md-subhead">
+                <span ng-show="event.comments[0]">{{event.comments.length}}</span>
+                <span ng-hide="event.comments[0]">0</span>
+            </span>
+        </md-card-actions>
     </md-card>
 </div>
 

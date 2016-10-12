@@ -129,6 +129,16 @@ a {
     text-align: right;
 }
 
+/* Multi-line text */
+.three-line {
+    line-height: 1.5em;
+    height: 4.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
 /* Icon font sizes */
 .material-icons.md-18 {
     font-size: 18px;
