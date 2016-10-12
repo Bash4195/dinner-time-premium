@@ -35,7 +35,7 @@ dtp.config(function ($compileProvider, $routeProvider, $locationProvider, $mdThe
         })
         .when('/admin/application/:appId', {
             templateUrl: 'admin/applications/applicationShow.html',
-            controller: 'adminApplicationsShowCtrl',
+            controller: 'adminApplicationShowCtrl',
             resolve: {
                 user: function(User) {
                     User.getCurrentUser();
@@ -687,8 +687,8 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'User', 'Rest',
     }
 }]);
 
-dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 'User', 'Rest', 'Notify', '$mdDialog',
-    function($scope, $routeParams, Title, User, Rest, Notify, $mdDialog) {
+dtp.controller('adminApplicationShowCtrl', ['$scope', '$routeParams', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
+    function($scope, $routeParams, Title, User, Rest, Notify, $mdDialog, $location) {
         var appId = $routeParams.appId;
 
         // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
@@ -846,6 +846,32 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
             $scope.toggleEditingVote = function() {
                 $scope.editingVote = !$scope.editingVote;
             };
+
+            $scope.confirmDeleteApp = function() {
+                $mdDialog.show({
+                    contentElement: '#deleteApp'
+                });
+            };
+
+            $scope.closeDialog = function() {
+                $mdDialog.cancel();
+            };
+
+            $scope.deleteApp = function() {
+                if(!$scope.user) {
+                    Notify.generic('You must be logged in to delete this application');
+                    $mdDialog.hide();
+                } else if($scope.user.roles.includes('Owner') || $scope.user.rank === 'Seraph') {
+                    $mdDialog.hide();
+                    Rest.delete('/api/admin/application/' + $scope.app._id)
+                        .then(function() {
+                            $location.path('/admin/applications');
+                        })
+                } else {
+                    Notify.generic('You don\'t have permission to do that');
+                    $mdDialog.hide();
+                }
+            };
             
             $scope.gotComments = false;
 
@@ -925,15 +951,11 @@ dtp.controller('adminApplicationsShowCtrl', ['$scope', '$routeParams', 'Title', 
                 });
             };
 
-            $scope.closeDialog = function() {
-                $mdDialog.cancel();
-            };
-
             $scope.deleteComment = function() {
                 if(!$scope.user) {
                     Notify.generic('You must be logged in to delete a comment');
                     $mdDialog.hide();
-                } else{
+                } else {
                     $mdDialog.hide();
                     Rest.delete('/api/admin/application/' + $scope.app._id + '/' + commentId)
                         .then(function() {

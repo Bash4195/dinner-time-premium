@@ -29,7 +29,7 @@
                             <span ng-hide="app.closed" md-colors="{color: 'green-500'}">Open</span>
                         </p>
                     </div>
-                    <md-divider></md-divider>
+                    <md-divider ng-hide="$last"></md-divider>
                 </md-list-item>
                 <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotApps">
                     <md-progress-circular class="md-accent"></md-progress-circular>

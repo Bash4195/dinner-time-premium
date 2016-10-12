@@ -3,7 +3,7 @@
     <div layout-padding flex-gt-sm="60" flex>
         <login-prompt user="user"></login-prompt>
         <unauthorized user="user" authorized="authorized"></unauthorized>
-        <page-not-found ng-if="!app"></page-not-found>
+        <page-not-found ng-if="gotApp && !app"></page-not-found>
 
         <div ng-if="user && authorized && gotApp && app">
             <h1 class="md-headline center-align-text">Status</h1>
@@ -42,7 +42,14 @@
             </md-card>
 
             <h1 class="md-display-2">{{app.authour.name}}'s Moderator Application</h1>
-            <p md-colors="{color: 'red-600'}">* Required</p>
+            <div layout="row">
+                <p md-colors="{color: 'red-600'}">* Required</p>
+                <span flex></span>
+                <md-button class="md-icon-button md-accent" ng-if="user.roles.includes('Owner') || user.rank === 'Seraph'" ng-click="confirmDeleteApp()">
+                    <md-icon>delete</md-icon>
+                    <md-tooltip>Delete this application</md-tooltip>
+                </md-button>
+            </div>
             <br>
             <h1 class="md-headline">Name</h1>
             <p class="md-subhead" ng-hide="!app.name">{{app.name}}</p>
@@ -408,6 +415,22 @@
         </div>
     </div>
     <div flex-gt-sm></div>
+</div>
+
+<!-- Delete Application Dialog Confirm -->
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="deleteApp">
+        <md-dialog aria-label="Delete Application">
+            <md-dialog-content class="md-dialog-content">
+                <p class="md-headline">Delete this application forever?</p>
+                <p class="md-subhead">You won't be able to undo this!</p>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary" ng-click="closeDialog()">Cancel</md-button>
+                <md-button class="md-primary md-raised" ng-click="deleteApp()">Delete</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+    </div>
 </div>
 
 <!-- Delete Comment Dialog Confirm -->

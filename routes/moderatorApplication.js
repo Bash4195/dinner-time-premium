@@ -108,42 +108,33 @@ router.put('/api/admin/application/:appId', middleware.isLoggedIn, middleware.is
     });
 });
 
-// // DELETE
-// router.delete('/api/forum/:categoryId/:postId', middleware.isLoggedIn, function(req, res) {
-//     Post.findById(req.params.postId, function(err, post) {
-//         if(err) {
-//             middleware.handleError(res, err.message, 'Failed to delete post');
-//         } else {
-//             if(req.user._id == post.authour || middleware.hasPermission(req.user, 'forum', 'deletePosts')) {
-//                 Category.findById(post.category, function(err, category) {
-//                     if(err) {
-//                         middleware.handleError(res, err.message, 'Failed to delete post');
-//                     } else {
-//                         var postToRemove = category.posts.indexOf(post._id);
-//                         category.posts.splice(postToRemove, 1);
-//                         category.save();
-//                     }
-//                 });
-//                 post.comments.forEach(function(comment) {
-//                     Comment.findByIdAndRemove(comment, function(err) {
-//                         if(err) {
-//                             middleware.handleError(res, err.message, 'Failed to delete the comments associated with this post');
-//                         }
-//                     })
-//                 });
-//                 Post.findByIdAndRemove(post._id, function(err) {
-//                     if(err) {
-//                         middleware.handleError(res, err.message, 'Failed to delete post');
-//                     } else {
-//                         res.status(204).end('Deleted post');
-//                     }
-//                 });
-//             } else {
-//                 middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
-//             }
-//         }
-//     })
-// });
+// DELETE
+router.delete('/api/admin/application/:appId', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
+    if(req.user.rank === 'GOD' || req.user.rank === 'GODDESS' || req.user.rank === 'Seraph') {
+        ModApp.findById(req.params.appId, function(err, app) {
+            if(err) {
+                middleware.handleError(res, err.message, 'Failed to delete moderator application');
+            } else {
+                app.comments.forEach(function(comment) {
+                    ModAppComment.findByIdAndRemove(comment, function(err) {
+                        if(err) {
+                            middleware.handleError(res, err.message, 'Failed to delete the comments associated with this application');
+                        }
+                    })
+                });
+                ModApp.findByIdAndRemove(app._id, function(err) {
+                    if(err) {
+                        middleware.handleError(res, err.message, 'Failed to delete moderator application');
+                    } else {
+                        res.status(204).end('Deleted moderator application');
+                    }
+                })
+            }
+        })
+    } else {
+        middleware.handleError(res, 'Unauthorized request', 'You don\'t have permission to do that', 401);
+    }
+});
 
 // Vote
 router.put('/api/admin/application/:appId/vote', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
