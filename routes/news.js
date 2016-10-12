@@ -8,11 +8,22 @@ var NewsComment = require('../models/newsComment');
 
 // INDEX
 router.get('/api/news', function(req, res) {
-    News.find({}).populate('authour').sort('-createdAt').exec(function(err, news) {
+    News.find({}).populate('authour').limit(21).skip(req.query.skip).sort('-createdAt').exec(function(err, news) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve news');
         } else {
-            res.status(200).json(news);
+            var response = {
+                canLoadMore: false,
+                news: news
+            };
+            if(news.length > 20) {
+                news.pop();
+                response.canLoadMore = true;
+                res.status(200).json(response);
+                
+            } else {
+                res.status(200).json(response);
+            }
         }
     });
 });

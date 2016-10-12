@@ -1283,11 +1283,19 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog',
         Title.setPageTitle('News');
 
         $scope.gotNews = false;
-        function getNews() {
+        var skip = 0;
+        $scope.getNews = function() {
             $scope.gotNews = false;
-            Rest.get('/api/news')
+            Rest.get('/api/news', {skip: skip})
                 .then(function(news) {
-                    $scope.news = news;
+                    if(!$scope.news) {
+                        $scope.news = news.news;
+                    } else {
+                        angular.forEach(news.news, function(event, key) {
+                            $scope.news.push(event);
+                        });
+                    }
+                    $scope.canLoadMore = news.canLoadMore;
                     $scope.gotNews = true;
 
                     $scope.newsMonths = {};
@@ -1297,9 +1305,11 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog',
                         $scope.newsMonths[month] = $scope.newsMonths[month] || [];
                         $scope.newsMonths[month].push(event);
                     });
+                    
+                    skip += 20;
                 })
-        }
-        getNews();
+        };
+        $scope.getNews();
 
         $scope.newNews = {
             title: '',
