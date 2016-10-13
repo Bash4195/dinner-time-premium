@@ -2,6 +2,10 @@
     <md-progress-circular class="md-accent"></md-progress-circular>
 </div>
 
+<p class="md-display-1" layout="column" layout-align="center center" flex ng-show="gotNews && !news[0]">
+    Looks like there isn't any news right now... Try again later!
+</p>
+
 <div ng-repeat="(date, news) in newsMonths">
     <md-subheader class="md-accent">
         <span flex-offset-gt-sm="20"
