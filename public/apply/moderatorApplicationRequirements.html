@@ -30,7 +30,9 @@
                 So make this one count! Make sure you have the requirements listed above and feel free to ask any of the staff if we think you should apply or not.</p>
 
             <div layout-gt-sm="row" layout="column">
-                <md-checkbox class="md-primary" ng-model="terms.accepted">I understand the terms listed above and I am ready to create an application...</md-checkbox>
+                <md-checkbox layout="row" layout-align="center center" class="md-primary" ng-model="terms.accepted">
+                    I understand the terms listed above and I am ready to create an application...
+                </md-checkbox>
                 <div flex-gt-sm></div>
                 <md-button class="md-raised md-primary" ng-click="createApplication()" ng-disabled="!terms.accepted">Create an Application</md-button>
             </div>

@@ -1162,6 +1162,10 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
         $scope.togglePermissions = function() { $scope.permissionsOpen = !$scope.permissionsOpen };
 
         $scope.ranks = Ranks;
+        
+        $scope.setDefault = {
+            permissions: true
+        };
 
         $scope.editingPermissions = false;
         $scope.editingPermissionsToggle = function() {
@@ -1171,7 +1175,13 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
         };
 
         $scope.savePermissions = function() {
-            Rest.put('/api/user/' + userId + '/updatePermissions', $scope.permissions)
+            var DefaultPermissions;
+            if($scope.permissions.rank !== $scope.userProfile.rank && $scope.setDefault.permissions) {
+                DefaultPermissions = true;
+            } else {
+                DefaultPermissions = false;
+            }
+            Rest.put('/api/user/' + userId + '/updatePermissions', $scope.permissions, {setDefaultPermissions: DefaultPermissions})
                 .then(function() {
                     $scope.editingPermissions = false;
                     $scope.getUserProfile();

@@ -151,7 +151,7 @@
             </md-card-header>
             <md-card-content ng-if="permissionsOpen">
                 <md-list>
-                    <md-list-item>
+                    <md-list-item layout="row">
                         <md-input-container>
                             <label>Rank</label>
                             <md-select class="md-primary" ng-model="permissions.rank" ng-disabled="!editingPermissions">
@@ -160,7 +160,11 @@
                                 </md-option>
                             </md-select>
                         </md-input-container>
+                        <md-input-container style="margin-left: 8px;" layout="row" layout-align="center center" ng-if="permissions.rank !== userProfile.rank">
+                            <md-checkbox class="md-primary" ng-model="setDefault.permissions">Set Default Permissions</md-checkbox>
+                        </md-input-container>
                     </md-list-item>
+                    <md-divider></md-divider>
                     <div ng-repeat="(permissionGroup, permissions) in userProfile.permissions">
                         <md-subheader class="md-no-sticky md-primary" style="background: transparent"><span class="md-title">{{permissionGroup}}</span></md-subheader>
                         <md-list-item ng-repeat="(permission, value) in permissions">

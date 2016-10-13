@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var middleware = require('../middleware/index');
 var User = require('../models/user');
+var defaultPermissions = require('../helper/defaultPermissions');
 
 // INDEX
 router.get('/api/users', function(req, res) {
@@ -66,6 +67,40 @@ router.put('/api/user/:userId', middleware.isLoggedIn, function(req, res) {
 // Same as user update route but checks that the user is part of the Super Admin role to be able to update permissions
 router.put('/api/user/:userId/updatePermissions', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
     req.body.roles = middleware.setRoles(req.body.rank, req.body.roles);
+    if(req.query.setDefaultPermissions === 'true') {
+        switch(req.body.rank) {
+            case 'GOD':
+                req.body.permissions = defaultPermissions.GOD;
+                break;
+            case 'GODDESS':
+                req.body.permissions = defaultPermissions.GODDESS;
+                break;
+            case 'Seraph':
+                req.body.permissions = defaultPermissions.Seraph;
+                break;
+            case 'Lord':
+                req.body.permissions = defaultPermissions.Lord;
+                break;
+            case 'Admin':
+                req.body.permissions = defaultPermissions.Admin;
+                break;
+            case 'Moderator':
+                req.body.permissions = defaultPermissions.Moderator;
+                break;
+            case 'Aristocrat':
+                req.body.permissions = defaultPermissions.Aristocrat;
+                break;
+            case 'VIP':
+                req.body.permissions = defaultPermissions.VIP;
+                break;
+            case 'Donator':
+                req.body.permissions = defaultPermissions.Donator;
+                break;
+            case 'User':
+                req.body.permissions = defaultPermissions.User;
+                break;
+        }
+    }
     User.findByIdAndUpdate(req.params.userId, req.body, {new: true}, function(err, user) {
         if(err) {
             middleware.handleError(res, err.message, 'Failed to update user permissions');

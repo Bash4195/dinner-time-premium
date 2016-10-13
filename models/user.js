@@ -25,6 +25,7 @@ var userSchema = mongoose.Schema({
     modApplication: { type: mongoose.Schema.Types.ObjectId, ref: 'Mod_App' },
 
     // Permissions
+    // If updating, be sure to update the defaultPermissions file!
     rank: { type: String, default: 'User', required: true },
     roles: { type: Array, default: 'User', required: true },
     permissions: {
