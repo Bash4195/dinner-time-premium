@@ -14,8 +14,8 @@
         <div style="width: 56px;"></div>
         <div class="md-list-item-text" layout="row" layout-align="center center">
             <h2 class="md-title center-align-text" flex="30">Name</h2>
-            <h2 class="md-title center-align-text" flex="30">Rank</h2>
-            <h2 class="md-title center-align-text" flex="30">Status</h2>
+            <h2 class="md-title center-align-text" flex="30" show-gt-xs hide>Rank</h2>
+            <h2 class="md-title center-align-text" flex="30" show-gt-sm hide>Status</h2>
         </div>
     </md-list-item>
     <md-card-content style="padding: 0;">
@@ -32,11 +32,11 @@
                             <h3 class="center-align-text" flex="30">{{user.name}}</h3>
                             <h4 class="center-align-text" flex="30" ng-class="{goddess: user.rank === 'GODDESS', seraph: user.rank === 'Seraph',
                             lord: user.rank === 'Lord', admin: user.rank === 'Admin', moderator: user.rank === 'Moderator', aristocrat: user.rank === 'Aristocrat',
-                            vip: user.rank === 'VIP', donator: user.rank === 'Donator', user: user.rank === 'User'}">{{user.rank}}</h4>
+                            vip: user.rank === 'VIP', donator: user.rank === 'Donator', user: user.rank === 'User'}" show-gt-xs hide>{{user.rank}}</h4>
                             <p class="center-align-text" ng-class="{'status-online': user.onlineStatus === 'Online',
                                     'status-away': user.onlineStatus === 'Away',
                                     'status-busy': user.onlineStatus === 'Busy',
-                                    'status-offline': user.onlineStatus === 'Offline'}" flex="30">{{user.onlineStatus}}</p>
+                                    'status-offline': user.onlineStatus === 'Offline'}" flex="30" show-gt-sm hide>{{user.onlineStatus}}</p>
                         </div>
                         <md-divider ng-hide="$last"></md-divider>
                     </md-list-item>

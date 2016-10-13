@@ -10,24 +10,32 @@
                 <md-list-item class="md-3-line">
                     <div style="width: 56px;"></div>
                     <div class="md-list-item-text" layout="row" layout-align="center center">
-                        <h2 class="md-title center-align-text" flex="25">Authour</h2>
-                        <h2 hide show-gt-xs class="md-title center-align-text" flex="25">Votes</h2>
-                        <h2 hide show-gt-xs class="md-title center-align-text" flex="25">Status</h2>
-                        <h2 class="md-title center-align-text" flex="25">Open/Closed</h2>
+                        <h2 class="md-title center-align-text" flex="20">Authour</h2>
+                        <span flex></span>
+                        <h2 class="md-title center-align-text" flex="20" hide show-gt-sm>Votes</h2>
+                        <span flex hide show-gt-sm></span>
+                        <h2 class="md-title center-align-text" flex="20">Status</h2>
+                        <span flex></span>
+                        <h2 class="md-title center-align-text" flex="20" hide show-gt-xs>Open/Closed</h2>
+                        <span flex hide show-gt-xs></span>
                     </div>
                 </md-list-item>
                 <md-list-item class="md-3-line" ng-repeat="app in apps" ng-click="$location.path('/admin/application/' + app._id)">
                     <img ng-src="{{app.authour.avatar}}" class="md-avatar" flex="10">
                     <div class="md-list-item-text" layout="row" layout-align="center center">
-                        <h3 class="center-align-text" flex="25">{{app.authour.name}}</h3>
-                        <h4 class="center-align-text" flex="25" hide show-gt-xs>{{app.votes.length}}/3</h4>
-                        <p class="center-align-text" flex="25" hide show-gt-xs ng-class="{'mod-app-under-review': app.status === 'Under Review',
+                        <h3 class="center-align-text" flex="20">{{app.authour.name}}</h3>
+                        <span flex></span>
+                        <h4 class="center-align-text" flex="20" hide show-gt-sm>{{app.votes.length}}/3</h4>
+                        <span flex hide show-gt-sm></span>
+                        <p class="center-align-text" flex="20" ng-class="{'mod-app-under-review': app.status === 'Under Review',
                                 'mod-app-awaiting-votes': app.status === 'Awaiting Votes', 'mod-app-accepted': app.status === 'Accepted',
                                 'mod-app-rejected': app.status === 'Rejected'}">{{app.status}}</p>
-                        <p class="center-align-text" flex="25">
+                        <span flex></span>
+                        <p class="center-align-text" flex="20" hide show-gt-xs>
                             <span ng-show="app.closed" md-colors="{color: 'warn-500'}">Closed</span>
                             <span ng-hide="app.closed" md-colors="{color: 'green-500'}">Open</span>
                         </p>
+                        <span flex hide show-gt-xs></span>
                     </div>
                     <md-divider ng-hide="$last"></md-divider>
                 </md-list-item>
