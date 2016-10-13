@@ -192,6 +192,17 @@ a {
     overflow: hidden;
 }
 
+/* Rank Colours */
+.goddess { color: #D500F9 !important; }
+.seraph { color: #FFD600 !important; }
+.lord { color: #00C853 !important; }
+.admin { color: #F44336 !important; }
+.moderator { color: #3F51B5 !important; }
+.aristocrat { color: #9C27B0 !important; }
+.vip { color: #82B1FF !important; }
+.donator { color: #009688 !important; }
+.user { color: #2196F3 !important; }
+
 /* Avatar image */
 .circle {
     border-radius: 50%;

@@ -30,7 +30,9 @@
                         <img ng-src="{{user.avatar}}" class="md-avatar" flex="10">
                         <div class="md-list-item-text" layout="row" layout-align="center center">
                             <h3 class="center-align-text" flex="30">{{user.name}}</h3>
-                            <h4 class="center-align-text" flex="30">{{user.rank}}</h4>
+                            <h4 class="center-align-text" flex="30" ng-class="{goddess: user.rank === 'GODDESS', seraph: user.rank === 'Seraph',
+                            lord: user.rank === 'Lord', admin: user.rank === 'Admin', moderator: user.rank === 'Moderator', aristocrat: user.rank === 'Aristocrat',
+                            vip: user.rank === 'VIP', donator: user.rank === 'Donator', user: user.rank === 'User'}">{{user.rank}}</h4>
                             <p class="center-align-text" ng-class="{'status-online': user.onlineStatus === 'Online',
                                     'status-away': user.onlineStatus === 'Away',
                                     'status-busy': user.onlineStatus === 'Busy',

@@ -18,7 +18,10 @@
                     <md-tooltip>{{userProfile.onlineStatus}}</md-tooltip>
                 </div>
             </div>
-            <span class="md-headline">{{userProfile.rank}}</span>
+            <span class="md-headline" ng-class="{goddess: userProfile.rank === 'GODDESS', seraph: userProfile.rank === 'Seraph',
+                            lord: userProfile.rank === 'Lord', admin: userProfile.rank === 'Admin', moderator: userProfile.rank === 'Moderator',
+                            aristocrat: userProfile.rank === 'Aristocrat', vip: userProfile.rank === 'VIP',
+                            donator: userProfile.rank === 'Donator', user: userProfile.rank === 'User'}">{{userProfile.rank}}</span>
         </div>
         <div flex></div>
     </div>
