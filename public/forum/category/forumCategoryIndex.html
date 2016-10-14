@@ -8,9 +8,9 @@
                     <md-toolbar class="md-toolbar-tools">
                         <h3>All Categories</h3>
                     </md-toolbar>
-                    <section layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotCategories">
+                    <div layout="column" layout-align="center center" layout-padding layout-margin ng-if="!gotCategories">
                         <md-progress-circular class="md-accent"></md-progress-circular>
-                    </section>
+                    </div>
                     <p class="md-headline center-align-text" layout="column" layout-align="center center" flex ng-show="gotCategories && !categories[0]">
                         Looks like there isn't anything in the forum yet... Try again later!
                     </p>
@@ -66,9 +66,9 @@
                 <md-subheader class="md-no-sticky">Categories</md-subheader>
                 <md-card>
                     <md-list>
-                        <md-list-item layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotCategoryPosts">
+                        <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotCategoryPosts">
                             <md-progress-circular class="md-accent"></md-progress-circular>
-                        </md-list-item>
+                        </div>
                         <md-list-item ng-repeat="category in categoryPosts" ng-click="$location.path(category.path)">
                             <div class="md-list-item-text" layout="row" layout-align="center center">
                                 <span class="wrap-title">{{category.title}}</span>
@@ -87,9 +87,9 @@
                 <md-subheader class="md-no-sticky">Recent Discussions</md-subheader>
                 <md-card>
                     <md-list>
-                        <md-list-item layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotRecentPosts">
+                        <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotRecentPosts">
                             <md-progress-circular class="md-accent"></md-progress-circular>
-                        </md-list-item>
+                        </div>
                         <md-list-item ng-repeat="recentPost in recentPosts" ng-click="$location.path(recentPost.category.path + '/' + recentPost._id)">
                             <div class="md-list-item-text" layout="row" layout-align="center center">
                                 <span class="wrap-title">{{recentPost.title | limitTo: 22}}</span>

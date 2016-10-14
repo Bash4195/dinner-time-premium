@@ -8,7 +8,12 @@
                 <md-icon>edit</md-icon>
             </md-button>
         </md-card-title>
-        <md-card-content class="wrap-content" style="background-color: transparent" ng-bind-html="rules | htmlLinky"></md-card-content>
+        <md-card-content>
+            <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotRules">
+                <md-progress-circular class="md-accent"></md-progress-circular>
+            </div>
+            <p class="wrap-content" ng-bind-html="rules | htmlLinky" ng-if="gotRules"></p>
+        </md-card-content>
     </md-card>
 </div>
 

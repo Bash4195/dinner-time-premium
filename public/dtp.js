@@ -2221,11 +2221,14 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog', fun
 
     Title.setTitle('Rules - DTP');
     Title.setPageTitle('Rules');
-
+    
+    $scope.gotRules = false;
     function getRules() {
+        $scope.gotRules = false;
         Rest.get('/api/rules')
             .then(function(rules) {
                 $scope.rules = rules.rules;
+                $scope.gotRules = true;
                 
                 $scope.editRules = {
                     rules: $scope.rules

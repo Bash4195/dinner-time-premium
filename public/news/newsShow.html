@@ -1,6 +1,6 @@
 <div layout="row" layout-align="center center">
     <page-not-found ng-if="gotNewsEvent && !news"></page-not-found>
-    <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin ng-if="!gotNewsEvent">
+    <div layout="column" layout-align="center center" layout-fill layout-padding layout-margin flex ng-if="!gotNewsEvent">
         <md-progress-circular class="md-accent"></md-progress-circular>
     </div>
     <div layout="column" flex-gt-sm="60" flex ng-if="gotNewsEvent && news">
