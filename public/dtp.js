@@ -2230,7 +2230,6 @@ dtp.controller('rulesCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog', fun
                 $scope.rules = rules.rules;
                 $scope.gotRules = true;
                 
-                
                 $scope.editRules = {
                     rules: $scope.rules
                 };
