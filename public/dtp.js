@@ -217,20 +217,49 @@ dtp.factory('Title', function() {
     };
 });
 
-// Factory just in case this is needed in multiple places of the application
 dtp.factory('Ranks', function() {
-    return [
-        'GOD',
-        'GODDESS',
-        'Seraph',
-        'Lord',
-        'Admin',
-        'Moderator',
-        'Aristocrat',
-        'VIP',
-        'Donator',
-        'User'
-    ];
+    return {
+        ranks: [
+            'GOD',
+            'GODDESS',
+            'Seraph',
+            'Lord',
+            'Admin',
+            'Moderator',
+            'Aristocrat',
+            'VIP',
+            'Donator',
+            'User'
+        ],
+        isRankGreaterThan: function(myRank, otherRank) {
+            var rank1, rank2;
+            switch(myRank) {
+                case 'GOD': rank1 = 5; break;
+                case 'GODDESS': rank1 = 5; break;
+                case 'Seraph': rank1 = 4; break;
+                case 'Lord': rank1 = 3; break;
+                case 'Admin': rank1 = 2; break;
+                case 'Moderator': rank1 = 1; break;
+                case 'Aristocrat': rank1 = 0; break;
+                case 'VIP': rank1 = 0; break;
+                case 'Donator': rank1 = 0; break;
+                case 'User': rank1 = 0; break;
+            }
+            switch(otherRank) {
+                case 'GOD': rank2 = 5; break;
+                case 'GODDESS': rank2 = 5; break;
+                case 'Seraph': rank2 = 4; break;
+                case 'Lord': rank2 = 3; break;
+                case 'Admin': rank2 = 2; break;
+                case 'Moderator': rank2 = 1; break;
+                case 'Aristocrat': rank2 = 0; break;
+                case 'VIP': rank2 = 0; break;
+                case 'Donator': rank2 = 0; break;
+                case 'User': rank2 = 0; break;
+            }
+            return rank1 >= rank2;
+        }
+    }
 });
 
 dtp.service('Notify', ['$mdToast', function($mdToast) {
@@ -687,8 +716,8 @@ dtp.controller('adminApplicationsIndexCtrl', ['$scope', 'Title', 'User', 'Rest',
     }
 }]);
 
-dtp.controller('adminApplicationShowCtrl', ['$scope', '$routeParams', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location',
-    function($scope, $routeParams, Title, User, Rest, Notify, $mdDialog, $location) {
+dtp.controller('adminApplicationShowCtrl', ['$scope', '$routeParams', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$location', 'Ranks',
+    function($scope, $routeParams, Title, User, Rest, Notify, $mdDialog, $location, Ranks) {
         var appId = $routeParams.appId;
 
         // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
@@ -725,14 +754,16 @@ dtp.controller('adminApplicationShowCtrl', ['$scope', '$routeParams', 'Title', '
                             $scope.appStatus = 0;
                         }
 
-                        if($scope.app.votes.length >= 1) {
-                            for(let i = 0; i <= $scope.app.votes.length; i++) {
-                                if($scope.app.votes[i].voter._id != $scope.user._id) {
-                                    $scope.hasVoted = false;
-                                } else {
-                                    $scope.hasVoted = true;
-                                    break;
-                                }
+                        if($scope.user.roles.includes('Owner') || $scope.user.rank === 'Seraph') {
+                            if($scope.app.votes.length >= 1) {
+                                $scope.app.votes.some(function(vote) {
+                                    if(vote.voter._id == $scope.user._id) {
+                                        $scope.hasVoted = true;
+                                        return true;
+                                    } else {
+                                        $scope.hasVoted = false;
+                                    }
+                                });
                             }
                         }
 
@@ -749,6 +780,10 @@ dtp.controller('adminApplicationShowCtrl', ['$scope', '$routeParams', 'Title', '
                     });
             }
             getModApp();
+
+            $scope.canEditWithPermission = function(rank) {
+                return Ranks.isRankGreaterThan($scope.user.rank, rank);
+            };
 
             $scope.openApplication = function() {
                 Rest.put('/api/admin/application/' + $scope.app._id, {closed: false})
@@ -1161,7 +1196,7 @@ dtp.controller('userShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Ranks', '$ro
         $scope.permissionsOpen = false;
         $scope.togglePermissions = function() { $scope.permissionsOpen = !$scope.permissionsOpen };
 
-        $scope.ranks = Ranks;
+        $scope.ranks = Ranks.ranks;
         
         $scope.setDefault = {
             permissions: true
@@ -1408,8 +1443,8 @@ dtp.controller('newsIndexCtrl', ['$scope', 'Title', 'User', 'Rest', '$mdDialog',
         };
 }]);
 
-dtp.controller('newsShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
-function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
+dtp.controller('newsShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location', 'Ranks',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, Ranks) {
     var newsId = $routeParams.newsId;
 
     // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
@@ -1436,7 +1471,7 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
                     $scope.commentLabels.push(i + 1);
                 }
                 $scope.getComments($scope.label);
-                
+
                 $scope.currentEvent = {
                     title: $scope.news.title,
                     content: $scope.news.content
@@ -1444,6 +1479,10 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
             })
     }
     getNewsEvent();
+    
+    $scope.canEditWithPermission = function(rank) {
+        return Ranks.isRankGreaterThan($scope.user.rank, rank);
+    };
 
     $scope.gotComments = false;
 
@@ -1912,8 +1951,8 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
     $scope.$location = $location;
 }]);
 
-dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location',
-function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) {
+dtp.controller('forumPostShowCtrl', ['$scope', 'Title', 'User', 'Rest', 'Notify', '$mdDialog', '$routeParams', '$location', 'Ranks',
+function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location, Ranks) {
     // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
     $scope.$watch(User.getUser, function() {
         $scope.user = User.getUser();
@@ -1953,6 +1992,10 @@ function($scope, Title, User, Rest, Notify, $mdDialog, $routeParams, $location) 
             })
     }
     getPost();
+
+    $scope.canEditWithPermission = function(rank) {
+        return Ranks.isRankGreaterThan($scope.user.rank, rank);
+    };
 
     $scope.gotComments = false;
     $scope.getComments = function(label) {

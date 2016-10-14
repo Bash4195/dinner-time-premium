@@ -31,7 +31,7 @@ router.get('/api/news', function(req, res) {
 // NEW - In dialog
 
 // CREATE
-router.post('/api/news', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
+router.post('/api/news', middleware.isLoggedIn, function(req, res) {
     if(middleware.hasPermission(req.user, 'news', 'createNews')) {
         var newNews = req.body;
         if(newNews.title === '' || newNews.title === 'undefined') {
@@ -68,7 +68,7 @@ router.get('/api/news/:newsId', function(req, res) {
 // EDIT - In dialog
 
 // UPDATE
-router.put('/api/news/:newsId', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
+router.put('/api/news/:newsId', middleware.isLoggedIn, function(req, res) {
     if(middleware.hasPermission(req.user, 'news', 'updateNews')) {
         var editedNewsEvent = req.body;
         if(middleware.checkIfMissing(editedNewsEvent.title)) {
@@ -90,7 +90,7 @@ router.put('/api/news/:newsId', middleware.isLoggedIn, middleware.isSuperAdmin, 
 });
 
 // DELETE
-router.delete('/api/news/:newsId', middleware.isLoggedIn, middleware.isSuperAdmin, function(req, res) {
+router.delete('/api/news/:newsId', middleware.isLoggedIn, function(req, res) {
     if(middleware.hasPermission(req.user, 'news', 'deleteNews')) {
         News.findById(req.params.newsId, function(err, news) {
             if(err) {

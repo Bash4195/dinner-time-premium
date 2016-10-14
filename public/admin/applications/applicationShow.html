@@ -41,7 +41,7 @@
                 </md-card-header>
             </md-card>
 
-            <h1 class="md-display-2">{{app.authour.name}}'s Moderator Application</h1>
+            <h1 class="md-display-2"><a ng-href="/user/{{app.authour._id}}">{{app.authour.name}}'s</a> Moderator Application</h1>
             <div layout="row">
                 <p md-colors="{color: 'red-600'}">* Required</p>
                 <span flex></span>
@@ -107,7 +107,8 @@
                 <md-progress-circular class="md-accent"></md-progress-circular>
             </div>
 
-            <md-card ng-if="!app.willingToAddUsOnSteam && app.closed === false">
+            <md-card ng-if="!app.willingToAddUsOnSteam && app.closed === false && user.roles.includes('Owner') ||
+            !app.willingToAddUsOnSteam && app.closed === false && user.rank === 'Seraph'">
                 <md-card-title>
                     <md-card-title-text>
                         <span class="md-headline center-align-text" md-colors="{color: 'warn-500'}">WARNING</span>
@@ -376,7 +377,7 @@
                                     </span>
                                 <span flex></span>
                             </div>
-                            <div ng-if="user._id === comment.authour._id">
+                            <div ng-if="user._id === comment.authour._id || canEditWithPermission(comment.authour.rank)">
                                 <md-button class="md-icon-button md-accent" ng-hide="editingComment && editingCommentId === comment._id" ng-click="toggleEditingComment(comment)">
                                     <md-icon>edit</md-icon>
                                     <md-tooltip>Edit comment</md-tooltip>

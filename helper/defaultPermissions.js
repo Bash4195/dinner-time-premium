@@ -3,7 +3,7 @@ var defaultPermissions = {
         general: {
             modifyRules: true,
             // Mod Application
-            canApplyToMod:true
+            canApplyToMod: false
         },
         news: {
             createNews: true,
