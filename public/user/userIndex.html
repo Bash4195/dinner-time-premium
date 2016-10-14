@@ -29,7 +29,7 @@
                     <md-list-item class="md-3-line" ng-repeat="user in users" ng-click="$location.path('/user/' + user._id)">
                         <img ng-src="{{user.avatar}}" class="md-avatar" flex="10">
                         <div class="md-list-item-text" layout="row" layout-align="center center">
-                            <h3 class="center-align-text" flex="30">{{user.name}}</h3>
+                            <h3 class="center-align-text" flex-gt-xs="30" flex>{{user.name}}</h3>
                             <h4 class="center-align-text" flex="30" ng-class="{goddess: user.rank === 'GODDESS', seraph: user.rank === 'Seraph',
                             lord: user.rank === 'Lord', admin: user.rank === 'Admin', moderator: user.rank === 'Moderator', aristocrat: user.rank === 'Aristocrat',
                             vip: user.rank === 'VIP', donator: user.rank === 'Donator', user: user.rank === 'User'}" show-gt-xs hide>{{user.rank}}</h4>

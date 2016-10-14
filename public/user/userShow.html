@@ -9,15 +9,14 @@
         <div flex></div>
         <div layout="column" layout-align="center center">
             <div layout="row" layout-align="center center">
-                <p style="margin: 16px 0;" class="md-display-1 wrap-title" layout-padding>{{userProfile.name}}
-                    <div>
-                        <md-icon md-colors="{color: 'green-500'}" ng-if="userProfile.onlineStatus === 'Online'">check_circle</md-icon>
-                        <md-icon md-colors="{color: 'yellow-500'}" ng-if="userProfile.onlineStatus === 'Away'">access_time</md-icon>
-                        <md-icon md-colors="{color: 'red-A700'}"  ng-if="userProfile.onlineStatus === 'Busy'">do_not_disturb_on</md-icon>
-                        <md-icon md-colors="{color: 'grey-A700'}"  ng-if="userProfile.onlineStatus === 'Offline'">offline_pin</md-icon>
-                        <md-tooltip>{{userProfile.onlineStatus}}</md-tooltip>
-                    </div>
-                </p>
+                <span class="md-display-1 wrap-title" layout-padding>{{userProfile.name}}</span>
+                <div>
+                    <md-icon md-colors="{color: 'green-500'}" ng-if="userProfile.onlineStatus === 'Online'">check_circle</md-icon>
+                    <md-icon md-colors="{color: 'yellow-500'}" ng-if="userProfile.onlineStatus === 'Away'">access_time</md-icon>
+                    <md-icon md-colors="{color: 'red-A700'}"  ng-if="userProfile.onlineStatus === 'Busy'">do_not_disturb_on</md-icon>
+                    <md-icon md-colors="{color: 'grey-A700'}"  ng-if="userProfile.onlineStatus === 'Offline'">offline_pin</md-icon>
+                    <md-tooltip>{{userProfile.onlineStatus}}</md-tooltip>
+                </div>
             </div>
             <span class="md-headline" ng-class="{goddess: userProfile.rank === 'GODDESS', seraph: userProfile.rank === 'Seraph',
                             lord: userProfile.rank === 'Lord', admin: userProfile.rank === 'Admin', moderator: userProfile.rank === 'Moderator',
