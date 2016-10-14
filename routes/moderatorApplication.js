@@ -71,6 +71,7 @@ router.get('/api/application/:appId', middleware.isLoggedIn, function(req, res) 
 
 // INDEX
 router.get('/api/admin/applications', middleware.isLoggedIn, middleware.isStaff, function(req, res) {
+    req.query.skip = Number(req.query.skip);
     ModApp.find({}).count().exec(function(err, numApps) {
         ModApp.find({}).populate('authour').skip(req.query.skip).limit(20).sort({createdAt: -1}).exec(function(err, apps) {
             if(err) {
@@ -196,6 +197,7 @@ router.put('/api/admin/application/:appId/vote', middleware.isLoggedIn, middlewa
 
 // INDEX
 router.get('/api/admin/application/:appId/comments', function(req, res) {
+    req.query.skip = Number(req.query.skip);
     ModApp.findById(req.params.appId)
         .populate({path: 'comments', populate: {path: 'authour editedBy'}, options: {skip: req.query.skip, limit: 20, sort: {createdAt: 1}}}).exec(function(err, appWithComments) {
         if(err) {

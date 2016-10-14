@@ -6,6 +6,7 @@ var defaultPermissions = require('../helper/defaultPermissions');
 
 // INDEX
 router.get('/api/users', function(req, res) {
+    req.query.skip = Number(req.query.skip);
     User.find({name: {$regex: req.query.search, $options: 'i'}}).limit(101).skip(req.query.skip).exec(function(err, namedUsers) {// .skip(req.query.skip).limit(100).exec(function(err, namedUsers) { // Pagination
         if(err) {
             middleware.handleError(res, err.message, 'Failed to retrieve users');
