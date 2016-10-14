@@ -33,9 +33,10 @@
                                 <md-list-item class="md-2-line" ng-repeat="post in posts | orderBy: '-updatedAt'" ng-click="$location.path(category.path + '/' + post._id)">
                                     <img ng-src="{{post.authour.avatar}}" class="md-avatar" alt="">
                                     <div class="md-list-item-text">
-                                        <h3 flex="90">{{post.title}}</h3>
+                                        <h3 flex="90" truncate>{{post.title}}</h3>
                                         <div layout="row">
-                                            <p flex>By {{post.authour.name}} <span am-time-ago="post.createdAt"></span></p>
+                                            <p hide show-gt-xs flex>By {{post.authour.name}} <span am-time-ago="post.createdAt"></span></p>
+                                            <p hide-gt-xs flex><span am-time-ago="post.createdAt"></span></p>
                                             <md-icon class="icon-left-of-text-far" ng-if="post.locked">lock</md-icon>
                                             <md-icon class="icon-left-of-text" md-colors="{color: 'blue-500'}">comment</md-icon>
                                             <span class="md-subhead">
@@ -56,10 +57,6 @@
                     <span ng-show="user">New Post</span>
                     <span ng-hide="user">Sign in to Post</span>
                 </md-button>
-
-                <a ng-href="/auth/steam" target="_self" aria-label="Sign in through Steam" layout="row" layout-align="center center" ng-hide="user">
-                    <img src="assets/img/steam.png" alt="Sign in through Steam" layout-margin>
-                </a>
 
                 <md-subheader class="md-no-sticky">Categories</md-subheader>
                 <md-card>

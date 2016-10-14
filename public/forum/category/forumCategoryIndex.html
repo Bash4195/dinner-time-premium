@@ -51,7 +51,7 @@
                 </md-card>
             </div>
             <div flex-gt-sm="25" flex="100" layout="column">
-                <md-button hide show-gt-sm class="md-raised md-primary" style="margin-top: 8px" ng-if="user.permissions.forum.createPosts || !user" ng-click="newPostDialog()" ng-disabled="!user">
+                <md-button class="md-raised md-primary" style="margin-top: 8px" ng-if="user.permissions.forum.createPosts || !user" ng-click="newPostDialog()" ng-disabled="!user">
                     <span ng-show="user">New Post</span>
                     <span ng-hide="user">Sign in to Post</span>
                 </md-button>
