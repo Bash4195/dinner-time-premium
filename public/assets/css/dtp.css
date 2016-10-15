@@ -303,6 +303,16 @@ md-progress-linear.mod-app-rejected .md-container {
     word-break: keep-all;
 }
 
+/* Post/Rules/News/etc., formatting margins gone so things aren't so far apart... */
+.no-margin h1 { margin: 0; }
+.no-margin h2 { margin: 0; }
+.no-margin h3 { margin: 0; }
+.no-margin h4 { margin: 0; }
+.no-margin h5 { margin: 0; }
+.no-margin h6 { margin: 0; }
+.no-margin ul { margin: 0; }
+.no-margin ol { margin: 0; }
+
 /* Disable text highlighting */
 .no-select {
     -webkit-touch-callout: none; /* iOS Safari */
