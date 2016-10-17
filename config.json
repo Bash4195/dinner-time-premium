@@ -1,0 +1,5 @@
+{
+  "GCLOUD_PROJECT": "dinner-time-premium",
+  "CLOUD_BUCKET": "dtp",
+  "DATA_BACKEND": "datastore"
+}
