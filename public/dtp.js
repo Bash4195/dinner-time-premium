@@ -438,6 +438,8 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
     $scope.$mdMedia = $mdMedia; // For opening menus from html
 
     $scope.gotOnlineUsers = false;
+    
+    var isAway = false;
 
     // Whenever something changes the front end user object, update it so we can immediately reflect the changes visually
     $scope.$watch(User.getUser, function() {
@@ -451,7 +453,7 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
                 $scope.user = User.getUser(); // Set to a reference to the object
                 // If we set it to User.current user, it will just COPY the current properties
 
-                onInactive();// When user logs in start checking for inactivity
+                inactiveWatcher();// When user logs in start checking for inactivity
 
                 if($scope.user.onlineStatus !== 'Online') {
                     Rest.put('/api/user/' + $scope.user._id, {onlineStatus: 'Online'})
@@ -555,16 +557,12 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         return ($location.path().substr(0, path.length) === path) ? 'active' : '';
     };
 
-    // $scope.newNotifications = false;
-    //
-    // $scope.getNotifications = function() {
-    //
-    // };
-
     // Set user status to away after 10 minutes
     // This function can also log users out after 30 minutes.
     // In case we want to add it back in the future
-    function onInactive() {
+    function inactiveWatcher() {
+        var lastSeen = 0;
+
         // Timeout timer value in milliseconds
         // var timeout = 1800000;
         // var warningTimeout = 1200000;
@@ -575,7 +573,14 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         // Start a timeout
         // var logoutTimer = $timeout(function(){ logoutUser() }, timeout);
         // var warningTimer = $timeout(function() { warnUser() }, warningTimeout);
-        var awayStatusTimer = $timeout(function() { $scope.setUserStatus('Away', false); }, awayStatusTimeout);
+        // var awayStatusTimer = $timeout(function() { $scope.setUserStatus('Away', false); }, awayStatusTimeout);
+        
+        $interval(function() {
+            if(lastSeen >= awayStatusTimeout && isAway === false && !noUpdateStatus) {
+                $scope.setUserStatus('Away', false);
+                isAway = true;
+            }
+        }, awayStatusTimeout);
 
         var bodyElement = angular.element($document);
         angular.forEach(['keydown', 'keyup', 'click', 'mousemove', 'DOMMouseScroll', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'scroll', 'focus'],
@@ -584,10 +589,18 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
                     // If logged out is false, reset the timer
                     // if(!loggedOut) {
                     //     $scope.reset = true; // For the warning dialog
-                    resetTimers();
+                    //     resetTimers();
                     // }
+
+                    if(isAway && !noUpdateStatus) {
+                        $scope.setUserStatus('Online', false);
+                        isAway = false;
+                    }
+                    lastSeen = 0;
                 });
             }, {passive: true});
+
+        $interval(function() { lastSeen += 1000; }, 1000);
 
         // function warnUser() {
         //     $mdDialog.show({
@@ -632,28 +645,28 @@ function($scope, Title, $timeout, $interval, $document, $window, $http, $locatio
         //     $scope.getOnlineUsers();
         // }
 
-        function resetTimers() {
-            // Stop the pending timers
-            // $timeout.cancel(logoutTimer);
-            // $timeout.cancel(warningTimer);
-            $timeout.cancel(awayStatusTimeout);
-
-            if(User.currentUser) {
-                if (User.currentUser.onlineStatus === 'Away' && !noUpdateStatus) {
-                    $scope.setUserStatus('Online', false);
-                }
-
-                // After 5 minutes, start this again
-                $timeout(function () {
-                    // Reset the timers
-                    // logoutTimer = $timeout(function(){ logoutUser() }, timeout);
-                    // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
-                    awayStatusTimer = $timeout(function () {
-                        $scope.setUserStatus('Away', false);
-                    }, awayStatusTimeout);
-                }, 300000);
-            }
-        }
+        // function resetTimers() {
+        //     // Stop the pending timers
+        //     // $timeout.cancel(logoutTimer);
+        //     // $timeout.cancel(warningTimer);
+        //     $timeout.cancel(awayStatusTimeout);
+        //
+        //     if(User.currentUser) {
+        //         if (User.currentUser.onlineStatus === 'Away' && !noUpdateStatus) {
+        //             $scope.setUserStatus('Online', false);
+        //         }
+        //
+        //         // After 5 minutes, start this again
+        //         $timeout(function () {
+        //             // Reset the timers
+        //             // logoutTimer = $timeout(function(){ logoutUser() }, timeout);
+        //             // warningTimer = $timeout(function() { warnUser() }, warningTimeout);
+        //             awayStatusTimer = $timeout(function () {
+        //                 $scope.setUserStatus('Away', false);
+        //             }, awayStatusTimeout);
+        //         }, 300000);
+        //     }
+        // }
     }
 }]);
 
@@ -1283,7 +1296,6 @@ dtp.controller('moderatorApplicationCreateCtrl', ['$scope', 'Title', 'User', 'No
         };
 
         $scope.submitApplication = function() {
-            console.log($scope.application);
             // Submit without checking as it should be done before the dialog was opened
             Rest.post('/api/apply', $scope.application)
                 .then(function(app) {

@@ -1,6 +1,6 @@
 {
   "name": "dtp",
-  "version": "0.3.04",
+  "version": "0.3.1",
   "description": "Web application for the Dinner Time Premium Gmod server.",
   "main": "server.js",
   "scripts": {
