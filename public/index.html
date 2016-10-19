@@ -287,7 +287,7 @@
                     <span flex="60">Oh no! Looks like no one else is online right now.</span>
                     <div flex></div>
                 </div>
-                <md-list-item ng-repeat="onlineUser in onlineUsers" ng-if="onlineUser._id !== user._id">
+                <md-list-item ng-repeat="onlineUser in onlineUsers | orderBy: '-onlineStatus'" ng-if="onlineUser._id !== user._id">
                     <md-button class="list-btn-no-radius" ng-click="onlineUsersHref('/user/' + onlineUser._id)" ng-href layout="row" layout-fill>
                         <div>
                             <md-icon md-colors="{color: 'green-500'}" ng-if="onlineUser.onlineStatus === 'Online'">check_circle</md-icon>
