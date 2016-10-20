@@ -1,0 +1,1977 @@
+"STEAM_0:0:101083515"	
+{
+	"allow"	
+	{
+	}
+	"name"	"ϟϟAnarchy︻芫═一"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:80497863"	
+{
+	"allow"	
+	{
+	}
+	"name"	"NightCrawler"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:120839750"	
+{
+	"allow"	
+	{
+	}
+	"name"	"NighthawkPlayz"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:93181038"	
+{
+	"allow"	
+	{
+	}
+	"name"	"A Bomb"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:26890745"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Yeast"
+	"group"	"Donator"
+}
+"STEAM_0:1:56190504"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Space Unicorn"
+	"group"	"Donator"
+}
+"STEAM_0:1:69148951"	
+{
+	"name"	"✪ Flครђвα¢к"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:97857157"	
+{
+	"name"	"☯Owlyox☠ArcticFox"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:141980009"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"|☣TouchTheWaffle☣|"
+	"group"	"Aristocrat"
+}
+"STEAM_0:1:116032610"	
+{
+	"name"	"Shadow"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:81560757"	
+{
+	"name"	"Mythical_Chris"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:27570300"	
+{
+	"allow"	
+	{
+	}
+	"name"	"i Zᴼᴹᴮᴵᴱ"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:85154221"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"★te★"
+	"group"	"Donator"
+}
+"STEAM_0:0:48428868"	
+{
+	"allow"	
+	{
+	}
+	"name"	"[green]Sh[pink]ad"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:52280823"	
+{
+	"allow"	
+	{
+	}
+	"name"	"YakuzaBrah"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:89279873"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Goat ●ᴥ●"
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:81076475"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Aspyre"
+	"group"	"Donator"
+}
+"STEAM_0:0:115258650"	
+{
+	"name"	"Bornoldis"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:18660969"	
+{
+	"allow"	
+	{
+	}
+	"name"	"[LiquidRP]Damon"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:90034116"	
+{
+	"allow"	
+	{
+	}
+	"name"	"springtrap"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:97027845"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"{HTG}Chocolate Thunder"
+	"group"	"Donator"
+}
+"STEAM_0:0:158412350"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:24661230"	
+{
+	"name"	"DEATH."
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:64632388"	
+{
+	"name"	"lasagnafield"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:40924131"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Sans"
+	"deny"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:19968951"	
+{
+	"name"	"filthy meme slut"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:62132556"	
+{
+	"allow"	
+	{
+	}
+	"name"	"El Polo"
+	"deny"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:0:44263193"	
+{
+	"name"	"ledzeplinrules"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:165433910"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Human"
+	"group"	"Donator"
+}
+"STEAM_0:1:76182898"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Acid"
+	"deny"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:142665532"	
+{
+	"allow"	
+	{
+	}
+	"name"	"CyphXHD"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:91943341"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Mackie"
+	"deny"	
+	{
+	}
+	"group"	"Lord"
+}
+"STEAM_0:1:119503482"	
+{
+	"name"	"captainfluffy711"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:109994047"	
+{
+	"name"	"il·lu·mi·na·ti"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:123941000"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Maxin'"
+	"group"	"Donator"
+}
+"STEAM_0:0:35509692"	
+{
+	"name"	"briankris"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:101828693"	
+{
+	"name"	"Lady Gaga"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:79294208"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Vae Victis' Princess"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:116246322"	
+{
+	"name"	"i am space cat"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:97795859"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"teletubbie"
+	"group"	"Donator"
+}
+"STEAM_0:0:68591575"	
+{
+	"allow"	
+	{
+	}
+	"name"	"✨Kim-Chi✨"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:63814604"	
+{
+	"allow"	
+	{
+	}
+	"name"	"DefiantSync"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:103286212"	
+{
+	"name"	"Ryan"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:102811905"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Spook"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:10595088"	
+{
+	"name"	"AdmiralSpeedy"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:91524591"	
+{
+	"name"	"FireTear"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:116708327"	
+{
+	"allow"	
+	{
+	}
+	"name"	"MEWTWO"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:34170223"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"The CyberBully"
+	"group"	"Donator"
+}
+"STEAM_0:1:92824460"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"sky☁"
+	"group"	"Admin"
+}
+"STEAM_0:0:64770702"	
+{
+	"name"	"Ellinity"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:70526328"	
+{
+	"name"	"BlessedPotato #TeamPyro"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:79706458"	
+{
+	"name"	"Dusti_333"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:91813888"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"GHeTToxMaNgO"
+	"group"	"Donator"
+}
+"STEAM_0:0:155885293"	
+{
+	"allow"	
+	{
+	}
+	"name"	"SoFloAutisimo"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:98177151"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Wander Serenity"
+	"deny"	
+	{
+	}
+	"group"	"Moderator"
+}
+"STEAM_0:1:22258612"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"NateSkunk"
+	"group"	"Aristocrat"
+}
+"STEAM_0:1:33459726"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Agent_X"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:18249629"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Lubrican[T]"
+	"group"	"Donator"
+}
+"STEAM_0:1:93413108"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"A.S.B"
+	"group"	"VIP"
+}
+"STEAM_0:1:33606602"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Zal"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:138551732"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"LoneFox"
+	"group"	"Donator"
+}
+"STEAM_0:1:50296607"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"The Village Idiot"
+	"group"	"Donator"
+}
+"STEAM_0:0:80658354"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Spearmint☀"
+	"deny"	
+	{
+	}
+	"group"	"Seraph"
+}
+"STEAM_0:1:62241731"	
+{
+	"name"	"iRapeU"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:68552261"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"EpicSnipingKiller666"
+	"group"	"Donator"
+}
+"STEAM_0:1:91298520"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"KaiZo"
+	"group"	"Donator"
+}
+"STEAM_0:1:124359763"	
+{
+	"name"	"SalemLeDuck"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:101507038"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Crack-Pot®"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:90243542"	
+{
+	"allow"	
+	{
+	}
+	"name"	"♋⭐Galaxy SkieZ⭐♋"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:80351462"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Pastelz"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:95420688"	
+{
+	"allow"	
+	{
+	}
+	"name"	"☢ SILVER_WOLF ☢"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:90646838"	
+{
+	"name"	"SenpaiSeducer"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:105127569"	
+{
+	"name"	"ass crust"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:50818528"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Ƭyroil Smoochiewallace™"
+	"group"	"Donator"
+}
+"STEAM_0:1:70716611"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"BRangerOP"
+	"group"	"Donator"
+}
+"STEAM_0:0:140708307"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+		"ulx seeasay"	"access tag"
+		"ulx seesasay"	"access tag"
+	}
+	"name"	"Barack Obama"
+}
+"STEAM_0:0:50643263"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Supersandwiche50"
+	"deny"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:1:31436868"	
+{
+	"name"	"Napstaffin"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:117072347"	
+{
+	"name"	"🎃King Skye Rain🎃"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:47208763"	
+{
+	"name"	"DAVID Big D"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:0:86712387"	
+{
+	"name"	"Cjebaker88"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:162770591"	
+{
+	"name"	"Noobinity"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:82666097"	
+{
+	"allow"	
+	{
+	}
+	"name"	"SanguineVisions"
+	"deny"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:1:115756910"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Hmmmm"
+	"group"	"Donator"
+}
+"STEAM_0:0:169122447"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"§a[§bLFG§a]§dgeor§cgeio"
+	"group"	"Donator"
+}
+"STEAM_0:1:61739338"	
+{
+	"allow"	
+	{
+	}
+	"name"	"§♥§Panda§♥§"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:67981391"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Aclipse"
+	"group"	"Donator"
+}
+"STEAM_0:0:100764408"	
+{
+	"name"	"♥ Cookie Katz ♥"
+	"deny"	
+	{
+		"ulx launch"
+		"ulx slap"
+	}
+	"allow"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:94106072"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"🎃ms.  shadow  cat🎃"
+	"group"	"Donator"
+}
+"STEAM_0:1:146749605"	
+{
+	"allow"	
+	{
+	}
+	"name"	"NorthernAutumn"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:121228837"	
+{
+	"name"	"(づ￣ ³￣)づ ♥ Melody �"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+		"mu_adminpanel"
+		"mu_adminpanel "
+		"ulx mu_adminpanel"
+		"ulx seeasay"
+		"ulx seesasay"
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:55386059"	
+{
+	"name"	"PaulThePandaXP"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:82486272"	
+{
+	"name"	"thecraziestofmudkipz"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:99435739"	
+{
+	"name"	"UnknownDuchess"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"GODDESS"
+}
+"STEAM_0:0:98822345"	
+{
+	"name"	"🎃-Dat Spooky Boi-🎃"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:0:74799793"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"{HTG} Unknown Hero"
+	"group"	"Aristocrat"
+}
+"STEAM_0:1:114020664"	
+{
+	"name"	"lucarifox"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:121462481"	
+{
+	"name"	"Kate ✿"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:123580526"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Sprinkles"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:63021123"	
+{
+	"name"	"heavy's sandvich"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:99935097"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Bottle of piss"
+	"group"	"Donator"
+}
+"STEAM_0:1:51524377"	
+{
+	"name"	"Batcoon"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:1:59262156"	
+{
+	"allow"	
+	{
+	}
+	"name"	"blakeylolz"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:104483616"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"ObeyIzzie❤"
+	"group"	"Moderator"
+}
+"STEAM_0:1:55222446"	
+{
+	"name"	"zitronic"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:53106843"	
+{
+	"name"	"BeardedGaming"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:38651753"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Detective Pretzel"
+	"group"	"Aristocrat"
+}
+"STEAM_0:1:14231015"	
+{
+	"name"	"Ryan Gosling in OnlyPinkForgive"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:41839307"	
+{
+	"name"	"ma7100"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:0:91603949"	
+{
+	"name"	"Airunicorn"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:85082453"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Inferno"
+	"deny"	
+	{
+		"ulx slap"
+	}
+	"group"	"VIP"
+}
+"STEAM_0:1:98863551"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"{HTG} AustinB1024 ゲームの�"
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:99646686"	
+{
+	"allow"	
+	{
+	}
+	"name"	"♡ ≬Booty Shadows≬ ♡"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:108421216"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"★Metricized★"
+	"group"	"Donator"
+}
+"STEAM_0:0:58861105"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Mr.Falco"
+	"group"	"VIP"
+}
+"STEAM_0:1:112615259"	
+{
+	"name"	"Kim Taehyung V"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:97203306"	
+{
+	"name"	"rayne"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:149977359"	
+{
+	"name"	"❤️ImYourGoddess❤"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:17591825"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Slyhand"
+	"group"	"Donator"
+}
+"STEAM_0:1:73027593"	
+{
+	"name"	"Kemsys"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:43431705"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Bash"
+	"deny"	
+	{
+	}
+	"group"	"GOD"
+}
+"STEAM_0:1:75642176"	
+{
+	"name"	"Spades"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:1:119555531"	
+{
+	"name"	"Erubius (Logan)"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:87700527"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Suspect"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:29827441"	
+{
+	"name"	"Skizry"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:106826665"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Luna Dracone"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:47606360"	
+{
+	"name"	"Tay Tay"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:106686053"	
+{
+	"name"	"Cake"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:1:64204669"	
+{
+	"name"	"Korb"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:0:46548995"	
+{
+	"name"	"soulsyth"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:109874741"	
+{
+	"name"	"Fluorescent™"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:109762218"	
+{
+	"name"	"Shell13000"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:105996843"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Jayfeather"
+	"group"	"Aristocrat"
+}
+"STEAM_0:1:93977858"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Trex"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:97624453"	
+{
+	"name"	"Montoya"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:0:99721523"	
+{
+	"allow"	
+	{
+	}
+	"name"	"[DTP] Rebellion"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:159106559"	
+{
+	"name"	"♫♥wôĹƒ Ļòvėr♥♫"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:50504169"	
+{
+	"name"	"♠ NOOBS360 ♠"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:1:18070550"	
+{
+	"allow"	
+	{
+	}
+	"name"	"♫ Teh Goreesha™ ♫"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:34171212"	
+{
+	"name"	"DigitalRemix"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:150830882"	
+{
+	"name"	"Dork"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Moderator"
+}
+"STEAM_0:1:176444093"	
+{
+	"name"	"Gengar"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:72995728"	
+{
+	"name"	"Killerhawks"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:29359031"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Sageluck"
+	"deny"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:0:79642449"	
+{
+	"name"	"❤ Miss Fluffy Cat ❤"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:85907350"	
+{
+	"allow"	
+	{
+	}
+	"name"	"queen meme (✿˘◡˘)"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:79461152"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"ZeBerg"
+	"group"	"Donator"
+}
+"STEAM_0:0:105315127"	
+{
+	"allow"	
+	{
+	}
+	"name"	"AlbinoBlackSheep"
+	"deny"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:1:25268420"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Arcane Hero"
+	"group"	"Donator"
+}
+"STEAM_0:1:116879989"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Ma-Nak-Nak"
+	"deny"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:1:104131211"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Carrot =＾● ⋏ ●＾="
+	"group"	"Lord"
+}
+"STEAM_0:1:56653842"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Tsundere_Kimi"
+	"group"	"Donator"
+}
+"STEAM_0:1:171795861"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"_Hazel_"
+	"group"	"Donator"
+}
+"STEAM_0:0:58576920"	
+{
+	"name"	"Scorchtrooper23"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:83416858"	
+{
+	"allow"	
+	{
+	}
+	"name"	"ChrissylizedKitten"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:95829975"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"[P.s]✫Shady✫"
+	"group"	"Donator"
+}
+"STEAM_0:0:104434848"	
+{
+	"allow"	
+	{
+	}
+	"name"	"♥FionaTheGirl♥"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:93012016"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"THEMUSHROOMWAR5"
+	"group"	"Donator"
+}
+"STEAM_0:0:169144352"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"[pink]h[green]ec"
+	"group"	"Donator"
+}
+"STEAM_0:0:96278063"	
+{
+	"name"	"Linester"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:67769508"	
+{
+	"allow"	
+	{
+	}
+	"name"	"it me doggo"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:110091400"	
+{
+	"name"	"MaverickBata"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:149723811"	
+{
+	"allow"	
+	{
+	}
+	"name"	"LiiAntunes"
+	"deny"	
+	{
+	}
+	"group"	"VIP"
+}
+"STEAM_0:0:75482307"	
+{
+	"allow"	
+	{
+	}
+	"name"	"☺ItsmePringlesBB☺"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:91868607"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Ƭσяα∂σяαвℓɛ  ♡"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:46887027"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Prodigy Project"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:173870278"	
+{
+	"name"	"NHTHE_DALEK"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:57966223"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"SpaceOtter"
+	"group"	"Donator"
+}
+"STEAM_0:1:121486882"	
+{
+	"name"	"‿β ʟ e ɑ ç h‿"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:102759636"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Hawkey"
+	"group"	"Moderator"
+}
+"STEAM_0:1:89810778"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Demon_The_Moist_Eevee"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:120458673"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"Wᵉᵉᵖᵉᵉ"
+	"group"	"Donator"
+}
+"STEAM_0:0:151444419"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"HappyCappyCappedCatCake"
+	"group"	"Donator"
+}
+"STEAM_0:1:43061929"	
+{
+	"allow"	
+	{
+	}
+	"name"	"Reck"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:156971773"	
+{
+	"name"	"Karma"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:0:57403590"	
+{
+	"name"	"MrAnonymous"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Aristocrat"
+}
+"STEAM_0:1:41969159"	
+{
+	"allow"	
+	{
+	}
+	"name"	"<CD> J-βeta"
+	"deny"	
+	{
+	}
+	"group"	"Donator"
+}
+"STEAM_0:1:93048264"	
+{
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"name"	"srautin"
+	"group"	"Donator"
+}
+"STEAM_0:1:90139803"	
+{
+	"name"	"✪ Rexxo"
+	"deny"	
+	{
+	}
+	"allow"	
+	{
+	}
+	"group"	"Donator"
+}
